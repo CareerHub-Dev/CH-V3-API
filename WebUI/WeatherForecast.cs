@@ -1,4 +1,4 @@
-namespace CH_V3_API
+namespace WebUI
 {
     public class WeatherForecast
     {
