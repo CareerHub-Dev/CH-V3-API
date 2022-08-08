@@ -18,7 +18,7 @@ public class LoggingBehaviour<TRequest> : IRequestPreProcessor<TRequest> where T
     public Task Process(TRequest request, CancellationToken cancellationToken)
     {
         var requestName = typeof(TRequest).Name;
-        var userId = _currentAccountService.AccountId ?? string.Empty;
+        var userId = _currentAccountService.AccountId.ToString();
 
         _logger.LogInformation("CH-V3-API Request: {Name} {@UserId} {@Request}", requestName, userId, request);
 

@@ -34,7 +34,7 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
         if (elapsedMilliseconds > 500)
         {
             var requestName = typeof(TRequest).Name;
-            var userId = _currentAccountService.AccountId ?? string.Empty;
+            var userId = _currentAccountService.AccountId.ToString();
 
             _logger.LogWarning("CH-V3-API Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@Request}",
                 requestName, elapsedMilliseconds, userId, request);
