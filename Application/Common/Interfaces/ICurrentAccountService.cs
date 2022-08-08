@@ -2,5 +2,5 @@
 
 public interface ICurrentAccountService
 {
-    string? AccountId { get; }
+    Guid? AccountId { get; }
 }
