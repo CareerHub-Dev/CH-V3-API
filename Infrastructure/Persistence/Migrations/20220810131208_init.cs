@@ -14,8 +14,8 @@ namespace Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    NormalizedEmail = table.Column<string>(type: "text", nullable: false, computedColumnSql: "LOWER(TRIM(\"Email\"))", stored: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false, computedColumnSql: "LOWER(TRIM(\"Email\"))", stored: true),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
                     VerificationToken = table.Column<string>(type: "text", nullable: true),
                     Verified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -50,10 +50,10 @@ namespace Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CompanyName = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    CompanyName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     CompanyLogoId = table.Column<Guid>(type: "uuid", nullable: true),
                     CompanyBannerId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CompanyMotto = table.Column<string>(type: "character varying(120)", maxLength: 120, nullable: false),
+                    CompanyMotto = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     CompanyDescription = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
                 },
                 constraints: table =>
@@ -98,8 +98,8 @@ namespace Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstName = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    LastName = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     Photo = table.Column<Guid>(type: "uuid", nullable: true),
                     Phone = table.Column<string>(type: "text", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)

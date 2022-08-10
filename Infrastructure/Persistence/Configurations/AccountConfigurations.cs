@@ -8,8 +8,17 @@ public class AccountConfigurations : IEntityTypeConfiguration<Account>
 {
     public void Configure(EntityTypeBuilder<Account> builder)
     {
-        builder.HasIndex(x => x.NormalizedEmail);
+        builder.Property(x => x.Email)
+            .HasMaxLength(256)
+            .IsRequired();
 
-        builder.Property(x => x.NormalizedEmail).HasComputedColumnSql(@"LOWER(TRIM(""Email""))", true);
+        builder.HasIndex(x => x.NormalizedEmail);
+        builder.Property(x => x.NormalizedEmail)
+            .HasMaxLength(256)
+            .IsRequired()
+            .HasComputedColumnSql(@"LOWER(TRIM(""Email""))", true);
+
+        builder.Property(x => x.PasswordHash)
+            .IsRequired();
     }
 }
