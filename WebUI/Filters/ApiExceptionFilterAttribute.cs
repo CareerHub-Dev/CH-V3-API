@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Security.Authentication;
 
 namespace WebUI.Filters;
 
@@ -15,6 +16,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             {
                 { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
+                { typeof(AuthenticationException), HandleAuthenticationException }
             };
     }
 
@@ -79,6 +81,22 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         };
 
         context.Result = new NotFoundObjectResult(details);
+
+        context.ExceptionHandled = true;
+    }
+
+    private void HandleAuthenticationException(ExceptionContext context)
+    {
+        var exception = (AuthenticationException)context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            Title = "Authorization failed.",
+            Detail = exception.Message
+        };
+
+        context.Result = new BadRequestObjectResult(details);
 
         context.ExceptionHandled = true;
     }
