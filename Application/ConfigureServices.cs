@@ -1,6 +1,10 @@
 ﻿using Application.Common.Behaviours;
+using Application.Common.Interfaces;
+using Application.Common.Models;
+using Application.Jwt;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -8,13 +12,18 @@ namespace Application;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddMediatR(Assembly.GetExecutingAssembly());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
+
+        services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IAccountManager, AccountManager.AccountManager>();
+
+        services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
 
         return services;
     }

@@ -13,17 +13,9 @@ public static class ConfigureServices
     {
         services.AddScoped<AuditableEntitySaveChangesInterceptor>();
 
-        if (configuration.GetValue<bool>("UseInMemoryDatabase"))
-        {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("CH-V3-API-DB"));
-        }
-        else
-        {
-            services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
                     builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-        }
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 

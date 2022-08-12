@@ -2,11 +2,12 @@ using Application;
 using Infrastructure;
 using Infrastructure.Persistence;
 using WebUI;
+using WebUI.Authorize;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebUIServices();
 
@@ -47,6 +48,9 @@ app.UseCors(x => x
     .AllowAnyMethod()
     .AllowAnyHeader()
     .AllowCredentials());
+
+// custom jwt auth middleware
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 
