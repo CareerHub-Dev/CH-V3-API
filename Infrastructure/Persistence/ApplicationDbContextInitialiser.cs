@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Persistence;
@@ -46,7 +47,15 @@ public class ApplicationDbContextInitialiser
     public async Task TrySeedAsync()
     {
         // Default accounts
-
+        if (!await _context.Admins.AnyAsync())
+        {
+            await _context.Admins.AddAsync(new Admin
+            {
+                Email = "Admin@CareerHub.ua",
+                PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
+                Verified = DateTime.UtcNow
+            });
+        }
 
         // Default data
 
