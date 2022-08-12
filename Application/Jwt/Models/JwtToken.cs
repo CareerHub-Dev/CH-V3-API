@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Models;
+﻿namespace Application.Jwt.Models;
 
 public class JwtToken
 {

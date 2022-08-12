@@ -1,4 +1,4 @@
-﻿using Application.Common.Models;
+﻿using Application.AccountManager.Models;
 
 namespace Application.Common.Interfaces;
 

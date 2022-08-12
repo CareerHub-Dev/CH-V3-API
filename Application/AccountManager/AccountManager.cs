@@ -1,6 +1,6 @@
-﻿using Application.Common.Entensions;
+﻿using Application.AccountManager.Models;
+using Application.Common.Entensions;
 using Application.Common.Interfaces;
-using Application.Common.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.AccountManager;
