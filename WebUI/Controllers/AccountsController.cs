@@ -6,7 +6,6 @@ namespace WebUI.Controllers;
 
 public class AccountsController : ApiControllerBase
 {
-
     [HttpPost("authenticate-{clientType}")]
     public async Task<IActionResult> Authenticate(AuthenticateRequest authenticateRequest, string clientType)
     {

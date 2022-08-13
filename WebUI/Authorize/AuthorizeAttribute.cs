@@ -19,11 +19,11 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 
         if (account == null)
         {
-            context.Result = new UnauthorizedResult();
+            context.Result = new StatusCodeResult(401);
         }
         else if (_roles.Any() && !_roles.Contains(account.Role))
         {
-            context.Result = new ForbidResult();
+            context.Result = new StatusCodeResult(403);
         }
     }
 }
