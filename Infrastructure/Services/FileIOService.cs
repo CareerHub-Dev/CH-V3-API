@@ -8,12 +8,12 @@ public class FileIOService : IFileIOService
 	{
 		return File.Exists(path);
 	}
-	public string ReadAllText(string path)
+	public async Task<string> ReadAllTextAsync(string path)
 	{
-		return File.ReadAllText(path);
+		return await File.ReadAllTextAsync(path);
 	}
-	public void WriteAllText(string path, string text)
+	public async Task WriteAllText(string path, string text)
 	{
-		File.WriteAllText(path, text);
+		await File.WriteAllTextAsync(path, text);
 	}
 }
