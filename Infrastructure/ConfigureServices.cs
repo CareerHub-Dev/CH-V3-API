@@ -23,6 +23,7 @@ public static class ConfigureServices
         services.AddScoped<ApplicationDbContextInitialiser>();
 
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IFileIOService, FileIOService>();
 
         return services;
     }
