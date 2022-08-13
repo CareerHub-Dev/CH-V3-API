@@ -1,4 +1,4 @@
-﻿using Application.Auth.Commands;
+﻿using Application.Auth.Commands.Authenticate;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.DTO.Auth;
 

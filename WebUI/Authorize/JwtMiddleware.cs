@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Auth.Commands.Identify;
+using MediatR;
 
 namespace WebUI.Authorize;
 
@@ -11,20 +12,15 @@ public class JwtMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IAccountManager accountManager, IJwtService jwtService)
+    public async Task Invoke(HttpContext context, ISender mediator)
     {
         var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
         if (token != null)
         {
-            var accountId = await jwtService.ValidateJwtTokenAsync(token);
+            var result = await mediator.Send(new IdentifyCommand { JwtToken = token });
 
-            if (accountId.HasValue)
-            {
-                var accountInfo = await accountManager.GetAccountInfoAsync(accountId.Value);
-
-                context.Items["Account"] = accountInfo is not null ? accountInfo : null; 
-            }
+            context.Items["Account"] = result != null ? new AccountInfo { Id = result.Id, Role = result.Role } : null;
         }
 
         await _next(context);
