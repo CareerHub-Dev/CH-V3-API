@@ -21,7 +21,6 @@ public static class ConfigureServices
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
 
         services.AddScoped<IJwtService, JwtService>();
-        services.AddScoped<IAccountManager, AccountManager.AccountManager>();
 
         services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
 
