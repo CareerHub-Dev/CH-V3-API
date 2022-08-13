@@ -4,6 +4,7 @@ using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using WebUI.Controllers;
 using WebUI.Filters;
 using WebUI.Services;
 
@@ -23,7 +24,10 @@ public static class ConfigureServices
             .AddDbContextCheck<ApplicationDbContext>();
 
         services.AddControllers(options =>
-            options.Filters.Add<ApiExceptionFilterAttribute>());
+        {
+            options.Filters.Add<ApiExceptionFilterAttribute>();
+            options.Filters.Add<ApiValidationFilter>();
+        });
 
         services.AddEndpointsApiExplorer();
 
