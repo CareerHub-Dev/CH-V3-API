@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using WebUI.Authorize;
 
 namespace WebUI.Services;
 
@@ -11,5 +12,5 @@ public class CurrentAccountService : ICurrentAccountService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public Guid? AccountId => _httpContextAccessor.HttpContext?.Items["AccountId"] as Guid?;
+    public Guid? AccountId => (_httpContextAccessor.HttpContext?.Items["Account"] as AccountInfo)?.Id;
 }
