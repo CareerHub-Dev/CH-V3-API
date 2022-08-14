@@ -3,7 +3,7 @@
 namespace Infrastructure.Services;
 
 public class FileIOService : IFileIOService
-    {
+{
 	public bool Exists(string path)
 	{
 		return File.Exists(path);
