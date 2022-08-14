@@ -1,5 +1,6 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,7 +32,7 @@ public class GetImageQueryHandler : IRequestHandler<GetImageQuery, ImageDTO>
 
         if (image == null)
         {
-            throw new NotFoundException("image", request.Id);
+            throw new NotFoundException(nameof(Image), request.Id);
         }
 
         return image;
