@@ -27,7 +27,7 @@
     <None Update="Templates\already_registered_email.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Templates\invitation_email.html">
+    <None Update="Templates\company_invitation_email.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Templates\password_reset_email.html">
