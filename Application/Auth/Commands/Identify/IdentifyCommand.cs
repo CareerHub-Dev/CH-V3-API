@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Auth.Commands.Identify;
 
-public class IdentifyCommand : IRequest<IdentifyResponse?>
+public record IdentifyCommand : IRequest<IdentifyResponse?>
 {
-    public string JwtToken { get; set; } = string.Empty;
+    public string JwtToken { get; init; } = string.Empty;
 }
 
 public class IdentifyCommandHandler : IRequestHandler<IdentifyCommand, IdentifyResponse?>

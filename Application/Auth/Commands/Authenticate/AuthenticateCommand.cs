@@ -8,11 +8,11 @@ using System.Security.Authentication;
 
 namespace Application.Auth.Commands.Authenticate;
 
-public record class AuthenticateCommand : IRequest<AuthenticateResponse>
+public record AuthenticateCommand : IRequest<AuthenticateResponse>
 {
-    public string Email { init; get; } = string.Empty;
-    public string Password { init; get; } = string.Empty;
-    public string IpAddress { init; get; } = string.Empty;
+    public string Email { get; init; } = string.Empty;
+    public string Password { get; init; } = string.Empty;
+    public string IpAddress { get; init; } = string.Empty;
 }
 
 public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, AuthenticateResponse>
