@@ -2,9 +2,9 @@
 
 namespace Domain.Events.Company;
 
-public class CompanyCreatedEvent : BaseEvent
+public class CompanyInvitedEvent : BaseEvent
 {
-    public CompanyCreatedEvent(Entities.Company company)
+    public CompanyInvitedEvent(Entities.Company company)
     {
         Company = company;
     }

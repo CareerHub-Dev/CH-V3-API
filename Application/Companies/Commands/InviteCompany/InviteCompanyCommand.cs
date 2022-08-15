@@ -1,10 +1,7 @@
 ﻿using Application.Common.Interfaces;
-using Application.Companies.Events;
 using Domain.Entities;
 using Domain.Events.Company;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 
 namespace Application.Companies.Commands.InviteCompany;
 
@@ -26,29 +23,15 @@ public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand,
     {
         var entity = new Company
         {
-            Email = request.Email,
-            VerificationToken = await GenerateVerificationTokenAsync()
+            Email = request.Email
         };
 
-        entity.AddDomainEvent(new CompanyCreatedEvent(entity));
+        entity.AddDomainEvent(new CompanyInvitedEvent(entity));
 
         await _context.Companies.AddAsync(entity, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
 
         return entity.Id;
-    }
-
-    private async Task<string> GenerateVerificationTokenAsync()
-    {
-        // token is a cryptographically strong random sequence of values
-        var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
-
-        // ensure token is unique by checking against db
-        var tokenIsUnique = !await _context.Accounts.AnyAsync(x => x.VerificationToken == token);
-        if (!tokenIsUnique)
-            return await GenerateVerificationTokenAsync();
-
-        return token;
     }
 }

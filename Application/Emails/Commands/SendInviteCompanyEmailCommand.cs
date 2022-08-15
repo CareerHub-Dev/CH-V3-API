@@ -5,6 +5,7 @@ using Application.Common.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace Application.Emails.Commands;
 
@@ -25,12 +26,15 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
 
     public async Task<Unit> Handle(SendInviteCompanyEmailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Companies.AsNoTracking().FirstOrDefaultAsync(x => x.Id == request.companyId, cancellationToken);
+        var entity = await _context.Companies.FirstOrDefaultAsync(x => x.Id == request.companyId, cancellationToken);
 
         if (entity == null)
         {
             throw new NotFoundException(nameof(Company), request.companyId);
         }
+
+        entity.VerificationToken = await GenerateVerificationTokenAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         var template = await _templateService.GetTemplateAsync(TemplateConstants.CompanyInvitationEmail);
 
@@ -39,5 +43,18 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
         await _emailService.SendEmailAsync(entity.NormalizedEmail, "Invitation Email", template);
 
         return Unit.Value;
+    }
+
+    private async Task<string> GenerateVerificationTokenAsync()
+    {
+        // token is a cryptographically strong random sequence of values
+        var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
+
+        // ensure token is unique by checking against db
+        var tokenIsUnique = !await _context.Accounts.AnyAsync(x => x.VerificationToken == token);
+        if (!tokenIsUnique)
+            return await GenerateVerificationTokenAsync();
+
+        return token;
     }
 }
