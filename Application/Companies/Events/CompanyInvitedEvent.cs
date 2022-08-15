@@ -34,7 +34,7 @@ public class CompanyInvitedEventHandler : INotificationHandler<CompanyInvitedEve
     {
         var template = await _templateService.GetTemplateAsync(TemplateConstants.CompanyInvitationEmail);
 
-        template.MultipleReplace(new Dictionary<string, string> { { "{verificationToken}", notification.Company.VerificationToken ?? "" } });
+        template = template.MultipleReplace(new Dictionary<string, string> { { "{verificationToken}", notification.Company.VerificationToken ?? "" } });
 
         await _emailService.SendEmailAsync(notification.Company.NormalizedEmail, "Invitation Email", template);
 

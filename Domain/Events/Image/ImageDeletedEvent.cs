@@ -1,6 +1,8 @@
-﻿namespace Domain.Events.Image;
+﻿using Domain.Common;
 
-public class ImageDeletedEvent
+namespace Domain.Events.Image;
+
+public class ImageDeletedEvent : BaseEvent
 {
     public ImageDeletedEvent(Entities.Image image)
     {

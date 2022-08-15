@@ -1,6 +1,5 @@
-﻿namespace WebUI.DTO
+﻿namespace WebUI.DTO;
+
+public interface IValidatableMarker
 {
-    public interface IValidatableMarker
-    {
-    }
 }
