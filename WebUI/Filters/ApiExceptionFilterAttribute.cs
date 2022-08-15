@@ -108,7 +108,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         var details = new ProblemDetails()
         {
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
-            Title = "Bad Request.",
+            Title = "Invalid arguments.",
             Detail = exception.Message
         };
 
