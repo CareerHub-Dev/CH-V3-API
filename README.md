@@ -7,15 +7,15 @@
 
 ### Database Configuration
 
-The project is configured to use an in-memory database by default. This ensures that all users will be able to run the solution without needing to set up additional infrastructure (e.g. PostgreSQL).
-
-If you would like to use PostgreSQL, you will need to update **WebUI/appsettings.json** as follows:
+If you would like to use PostgreSQL, you will need to update **WebUI/appsettings.Development.json** as follows:
 
 ```json
-  "UseInMemoryDatabase": false,
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=*;Database=*;Username=*;Password=*"
+  }
 ```
 
-Verify that the **DefaultConnection** connection string within **appsettings.json** points to a valid PostgreSQL instance. 
+Verify that the **DefaultConnection** connection string within **appsettings.Development.json** points to a valid PostgreSQL instance. 
 
 When you run the application the database will be automatically created (if necessary) and the latest migrations will be applied.
 
