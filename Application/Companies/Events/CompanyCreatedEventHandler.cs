@@ -20,6 +20,6 @@ public class CompanyCreatedEventHandler : INotificationHandler<CompanyCreatedEve
     {
         _logger.LogInformation("CH-V3-API Domain Event: {DomainEvent}", notification.GetType().Name);
 
-        await _mediator.Send(new SendInviteCompanyEmailCommand(notification.Company.Id));
+        await _mediator.Send(new SendInviteCompanyEmailCommand(notification.Company.Id), cancellationToken);
     }
 }
