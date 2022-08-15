@@ -6,12 +6,12 @@ namespace Application.Auth.Commands.VerifyCompanyWithContinuedRegistration;
 
 public record VerifyCompanyWithContinuedRegistrationCommand : IRequest
 {
-    public string Token { get; set; } = string.Empty;
+    public string Token { get; init; } = string.Empty;
 
-    public string CompanyName { get; set; } = string.Empty;
-    public string CompanyMotto { get; set; } = string.Empty;
-    public string CompanyDescription { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
+    public string CompanyName { get; init; } = string.Empty;
+    public string CompanyMotto { get; init; } = string.Empty;
+    public string CompanyDescription { get; init; } = string.Empty;
+    public string Password { get; init; } = string.Empty;
 }
 
 public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHandler<VerifyCompanyWithContinuedRegistrationCommand>

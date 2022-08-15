@@ -1,4 +1,5 @@
 ﻿using Application.Auth.Commands.Authenticate;
+using Application.Auth.Commands.VerifyCompanyWithContinuedRegistration;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.DTO.Auth;
 
@@ -32,6 +33,22 @@ public class AccountsController : ApiControllerBase
             default:
                 return Ok(response);
         }
+    }
+
+    [HttpPost("verify-company-email")]
+    public async Task<IActionResult> VerifyCompanyEmail([FromForm] VerifyCompanyWithContinuedRegistrationRequest verifyCompanyRequest)
+    {
+        var companuInfo = new VerifyCompanyWithContinuedRegistrationCommand
+        {
+            Token = verifyCompanyRequest.Token,
+            CompanyName = verifyCompanyRequest.CompanyName,
+            CompanyMotto = verifyCompanyRequest.CompanyMotto,
+            CompanyDescription = verifyCompanyRequest.CompanyDescription,
+            Password = verifyCompanyRequest.Password,
+        };
+
+        await Mediator.Send(companuInfo);
+        return Ok(new { message = "Verification successful, you can now login" });
     }
 
     // helper methods

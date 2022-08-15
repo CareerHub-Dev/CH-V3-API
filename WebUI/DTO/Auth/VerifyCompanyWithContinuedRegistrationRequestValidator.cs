@@ -1,11 +1,11 @@
 ﻿using Application.Common.Entensions;
 using FluentValidation;
 
-namespace Application.Auth.Commands.VerifyCompanyWithContinuedRegistration;
+namespace WebUI.DTO.Auth;
 
-public class VerifyCompanyWithContinuedRegistrationCommandValidator : AbstractValidator<VerifyCompanyWithContinuedRegistrationCommand>
+public class VerifyCompanyWithContinuedRegistrationRequestValidator : AbstractValidator<VerifyCompanyWithContinuedRegistrationRequest>
 {
-    public VerifyCompanyWithContinuedRegistrationCommandValidator()
+    public VerifyCompanyWithContinuedRegistrationRequestValidator()
     {
         RuleFor(x => x.Token).NotEmpty();
         RuleFor(x => x.CompanyName).NotEmpty().MaximumLength(50);

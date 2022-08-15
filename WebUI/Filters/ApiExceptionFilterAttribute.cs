@@ -16,7 +16,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             {
                 { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
-                { typeof(AuthenticationException), HandleAuthenticationException }
+                { typeof(AuthenticationException), HandleAuthenticationException },
+                { typeof(ArgumentException), HandleArgumentException }
             };
     }
 
@@ -93,6 +94,21 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         {
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
             Title = "Authorization failed.",
+            Detail = exception.Message
+        };
+
+        context.Result = new BadRequestObjectResult(details);
+
+        context.ExceptionHandled = true;
+    }
+    private void HandleArgumentException(ExceptionContext context)
+    {
+        var exception = (ArgumentException)context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            Title = "Bad Request.",
             Detail = exception.Message
         };
 
