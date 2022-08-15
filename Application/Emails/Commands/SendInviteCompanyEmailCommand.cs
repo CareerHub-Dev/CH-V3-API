@@ -33,6 +33,11 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
             throw new NotFoundException(nameof(Company), request.companyId);
         }
 
+        if(entity.IsVerified)
+        {
+            throw new ArgumentException("Company is verified");
+        }
+
         entity.VerificationToken = await GenerateVerificationTokenAsync();
         await _context.SaveChangesAsync(cancellationToken);
 
