@@ -16,12 +16,10 @@ public record InviteCompanyCommand : IRequest<Guid>
 public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IMediator _mediator;
 
-    public InviteCompanyCommandHandler(IApplicationDbContext context, IMediator mediator)
+    public InviteCompanyCommandHandler(IApplicationDbContext context)
     {
         _context = context;
-        _mediator = mediator;
     }
 
     public async Task<Guid> Handle(InviteCompanyCommand request, CancellationToken cancellationToken)
@@ -37,8 +35,6 @@ public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand,
         await _context.Companies.AddAsync(entity, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
-
-        await _mediator.Publish(new CompanyInvitedEvent(entity), cancellationToken);
 
         return entity.Id;
     }
