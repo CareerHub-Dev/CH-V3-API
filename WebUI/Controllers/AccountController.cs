@@ -5,7 +5,7 @@ using WebUI.DTO.Auth;
 
 namespace WebUI.Controllers;
 
-public class AccountsController : ApiControllerBase
+public class AccountController : ApiControllerBase
 {
     [HttpPost("authenticate-{clientType}")]
     public async Task<IActionResult> Authenticate(AuthenticateRequest authenticateRequest, string clientType)
