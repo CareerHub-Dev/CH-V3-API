@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace WebUI.DTO.Auth;
+namespace WebUI.DTO.Auth.Validators;
 
 public class AuthenticateRequestValidator : AbstractValidator<AuthenticateRequest>
 {

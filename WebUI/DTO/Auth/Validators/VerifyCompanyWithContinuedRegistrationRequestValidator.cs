@@ -1,7 +1,7 @@
 ﻿using Application.Common.Entensions;
 using FluentValidation;
 
-namespace WebUI.DTO.Auth;
+namespace WebUI.DTO.Auth.Validators;
 
 public class VerifyCompanyWithContinuedRegistrationRequestValidator : AbstractValidator<VerifyCompanyWithContinuedRegistrationRequest>
 {

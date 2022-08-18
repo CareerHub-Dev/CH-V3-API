@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace WebUI.DTO.Company;
+namespace WebUI.DTO.Company.Validators;
 
 public class InviteCompanyRequestValidator : AbstractValidator<InviteCompanyRequest>
 {
