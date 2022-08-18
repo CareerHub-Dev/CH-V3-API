@@ -1,4 +1,4 @@
-﻿using Application.JwtService.Models;
+﻿using Application.Services.Jwt.Models;
 using Domain.Entities;
 
 namespace Application.Common.Interfaces;

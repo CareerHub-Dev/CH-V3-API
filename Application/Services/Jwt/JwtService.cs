@@ -1,6 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models;
-using Application.JwtService.Models;
+using Application.Services.Jwt.Models;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Application.JwtService;
+namespace Application.Services.Jwt;
 
 public class JwtService : IJwtService
 {

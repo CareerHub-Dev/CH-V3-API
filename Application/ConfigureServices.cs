@@ -1,7 +1,8 @@
 ﻿using Application.Common.Behaviours;
 using Application.Common.Interfaces;
 using Application.Common.Models;
-using Application.JwtService;
+using Application.Services.Jwt;
+using Application.Services.Procedure;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,7 @@ public static class ConfigureServices
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
 
         services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IProcedureService, ProcedureService>();
 
         services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
 

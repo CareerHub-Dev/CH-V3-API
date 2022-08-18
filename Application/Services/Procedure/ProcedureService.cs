@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 
-namespace Application.ProcedureService;
+namespace Application.Services.Procedure;
 
 public class ProcedureService : IProcedureService
 {
