@@ -1,4 +1,4 @@
-﻿namespace Application.Auth.Commands.Identify;
+﻿namespace Application.Accounts.Commands.Identify;
 
 public class IdentifyResponse
 {

@@ -1,6 +1,6 @@
-﻿using Application.Auth.Commands.Authenticate;
-using Application.Auth.Commands.ResetPassword;
-using Application.Auth.Commands.VerifyCompanyWithContinuedRegistration;
+﻿using Application.Accounts.Commands.Authenticate;
+using Application.Accounts.Commands.ResetPassword;
+using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.DTO.Account;

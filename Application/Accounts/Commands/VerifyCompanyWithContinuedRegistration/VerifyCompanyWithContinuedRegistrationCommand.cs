@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Auth.Commands.VerifyCompanyWithContinuedRegistration;
+namespace Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 
 public record VerifyCompanyWithContinuedRegistrationCommand : IRequest
 {

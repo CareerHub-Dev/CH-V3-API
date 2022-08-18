@@ -1,4 +1,4 @@
-﻿namespace Application.Auth.Commands.Authenticate;
+﻿namespace Application.Accounts.Commands.Authenticate;
 
 public class AuthenticateResponse
 {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Security.Authentication;
 
-namespace Application.Auth.Commands.Authenticate;
+namespace Application.Accounts.Commands.Authenticate;
 
 public record AuthenticateCommand : IRequest<AuthenticateResponse>
 {

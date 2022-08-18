@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Auth.Commands.Identify;
+namespace Application.Accounts.Commands.Identify;
 
 public record IdentifyCommand : IRequest<IdentifyResponse?>
 {

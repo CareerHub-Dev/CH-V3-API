@@ -4,7 +4,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Auth.Commands.ResetPassword;
+namespace Application.Accounts.Commands.ResetPassword;
 
 public record ResetPasswordCommand : IRequest
 {

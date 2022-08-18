@@ -1,4 +1,4 @@
-﻿using Application.Auth.Commands.Identify;
+﻿using Application.Accounts.Commands.Identify;
 using MediatR;
 
 namespace WebUI.Authorize;

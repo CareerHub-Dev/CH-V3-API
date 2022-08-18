@@ -1,7 +1,7 @@
 ﻿using Application.Common.Entensions;
 using FluentValidation;
 
-namespace Application.Auth.Commands.VerifyCompanyWithContinuedRegistration;
+namespace Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 
 public class VerifyCompanyWithContinuedRegistrationCommandValidator : AbstractValidator<VerifyCompanyWithContinuedRegistrationCommand>
 {

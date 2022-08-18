@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Auth.Commands.Authenticate;
+namespace Application.Accounts.Commands.Authenticate;
 
 public class AuthenticateCommandValidator : AbstractValidator<AuthenticateCommand>
 {
