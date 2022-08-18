@@ -5,18 +5,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Companies.Events;
 
-public class CompanyInvitedEventHandler : INotificationHandler<CompanyInvitedEvent>
+public class CompanyCreatedEventHandler : INotificationHandler<CompanyCreatedEvent>
 {
-    private readonly ILogger<CompanyInvitedEventHandler> _logger;
+    private readonly ILogger<CompanyCreatedEventHandler> _logger;
     private readonly IMediator _mediator;
 
-    public CompanyInvitedEventHandler(ILogger<CompanyInvitedEventHandler> logger, IMediator mediator)
+    public CompanyCreatedEventHandler(ILogger<CompanyCreatedEventHandler> logger, IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
     }
 
-    public async Task Handle(CompanyInvitedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(CompanyCreatedEvent notification, CancellationToken cancellationToken)
     {
         await _mediator.Send(new SendInviteCompanyEmailCommand(notification.Company.Id), cancellationToken);
 

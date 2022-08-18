@@ -26,7 +26,7 @@ public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand,
             Email = request.Email
         };
 
-        entity.AddDomainEvent(new CompanyInvitedEvent(entity));
+        entity.AddDomainEvent(new CompanyCreatedEvent(entity));
 
         await _context.Companies.AddAsync(entity, cancellationToken);
 
