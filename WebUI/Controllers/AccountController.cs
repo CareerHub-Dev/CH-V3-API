@@ -1,4 +1,5 @@
 ﻿using Application.Accounts.Commands.Authenticate;
+using Application.Accounts.Commands.RefreshToken;
 using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Emails.Commands;
@@ -37,8 +38,46 @@ public class AccountController : ApiControllerBase
         }
     }
 
+    [HttpPost("refresh-token-{clientType}")]
+    public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshToken, string clientType)
+    {
+        if (string.IsNullOrWhiteSpace(refreshToken.Token))
+        {
+            refreshToken.Token = Request.Cookies["refreshToken"];
+        }
+
+        if (string.IsNullOrWhiteSpace(refreshToken.Token))
+        {
+            return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required");
+        }
+
+        var response = await Mediator.Send(new RefreshTokenCommand
+        {
+            Token = refreshToken.Token,
+            IpAddress = IpAddress()
+        });
+
+        switch (clientType)
+        {
+            case "web":
+                {
+                    SetTokenCookie(response.RefreshToken);
+                    return Ok(new
+                    {
+                        response.AccountId,
+                        response.JwtToken,
+                        response.JwtTokenExpires,
+                        response.Role
+                    });
+                }
+            default:
+                return Ok(response);
+
+        }
+    }
+
     [HttpPost("verify-company-email")]
-    public async Task<IActionResult> VerifyCompanyEmail([FromForm] VerifyCompanyWithContinuedRegistrationRequest verifyCompanyRequest)
+    public async Task<IActionResult> VerifyCompanyWithContinuedRegistration([FromForm] VerifyCompanyWithContinuedRegistrationRequest verifyCompanyRequest)
     {
         var companuInfo = new VerifyCompanyWithContinuedRegistrationCommand
         {
