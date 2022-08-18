@@ -16,12 +16,14 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
     private readonly IApplicationDbContext _context;
     private readonly IEmailService _emailService;
     private readonly ITemplateService _templateService;
+    private readonly IProcedureService _procedureService;
 
-    public SendInviteCompanyEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, ITemplateService templateService)
+    public SendInviteCompanyEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, ITemplateService templateService, IProcedureService procedureService)
     {
         _context = context;
         _emailService = emailService;
         _templateService = templateService;
+        _procedureService = procedureService;
     }
 
     public async Task<Unit> Handle(SendInviteCompanyEmailCommand request, CancellationToken cancellationToken)
@@ -38,7 +40,7 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
             throw new ArgumentException("Company is verified");
         }
 
-        entity.VerificationToken = await GenerateVerificationTokenAsync();
+        entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync();
         await _context.SaveChangesAsync(cancellationToken);
 
         var template = await _templateService.GetTemplateAsync(TemplateConstants.CompanyInvitationEmail);
@@ -48,18 +50,5 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
         await _emailService.SendEmailAsync(entity.NormalizedEmail, "Invitation Email", template);
 
         return Unit.Value;
-    }
-
-    private async Task<string> GenerateVerificationTokenAsync()
-    {
-        // token is a cryptographically strong random sequence of values
-        var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
-
-        // ensure token is unique by checking against db
-        var tokenIsUnique = !await _context.Accounts.AnyAsync(x => x.VerificationToken == token);
-        if (!tokenIsUnique)
-            return await GenerateVerificationTokenAsync();
-
-        return token;
     }
 }

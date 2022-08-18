@@ -19,12 +19,14 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
     private readonly IApplicationDbContext _context;
     private readonly IEmailService _emailService;
     private readonly ITemplateService _templateService;
+    private readonly IProcedureService _procedureService;
 
-    public SendPasswordResetEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, ITemplateService templateService)
+    public SendPasswordResetEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, ITemplateService templateService, IProcedureService procedureService)
     {
         _context = context;
         _emailService = emailService;
         _templateService = templateService;
+        _procedureService = procedureService;
     }
 
     public async Task<Unit> Handle(SendPasswordResetEmailCommand request, CancellationToken cancellationToken)
@@ -36,7 +38,7 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
             throw new NotFoundException(nameof(Account), request.Email);
         }
 
-        entity.ResetToken = await GenerateVerificationTokenAsync();
+        entity.ResetToken = await _procedureService.GenerateAccountResetTokenAsync();
         entity.ResetTokenExpires = DateTime.UtcNow.AddDays(1);
 
         await _context.SaveChangesAsync(cancellationToken);
@@ -48,18 +50,5 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
         await _emailService.SendEmailAsync(entity.NormalizedEmail, "Reset Password", template);
 
         return Unit.Value;
-    }
-
-    private async Task<string> GenerateVerificationTokenAsync()
-    {
-        // token is a cryptographically strong random sequence of values
-        var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
-
-        // ensure token is unique by checking against db
-        var tokenIsUnique = !await _context.Accounts.AnyAsync(x => x.VerificationToken == token);
-        if (!tokenIsUnique)
-            return await GenerateVerificationTokenAsync();
-
-        return token;
     }
 }

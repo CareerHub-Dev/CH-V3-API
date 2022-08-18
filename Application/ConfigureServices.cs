@@ -1,7 +1,7 @@
 ﻿using Application.Common.Behaviours;
 using Application.Common.Interfaces;
 using Application.Common.Models;
-using Application.Jwt;
+using Application.JwtService;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Configuration;
