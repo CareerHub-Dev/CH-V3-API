@@ -3,7 +3,7 @@ using Application.Auth.Commands.ResetPassword;
 using Application.Auth.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
-using WebUI.DTO.Auth;
+using WebUI.DTO.Account;
 
 namespace WebUI.Controllers;
 

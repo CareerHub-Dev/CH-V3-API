@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace WebUI.DTO.Auth.Validators;
+namespace WebUI.DTO.Account.Validators;
 
 public class ForgotPasswordRequestValidator : AbstractValidator<ForgotPasswordRequest>
 {

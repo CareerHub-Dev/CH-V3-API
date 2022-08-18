@@ -1,4 +1,4 @@
-﻿namespace WebUI.DTO.Auth;
+﻿namespace WebUI.DTO.Account;
 
 public class AuthenticateRequest : IValidatableMarker
 {
