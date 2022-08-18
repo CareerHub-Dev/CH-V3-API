@@ -1,5 +1,6 @@
 ﻿using Application.Auth.Commands.Authenticate;
 using Application.Auth.Commands.VerifyCompanyWithContinuedRegistration;
+using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.DTO.Auth;
 
@@ -49,6 +50,14 @@ public class AccountController : ApiControllerBase
 
         await Mediator.Send(companuInfo);
         return Ok(new { message = "Verification successful, you can now login" });
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest forgotPassword)
+    {
+        await Mediator.Send(new SendPasswordResetEmailCommand { Email = forgotPassword.Email });
+
+        return Ok(new { message = "Please check your email for password reset instructions" });
     }
 
     // helper methods

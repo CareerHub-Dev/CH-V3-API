@@ -9,7 +9,10 @@ using System.Security.Cryptography;
 
 namespace Application.Emails.Commands;
 
-public record SendPasswordResetEmailCommand(Guid accountId) : IRequest;
+public record SendPasswordResetEmailCommand : IRequest
+{
+    public string Email { get; init; } = string.Empty;
+}
 
 public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPasswordResetEmailCommand>
 {
@@ -26,14 +29,14 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
 
     public async Task<Unit> Handle(SendPasswordResetEmailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == request.accountId, cancellationToken);
+        var entity = await _context.Accounts.FirstOrDefaultAsync(x => x.NormalizedEmail == request.Email.NormalizeName(), cancellationToken);
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(Account), request.accountId);
+            throw new NotFoundException(nameof(Account), request.Email);
         }
 
-        entity.VerificationToken = await GenerateVerificationTokenAsync();
+        entity.ResetToken = await GenerateVerificationTokenAsync();
         entity.ResetTokenExpires = DateTime.UtcNow.AddDays(1);
 
         await _context.SaveChangesAsync(cancellationToken);
