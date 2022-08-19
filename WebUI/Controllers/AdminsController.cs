@@ -1,4 +1,5 @@
-﻿using Application.Admins.Queries;
+﻿using Application.Admins.Commands.InviteAdmin;
+using Application.Admins.Queries;
 using Application.Common.Models.Filtration.Admin;
 using Application.Common.Models.Pagination;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,22 @@ namespace WebUI.Controllers
             });
 
             return new AdminResponse(result);
+        }
+
+        /// <summary>
+        /// Admin
+        /// </summary>
+        /// <remarks>
+        /// Admin:
+        /// 
+        ///     Create admin (sends an e-mail under the hood)
+        ///
+        /// </remarks>
+        [HttpPost("invite")]
+        [Authorize("Admin")]
+        public async Task<ActionResult<Guid>> InviteAdmin(InviteAdminRequest model)
+        {
+            return await Mediator.Send(new InviteAdminCommand { Email = model.Email });
         }
     }
 }

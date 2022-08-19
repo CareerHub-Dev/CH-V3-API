@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 
-namespace WebUI.DTO.Company.Validators;
+namespace WebUI.DTO.Admin.Validators;
 
-public class InviteAdminRequestValidator : AbstractValidator<InviteCompanyRequest>
+public class InviteAdminRequestValidator : AbstractValidator<InviteAdminRequest>
 {
     public InviteAdminRequestValidator()
     {
