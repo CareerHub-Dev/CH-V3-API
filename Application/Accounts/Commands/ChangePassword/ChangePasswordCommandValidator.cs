@@ -7,9 +7,6 @@ public class ChangePasswordCommandValidator : AbstractValidator<ChangePasswordCo
 {
     public ChangePasswordCommandValidator()
     {
-        RuleFor(x => x.AccountId)
-            .NotEmpty();
-
         RuleFor(x => x.OldPassword)
             .NotEmpty();
 

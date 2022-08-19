@@ -6,9 +6,6 @@ public class RevokeTokenCommandValidator : AbstractValidator<RevokeTokenCommand>
 {
     public RevokeTokenCommandValidator()
     {
-        RuleFor(x => x.AccountId)
-            .NotEmpty();
-
         RuleFor(x => x.Token)
             .NotEmpty();
 
