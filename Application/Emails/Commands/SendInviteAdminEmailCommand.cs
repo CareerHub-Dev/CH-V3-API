@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Emails.Commands;
 
-public record SendInviteAdminEmailCommand(Guid adminId) : IRequest;
+public record SendInviteAdminEmailCommand(Guid AdminId) : IRequest;
 
 public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdminEmailCommand>
 {
@@ -27,11 +27,11 @@ public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdmi
 
     public async Task<Unit> Handle(SendInviteAdminEmailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Admins.FirstOrDefaultAsync(x => x.Id == request.adminId, cancellationToken);
+        var entity = await _context.Admins.FirstOrDefaultAsync(x => x.Id == request.AdminId, cancellationToken);
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(Admin), request.adminId);
+            throw new NotFoundException(nameof(Admin), request.AdminId);
         }
 
         if (entity.IsVerified)

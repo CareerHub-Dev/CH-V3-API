@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Admins.Commands.DeleteAdmin;
 
-public record DeleteAdminCommand(Guid adminId) : IRequest;
+public record DeleteAdminCommand(Guid AdminId) : IRequest;
 
 public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
 {
@@ -21,11 +21,11 @@ public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
     {
         var entity = await _context.Admins
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.adminId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.AdminId, cancellationToken);
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(Admin), request.adminId);
+            throw new NotFoundException(nameof(Admin), request.AdminId);
         }
 
         _context.Admins.Remove(entity);

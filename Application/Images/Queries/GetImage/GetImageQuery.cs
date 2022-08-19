@@ -28,7 +28,7 @@ public class GetImageQueryHandler : IRequestHandler<GetImageQuery, ImageDTO>
                 FileName = x.FileName,
                 Content = x.Content
             })
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (image == null)
         {

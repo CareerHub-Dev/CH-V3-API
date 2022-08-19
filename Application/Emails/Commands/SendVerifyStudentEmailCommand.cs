@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Emails.Commands;
 
-public record SendVerifyStudentEmailCommand(Guid studentId) : IRequest;
+public record SendVerifyStudentEmailCommand(Guid StudentId) : IRequest;
 
 public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifyStudentEmailCommand>
 {
@@ -27,11 +27,11 @@ public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifySt
 
     public async Task<Unit> Handle(SendVerifyStudentEmailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Students.FirstOrDefaultAsync(x => x.Id == request.studentId, cancellationToken);
+        var entity = await _context.Students.FirstOrDefaultAsync(x => x.Id == request.StudentId, cancellationToken);
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(Student), request.studentId);
+            throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
         if (entity.IsVerified)
