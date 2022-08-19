@@ -14,6 +14,7 @@ public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
 
     public DeleteAdminCommandHandler(IApplicationDbContext context)
     {
+        _context = context;
     }
 
     public async Task<Unit> Handle(DeleteAdminCommand request, CancellationToken cancellationToken)
