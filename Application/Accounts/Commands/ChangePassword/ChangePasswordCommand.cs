@@ -33,7 +33,7 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
 
         if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, account.PasswordHash))
         {
-            throw new ArgumentException("Incorrect old password");
+            throw new ArgumentException("The old password does not match.");
         }
 
         account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);

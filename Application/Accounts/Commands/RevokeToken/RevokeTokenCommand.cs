@@ -32,7 +32,7 @@ public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
 
         if (!refreshToken.IsActive)
         {
-            throw new ArgumentException("Token is not active");
+            throw new ArgumentException("Token is not active.");
         }
 
         refreshToken.Revoked = DateTime.UtcNow;

@@ -34,9 +34,14 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
                 .Include(x => x.RefreshTokens)
                 .SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == request.Token), cancellationToken);
 
-        if (account == null || !account.IsVerified)
+        if (account == null)
         {
             throw new NotFoundException(nameof(Account), request.Token);
+        }
+
+        if (!account.IsVerified)
+        {
+            throw new ArgumentException("Account is not Verified.");
         }
 
         var refreshToken = account.RefreshTokens.Single(x => x.Token == request.Token);

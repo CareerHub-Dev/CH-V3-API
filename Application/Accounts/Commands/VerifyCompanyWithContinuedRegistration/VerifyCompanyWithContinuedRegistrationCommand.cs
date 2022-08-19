@@ -1,4 +1,6 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,7 +32,7 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
 
         if (entity == null)
         {
-            throw new ArgumentException("Verification failed. Token does not exist");
+            throw new NotFoundException(nameof(Company), request.Token);
         }
 
         entity.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
