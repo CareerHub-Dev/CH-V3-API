@@ -1,9 +1,11 @@
 ﻿using Application.Accounts.Commands.Authenticate;
 using Application.Accounts.Commands.RefreshToken;
 using Application.Accounts.Commands.ResetPassword;
+using Application.Accounts.Commands.RevokeToken;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
+using WebUI.Authorize;
 using WebUI.DTO.Account;
 
 namespace WebUI.Controllers;
@@ -107,7 +109,27 @@ public class AccountController : ApiControllerBase
 
         return Ok(new { message = "Password reset successful, you can now login" });
     }
+    
+    /// <summary>
+    /// Auth
+    /// </summary>
+    [Authorize]
+    [HttpPost("revoke-token")]
+    public async Task<IActionResult> RevokeTokenOfAccountAsync(RevokeTokenRequest revokeToken)
+    {
+        if (string.IsNullOrWhiteSpace(revokeToken.Token))
+        {
+            revokeToken.Token = Request.Cookies["refreshToken"];
+        }
 
+        if (string.IsNullOrWhiteSpace(revokeToken.Token))
+        {
+            return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required");
+        }
+        await Mediator.Send(new RevokeTokenCommand { Token = revokeToken.Token, IpAddress = IpAddress(), AccountId = AccountInfo!.Id });
+
+        return Ok(new { message = "Token revoked" });
+    }
     // helper methods
     private void SetTokenCookie(string token)
     {
