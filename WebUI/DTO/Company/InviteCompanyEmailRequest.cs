@@ -1,6 +1,6 @@
 ﻿namespace WebUI.DTO.Company;
 
-public class InviteCompanyEmailRequest : IValidatableMarker
+public class SendInviteCompanyEmailRequest : IValidatableMarker
 {
     public Guid CompanyId { get; set; }
 }

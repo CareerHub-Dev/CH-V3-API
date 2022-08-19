@@ -33,9 +33,9 @@ namespace WebUI.Controllers
         ///     sends an e-mail
         ///
         /// </remarks>
-        [HttpPost("inviteEmail")]
+        [HttpPost("send-invite-email")]
         [Authorize("Admin")]
-        public async Task<IActionResult> SendInviteCompanyEmail(InviteCompanyEmailRequest model)
+        public async Task<IActionResult> SendInviteCompanyEmail(SendInviteCompanyEmailRequest model)
         {
             await Mediator.Send(new SendInviteCompanyEmailCommand(model.CompanyId));
             return Ok();

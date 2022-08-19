@@ -2,7 +2,7 @@
 
 namespace WebUI.DTO.Company.Validators;
 
-public class InviteCompanyEmailRequestValidator : AbstractValidator<InviteCompanyEmailRequest>
+public class InviteCompanyEmailRequestValidator : AbstractValidator<SendInviteCompanyEmailRequest>
 {
     public InviteCompanyEmailRequestValidator()
     {
