@@ -3,6 +3,7 @@ using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Queries;
 using Application.Common.Models.Filtration.Admin;
 using Application.Common.Models.Pagination;
+using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
@@ -40,9 +41,6 @@ namespace WebUI.Controllers
             return new AdminResponse(result);
         }
 
-        /// <summary>
-        /// Admin
-        /// </summary>
         /// <remarks>
         /// Admin:
         /// 
@@ -54,6 +52,20 @@ namespace WebUI.Controllers
         public async Task<ActionResult<Guid>> InviteAdmin(InviteAdminRequest model)
         {
             return await Mediator.Send(new InviteAdminCommand { Email = model.Email });
+        }
+
+        /// <remarks>
+        /// Admin:
+        /// 
+        ///     sends an e-mail
+        ///
+        /// </remarks>
+        [HttpPost("send-invite-email")]
+        [Authorize("Admin")]
+        public async Task<IActionResult> SendInviteAdminEmail(SendInviteAdminEmailRequest model)
+        {
+            await Mediator.Send(new SendInviteAdminEmailCommand(model.AdminId));
+            return Ok();
         }
 
         [HttpDelete("{adminId}")]
