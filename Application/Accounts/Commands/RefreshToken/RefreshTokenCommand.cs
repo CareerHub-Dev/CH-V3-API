@@ -71,7 +71,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         {
             JwtToken = jwtToken.Token,
             JwtTokenExpires = jwtToken.Expires,
-            RefreshToken = refreshToken.Token,
+            RefreshToken = newRefreshToken.Token,
             AccountId = account.Id,
             Role = account.GetType().Name
         };
