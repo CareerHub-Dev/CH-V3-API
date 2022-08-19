@@ -1,4 +1,5 @@
-﻿using Application.Admins.Commands.InviteAdmin;
+﻿using Application.Admins.Commands.DeleteAdmin;
+using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Queries;
 using Application.Common.Models.Filtration.Admin;
 using Application.Common.Models.Pagination;
@@ -53,6 +54,14 @@ namespace WebUI.Controllers
         public async Task<ActionResult<Guid>> InviteAdmin(InviteAdminRequest model)
         {
             return await Mediator.Send(new InviteAdminCommand { Email = model.Email });
+        }
+
+        [HttpDelete("{adminId}")]
+        public async Task<IActionResult> DeleteAdmin(Guid adminId)
+        {
+            await Mediator.Send(new DeleteAdminCommand(adminId));
+
+            return NoContent();
         }
     }
 }
