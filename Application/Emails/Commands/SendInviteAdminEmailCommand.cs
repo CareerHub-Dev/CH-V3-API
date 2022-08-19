@@ -5,7 +5,6 @@ using Application.Common.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 
 namespace Application.Emails.Commands;
 

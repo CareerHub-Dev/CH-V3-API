@@ -5,7 +5,6 @@ using Application.Common.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 
 namespace Application.Emails.Commands;
 
@@ -35,7 +34,7 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
             throw new NotFoundException(nameof(Company), request.companyId);
         }
 
-        if(entity.IsVerified)
+        if (entity.IsVerified)
         {
             throw new ArgumentException("Company is verified");
         }
