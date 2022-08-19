@@ -1,0 +1,45 @@
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
+using Domain.Entities;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
+namespace Application.Accounts.Commands.ChangePassword;
+
+public record ChangePasswordCommand : IRequest
+{
+    public Guid AccountId { get; set; }
+    public string OldPassword { get; init; } = string.Empty;
+    public string NewPassword { get; init; } = string.Empty;
+}
+
+public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand>
+{
+    private readonly IApplicationDbContext _context;
+
+    public ChangePasswordCommandHandler(IApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+    {
+        var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == request.AccountId, cancellationToken);
+
+        if (account == null)
+        {
+            throw new NotFoundException(nameof(Account), request.AccountId);
+        }
+
+        if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, account.PasswordHash))
+        {
+            throw new ArgumentException("Incorrect old password");
+        }
+
+        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Unit.Value;
+    }
+}

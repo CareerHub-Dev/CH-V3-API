@@ -1,4 +1,5 @@
 ﻿using Application.Accounts.Commands.Authenticate;
+using Application.Accounts.Commands.ChangePassword;
 using Application.Accounts.Commands.RefreshToken;
 using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.RevokeToken;
@@ -129,6 +130,22 @@ public class AccountController : ApiControllerBase
         await Mediator.Send(new RevokeTokenCommand { Token = revokeToken.Token, IpAddress = IpAddress(), AccountId = AccountInfo!.Id });
 
         return Ok(new { message = "Token revoked" });
+    }
+
+    /// <summary>
+    /// Auth
+    /// </summary>
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword(ChangePasswordRequest changePassword)
+    {
+        await Mediator.Send(new ChangePasswordCommand {
+            OldPassword = changePassword.OldPassword,
+            NewPassword = changePassword.NewPassword,
+            AccountId = AccountInfo!.Id,
+        });
+
+        return Ok(new { message = "Password change successful" });
     }
     // helper methods
     private void SetTokenCookie(string token)

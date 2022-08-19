@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,12 +14,10 @@ public record RevokeTokenCommand : IRequest
 public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IJwtService _jwtService;
 
-    public RevokeTokenCommandHandler(IApplicationDbContext context, IJwtService jwtService)
+    public RevokeTokenCommandHandler(IApplicationDbContext context)
     {
         _context = context;
-        _jwtService = jwtService;
     }
 
     public async Task<Unit> Handle(RevokeTokenCommand request, CancellationToken cancellationToken)
@@ -26,9 +25,14 @@ public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
         var refreshToken = await _context.RefreshTokens
                 .SingleOrDefaultAsync(x => x.Token == request.Token && x.AccountId == request.AccountId);
 
-        if (refreshToken == null || !refreshToken.IsActive)
+        if (refreshToken == null )
         {
-            throw new ArgumentException("Token does not exist or is not active");
+            throw new NotFoundException(nameof(Domain.Entities.RefreshToken), request.Token);
+        }
+
+        if (!refreshToken.IsActive)
+        {
+            throw new ArgumentException("Token is not active");
         }
 
         refreshToken.Revoked = DateTime.UtcNow;
