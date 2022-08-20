@@ -32,6 +32,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Company> Companies => Set<Company>();
     public DbSet<Admin> Admins => Set<Admin>();
     public DbSet<Image> Images => Set<Image>();
+    public DbSet<StudentGroup> StudentGroups => Set<StudentGroup>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

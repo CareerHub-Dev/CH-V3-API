@@ -46,7 +46,7 @@ public class ApplicationDbContextInitialiser
 
     public async Task TrySeedAsync()
     {
-        // Default accounts
+        // Default admin accounts
         if (!await _context.Admins.AnyAsync())
         {
             await _context.Admins.AddAsync(new Admin
@@ -57,8 +57,29 @@ public class ApplicationDbContextInitialiser
             });
         }
 
-        // Default data
-
+        // Default StudentGroups
+        if (!await _context.StudentGroups.AnyAsync())
+        {
+            await _context.StudentGroups.AddRangeAsync(
+                new StudentGroup
+                {
+                    Name = "ПЗПІ-19-6"
+                },
+                new StudentGroup
+                {
+                    Name = "ПЗПІ-19-7"
+                },
+                new StudentGroup
+                {
+                    Name = "ПЗПІ-19-8"
+                }
+                ,
+                new StudentGroup
+                {
+                    Name = "ПЗПІи-19-1"
+                }
+            );
+        }
 
         await _context.SaveChangesAsync();
     }

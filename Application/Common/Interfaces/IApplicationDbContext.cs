@@ -11,5 +11,6 @@ public interface IApplicationDbContext
     DbSet<Company> Companies { get; }
     DbSet<Admin> Admins { get; }
     DbSet<Image> Images { get; }
+    DbSet<StudentGroup> StudentGroups { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
