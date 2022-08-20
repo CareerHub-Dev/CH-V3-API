@@ -48,7 +48,6 @@ namespace WebUI.Controllers
         ///
         /// </remarks>
         [HttpPost("invite")]
-        [Authorize("Admin")]
         public async Task<ActionResult<Guid>> InviteAdmin(InviteAdminRequest model)
         {
             return await Mediator.Send(new InviteAdminCommand { Email = model.Email });
@@ -61,7 +60,6 @@ namespace WebUI.Controllers
         ///
         /// </remarks>
         [HttpPost("send-invite-email")]
-        [Authorize("Admin")]
         public async Task<IActionResult> SendInviteAdminEmail(SendInviteAdminEmailRequest model)
         {
             await Mediator.Send(new SendInviteAdminEmailCommand(model.AdminId));
