@@ -1,9 +1,10 @@
-﻿using Application.Emails.Commands;
+﻿using Application.Companies.Events;
+using Application.Emails.Commands;
 using Domain.Events.Admin;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Companies.Events;
+namespace Application.Admins.Event;
 
 public class AdminCreatedEventHandler : INotificationHandler<AdminCreatedEvent>
 {
