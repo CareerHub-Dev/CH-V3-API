@@ -1,4 +1,4 @@
-﻿using Application.Admins.Event;
+﻿using Application.Admins.Events;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;

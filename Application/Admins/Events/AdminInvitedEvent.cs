@@ -3,7 +3,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Application.Admins.Event;
+namespace Application.Admins.Events;
 
 public class AdminInvitedEvent : INotification
 {
