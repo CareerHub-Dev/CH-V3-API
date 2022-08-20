@@ -1,6 +1,6 @@
 ﻿using Application.Common.Interfaces;
+using Application.Companies.Events;
 using Domain.Entities;
-using Domain.Events.Company;
 using MediatR;
 
 namespace Application.Companies.Commands.InviteCompany;
@@ -13,10 +13,12 @@ public record InviteCompanyCommand : IRequest<Guid>
 public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IMediator _mediator;
 
-    public InviteCompanyCommandHandler(IApplicationDbContext context)
+    public InviteCompanyCommandHandler(IApplicationDbContext context, IMediator mediator)
     {
         _context = context;
+        _mediator = mediator;
     }
 
     public async Task<Guid> Handle(InviteCompanyCommand request, CancellationToken cancellationToken)
@@ -26,11 +28,11 @@ public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand,
             Email = request.Email
         };
 
-        entity.AddDomainEvent(new CompanyCreatedEvent(entity));
-
         await _context.Companies.AddAsync(entity, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
+
+        await _mediator.Publish(new CompanyInvitedEvent(entity));
 
         return entity.Id;
     }
