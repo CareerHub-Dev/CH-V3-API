@@ -1,12 +1,13 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Common;
 
-public class Student : Account
+namespace Domain.Entities;
+
+public class StudentLog : BaseAuditableEntity
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
-    public Guid? Photo { get; set; }
-    public string Phone { get; set; } = string.Empty;
-    public DateTime? BirthDate { get; set; }
+    public string Email { set; get; } = string.Empty;
+    public string NormalizedEmail { set; get; } = string.Empty;
 
     public Guid StudentGroupId { get; set; }
     public StudentGroup? StudentGroup { get; set; }

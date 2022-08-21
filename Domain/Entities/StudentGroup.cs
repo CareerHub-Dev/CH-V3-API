@@ -1,7 +1,11 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Common;
 
-public class StudentGroup
+namespace Domain.Entities;
+
+public class StudentGroup : BaseAuditableEntity
 {
-    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
+
+    public List<Student> Students = new List<Student>();
+    public List<StudentLog> StudentLogs = new List<StudentLog>();
 }

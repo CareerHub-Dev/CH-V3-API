@@ -33,6 +33,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Admin> Admins => Set<Admin>();
     public DbSet<Image> Images => Set<Image>();
     public DbSet<StudentGroup> StudentGroups => Set<StudentGroup>();
+    public DbSet<StudentLog> StudentLogs => Set<StudentLog>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
