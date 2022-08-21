@@ -21,6 +21,10 @@ public class InviteCompanyCommandValidator : AbstractValidator<InviteCompanyComm
 
     private async Task<bool> BeUniqueEmail(string email, CancellationToken cancellationToken)
     {
-        return !await _context.Accounts.AnyAsync(x => x.NormalizedEmail == email.NormalizeName(), cancellationToken);
+        var query = _context.Accounts.Select(x => x.NormalizedEmail)
+            .Union(_context.StudentLogs.Select(x => x.NormalizedEmail));
+
+        return !await query
+            .AnyAsync(x => x == email.NormalizeName(), cancellationToken);
     }
 }
