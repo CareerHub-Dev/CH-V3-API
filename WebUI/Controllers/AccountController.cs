@@ -3,6 +3,7 @@ using Application.Accounts.Commands.ChangePassword;
 using Application.Accounts.Commands.RefreshToken;
 using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.RevokeToken;
+using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
@@ -82,7 +83,7 @@ public class AccountController : ApiControllerBase
     [HttpPost("verify-company-email")]
     public async Task<IActionResult> VerifyCompanyWithContinuedRegistration([FromForm] VerifyCompanyWithContinuedRegistrationRequest verifyCompanyRequest)
     {
-        var companuInfo = new VerifyCompanyWithContinuedRegistrationCommand
+        var companyInfo = new VerifyCompanyWithContinuedRegistrationCommand
         {
             Token = verifyCompanyRequest.Token,
             CompanyName = verifyCompanyRequest.CompanyName,
@@ -91,7 +92,19 @@ public class AccountController : ApiControllerBase
             Password = verifyCompanyRequest.Password,
         };
 
-        await Mediator.Send(companuInfo);
+        await Mediator.Send(companyInfo);
+        return Ok(new { message = "Verification successful, you can now login" });
+    }
+    [HttpPost("verify-admin-email")]
+    public async Task<IActionResult> VerifyAdminWithContinuedRegistration([FromForm] VerifyAdminWithContinuedRegistrationRequest verifyAdminRequest)
+    {
+        var adminInfo = new VerifyAdminWithContinuedRegistrationCommand
+        {
+            Token = verifyAdminRequest.Token,
+            Password = verifyAdminRequest.Password,
+        };
+
+        await Mediator.Send(adminInfo);
         return Ok(new { message = "Verification successful, you can now login" });
     }
 
@@ -147,6 +160,7 @@ public class AccountController : ApiControllerBase
 
         return Ok(new { message = "Password change successful" });
     }
+    
     // helper methods
     private void SetTokenCookie(string token)
     {
