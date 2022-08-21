@@ -32,7 +32,7 @@ public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand,
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        await _mediator.Publish(new CompanyInvitedEvent(entity));
+        await _mediator.Publish(new CompanyInvitedEvent(entity), cancellationToken);
 
         return entity.Id;
     }

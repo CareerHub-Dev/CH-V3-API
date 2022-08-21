@@ -16,13 +16,13 @@ public static class PaginationExtensions
         return new PaginatedList<T>(items, count, pageNumber, pageSize);
     }
 
-    public static async Task<PaginatedList<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageNumber, int pageSize)
+    public static async Task<PaginatedList<T>> ToPagedListAsync<T>(this IQueryable<T> source, int pageNumber, int pageSize, CancellationToken cancellationToken = default)
     {
-        var count = await source.CountAsync();
+        var count = await source.CountAsync(cancellationToken);
         var items = await source
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return new PaginatedList<T>(items, count, pageNumber, pageSize);
     }

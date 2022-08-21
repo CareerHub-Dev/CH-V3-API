@@ -26,7 +26,7 @@ public class IdentifyCommandHandler : IRequestHandler<IdentifyCommand, IdentifyR
 
         if (accountId == null) return null;
 
-        var account = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.Id == accountId);
+        var account = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.Id == accountId, cancellationToken);
 
         if (account == null) return null;
 

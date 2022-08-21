@@ -25,7 +25,7 @@ public class CreateStudentGroupCommandHandler : IRequestHandler<CreateStudentGro
             Name = request.Name,
         };
 
-        _context.StudentGroups.Add(entity);
+        await _context.StudentGroups.AddAsync(entity, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
 

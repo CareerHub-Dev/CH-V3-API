@@ -40,6 +40,6 @@ public class GetAdminsQueryHandler : IRequestHandler<GetAdminsQuery, PaginatedLi
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset
             })
-            .ToPagedListAsync(request.PaginationParameters.PageNumber, request.PaginationParameters.PageSize);
+            .ToPagedListAsync(request.PaginationParameters.PageNumber, request.PaginationParameters.PageSize, cancellationToken);
     }
 }

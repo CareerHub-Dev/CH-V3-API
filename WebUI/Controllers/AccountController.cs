@@ -129,7 +129,7 @@ public class AccountController : ApiControllerBase
     /// </summary>
     [Authorize]
     [HttpPost("revoke-token")]
-    public async Task<IActionResult> RevokeTokenOfAccountAsync(RevokeTokenRequest revokeToken)
+    public async Task<IActionResult> RevokeTokenAsync(RevokeTokenRequest revokeToken)
     {
         if (string.IsNullOrWhiteSpace(revokeToken.Token))
         {
@@ -140,7 +140,8 @@ public class AccountController : ApiControllerBase
         {
             return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required");
         }
-        await Mediator.Send(new RevokeTokenCommand { Token = revokeToken.Token, IpAddress = IpAddress(), AccountId = AccountInfo!.Id });
+
+        await Mediator.Send(new RevokeTokenCommand { Token = revokeToken.Token, IpAddress = IpAddress() });
 
         return Ok(new { message = "Token revoked" });
     }

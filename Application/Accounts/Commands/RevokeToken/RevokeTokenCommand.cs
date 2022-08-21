@@ -9,7 +9,6 @@ public record RevokeTokenCommand : IRequest
 {
     public string Token { init; get; } = string.Empty;
     public string IpAddress { init; get; } = string.Empty;
-    public Guid AccountId { init; get; }
 }
 public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
 {
@@ -23,9 +22,9 @@ public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
     public async Task<Unit> Handle(RevokeTokenCommand request, CancellationToken cancellationToken)
     {
         var refreshToken = await _context.RefreshTokens
-                .SingleOrDefaultAsync(x => x.Token == request.Token && x.AccountId == request.AccountId);
+                .SingleOrDefaultAsync(x => x.Token == request.Token, cancellationToken);
 
-        if (refreshToken == null )
+        if (refreshToken == null)
         {
             throw new NotFoundException(nameof(Domain.Entities.RefreshToken), request.Token);
         }
