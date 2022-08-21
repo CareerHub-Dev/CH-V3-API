@@ -1,4 +1,5 @@
-﻿using Application.Accounts.Commands.Authenticate;
+﻿using Application.Accounts.Commands.AccountOwnsToken;
+using Application.Accounts.Commands.Authenticate;
 using Application.Accounts.Commands.ChangePassword;
 using Application.Accounts.Commands.RefreshToken;
 using Application.Accounts.Commands.ResetPassword;
@@ -139,6 +140,11 @@ public class AccountController : ApiControllerBase
         if (string.IsNullOrWhiteSpace(revokeToken.Token))
         {
             return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required");
+        }
+
+        if(!await Mediator.Send(new AccountOwnsTokenCommand { Token = revokeToken.Token, AccountId = AccountInfo!.Id }))
+        {
+            return Problem(title: "Not Found", statusCode: StatusCodes.Status404NotFound, detail: "Token is not found");
         }
 
         await Mediator.Send(new RevokeTokenCommand { Token = revokeToken.Token, IpAddress = IpAddress() });
