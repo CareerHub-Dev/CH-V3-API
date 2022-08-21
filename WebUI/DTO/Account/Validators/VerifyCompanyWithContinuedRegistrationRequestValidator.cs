@@ -7,10 +7,23 @@ public class VerifyCompanyWithContinuedRegistrationRequestValidator : AbstractVa
 {
     public VerifyCompanyWithContinuedRegistrationRequestValidator()
     {
-        RuleFor(x => x.Token).NotEmpty();
-        RuleFor(x => x.CompanyName).NotEmpty().MaximumLength(50);
-        RuleFor(x => x.CompanyMotto).NotEmpty().MaximumLength(128);
-        RuleFor(x => x.CompanyDescription).NotEmpty().MaximumLength(256);
-        RuleFor(x => x.Password).NotEmpty().Password();
+        RuleFor(x => x.Token)
+            .NotEmpty();
+
+        RuleFor(x => x.CompanyName)
+            .NotEmpty()
+            .MaximumLength(50);
+
+        RuleFor(x => x.CompanyMotto)
+            .NotEmpty()
+            .MaximumLength(128);
+
+        RuleFor(x => x.CompanyDescription)
+            .NotEmpty()
+            .MaximumLength(256);
+
+        RuleFor(x => x.Password)
+            .NotEmpty()
+            .Password();
     }
 }

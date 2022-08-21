@@ -2,20 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
-namespace WebUI.Controllers
-{
-    public class ImagesController : ApiControllerBase
-    {
-        /// <summary>
-        /// Auth
-        /// </summary>
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<IActionResult> GetImage(Guid id)
-        {
-            var image = await Mediator.Send(new GetImageQuery(id));
+namespace WebUI.Controllers;
 
-            return File(image.Content, $"image/{image.Extention[1..]}");
-        }
+public class ImagesController : ApiControllerBase
+{
+    /// <summary>
+    /// Auth
+    /// </summary>
+    [HttpGet("{imageId}")]
+    [Authorize]
+    public async Task<IActionResult> GetImage(Guid imageId)
+    {
+        var image = await Mediator.Send(new GetImageQuery(imageId));
+
+        return File(image.Content, $"image/{image.Extention[1..]}");
     }
 }

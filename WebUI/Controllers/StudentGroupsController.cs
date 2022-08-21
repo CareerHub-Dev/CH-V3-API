@@ -44,9 +44,9 @@ public class StudentGroupsController : ApiControllerBase
     /// </summary>
     [HttpPost]
     [Authorize("Admin")]
-    public async Task<ActionResult<Guid>> CreateStudentGroup(CreateStudentGroupRequest model)
+    public async Task<ActionResult<Guid>> CreateStudentGroup(CreateStudentGroupRequest createStudentGroup)
     {
-        return await Mediator.Send(new CreateStudentGroupCommand { Name = model.Name });
+        return await Mediator.Send(new CreateStudentGroupCommand { Name = createStudentGroup.Name });
     }
 
     /// <summary>
@@ -54,9 +54,9 @@ public class StudentGroupsController : ApiControllerBase
     /// </summary>
     [HttpPut("{studentGroupId}")]
     [Authorize("Admin")]
-    public async Task<IActionResult> UpdateStudentGroup(Guid studentGroupId, UpdateStudentGroupRequest model)
+    public async Task<IActionResult> UpdateStudentGroup(Guid studentGroupId, UpdateStudentGroupRequest updateStudentGroup)
     {
-        await Mediator.Send(new UpdateStudentGroupCommand { Id = studentGroupId, Name = model.Name });
+        await Mediator.Send(new UpdateStudentGroupCommand { Id = studentGroupId, Name = updateStudentGroup.Name });
         return NoContent();
     }
 }

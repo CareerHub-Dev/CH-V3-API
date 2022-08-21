@@ -9,69 +9,68 @@ using Newtonsoft.Json;
 using WebUI.Authorize;
 using WebUI.DTO.Admin;
 
-namespace WebUI.Controllers
+namespace WebUI.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+[Authorize("Admin")]
+public class AdminsController : ApiControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize("Admin")]
-    public class AdminsController : ApiControllerBase
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<AdminResponse>>> GetAdmins([FromQuery] PaginationParameters paginationParameters, [FromQuery] AdminListFilter filter)
     {
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AdminResponse>>> GetAdmins([FromQuery] PaginationParameters paginationParameters, [FromQuery] AdminListFilter filter)
+        var result = await Mediator.Send(new GetAdminsQuery
         {
-            var result = await Mediator.Send(new GetAdminsQuery
-            {
-                PaginationParameters = paginationParameters,
-                FilterParameters = new AdminListFilterParameters { WithoutAdminId = AccountInfo!.Id, IsVerified = filter.IsVerified }
-            });
+            PaginationParameters = paginationParameters,
+            FilterParameters = new AdminListFilterParameters { WithoutAdminId = AccountInfo!.Id, IsVerified = filter.IsVerified }
+        });
 
-            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-            return Ok(result.Select(x => new AdminResponse(x)));
-        }
+        return Ok(result.Select(x => new AdminResponse(x)));
+    }
 
-        [HttpGet("{adminId}")]
-        public async Task<ActionResult<AdminResponse>> GetAdmin(Guid adminId)
+    [HttpGet("{adminId}")]
+    public async Task<ActionResult<AdminResponse>> GetAdmin(Guid adminId)
+    {
+        var result = await Mediator.Send(new GetAdminQuery
         {
-            var result = await Mediator.Send(new GetAdminQuery
-            {
-                AdminId = adminId
-            });
+            AdminId = adminId
+        });
 
-            return new AdminResponse(result);
-        }
+        return new AdminResponse(result);
+    }
 
-        /// <remarks>
-        /// Admin:
-        /// 
-        ///     Create admin (sends an e-mail under the hood)
-        ///
-        /// </remarks>
-        [HttpPost("invite")]
-        public async Task<ActionResult<Guid>> InviteAdmin(InviteAdminRequest model)
-        {
-            return await Mediator.Send(new InviteAdminCommand { Email = model.Email });
-        }
+    /// <remarks>
+    /// Admin:
+    /// 
+    ///     Create admin (sends an e-mail under the hood)
+    ///
+    /// </remarks>
+    [HttpPost("invite")]
+    public async Task<ActionResult<Guid>> InviteAdmin(InviteAdminRequest inviteAdmin)
+    {
+        return await Mediator.Send(new InviteAdminCommand { Email = inviteAdmin.Email });
+    }
 
-        /// <remarks>
-        /// Admin:
-        /// 
-        ///     sends an e-mail
-        ///
-        /// </remarks>
-        [HttpPost("send-invite-email")]
-        public async Task<IActionResult> SendInviteAdminEmail(SendInviteAdminEmailRequest model)
-        {
-            await Mediator.Send(new SendInviteAdminEmailCommand(model.AdminId));
-            return Ok();
-        }
+    /// <remarks>
+    /// Admin:
+    /// 
+    ///     sends an e-mail
+    ///
+    /// </remarks>
+    [HttpPost("send-invite-email")]
+    public async Task<IActionResult> SendInviteAdminEmail(SendInviteAdminEmailRequest sendInviteAdminEmail)
+    {
+        await Mediator.Send(new SendInviteAdminEmailCommand(sendInviteAdminEmail.AdminId));
+        return Ok();
+    }
 
-        [HttpDelete("{adminId}")]
-        public async Task<IActionResult> DeleteAdmin(Guid adminId)
-        {
-            await Mediator.Send(new DeleteAdminCommand(adminId));
+    [HttpDelete("{adminId}")]
+    public async Task<IActionResult> DeleteAdmin(Guid adminId)
+    {
+        await Mediator.Send(new DeleteAdminCommand(adminId));
 
-            return NoContent();
-        }
+        return NoContent();
     }
 }
