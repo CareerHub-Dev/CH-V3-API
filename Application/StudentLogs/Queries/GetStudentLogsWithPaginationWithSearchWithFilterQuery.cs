@@ -14,16 +14,16 @@ public record GetStudentLogsWithPaginationWithSearchWithFilterQuery : IRequest<P
 
     public string? SearchTerm { get; init; }
 
-    public Guid? CreatedBy { get; set; }
-    public Guid? LastModifiedBy { get; set; }
-    public Guid? StudentGroupId { get; set; }
+    public Guid? CreatedBy { get; init; }
+    public Guid? LastModifiedBy { get; init; }
+    public Guid? StudentGroupId { get; init; }
 }
 
-public class GetStudentLogsQueryHandler : IRequestHandler<GetStudentLogsWithPaginationWithSearchWithFilterQuery, PaginatedList<StudentLogDTO>>
+public class GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetStudentLogsWithPaginationWithSearchWithFilterQuery, PaginatedList<StudentLogDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetStudentLogsQueryHandler(IApplicationDbContext context)
+    public GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }

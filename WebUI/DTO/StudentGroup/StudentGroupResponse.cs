@@ -1,4 +1,4 @@
-﻿using Application.Common.Models.StudentGroup;
+﻿using Application.StudentGroups.Queries.Models;
 
 namespace WebUI.DTO.StudentGroup;
 

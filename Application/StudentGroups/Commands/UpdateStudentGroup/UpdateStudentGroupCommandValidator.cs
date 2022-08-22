@@ -22,7 +22,7 @@ public class UpdateStudentGroupCommandValidator : AbstractValidator<UpdateStuden
     private async Task<bool> BeUniqueName(UpdateStudentGroupCommand model, string name, CancellationToken cancellationToken)
     {
         return !await _context.StudentGroups
-            .Where(x => x.Id != model.Id)
+            .Where(x => x.Id != model.StudentGroupId)
             .AnyAsync(x => x.Name.Trim().ToLower() == name.NormalizeName(), cancellationToken);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Application.Common.Models.StudentGroup;
+﻿using Application.Common.Models.StudentGroup;
+
+namespace Application.StudentGroups.Queries.Models;
 
 public class StudentGroupDTO : StudentGroupBriefDTO
 {

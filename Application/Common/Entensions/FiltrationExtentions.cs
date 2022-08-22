@@ -56,4 +56,19 @@ public static class FiltrationExtentions
 
         return studentLogs;
     }
+
+    public static IQueryable<StudentGroup> Filter(this IQueryable<StudentGroup> studentGroups, Guid? CreatedBy = null, Guid? LastModifiedBy = null)
+    {
+        if (CreatedBy.HasValue)
+        {
+            studentGroups = studentGroups.Where(x => x.CreatedBy == CreatedBy);
+        }
+
+        if (LastModifiedBy.HasValue)
+        {
+            studentGroups = studentGroups.Where(x => x.LastModifiedBy == LastModifiedBy);
+        }
+
+        return studentGroups;
+    }
 }

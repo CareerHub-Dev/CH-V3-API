@@ -18,7 +18,7 @@ public class StudentLogsController : ApiControllerBase
     /// </summary>
     [HttpGet]
     [Authorize]
-    public async Task<ActionResult<IEnumerable<StudentLogResponse>>> GetStudentLogs(
+    public async Task<IEnumerable<StudentLogResponse>> GetStudentLogs(
         [FromQuery] PaginationParameters paginationParameters, 
         [FromQuery] SearchParameter searchParameter, 
         [FromQuery] StudentLogListFilterParameters filterParameters)
@@ -34,7 +34,7 @@ public class StudentLogsController : ApiControllerBase
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return Ok(result.Select(x => new StudentLogResponse(x)));
+        return result.Select(x => new StudentLogResponse(x));
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public class StudentLogsController : ApiControllerBase
     /// </summary>
     [HttpGet("{studentLogId}")]
     [Authorize("Admin")]
-    public async Task<ActionResult<StudentLogResponse>> GetStudentLog(Guid studentLogId)
+    public async Task<StudentLogResponse> GetStudentLog(Guid studentLogId)
     {
         var result = await Mediator.Send(new GetStudentLogQuery(studentLogId));
         return new StudentLogResponse(result);
@@ -64,7 +64,7 @@ public class StudentLogsController : ApiControllerBase
     /// </summary>
     [HttpPost]
     [Authorize("Admin")]
-    public async Task<ActionResult<Guid>> CreateStudentLog(CreateStudentLogRequest request)
+    public async Task<Guid> CreateStudentLog(CreateStudentLogRequest request)
     {
         return await Mediator.Send(new CreateStudentLogCommand
         {
