@@ -14,7 +14,7 @@ public class Account : BaseEntity
     public DateTime? ResetTokenExpires { get; set; }
     public DateTime? PasswordReset { get; set; }
 
-    public List<RefreshToken> RefreshTokens { get; set; } = new();
+    public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 
     public bool IsVerified => Verified.HasValue || PasswordReset.HasValue;
     public bool IsResetTokenExpired => !ResetTokenExpires.HasValue || ResetTokenExpires < DateTime.UtcNow;

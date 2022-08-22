@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentLogs.Commands.DeleteStudentLog;
 
-public record DeleteStudentLogCommand(Guid Id) : IRequest;
+public record DeleteStudentLogCommand(Guid StudentLogId) : IRequest;
 
 public class DeleteStudentLogCommandHandler : IRequestHandler<DeleteStudentLogCommand>
 {
@@ -21,11 +21,11 @@ public class DeleteStudentLogCommandHandler : IRequestHandler<DeleteStudentLogCo
     {
         var entity = await _context.StudentLogs
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.StudentLogId, cancellationToken);
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(StudentLog), request.Id);
+            throw new NotFoundException(nameof(StudentLog), request.StudentLogId);
         }
 
         _context.StudentLogs.Remove(entity);

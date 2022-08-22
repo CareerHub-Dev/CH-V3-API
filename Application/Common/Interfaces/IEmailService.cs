@@ -2,5 +2,5 @@
 
 public interface IEmailService
 {
-    Task SendEmailAsync(string to, string subject, string html, string? from = null);
+    Task SendEmailAsync(string to, string subject, string html, string? from = null, CancellationToken cancellationToken = default);
 }

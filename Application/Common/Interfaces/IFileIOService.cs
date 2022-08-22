@@ -3,6 +3,6 @@
 public interface IFileIOService
 {
 	bool Exists(string path);
-	Task<string> ReadAllTextAsync(string path);
-	Task WriteAllText(string path, string text);
+	Task<string> ReadAllTextAsync(string path, CancellationToken cancellationToken = default);
+	Task WriteAllTextAsync(string path, string text, CancellationToken cancellationToken = default);
 }

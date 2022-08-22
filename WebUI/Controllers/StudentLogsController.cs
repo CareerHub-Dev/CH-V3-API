@@ -1,4 +1,5 @@
 ﻿using Application.Common.Models.Pagination;
+using Application.Common.Models.Search;
 using Application.StudentLogs.Commands.CreateStudentLog;
 using Application.StudentLogs.Commands.DeleteStudentLog;
 using Application.StudentLogs.Commands.UpdateStudentLog;
@@ -17,16 +18,34 @@ public class StudentLogsController : ApiControllerBase
     /// </summary>
     [HttpGet]
     [Authorize]
-    public async Task<IEnumerable<StudentLogResponse>> GetStudentLogs([FromQuery] PaginationParameters paginationParameters)
+    public async Task<ActionResult<IEnumerable<StudentLogResponse>>> GetStudentLogs(
+        [FromQuery] PaginationParameters paginationParameters, 
+        [FromQuery] SearchParameter searchParameter, 
+        [FromQuery] StudentLogListFilterParameters filterParameters)
     {
-        var result = await Mediator.Send(new GetStudentLogsQuery
+        var result = await Mediator.Send(new GetStudentLogsWithPaginationWithSearchWithFilterQuery
         {
-            PaginationParameters = paginationParameters
+            PaginationParameters = paginationParameters,
+            SearchTerm = searchParameter.SearchTerm,
+            CreatedBy = filterParameters.CreatedBy,
+            LastModifiedBy = filterParameters.LastModifiedBy,
+            StudentGroupId = filterParameters.StudentGroupId
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return result.Select(x => new StudentLogResponse(x));
+        return Ok(result.Select(x => new StudentLogResponse(x)));
+    }
+
+    /// <summary>
+    /// Admin
+    /// </summary>
+    [HttpGet("{studentLogId}")]
+    [Authorize("Admin")]
+    public async Task<ActionResult<StudentLogResponse>> GetStudentLog(Guid studentLogId)
+    {
+        var result = await Mediator.Send(new GetStudentLogQuery(studentLogId));
+        return new StudentLogResponse(result);
     }
 
     /// <summary>
@@ -45,14 +64,14 @@ public class StudentLogsController : ApiControllerBase
     /// </summary>
     [HttpPost]
     [Authorize("Admin")]
-    public async Task<ActionResult<Guid>> CreateStudentLog(CreateStudentLogRequest createStudentLog)
+    public async Task<ActionResult<Guid>> CreateStudentLog(CreateStudentLogRequest request)
     {
         return await Mediator.Send(new CreateStudentLogCommand
         {
-            Email = createStudentLog.Email,
-            LastName = createStudentLog.LastName,
-            FirstName = createStudentLog.FirstName,
-            StudentGroupId = createStudentLog.StudentGroupId,
+            Email = request.Email,
+            LastName = request.LastName,
+            FirstName = request.FirstName,
+            StudentGroupId = request.StudentGroupId,
         });
     }
 
@@ -61,15 +80,15 @@ public class StudentLogsController : ApiControllerBase
     /// </summary>
     [HttpPut("{studentLogId}")]
     [Authorize("Admin")]
-    public async Task<IActionResult> UpdateStudentLog(Guid studentLogId, UpdateStudentLogRequest updateStudentLog)
+    public async Task<IActionResult> UpdateStudentLog(Guid studentLogId, UpdateStudentLogRequest request)
     {
         await Mediator.Send(new UpdateStudentLogCommand
         {
-            Id = studentLogId,
-            Email = updateStudentLog.Email,
-            LastName = updateStudentLog.LastName,
-            FirstName = updateStudentLog.FirstName,
-            StudentGroupId = updateStudentLog.StudentGroupId,
+            StudentLogId = studentLogId,
+            Email = request.Email,
+            LastName = request.LastName,
+            FirstName = request.FirstName,
+            StudentGroupId = request.StudentGroupId,
         });
 
         return NoContent();

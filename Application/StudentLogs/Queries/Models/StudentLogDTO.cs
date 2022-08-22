@@ -1,4 +1,4 @@
-﻿using Application.StudentGroups.Queries.Models;
+﻿using Application.Common.Models.StudentGroup;
 
 namespace Application.StudentLogs.Queries.Models;
 
@@ -9,5 +9,10 @@ public class StudentLogDTO
     public string LastName { get; set; } = string.Empty;
     public string Email { set; get; } = string.Empty;
 
-    public StudentGroupDTO? StudentGroup { get; set; }
+    public DateTime Created { get; set; }
+    public Guid? CreatedBy { get; set; }
+    public DateTime? LastModified { get; set; }
+    public Guid? LastModifiedBy { get; set; }
+
+    public StudentGroupBriefDTO? StudentGroup { get; set; }
 }

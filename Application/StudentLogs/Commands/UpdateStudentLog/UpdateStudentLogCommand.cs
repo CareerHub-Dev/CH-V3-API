@@ -8,7 +8,7 @@ namespace Application.StudentLogs.Commands.UpdateStudentLog;
 
 public record UpdateStudentLogCommand : IRequest
 {
-    public Guid Id { get; set; }
+    public Guid StudentLogId { get; set; }
     public string FirstName { get; init; } = string.Empty;
     public string LastName { get; init; } = string.Empty;
     public string Email { get; init; } = string.Empty;
@@ -27,11 +27,11 @@ public class UpdateStudentLogCommandHandler : IRequestHandler<UpdateStudentLogCo
     public async Task<Unit> Handle(UpdateStudentLogCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.StudentLogs
-            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.StudentLogId, cancellationToken);
 
         if (entity == null)
         {
-            throw new NotFoundException(nameof(StudentLog), request.Id);
+            throw new NotFoundException(nameof(StudentLog), request.StudentLogId);
         }
 
         entity.FirstName = request.FirstName;

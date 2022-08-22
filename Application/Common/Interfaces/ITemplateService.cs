@@ -2,5 +2,5 @@
 
 public interface ITemplateService
 {
-    Task<string> GetTemplateAsync(string templateName);
+    Task<string> GetTemplateAsync(string templateName, CancellationToken cancellationToken = default);
 }

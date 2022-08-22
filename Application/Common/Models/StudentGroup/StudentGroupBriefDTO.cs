@@ -1,6 +1,6 @@
-﻿namespace Application.StudentGroups.Queries.Models;
+﻿namespace Application.Common.Models.StudentGroup;
 
-public class StudentGroupDTO
+public class StudentGroupBriefDTO
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

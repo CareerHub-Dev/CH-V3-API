@@ -1,7 +1,7 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Search;
-using Application.StudentGroups.Queries.Models;
+using Application.Common.Models.StudentGroup;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +36,10 @@ public class GetStudentGroupsQueryHandler : IRequestHandler<GetStudentGroupsQuer
             {
                 Id = x.Id,
                 Name = x.Name,
+                Created = x.Created,
+                CreatedBy = x.CreatedBy,
+                LastModified = x.LastModified,
+                LastModifiedBy = x.LastModifiedBy,
             })
             .ToListAsync(cancellationToken);
     }

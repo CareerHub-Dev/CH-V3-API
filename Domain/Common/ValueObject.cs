@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-namespace Domain.Common;
+﻿namespace Domain.Common;
 
 public abstract class ValueObject
 {

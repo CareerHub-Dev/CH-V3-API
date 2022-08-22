@@ -18,7 +18,7 @@ public class StudentGroupsController : ApiControllerBase
     /// </summary>
     [HttpGet]
     [Authorize]
-    public async Task<IEnumerable<StudentGroupResponse>> GetStudentGroups([FromQuery] SearchParameter searchParameter)
+    public async Task<IEnumerable<StudentGroupBriefResponse>> GetStudentGroups([FromQuery] SearchParameter searchParameter)
     {
         var result = await Mediator.Send(new GetStudentGroupsQuery
         {

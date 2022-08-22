@@ -16,14 +16,15 @@ public class TemplateService : ITemplateService
         _fileIOService = fileIOService;
     }
 
-    public async Task<string> GetTemplateAsync(string templateName)
+    public async Task<string> GetTemplateAsync(string templateName, CancellationToken cancellationToken = default)
     {
         var path = Path.Combine(_templatesPath, templateName);
+
         if (!_fileIOService.Exists(path))
         {
             throw new FileNotFoundException(path);
         }
 
-        return await _fileIOService.ReadAllTextAsync(path);
+        return await _fileIOService.ReadAllTextAsync(path, cancellationToken);
     }
 }

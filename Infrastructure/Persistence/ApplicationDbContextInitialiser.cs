@@ -72,8 +72,7 @@ public class ApplicationDbContextInitialiser
                 new StudentGroup
                 {
                     Name = "ПЗПІ-19-8"
-                }
-                ,
+                },
                 new StudentGroup
                 {
                     Name = "ПЗПІи-19-1"

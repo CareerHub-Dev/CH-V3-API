@@ -30,7 +30,7 @@ public class UpdateStudentLogCommandValidator : AbstractValidator<UpdateStudentL
     private async Task<bool> BeUniqueEmail(UpdateStudentLogCommand model, string email, CancellationToken cancellationToken)
     {
         var query = _context.Accounts.Select(x => x.NormalizedEmail)
-            .Union(_context.StudentLogs.Where(x => x.Id != model.Id).Select(x => x.NormalizedEmail));
+            .Union(_context.StudentLogs.Where(x => x.Id != model.StudentLogId).Select(x => x.NormalizedEmail));
 
         return !await query
             .AnyAsync(x => x == email.NormalizeName(), cancellationToken);

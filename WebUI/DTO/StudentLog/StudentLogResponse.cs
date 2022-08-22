@@ -9,8 +9,12 @@ public class StudentLogResponse
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { set; get; } = string.Empty;
+    public DateTime Created { get; set; }
+    public Guid? CreatedBy { get; set; }
+    public DateTime? LastModified { get; set; }
+    public Guid? LastModifiedBy { get; set; }
 
-    public StudentGroupResponse? StudentGroup { get; set; }
+    public StudentGroupBriefResponse? StudentGroup { get; set; }
 
     public StudentLogResponse(StudentLogDTO studentLog)
     {
@@ -18,6 +22,10 @@ public class StudentLogResponse
         FirstName = studentLog.FirstName;
         LastName = studentLog.LastName;
         Email = studentLog.Email;
-        StudentGroup = studentLog.StudentGroup != null ? new StudentGroupResponse(studentLog.StudentGroup) : null;
+        Created = studentLog.Created;
+        CreatedBy = studentLog.CreatedBy;
+        LastModified = studentLog.LastModified;
+        LastModifiedBy = studentLog.LastModifiedBy;
+        StudentGroup = studentLog.StudentGroup != null ? new StudentGroupBriefResponse(studentLog.StudentGroup) : null;
     }
 }
