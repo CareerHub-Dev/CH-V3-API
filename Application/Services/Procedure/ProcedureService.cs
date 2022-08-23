@@ -13,24 +13,24 @@ public class ProcedureService : IProcedureService
         _context = context;
     }
 
-    public async Task<string> GenerateAccountResetTokenAsync()
+    public async Task<string> GenerateAccountResetTokenAsync(CancellationToken cancellationToken = default)
     {
         var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
 
-        var tokenIsUnique = !await _context.Accounts.AnyAsync(x => x.ResetToken == token);
+        var tokenIsUnique = !await _context.Accounts.AnyAsync(x => x.ResetToken == token, cancellationToken);
         if (!tokenIsUnique)
-            return await GenerateAccountResetTokenAsync();
+            return await GenerateAccountResetTokenAsync(cancellationToken);
 
         return token;
     }
 
-    public async Task<string> GenerateAccountVerificationTokenAsync()
+    public async Task<string> GenerateAccountVerificationTokenAsync(CancellationToken cancellationToken = default)
     {
         var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
 
-        var tokenIsUnique = !await _context.Accounts.AnyAsync(x => x.VerificationToken == token);
+        var tokenIsUnique = !await _context.Accounts.AnyAsync(x => x.VerificationToken == token, cancellationToken);
         if (!tokenIsUnique)
-            return await GenerateAccountVerificationTokenAsync();
+            return await GenerateAccountVerificationTokenAsync(cancellationToken);
 
         return token;
     }

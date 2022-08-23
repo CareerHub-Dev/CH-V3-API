@@ -2,6 +2,6 @@
 
 public interface IProcedureService
 {
-    Task<string> GenerateAccountVerificationTokenAsync();
-    Task<string> GenerateAccountResetTokenAsync();
+    Task<string> GenerateAccountVerificationTokenAsync(CancellationToken cancellationToken = default);
+    Task<string> GenerateAccountResetTokenAsync(CancellationToken cancellationToken = default);
 }

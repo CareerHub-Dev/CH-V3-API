@@ -7,5 +7,5 @@ public interface IJwtService
 {
     JwtToken GenerateJwtToken(Guid accountId);
     Task<Guid?> ValidateJwtTokenAsync(string token);
-    Task<RefreshToken> GenerateRefreshTokenAsync(string ipAddress);
+    Task<RefreshToken> GenerateRefreshTokenAsync(string ipAddress, CancellationToken cancellationToken = default);
 }

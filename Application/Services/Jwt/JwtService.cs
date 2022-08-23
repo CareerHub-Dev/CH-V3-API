@@ -49,7 +49,7 @@ public class JwtService : IJwtService
         return jwtToken;
     }
 
-    public async Task<RefreshToken> GenerateRefreshTokenAsync(string ipAddress)
+    public async Task<RefreshToken> GenerateRefreshTokenAsync(string ipAddress, CancellationToken cancellationToken = default)
     {
         var refreshToken = new RefreshToken
         {
@@ -62,11 +62,11 @@ public class JwtService : IJwtService
         };
 
         // ensure token is unique by checking against db
-        var tokenIsNotUnique = await _context.RefreshTokens.AnyAsync(x => x.Token == refreshToken.Token);
+        var tokenIsNotUnique = await _context.RefreshTokens.AnyAsync(x => x.Token == refreshToken.Token, cancellationToken);
 
         if (tokenIsNotUnique)
         {
-            return await GenerateRefreshTokenAsync(ipAddress);
+            return await GenerateRefreshTokenAsync(ipAddress, cancellationToken);
         }
 
         return refreshToken;
