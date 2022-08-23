@@ -22,19 +22,16 @@ public class StudentGroupsController : ApiControllerBase
     [Authorize]
     public async Task<IEnumerable<StudentGroupBriefResponse>> GetStudentGroups(
         [FromQuery] PaginationParameters paginationParameters,
-        [FromQuery] SearchParameter searchParameter,
-        [FromQuery] StudentGroupListFilterParameters filterParameters)
+        [FromQuery] SearchParameter searchParameter)
     {
         switch (AccountInfo!.Role)
         {
             case "Admin":
                 {
-                    var result = await Mediator.Send(new GetStudentGroupsWithPaginationWithSearchWithFilterQuery
+                    var result = await Mediator.Send(new GetStudentGroupsWithPaginationWithSearchQuery
                     {
                         PaginationParameters = paginationParameters,
                         SearchTerm = searchParameter.SearchTerm,
-                        CreatedBy = filterParameters.CreatedBy,
-                        LastModifiedBy = filterParameters.LastModifiedBy
                     });
 
                     Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

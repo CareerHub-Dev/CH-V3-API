@@ -14,8 +14,6 @@ public record GetStudentLogsWithPaginationWithSearchWithFilterQuery : IRequest<P
 
     public string? SearchTerm { get; init; }
 
-    public Guid? CreatedBy { get; init; }
-    public Guid? LastModifiedBy { get; init; }
     public Guid? StudentGroupId { get; init; }
 }
 
@@ -33,7 +31,7 @@ public class GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler : IReq
         return await _context.StudentLogs
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
-            .Filter(request.CreatedBy, request.LastModifiedBy, request.StudentGroupId)
+            .Filter(request.StudentGroupId)
             .Select(x => new StudentLogDTO
             {
                 Id = x.Id,

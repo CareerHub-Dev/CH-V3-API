@@ -37,38 +37,13 @@ public static class FiltrationExtentions
         return admins;
     }
 
-    public static IQueryable<StudentLog> Filter(this IQueryable<StudentLog> studentLogs, Guid? CreatedBy = null, Guid? LastModifiedBy = null, Guid? StudentGroupId = null)
+    public static IQueryable<StudentLog> Filter(this IQueryable<StudentLog> studentLogs, Guid? StudentGroupId = null)
     {
-        if (CreatedBy.HasValue)
-        {
-            studentLogs = studentLogs.Where(x => x.CreatedBy == CreatedBy);
-        }
-
-        if (LastModifiedBy.HasValue)
-        {
-            studentLogs = studentLogs.Where(x => x.LastModifiedBy == LastModifiedBy);
-        }
-
         if (StudentGroupId.HasValue)
         {
             studentLogs = studentLogs.Where(x => x.StudentGroupId == StudentGroupId);
         }
 
         return studentLogs;
-    }
-
-    public static IQueryable<StudentGroup> Filter(this IQueryable<StudentGroup> studentGroups, Guid? CreatedBy = null, Guid? LastModifiedBy = null)
-    {
-        if (CreatedBy.HasValue)
-        {
-            studentGroups = studentGroups.Where(x => x.CreatedBy == CreatedBy);
-        }
-
-        if (LastModifiedBy.HasValue)
-        {
-            studentGroups = studentGroups.Where(x => x.LastModifiedBy == LastModifiedBy);
-        }
-
-        return studentGroups;
     }
 }

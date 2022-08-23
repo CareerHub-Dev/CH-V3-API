@@ -27,8 +27,6 @@ public class StudentLogsController : ApiControllerBase
         {
             PaginationParameters = paginationParameters,
             SearchTerm = searchParameter.SearchTerm,
-            CreatedBy = filterParameters.CreatedBy,
-            LastModifiedBy = filterParameters.LastModifiedBy,
             StudentGroupId = filterParameters.StudentGroupId
         });
 
