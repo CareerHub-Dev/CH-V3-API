@@ -1,8 +1,8 @@
 ﻿using Application.Admins.Commands.DeleteAdmin;
 using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Queries;
-using Application.Common.Models.Filtration.Admin;
 using Application.Common.Models.Pagination;
+using Application.Common.Models.Search;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -17,12 +17,18 @@ namespace WebUI.Controllers;
 public class AdminsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AdminResponse>>> GetAdmins([FromQuery] PaginationParameters paginationParameters, [FromQuery] AdminListFilter filter)
+    public async Task<ActionResult<IEnumerable<AdminResponse>>> GetAdmins(
+        [FromQuery] PaginationParameters paginationParameters,
+        [FromQuery] SearchParameter searchParameter,
+        [FromQuery] AdminListFilterParameters filter
+        )
     {
-        var result = await Mediator.Send(new GetAdminsQuery
+        var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterQuery
         {
             PaginationParameters = paginationParameters,
-            FilterParameters = new AdminListFilterParameters { WithoutAdminId = AccountInfo!.Id, IsVerified = filter.IsVerified }
+            SearchTerm = searchParameter.SearchTerm,
+            WithoutAdminId = AccountInfo!.Id, 
+            IsVerified = filter.IsVerified
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -33,7 +39,7 @@ public class AdminsController : ApiControllerBase
     [HttpGet("{adminId}")]
     public async Task<ActionResult<AdminResponse>> GetAdmin(Guid adminId)
     {
-        var result = await Mediator.Send(new GetAdminQuery
+        var result = await Mediator.Send(new GetAdminWithFilterQuery
         {
             AdminId = adminId
         });

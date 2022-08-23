@@ -17,19 +17,15 @@ public class CompanyInvitedEvent : INotification
 
 public class CompanyInvitedEventHandler : INotificationHandler<CompanyInvitedEvent>
 {
-    private readonly ILogger<CompanyInvitedEventHandler> _logger;
     private readonly IMediator _mediator;
 
-    public CompanyInvitedEventHandler(ILogger<CompanyInvitedEventHandler> logger, IMediator mediator)
+    public CompanyInvitedEventHandler(IMediator mediator)
     {
-        _logger = logger;
         _mediator = mediator;
     }
 
     public async Task Handle(CompanyInvitedEvent notification, CancellationToken cancellationToken)
     {
         await _mediator.Send(new SendInviteCompanyEmailCommand(notification.Company.Id), cancellationToken);
-
-        _logger.LogInformation("CH-V3-API Application Event: {ApplicationEvent}", notification.GetType().Name);
     }
 }

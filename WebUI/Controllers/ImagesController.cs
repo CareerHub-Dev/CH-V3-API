@@ -1,4 +1,4 @@
-﻿using Application.Images.Queries.GetImage;
+﻿using Application.Images.Queries;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 

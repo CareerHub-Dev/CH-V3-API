@@ -27,6 +27,20 @@ public static class SearchExtentions
             .Where(x => 
                 x.FirstName.Trim().ToLower().Contains(lowerCaseTerm) ||
                 x.LastName.Trim().ToLower().Contains(lowerCaseTerm) ||
+                x.NormalizedEmail.Contains(lowerCaseTerm)
+            );
+    }
+
+    public static IQueryable<Admin> Search(this IQueryable<Admin> admins, string searchTerm)
+    {
+
+        if (string.IsNullOrWhiteSpace(searchTerm))
+            return admins;
+
+        var lowerCaseTerm = searchTerm.NormalizeName();
+
+        return admins
+            .Where(x =>
                 x.NormalizedEmail.Trim().ToLower().Contains(lowerCaseTerm)
             );
     }

@@ -39,14 +39,14 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
             throw new ArgumentException("Company is verified");
         }
 
-        entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync();
+        entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync(cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        var template = await _templateService.GetTemplateAsync(TemplateConstants.CompanyInvitationEmail);
+        var template = await _templateService.GetTemplateAsync(TemplateConstants.CompanyInvitationEmail, cancellationToken);
 
         template = template.MultipleReplace(new Dictionary<string, string> { { "{verificationToken}", entity.VerificationToken ?? "" } });
 
-        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Invitation Email", template);
+        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Invitation Email", template, cancellationToken: cancellationToken);
 
         return Unit.Value;
     }

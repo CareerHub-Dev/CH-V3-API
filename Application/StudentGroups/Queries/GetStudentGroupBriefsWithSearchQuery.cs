@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Entensions;
+using Application.Common.Interfaces;
 using Application.Common.Models.StudentGroup;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ public class GetStudentGroupBriefsWithSearchQueryHandler : IRequestHandler<GetSt
     {
         return await _context.StudentGroups
             .AsNoTracking()
+            .Search(request.SearchTerm ?? "")
             .Select(x => new StudentGroupBriefDTO
             {
                 Id = x.Id,

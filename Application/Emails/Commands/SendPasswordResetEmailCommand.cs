@@ -37,16 +37,16 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
             throw new NotFoundException(nameof(Account), request.Email);
         }
 
-        entity.ResetToken = await _procedureService.GenerateAccountResetTokenAsync();
+        entity.ResetToken = await _procedureService.GenerateAccountResetTokenAsync(cancellationToken);
         entity.ResetTokenExpires = DateTime.UtcNow.AddDays(1);
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        var template = await _templateService.GetTemplateAsync(TemplateConstants.PasswordResetEmail);
+        var template = await _templateService.GetTemplateAsync(TemplateConstants.PasswordResetEmail, cancellationToken);
 
         template = template.MultipleReplace(new Dictionary<string, string> { { "{resetToken}", entity.ResetToken ?? "" } });
 
-        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Reset Password", template);
+        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Reset Password", template, cancellationToken: cancellationToken);
 
         return Unit.Value;
     }

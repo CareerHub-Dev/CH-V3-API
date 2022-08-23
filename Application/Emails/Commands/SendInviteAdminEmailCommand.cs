@@ -39,14 +39,14 @@ public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdmi
             throw new ArgumentException("Admin is verified");
         }
 
-        entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync();
+        entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync(cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        var template = await _templateService.GetTemplateAsync(TemplateConstants.AdminInvitationEmail);
+        var template = await _templateService.GetTemplateAsync(TemplateConstants.AdminInvitationEmail, cancellationToken);
 
         template = template.MultipleReplace(new Dictionary<string, string> { { "{verificationToken}", entity.VerificationToken ?? "" } });
 
-        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Invitation Email", template);
+        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Invitation Email", template, cancellationToken: cancellationToken);
 
         return Unit.Value;
     }

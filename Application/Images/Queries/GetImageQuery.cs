@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Images.Queries;
 
-public record GetImageQuery(Guid Id) : IRequest<ImageDTO>;
+public record GetImageQuery(Guid ImageId) : IRequest<ImageDTO>;
 
 public class GetImageQueryHandler : IRequestHandler<GetImageQuery, ImageDTO>
 {
@@ -22,7 +22,7 @@ public class GetImageQueryHandler : IRequestHandler<GetImageQuery, ImageDTO>
     {
         var image = await _context.Images
             .AsNoTracking()
-            .Where(x => x.Id == request.Id)
+            .Where(x => x.Id == request.ImageId)
             .Select(x => new ImageDTO
             {
                 Id = x.Id,
@@ -33,7 +33,7 @@ public class GetImageQueryHandler : IRequestHandler<GetImageQuery, ImageDTO>
 
         if (image == null)
         {
-            throw new NotFoundException(nameof(Image), request.Id);
+            throw new NotFoundException(nameof(Image), request.ImageId);
         }
 
         return image;
