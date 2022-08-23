@@ -30,6 +30,12 @@ public class GetStudentLogQueryHandler : IRequestHandler<GetAccountBriefQuery, A
             throw new NotFoundException(nameof(Account), request.AccountId);
         }
 
-        return new AccountBriefDTO { Id = entity.Id, Email = entity.Email, Verified = entity.Verified };
+        return new AccountBriefDTO { 
+            Id = entity.Id, 
+            Email = entity.Email, 
+            Verified = entity.Verified, 
+            PasswordReset = entity.PasswordReset,
+            Role = entity.GetType().Name 
+        };
     }
 }

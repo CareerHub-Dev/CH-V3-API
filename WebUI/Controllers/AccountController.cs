@@ -6,6 +6,7 @@ using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.RevokeToken;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
+using Application.Accounts.Query;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
@@ -167,7 +168,19 @@ public class AccountController : ApiControllerBase
 
         return Ok(new { message = "Password change successful" });
     }
-    
+
+    /// <summary>
+    /// Admin
+    /// </summary>
+    [Authorize("Admin")]
+    [HttpGet("{accountId}")]
+    public async Task<AccountBriefResponse> GetAccountBrief(Guid accountId)
+    {
+        var result = await Mediator.Send(new GetAccountBriefQuery(accountId));
+
+        return new AccountBriefResponse(result);
+    }
+
     // helper methods
     private void SetTokenCookie(string token)
     {
