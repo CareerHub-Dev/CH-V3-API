@@ -2,7 +2,7 @@
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.DTO.Company;
+using WebUI.Common.Models.Company;
 
 namespace WebUI.Controllers;
 

@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Models.Search;
+﻿namespace WebUI.Common.Models;
 
 public class SearchParameter
 {

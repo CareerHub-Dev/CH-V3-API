@@ -1,5 +1,4 @@
 ﻿using Application.Common.Models.Pagination;
-using Application.Common.Models.Search;
 using Application.StudentGroups.Commands.CreateStudentGroup;
 using Application.StudentGroups.Commands.DeleteStudentGroup;
 using Application.StudentGroups.Commands.UpdateStudentGroup;
@@ -7,7 +6,8 @@ using Application.StudentGroups.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.DTO.StudentGroup;
+using WebUI.Common.Models;
+using WebUI.Common.Models.StudentGroup;
 
 namespace WebUI.Controllers;
 

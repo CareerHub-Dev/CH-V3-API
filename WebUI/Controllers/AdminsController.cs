@@ -2,12 +2,12 @@
 using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Queries;
 using Application.Common.Models.Pagination;
-using Application.Common.Models.Search;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.DTO.Admin;
+using WebUI.Common.Models;
+using WebUI.Common.Models.Admin;
 
 namespace WebUI.Controllers;
 

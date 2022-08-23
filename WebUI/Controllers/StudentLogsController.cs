@@ -1,5 +1,4 @@
 ﻿using Application.Common.Models.Pagination;
-using Application.Common.Models.Search;
 using Application.StudentLogs.Commands.CreateStudentLog;
 using Application.StudentLogs.Commands.DeleteStudentLog;
 using Application.StudentLogs.Commands.UpdateStudentLog;
@@ -7,7 +6,8 @@ using Application.StudentLogs.Queries;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.DTO.StudentLog;
+using WebUI.Common.Models;
+using WebUI.Common.Models.StudentLog;
 
 namespace WebUI.Controllers;
 

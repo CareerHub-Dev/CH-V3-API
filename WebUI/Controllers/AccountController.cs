@@ -10,7 +10,7 @@ using Application.Accounts.Query;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.DTO.Account;
+using WebUI.Common.Models.Account;
 
 namespace WebUI.Controllers;
 

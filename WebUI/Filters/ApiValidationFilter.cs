@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using WebUI.DTO;
+using WebUI.Common.Models;
 
 namespace WebUI.Filters;
 
