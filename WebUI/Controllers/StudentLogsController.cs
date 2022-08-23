@@ -11,13 +11,13 @@ using WebUI.DTO.StudentLog;
 
 namespace WebUI.Controllers;
 
+[Authorize("Admin")]
 public class StudentLogsController : ApiControllerBase
 {
     /// <summary>
     /// Auth
     /// </summary>
     [HttpGet]
-    [Authorize]
     public async Task<IEnumerable<StudentLogResponse>> GetStudentLogs(
         [FromQuery] PaginationParameters paginationParameters, 
         [FromQuery] SearchParameter searchParameter, 
@@ -39,7 +39,6 @@ public class StudentLogsController : ApiControllerBase
     /// Admin
     /// </summary>
     [HttpGet("{studentLogId}")]
-    [Authorize("Admin")]
     public async Task<StudentLogResponse> GetStudentLog(Guid studentLogId)
     {
         var result = await Mediator.Send(new GetStudentLogQuery(studentLogId));
@@ -50,7 +49,6 @@ public class StudentLogsController : ApiControllerBase
     /// Admin
     /// </summary>
     [HttpDelete("{studentLogId}")]
-    [Authorize("Admin")]
     public async Task<IActionResult> DeleteStudentLog(Guid studentLogId)
     {
         await Mediator.Send(new DeleteStudentLogCommand(studentLogId));
@@ -61,7 +59,6 @@ public class StudentLogsController : ApiControllerBase
     /// Admin
     /// </summary>
     [HttpPost]
-    [Authorize("Admin")]
     public async Task<Guid> CreateStudentLog(CreateStudentLogRequest request)
     {
         return await Mediator.Send(new CreateStudentLogCommand
@@ -77,7 +74,6 @@ public class StudentLogsController : ApiControllerBase
     /// Admin
     /// </summary>
     [HttpPut("{studentLogId}")]
-    [Authorize("Admin")]
     public async Task<IActionResult> UpdateStudentLog(Guid studentLogId, UpdateStudentLogRequest request)
     {
         await Mediator.Send(new UpdateStudentLogCommand
