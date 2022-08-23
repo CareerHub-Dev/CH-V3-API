@@ -30,6 +30,6 @@ public class IdentifyCommandHandler : IRequestHandler<IdentifyCommand, IdentifyR
 
         if (account == null) return null;
 
-        return new IdentifyResponse { Id = account.Id, Role = account.GetType().Name };
+        return new IdentifyResponse { Id = account.Id, Role = account.GetType().Name, IsVerified = account.IsVerified };
     }
 }
