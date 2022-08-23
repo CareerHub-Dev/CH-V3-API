@@ -1,10 +1,11 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Images.Queries.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Images.Queries.GetImage;
+namespace Application.Images.Queries;
 
 public record GetImageQuery(Guid Id) : IRequest<ImageDTO>;
 
