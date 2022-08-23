@@ -59,7 +59,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         }
 
         // replace old refresh token with a new one (rotate token)
-        var newRefreshToken = await RotateRefreshTokenAsync(refreshToken, request.IpAddress);
+        var newRefreshToken = await RotateRefreshTokenAsync(refreshToken, request.IpAddress, cancellationToken);
         account.RefreshTokens.Add(newRefreshToken);
 
         // remove old refresh tokens from account
@@ -103,9 +103,9 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         token.ReplacedByToken = replacedByToken;
     }
 
-    private async Task<RefreshTokenEntity> RotateRefreshTokenAsync(RefreshTokenEntity refreshToken, string ipAddress)
+    private async Task<RefreshTokenEntity> RotateRefreshTokenAsync(RefreshTokenEntity refreshToken, string ipAddress, CancellationToken cancellationToken)
     {
-        var newRefreshToken = await _jwtService.GenerateRefreshTokenAsync(ipAddress);
+        var newRefreshToken = await _jwtService.GenerateRefreshTokenAsync(ipAddress, cancellationToken);
         RevokeRefreshToken(refreshToken, ipAddress, "Replaced by new token", newRefreshToken.Token);
         return newRefreshToken;
     }

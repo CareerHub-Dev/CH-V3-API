@@ -42,7 +42,7 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
         }
 
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);
-        var refreshToken = await _jwtService.GenerateRefreshTokenAsync(request.IpAddress);
+        var refreshToken = await _jwtService.GenerateRefreshTokenAsync(request.IpAddress, cancellationToken);
         account.RefreshTokens.Add(refreshToken);
 
         account.RefreshTokens.RemoveAll(x =>
