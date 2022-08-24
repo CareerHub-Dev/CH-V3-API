@@ -26,7 +26,7 @@ public class GetImageQueryHandler : IRequestHandler<GetImageQuery, ImageDTO>
             .Select(x => new ImageDTO
             {
                 Id = x.Id,
-                FileName = x.FileName,
+                ContentType = x.ContentType,
                 Content = x.Content
             })
             .FirstOrDefaultAsync(cancellationToken);

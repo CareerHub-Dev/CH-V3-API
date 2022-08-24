@@ -1,8 +1,9 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Common;
 
-public class Image
+namespace Domain.Entities;
+
+public class Image : BaseAuditableEntity
 {
-    public Guid Id { get; set; }
-    public string FileName { get; set; } = string.Empty;
+    public string ContentType { get; set; } = string.Empty;
     public byte[] Content { get; set; } = Array.Empty<byte>();
 }

@@ -15,6 +15,6 @@ public class ImagesController : ApiControllerBase
     {
         var image = await Mediator.Send(new GetImageQuery(imageId));
 
-        return File(image.Content, $"image/{image.Extention[1..]}");
+        return File(image.Content, image.ContentType);
     }
 }
