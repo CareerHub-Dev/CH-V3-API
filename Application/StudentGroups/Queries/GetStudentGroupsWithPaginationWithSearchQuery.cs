@@ -9,7 +9,8 @@ namespace Application.StudentGroups.Queries;
 
 public record GetStudentGroupsWithPaginationWithSearchQuery : IRequest<PaginatedList<StudentGroupDTO>>
 {
-    public PaginationParameters PaginationParameters { get; init; } = new PaginationParameters();
+    public int PageNumber { get; init; } = 1;
+    public int PageSize { get; init; } = 10;
 
     public string? SearchTerm { get; init; }
 }
@@ -37,6 +38,6 @@ public class GetStudentGroupsWithPaginationWithSearchQueryHandler : IRequestHand
                 LastModified = x.LastModified,
                 LastModifiedBy = x.LastModifiedBy,
             })
-            .ToPagedListAsync(request.PaginationParameters.PageNumber, request.PaginationParameters.PageSize, cancellationToken);
+            .ToPagedListAsync(request.PageNumber, request.PageSize, cancellationToken);
     }
 }

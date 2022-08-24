@@ -10,7 +10,8 @@ namespace Application.StudentLogs.Queries;
 
 public record GetStudentLogsWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<StudentLogDTO>>
 {
-    public PaginationParameters PaginationParameters { get; init; } = new PaginationParameters();
+    public int PageNumber { get; init; } = 1;
+    public int PageSize { get; init; } = 10;
 
     public string? SearchTerm { get; init; }
 
@@ -44,6 +45,6 @@ public class GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler : IReq
                 LastModifiedBy = x.LastModifiedBy,
                 StudentGroup = new StudentGroupBriefDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name }
             })
-            .ToPagedListAsync(request.PaginationParameters.PageNumber, request.PaginationParameters.PageSize, cancellationToken);
+            .ToPagedListAsync(request.PageNumber, request.PageSize, cancellationToken);
     }
 }

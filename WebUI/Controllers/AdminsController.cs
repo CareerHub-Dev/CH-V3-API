@@ -25,7 +25,8 @@ public class AdminsController : ApiControllerBase
     {
         var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterQuery
         {
-            PaginationParameters = paginationParameters,
+            PageNumber = paginationParameters.PageNumber,
+            PageSize = paginationParameters.PageSize,
             SearchTerm = searchParameter.SearchTerm,
             WithoutAdminId = AccountInfo!.Id, 
             IsVerified = filter.IsVerified

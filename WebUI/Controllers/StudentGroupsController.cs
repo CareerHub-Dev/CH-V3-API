@@ -30,7 +30,8 @@ public class StudentGroupsController : ApiControllerBase
                 {
                     var result = await Mediator.Send(new GetStudentGroupsWithPaginationWithSearchQuery
                     {
-                        PaginationParameters = paginationParameters,
+                        PageSize = paginationParameters.PageSize,
+                        PageNumber = paginationParameters.PageNumber,
                         SearchTerm = searchParameter.SearchTerm,
                     });
 

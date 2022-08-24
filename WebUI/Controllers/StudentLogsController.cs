@@ -25,7 +25,8 @@ public class StudentLogsController : ApiControllerBase
     {
         var result = await Mediator.Send(new GetStudentLogsWithPaginationWithSearchWithFilterQuery
         {
-            PaginationParameters = paginationParameters,
+            PageSize = paginationParameters.PageSize,
+            PageNumber = paginationParameters.PageNumber,
             SearchTerm = searchParameter.SearchTerm,
             StudentGroupId = filterParameters.StudentGroupId
         });

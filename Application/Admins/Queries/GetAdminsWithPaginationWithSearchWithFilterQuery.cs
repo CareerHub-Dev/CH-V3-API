@@ -9,7 +9,8 @@ namespace Application.Admins.Queries;
 
 public record GetAdminsWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<AdminDTO>>
 {
-    public PaginationParameters PaginationParameters { get; init; } = new PaginationParameters();
+    public int PageNumber { get; init; } = 1;
+    public int PageSize { get; init; } = 10;
 
     public string? SearchTerm { get; init; }
 
@@ -39,6 +40,6 @@ public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestH
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset
             })
-            .ToPagedListAsync(request.PaginationParameters.PageNumber, request.PaginationParameters.PageSize, cancellationToken);
+            .ToPagedListAsync(request.PageNumber, request.PageSize, cancellationToken);
     }
 }
