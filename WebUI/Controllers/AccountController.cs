@@ -7,9 +7,11 @@ using Application.Accounts.Commands.RevokeToken;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Accounts.Query;
+using Application.Common.Models.Image;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
+using WebUI.Common.Extentions;
 using WebUI.Common.Models.Account;
 
 namespace WebUI.Controllers;
@@ -88,6 +90,16 @@ public class AccountController : ApiControllerBase
         var companyInfo = new VerifyCompanyWithContinuedRegistrationCommand
         {
             Token = verifyCompanyRequest.Token,
+            CompanyLogo = verifyCompanyRequest.CompanyLogoFile != null ? new CreateImage
+            {
+                Content = await verifyCompanyRequest.CompanyLogoFile.ToByteArrayAsync(),
+                ContentType = verifyCompanyRequest.CompanyLogoFile.ContentType
+            } : null,
+            CompanyBanner = verifyCompanyRequest.CompanyBannerFile != null ? new CreateImage
+            {
+                Content = await verifyCompanyRequest.CompanyBannerFile.ToByteArrayAsync(),
+                ContentType = verifyCompanyRequest.CompanyBannerFile.ContentType
+            } : null,
             CompanyName = verifyCompanyRequest.CompanyName,
             CompanyMotto = verifyCompanyRequest.CompanyMotto,
             CompanyDescription = verifyCompanyRequest.CompanyDescription,
