@@ -39,21 +39,11 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
             throw new NotFoundException(nameof(Company), request.Token);
         }
 
-        Image? imageLogo = null;
-        Image? imageBanner = null;
+        var imageLogo = request.CompanyLogo?.ToImageWithGeneratedId;
+        var imageBanner = request.CompanyBanner?.ToImageWithGeneratedId;
 
-        if(request.CompanyLogo != null)
-        {
-            imageLogo = new Image { ContentType = request.CompanyLogo.ContentType, Content = request.CompanyLogo.Content };
-            await _context.Images.AddAsync(imageLogo, cancellationToken);
-        }
-        if (request.CompanyBanner != null)
-        {
-            imageBanner = new Image { ContentType = request.CompanyBanner.ContentType, Content = request.CompanyBanner.Content };
-            await _context.Images.AddAsync(imageBanner, cancellationToken);
-        }
-
-        await _context.SaveChangesAsync(cancellationToken);
+        if (imageLogo != null) await _context.Images.AddAsync(imageLogo, cancellationToken);
+        if (imageBanner != null) await _context.Images.AddAsync(imageBanner, cancellationToken);
 
         entity.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
         entity.VerificationToken = null;
