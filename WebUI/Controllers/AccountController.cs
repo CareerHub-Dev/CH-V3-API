@@ -7,6 +7,7 @@ using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.RevokeToken;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
+using Application.Accounts.Commands.VerifyStudent;
 using Application.Accounts.Query;
 using Application.Common.Models.Image;
 using Application.Emails.Commands;
@@ -20,12 +21,12 @@ namespace WebUI.Controllers;
 public class AccountController : ApiControllerBase
 {
     [HttpPost("authenticate-{clientType}")]
-    public async Task<IActionResult> Authenticate(AuthenticateRequest authenticateRequest, string clientType)
+    public async Task<IActionResult> Authenticate(AuthenticateRequest authenticate, string clientType)
     {
         var response = await Mediator.Send(new AuthenticateCommand
         {
-            Email = authenticateRequest.Email,
-            Password = authenticateRequest.Password,
+            Email = authenticate.Email,
+            Password = authenticate.Password,
             IpAddress = IpAddress()
         });
 
@@ -86,32 +87,38 @@ public class AccountController : ApiControllerBase
     }
 
     [HttpPost("verify-company-email")]
-    public async Task<IActionResult> VerifyCompanyWithContinuedRegistration([FromForm] VerifyCompanyWithContinuedRegistrationRequest verifyCompanyRequest)
+    public async Task<IActionResult> VerifyCompanyWithContinuedRegistration([FromForm] VerifyCompanyWithContinuedRegistrationRequest verifyCompany)
     {
         var companyInfo = new VerifyCompanyWithContinuedRegistrationCommand
         {
-            Token = verifyCompanyRequest.Token,
-            CompanyLogo = verifyCompanyRequest.CompanyLogoFile is IFormFile logo ? await logo.ToCreateImageAsync() : null,
-            CompanyBanner = verifyCompanyRequest.CompanyBannerFile is IFormFile banner ? await banner.ToCreateImageAsync() : null,
-            CompanyName = verifyCompanyRequest.CompanyName,
-            CompanyMotto = verifyCompanyRequest.CompanyMotto,
-            CompanyDescription = verifyCompanyRequest.CompanyDescription,
-            Password = verifyCompanyRequest.Password,
+            Token = verifyCompany.Token,
+            CompanyLogo = verifyCompany.CompanyLogoFile is IFormFile logo ? await logo.ToCreateImageAsync() : null,
+            CompanyBanner = verifyCompany.CompanyBannerFile is IFormFile banner ? await banner.ToCreateImageAsync() : null,
+            CompanyName = verifyCompany.CompanyName,
+            CompanyMotto = verifyCompany.CompanyMotto,
+            CompanyDescription = verifyCompany.CompanyDescription,
+            Password = verifyCompany.Password,
         };
 
         await Mediator.Send(companyInfo);
         return Ok(new { message = "Verification successful, you can now login" });
     }
     [HttpPost("verify-admin-email")]
-    public async Task<IActionResult> VerifyAdminWithContinuedRegistration([FromForm] VerifyAdminWithContinuedRegistrationRequest verifyAdminRequest)
+    public async Task<IActionResult> VerifyAdminWithContinuedRegistration([FromForm] VerifyAdminWithContinuedRegistrationRequest verifyAdmin)
     {
         var adminInfo = new VerifyAdminWithContinuedRegistrationCommand
         {
-            Token = verifyAdminRequest.Token,
-            Password = verifyAdminRequest.Password,
+            Token = verifyAdmin.Token,
+            Password = verifyAdmin.Password,
         };
 
         await Mediator.Send(adminInfo);
+        return Ok(new { message = "Verification successful, you can now login" });
+    }
+    [HttpPost("verify-student-email")]
+    public async Task<IActionResult> VerifyStudent([FromForm] VerifyStudentRequest verifyStudent)
+    {
+        await Mediator.Send(new VerifyStudentCommand { Token = verifyStudent.Token });
         return Ok(new { message = "Verification successful, you can now login" });
     }
 
