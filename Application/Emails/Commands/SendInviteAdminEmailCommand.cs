@@ -42,11 +42,11 @@ public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdmi
         entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync(cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        var template = await _templateService.GetTemplateAsync(TemplateConstants.AdminInvitationEmail, cancellationToken);
+        var template = await _templateService.GetTemplateAsync(TemplateConstants.AdminInvitationEmail);
 
         template = template.MultipleReplace(new Dictionary<string, string> { { "{verificationToken}", entity.VerificationToken ?? "" } });
 
-        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Invitation Email", template, cancellationToken: cancellationToken);
+        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Invitation Email", template);
 
         return Unit.Value;
     }

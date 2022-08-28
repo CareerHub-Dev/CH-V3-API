@@ -32,7 +32,7 @@ public class InviteAdminCommandHandler : IRequestHandler<InviteAdminCommand, Gui
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        await _mediator.Publish(new AdminInvitedEvent(entity), cancellationToken);
+        await _mediator.Publish(new AdminInvitedEvent(entity));
 
         return entity.Id;
     }

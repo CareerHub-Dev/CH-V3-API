@@ -31,6 +31,6 @@ public class EmailService : IEmailService
         await smtp.ConnectAsync(_appSettings.SmtpHost, _appSettings.SmtpPort, SecureSocketOptions.StartTls, cancellationToken);
         await smtp.AuthenticateAsync(_appSettings.SmtpUser, _appSettings.SmtpPass, cancellationToken);
         await smtp.SendAsync(email, cancellationToken);
-        await smtp.DisconnectAsync(true, cancellationToken);
+        await smtp.DisconnectAsync(true);
     }
 }

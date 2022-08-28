@@ -23,7 +23,7 @@ public class AccountOwnsTokenCommandHandler : IRequestHandler<AccountOwnsTokenCo
 
     public async Task<bool> Handle(AccountOwnsTokenCommand request, CancellationToken cancellationToken)
     {
-        if (!await _context.Accounts.AnyAsync(x => x.Id == request.AccountId))
+        if (!await _context.Accounts.AnyAsync(x => x.Id == request.AccountId, cancellationToken))
         {
             throw new NotFoundException(nameof(Account), request.AccountId);
         }

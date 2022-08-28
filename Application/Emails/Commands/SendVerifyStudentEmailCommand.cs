@@ -42,11 +42,11 @@ public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifySt
         entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync(cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        var template = await _templateService.GetTemplateAsync(TemplateConstants.VerifyStudentEmail, cancellationToken);
+        var template = await _templateService.GetTemplateAsync(TemplateConstants.VerifyStudentEmail);
 
         template = template.MultipleReplace(new Dictionary<string, string> { { "{verificationToken}", entity.VerificationToken ?? "" } });
 
-        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Student Verification", template, cancellationToken: cancellationToken);
+        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Student Verification", template);
 
         return Unit.Value;
     }

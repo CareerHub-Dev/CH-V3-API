@@ -1,7 +1,6 @@
 ﻿using Application.Emails.Commands;
 using Domain.Entities;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Application.Companies.Events;
 
