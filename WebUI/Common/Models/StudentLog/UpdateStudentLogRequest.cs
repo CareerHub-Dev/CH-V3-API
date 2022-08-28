@@ -1,6 +1,6 @@
 ﻿namespace WebUI.Common.Models.StudentLog;
 
-public class UpdateStudentLogRequest
+public class UpdateStudentLogRequest : IValidatableMarker
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;

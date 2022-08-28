@@ -2,6 +2,7 @@
 using Application.Accounts.Commands.Authenticate;
 using Application.Accounts.Commands.ChangePassword;
 using Application.Accounts.Commands.RefreshToken;
+using Application.Accounts.Commands.RegisterStudent;
 using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.RevokeToken;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
@@ -90,16 +91,8 @@ public class AccountController : ApiControllerBase
         var companyInfo = new VerifyCompanyWithContinuedRegistrationCommand
         {
             Token = verifyCompanyRequest.Token,
-            CompanyLogo = verifyCompanyRequest.CompanyLogoFile != null ? new CreateImage
-            {
-                Content = await verifyCompanyRequest.CompanyLogoFile.ToByteArrayAsync(),
-                ContentType = verifyCompanyRequest.CompanyLogoFile.ContentType
-            } : null,
-            CompanyBanner = verifyCompanyRequest.CompanyBannerFile != null ? new CreateImage
-            {
-                Content = await verifyCompanyRequest.CompanyBannerFile.ToByteArrayAsync(),
-                ContentType = verifyCompanyRequest.CompanyBannerFile.ContentType
-            } : null,
+            CompanyLogo = verifyCompanyRequest.CompanyLogoFile is IFormFile logo ? await logo.ToCreateImageAsync() : null,
+            CompanyBanner = verifyCompanyRequest.CompanyBannerFile is IFormFile banner ? await banner.ToCreateImageAsync() : null,
             CompanyName = verifyCompanyRequest.CompanyName,
             CompanyMotto = verifyCompanyRequest.CompanyMotto,
             CompanyDescription = verifyCompanyRequest.CompanyDescription,
@@ -120,6 +113,14 @@ public class AccountController : ApiControllerBase
 
         await Mediator.Send(adminInfo);
         return Ok(new { message = "Verification successful, you can now login" });
+    }
+
+    [HttpPost("register/student")]
+    public async Task<IActionResult> RegisterStudent(RegisterStudentRequest registerStudent)
+    {
+        await Mediator.Send(new RegisterStudentCommand { Email = registerStudent.Email, Password = registerStudent.Password });
+
+        return Ok(new { message = "Registration successful, please check your email for verification instructions" });
     }
 
     [HttpPost("forgot-password")]

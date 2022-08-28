@@ -1,6 +1,6 @@
 ﻿namespace WebUI.Common.Models.Company;
 
-public class SendInviteCompanyEmailRequest : IValidatableMarker
+public class SendInviteCompanyEmailRequest
 {
     public Guid CompanyId { get; set; }
 }
