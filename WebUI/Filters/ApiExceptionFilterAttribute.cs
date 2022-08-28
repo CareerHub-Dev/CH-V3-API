@@ -42,6 +42,25 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             HandleInvalidModelStateException(context);
             return;
         }
+
+        HandleAnyException(context);
+    }
+
+    private void HandleAnyException(ExceptionContext context)
+    {
+        var exception = context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.6.1",
+            Title = "Internal Server Error.",
+            Detail = exception.Message,
+            Status = 500
+        };
+
+        context.Result = new ObjectResult(details);
+
+        context.ExceptionHandled = true;
     }
 
     private void HandleValidationException(ExceptionContext context)
