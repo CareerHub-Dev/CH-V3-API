@@ -11,8 +11,8 @@ public record VerifyCompanyWithContinuedRegistrationCommand : IRequest
 {
     public string Token { get; init; } = string.Empty;
 
-    public CreateImage? CompanyLogo { get; init; }
-    public CreateImage? CompanyBanner { get; init; }
+    public CreateImage? Logo { get; init; }
+    public CreateImage? Banner { get; init; }
 
     public string CompanyName { get; init; } = string.Empty;
     public string CompanyMotto { get; init; } = string.Empty;
@@ -39,8 +39,8 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
             throw new NotFoundException(nameof(Company), request.Token);
         }
 
-        var imageLogo = request.CompanyLogo?.ToImageWithGeneratedId;
-        var imageBanner = request.CompanyBanner?.ToImageWithGeneratedId;
+        var imageLogo = request.Logo?.ToImageWithGeneratedId;
+        var imageBanner = request.Banner?.ToImageWithGeneratedId;
 
         if (imageLogo != null) await _context.Images.AddAsync(imageLogo, cancellationToken);
         if (imageBanner != null) await _context.Images.AddAsync(imageBanner, cancellationToken);

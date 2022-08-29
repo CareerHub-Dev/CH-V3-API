@@ -92,8 +92,8 @@ public class AccountController : ApiControllerBase
         var companyInfo = new VerifyCompanyWithContinuedRegistrationCommand
         {
             Token = verifyCompany.Token,
-            CompanyLogo = verifyCompany.CompanyLogoFile is IFormFile logo ? await logo.ToCreateImageAsync() : null,
-            CompanyBanner = verifyCompany.CompanyBannerFile is IFormFile banner ? await banner.ToCreateImageAsync() : null,
+            Logo = verifyCompany.LogoFile is IFormFile logo ? await logo.ToCreateImageAsync() : null,
+            Banner = verifyCompany.BannerFile is IFormFile banner ? await banner.ToCreateImageAsync() : null,
             CompanyName = verifyCompany.CompanyName,
             CompanyMotto = verifyCompany.CompanyMotto,
             CompanyDescription = verifyCompany.CompanyDescription,

@@ -11,16 +11,16 @@ public class VerifyCompanyWithContinuedRegistrationRequestValidator : AbstractVa
         RuleFor(x => x.Token)
             .NotEmpty();
 
-        When(x => x.CompanyLogoFile != null, () =>
+        When(x => x.LogoFile != null, () =>
         {
-            RuleFor(x => x.CompanyLogoFile!)
+            RuleFor(x => x.LogoFile!)
                 .AllowedExtensions(".jpg", ".jpeg", ".png")
                 .MaxFileSize(2 * 1024 * 1024);
         });
 
-        When(x => x.CompanyBannerFile != null, () =>
+        When(x => x.BannerFile != null, () =>
         {
-            RuleFor(x => x.CompanyBannerFile!)
+            RuleFor(x => x.BannerFile!)
                 .AllowedExtensions(".jpg", ".jpeg", ".png")
                 .MaxFileSize(2 * 1024 * 1024);
         });

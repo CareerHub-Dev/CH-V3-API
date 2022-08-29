@@ -11,14 +11,14 @@ public class VerifyCompanyWithContinuedRegistrationCommandValidator : AbstractVa
         RuleFor(x => x.Token)
             .NotEmpty();
 
-        When(x => x.CompanyLogo != null, () =>
+        When(x => x.Logo != null, () =>
         {
-            RuleFor(x => x.CompanyLogo)
+            RuleFor(x => x.Logo)
                 .SetValidator(imageValidator!);
         });
-        When(x => x.CompanyBanner != null, () =>
+        When(x => x.Banner != null, () =>
         {
-            RuleFor(x => x.CompanyBanner)
+            RuleFor(x => x.Banner)
                 .SetValidator(imageValidator!);
         });
 

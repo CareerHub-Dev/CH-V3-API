@@ -32,9 +32,9 @@ public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPho
             throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
-        if(entity.Photo != null)
+        if(entity.PhotoId != null)
         {
-            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.Photo, cancellationToken);
+            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.PhotoId, cancellationToken);
 
             if (image != null)
             {
@@ -49,10 +49,10 @@ public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPho
             await _context.Images.AddAsync(newImage, cancellationToken);
         }
 
-        entity.Photo = newImage?.Id;
+        entity.PhotoId = newImage?.Id;
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return entity.Photo;
+        return entity.PhotoId;
     }
 }
