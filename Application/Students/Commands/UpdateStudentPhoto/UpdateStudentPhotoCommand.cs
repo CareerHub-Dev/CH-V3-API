@@ -44,6 +44,11 @@ public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPho
 
         var newImage = request.Photo?.ToImageWithGeneratedId;
 
+        if(newImage != null)
+        {
+            await _context.Images.AddAsync(newImage);
+        }
+
         entity.Photo = newImage?.Id;
 
         await _context.SaveChangesAsync(cancellationToken);
