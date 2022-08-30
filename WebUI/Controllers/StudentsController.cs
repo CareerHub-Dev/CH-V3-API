@@ -18,7 +18,7 @@ public class StudentsController : ApiControllerBase
     /// </remarks>
     [HttpPost("send-verification-email")]
     [Authorize("Admin")]
-    public async Task<IActionResult> SendInviteCompanyEmail(SendVerifyStudentEmailRequest sendVerifyStudentEmail)
+    public async Task<IActionResult> SendVerifyStudentEmail(SendVerifyStudentEmailRequest sendVerifyStudentEmail)
     {
         await Mediator.Send(new SendVerifyStudentEmailCommand(sendVerifyStudentEmail.StudentId));
         return Ok();
