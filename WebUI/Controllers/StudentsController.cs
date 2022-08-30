@@ -124,7 +124,7 @@ public class StudentsController : ApiControllerBase
                     return await Mediator.Send(new UpdateStudentPhotoCommand
                     {
                         StudentId = studentId,
-                        Photo = updateStudentPhoto.PhotoFile is IFormFile logo ? await logo.ToCreateImageAsync() : null,
+                        Photo = updateStudentPhoto.PhotoFile is IFormFile photo ? await photo.ToCreateImageAsync() : null,
                     });
                 }
             default:
