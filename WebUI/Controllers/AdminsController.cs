@@ -20,7 +20,7 @@ public class AdminsController : ApiControllerBase
     public async Task<ActionResult<IEnumerable<AdminResponse>>> GetAdmins(
         [FromQuery] PaginationParameters paginationParameters,
         [FromQuery] SearchParameter searchParameter,
-        [FromQuery] AdminListFilterParameters filter
+        [FromQuery] AdminListFilterParameters filterParameters
         )
     {
         var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterQuery
@@ -29,7 +29,7 @@ public class AdminsController : ApiControllerBase
             PageSize = paginationParameters.PageSize,
             SearchTerm = searchParameter.SearchTerm,
             WithoutAdminId = AccountInfo!.Id, 
-            IsVerified = filter.IsVerified
+            IsVerified = filterParameters.IsVerified
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

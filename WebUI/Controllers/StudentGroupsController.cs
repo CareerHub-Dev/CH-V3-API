@@ -1,5 +1,4 @@
-﻿using Application.Common.Models.Pagination;
-using Application.StudentGroups.Commands.CreateStudentGroup;
+﻿using Application.StudentGroups.Commands.CreateStudentGroup;
 using Application.StudentGroups.Commands.DeleteStudentGroup;
 using Application.StudentGroups.Commands.UpdateStudentGroup;
 using Application.StudentGroups.Queries;

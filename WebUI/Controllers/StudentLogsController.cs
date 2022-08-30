@@ -1,5 +1,4 @@
-﻿using Application.Common.Models.Pagination;
-using Application.StudentLogs.Commands.CreateStudentLog;
+﻿using Application.StudentLogs.Commands.CreateStudentLog;
 using Application.StudentLogs.Commands.DeleteStudentLog;
 using Application.StudentLogs.Commands.UpdateStudentLog;
 using Application.StudentLogs.Queries;
@@ -19,8 +18,8 @@ public class StudentLogsController : ApiControllerBase
     /// </summary>
     [HttpGet]
     public async Task<IEnumerable<StudentLogResponse>> GetStudentLogs(
-        [FromQuery] PaginationParameters paginationParameters, 
-        [FromQuery] SearchParameter searchParameter, 
+        [FromQuery] PaginationParameters paginationParameters,
+        [FromQuery] SearchParameter searchParameter,
         [FromQuery] StudentLogListFilterParameters filterParameters)
     {
         var result = await Mediator.Send(new GetStudentLogsWithPaginationWithSearchWithFilterQuery
@@ -60,14 +59,14 @@ public class StudentLogsController : ApiControllerBase
     /// Admin
     /// </summary>
     [HttpPost]
-    public async Task<Guid> CreateStudentLog(CreateStudentLogRequest request)
+    public async Task<Guid> CreateStudentLog(CreateStudentLogRequest createStudentLog)
     {
         return await Mediator.Send(new CreateStudentLogCommand
         {
-            Email = request.Email,
-            LastName = request.LastName,
-            FirstName = request.FirstName,
-            StudentGroupId = request.StudentGroupId,
+            Email = createStudentLog.Email,
+            LastName = createStudentLog.LastName,
+            FirstName = createStudentLog.FirstName,
+            StudentGroupId = createStudentLog.StudentGroupId,
         });
     }
 
@@ -75,15 +74,15 @@ public class StudentLogsController : ApiControllerBase
     /// Admin
     /// </summary>
     [HttpPut("{studentLogId}")]
-    public async Task<IActionResult> UpdateStudentLog(Guid studentLogId, UpdateStudentLogRequest request)
+    public async Task<IActionResult> UpdateStudentLog(Guid studentLogId, UpdateStudentLogRequest updateStudentLog)
     {
         await Mediator.Send(new UpdateStudentLogCommand
         {
             StudentLogId = studentLogId,
-            Email = request.Email,
-            LastName = request.LastName,
-            FirstName = request.FirstName,
-            StudentGroupId = request.StudentGroupId,
+            Email = updateStudentLog.Email,
+            LastName = updateStudentLog.LastName,
+            FirstName = updateStudentLog.FirstName,
+            StudentGroupId = updateStudentLog.StudentGroupId,
         });
 
         return NoContent();
