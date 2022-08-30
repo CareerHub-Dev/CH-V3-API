@@ -13,5 +13,6 @@ public interface IApplicationDbContext
     DbSet<Image> Images { get; }
     DbSet<StudentGroup> StudentGroups { get; }
     DbSet<StudentLog> StudentLogs { get; }
+    DbSet<CompanyLink> CompanyLinks { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

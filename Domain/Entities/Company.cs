@@ -7,4 +7,6 @@ public class Company : Account
     public Guid? BannerId { get; set; }
     public string Motto { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+
+    public List<CompanyLink> Links { get; set; } = new List<CompanyLink>();
 }
