@@ -10,15 +10,15 @@ public class CompanyConfigurations : IEntityTypeConfiguration<Company>
     {
         builder.ToTable("Companies");
 
-        builder.Property(x => x.CompanyName)
+        builder.Property(x => x.Name)
             .HasMaxLength(50)
             .IsRequired();
 
-        builder.Property(x => x.CompanyMotto)
+        builder.Property(x => x.Motto)
             .HasMaxLength(128)
             .IsRequired();
 
-        builder.Property(x => x.CompanyDescription)
+        builder.Property(x => x.Description)
             .HasMaxLength(256)
             .IsRequired();
     }

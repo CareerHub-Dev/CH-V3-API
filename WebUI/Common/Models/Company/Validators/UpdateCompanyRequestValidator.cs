@@ -6,15 +6,15 @@ public class UpdateCompanyRequestValidator : AbstractValidator<UpdateCompanyRequ
 {
     public UpdateCompanyRequestValidator()
     {
-        RuleFor(x => x.CompanyName)
+        RuleFor(x => x.Name)
             .NotEmpty()
             .MaximumLength(50);
 
-        RuleFor(x => x.CompanyMotto)
+        RuleFor(x => x.Motto)
             .NotEmpty()
             .MaximumLength(128);
 
-        RuleFor(x => x.CompanyDescription)
+        RuleFor(x => x.Description)
             .NotEmpty()
             .MaximumLength(256);
     }

@@ -15,9 +15,12 @@ public class UpdateStudentCommandValidator : AbstractValidator<UpdateStudentComm
             .NotEmpty()
             .MaximumLength(30);
 
-        RuleFor(x => x.Phone)
-            .NotEmpty()
-            .Phone();
+        When(x => x.Phone != null, () =>
+        {
+            RuleFor(x => x.Phone!)
+                .NotEmpty()
+                .Phone();
+        });
 
         RuleFor(x => x.BirthDate)
            .LessThan(DateTime.UtcNow).When(x => x.BirthDate.HasValue);

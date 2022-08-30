@@ -32,9 +32,9 @@ public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogo
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        if (entity.CompanyBannerId != null)
+        if (entity.BannerId != null)
         {
-            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.CompanyLogoId, cancellationToken);
+            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.LogoId, cancellationToken);
 
             if (image != null)
             {
@@ -49,10 +49,10 @@ public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogo
             await _context.Images.AddAsync(newImage, cancellationToken);
         }
 
-        entity.CompanyLogoId = newImage?.Id;
+        entity.LogoId = newImage?.Id;
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return entity.CompanyLogoId;
+        return entity.LogoId;
     }
 }

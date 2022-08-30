@@ -94,9 +94,9 @@ public class AccountController : ApiControllerBase
             Token = verifyCompany.Token,
             Logo = verifyCompany.LogoFile is IFormFile logo ? await logo.ToCreateImageAsync() : null,
             Banner = verifyCompany.BannerFile is IFormFile banner ? await banner.ToCreateImageAsync() : null,
-            CompanyName = verifyCompany.CompanyName,
-            CompanyMotto = verifyCompany.CompanyMotto,
-            CompanyDescription = verifyCompany.CompanyDescription,
+            Name = verifyCompany.Name,
+            Motto = verifyCompany.Motto,
+            Description = verifyCompany.Description,
             Password = verifyCompany.Password,
         };
 

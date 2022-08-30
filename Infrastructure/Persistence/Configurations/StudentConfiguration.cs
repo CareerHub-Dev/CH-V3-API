@@ -19,6 +19,6 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
             .IsRequired();
 
         builder.Property(x => x.Phone)
-            .IsRequired();
+            .HasMaxLength(20);
     }
 }

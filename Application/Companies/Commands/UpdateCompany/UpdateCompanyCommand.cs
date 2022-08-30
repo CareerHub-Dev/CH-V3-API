@@ -9,9 +9,9 @@ namespace Application.Companies.Commands.UpdateCompany;
 public record UpdateCompanyCommand : IRequest
 {
     public Guid CompanyId { get; init; }
-    public string CompanyName { get; init; } = string.Empty;
-    public string CompanyMotto { get; init; } = string.Empty;
-    public string CompanyDescription { get; init; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
+    public string Motto { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
 }
 
 public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand>
@@ -32,9 +32,9 @@ public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand>
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        entity.CompanyName = request.CompanyName;
-        entity.CompanyMotto = request.CompanyMotto;
-        entity.CompanyDescription = request.CompanyDescription;
+        entity.Name = request.Name;
+        entity.Motto = request.Motto;
+        entity.Description = request.Description;
 
         await _context.SaveChangesAsync(cancellationToken);
 

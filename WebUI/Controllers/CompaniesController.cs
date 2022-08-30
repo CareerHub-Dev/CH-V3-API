@@ -101,9 +101,9 @@ public class CompaniesController : ApiControllerBase
                     await Mediator.Send(new UpdateCompanyCommand
                     {
                         CompanyId = companyId,
-                        CompanyName = updateCompany.CompanyName,
-                        CompanyMotto = updateCompany.CompanyMotto,
-                        CompanyDescription = updateCompany.CompanyDescription
+                        Name = updateCompany.Name,
+                        Motto = updateCompany.Motto,
+                        Description = updateCompany.Description
                     });
                     break;
                 }

@@ -14,9 +14,9 @@ public record VerifyCompanyWithContinuedRegistrationCommand : IRequest
     public CreateImage? Logo { get; init; }
     public CreateImage? Banner { get; init; }
 
-    public string CompanyName { get; init; } = string.Empty;
-    public string CompanyMotto { get; init; } = string.Empty;
-    public string CompanyDescription { get; init; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
+    public string Motto { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
     public string Password { get; init; } = string.Empty;
 }
 
@@ -48,11 +48,11 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
         entity.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
         entity.VerificationToken = null;
         entity.Verified = DateTime.UtcNow;
-        entity.CompanyName = request.CompanyName;
-        entity.CompanyMotto = request.CompanyMotto;
-        entity.CompanyDescription = request.CompanyDescription;
-        entity.CompanyLogoId = imageLogo?.Id;
-        entity.CompanyBannerId = imageBanner?.Id;
+        entity.Name = request.Name;
+        entity.Motto = request.Motto;
+        entity.Description = request.Description;
+        entity.LogoId = imageLogo?.Id;
+        entity.BannerId = imageBanner?.Id;
 
         await _context.SaveChangesAsync(cancellationToken);
 

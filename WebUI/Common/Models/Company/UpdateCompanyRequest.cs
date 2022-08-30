@@ -2,7 +2,7 @@
 
 public class UpdateCompanyRequest : IValidatableMarker
 {
-    public string CompanyName { get; init; } = string.Empty;
-    public string CompanyMotto { get; init; } = string.Empty;
-    public string CompanyDescription { get; init; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
+    public string Motto { get; init; } = string.Empty;
+    public string Description { get; init; } = string.Empty;
 }
