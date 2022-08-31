@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\EmailTemplates\company_invitation_template.html" />
+    <Content Remove="wwwroot\EmailTemplates\password_reset_template.html" />
+    <Content Remove="wwwroot\EmailTemplates\verify_student_template.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,7 +30,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\EmailTemplates\" />
+    <None Include="wwwroot\EmailTemplates\company_invitation_template.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="wwwroot\EmailTemplates\password_reset_template.html" />
+    <None Include="wwwroot\EmailTemplates\verify_student_template.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

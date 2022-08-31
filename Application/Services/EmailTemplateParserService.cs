@@ -16,7 +16,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
 
     public string PrepareInviteAdminEmail(Admin admin, string stringTemplate)
     {
-        var url = $"{_clientSettings.Url}/sampleRoute/token={admin.VerificationToken}";
+        var url = $"{_clientSettings.Url}/sampleInviteAdminRoute/token={admin.VerificationToken}";
 
         stringTemplate = stringTemplate.Replace("{{{url}}}", url);
 
@@ -25,7 +25,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
 
     public string PrepareInviteCompanyEmail(Company company, string stringTemplate)
     {
-        var url = $"{_clientSettings.Url}/sampleRoute/token={company.VerificationToken}";
+        var url = $"{_clientSettings.Url}/sampleInviteCompanyRoute/token={company.VerificationToken}";
 
         stringTemplate = stringTemplate.Replace("{{{url}}}", url);
 
@@ -34,7 +34,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
 
     public string PreparePasswordResetEmail(Account account, string stringTemplate)
     {
-        var url = $"{_clientSettings.Url}/sampleRoute/token={account.ResetToken}";
+        var url = $"{_clientSettings.Url}/samplePasswordResetRoute/token={account.ResetToken}";
 
         stringTemplate = stringTemplate.Replace("{{{url}}}", url);
 
@@ -43,7 +43,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
 
     public string PrepareVerifyStudentEmail(Student student, string stringTemplate)
     {
-        var url = $"{_clientSettings.Url}/sampleRoute/token={student.VerificationToken}";
+        var url = $"{_clientSettings.Url}/sampleVerifyStudentRoute/token={student.VerificationToken}";
 
         stringTemplate = stringTemplate.Replace("{{{url}}}", url);
 
