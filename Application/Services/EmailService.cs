@@ -27,28 +27,28 @@ public class EmailService : IEmailService
     public async Task SendInviteAdminEmailAsync(Admin admin)
     {
         var template = await _emailTemplatesService.ReadTemplateAsync(_emailTemplateSettings.InviteAdmin.TemplateName);
-        template = _emailTemplateParserService.PrepareInviteAdminEmailAsync(admin, template);
-        await _mailKitService.SendEmailAsync(admin.NormalizedEmail, _emailTemplateSettings.InviteAdmin.Subject, template);
+        template = _emailTemplateParserService.PrepareInviteAdminEmail(admin, template);
+        await _mailKitService.SendAsync(admin.NormalizedEmail, _emailTemplateSettings.InviteAdmin.Subject, template);
     }
 
     public async Task SendInviteCompanyEmailAsync(Company company)
     {
         var template = await _emailTemplatesService.ReadTemplateAsync(_emailTemplateSettings.InviteCompany.TemplateName);
-        template = _emailTemplateParserService.PrepareInviteCompanyEmailAsync(company, template);
-        await _mailKitService.SendEmailAsync(company.NormalizedEmail, _emailTemplateSettings.InviteCompany.Subject, template);
+        template = _emailTemplateParserService.PrepareInviteCompanyEmail(company, template);
+        await _mailKitService.SendAsync(company.NormalizedEmail, _emailTemplateSettings.InviteCompany.Subject, template);
     }
 
     public async Task SendPasswordResetEmailAsync(Account account)
     {
         var template = await _emailTemplatesService.ReadTemplateAsync(_emailTemplateSettings.PasswordReset.TemplateName);
-        template = _emailTemplateParserService.PreparePasswordResetEmailAsync(account, template);
-        await _mailKitService.SendEmailAsync(account.NormalizedEmail, _emailTemplateSettings.PasswordReset.Subject, template);
+        template = _emailTemplateParserService.PreparePasswordResetEmail(account, template);
+        await _mailKitService.SendAsync(account.NormalizedEmail, _emailTemplateSettings.PasswordReset.Subject, template);
     }
 
     public async Task SendVerifyStudentEmailAsync(Student student)
     {
         var template = await _emailTemplatesService.ReadTemplateAsync(_emailTemplateSettings.VerifyStudent.TemplateName);
-        template = _emailTemplateParserService.PrepareVerifyStudentEmailAsync(student, template);
-        await _mailKitService.SendEmailAsync(student.NormalizedEmail, _emailTemplateSettings.VerifyStudent.Subject, template);
+        template = _emailTemplateParserService.PrepareVerifyStudentEmail(student, template);
+        await _mailKitService.SendAsync(student.NormalizedEmail, _emailTemplateSettings.VerifyStudent.Subject, template);
     }
 }

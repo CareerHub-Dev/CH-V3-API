@@ -46,7 +46,7 @@ public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdmi
 
         template = template.MultipleReplace(new Dictionary<string, string> { { "{verificationToken}", entity.VerificationToken ?? "" } });
 
-        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Invitation Email", template);
+        await _emailService.SendAsync(entity.NormalizedEmail, "Invitation Email", template);
 
         return Unit.Value;
     }

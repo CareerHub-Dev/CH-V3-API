@@ -4,8 +4,8 @@ namespace Application.Common.Interfaces;
 
 public interface IEmailTemplateParserService
 {
-    string PrepareInviteAdminEmailAsync(Admin admin, string stringTemplate);
-    string PrepareInviteCompanyEmailAsync(Company company, string stringTemplate);
-    string PreparePasswordResetEmailAsync(Account account, string stringTemplate);
-    string PrepareVerifyStudentEmailAsync(Student student, string stringTemplate);
+    string PrepareInviteAdminEmail(Admin admin, string stringTemplate);
+    string PrepareInviteCompanyEmail(Company company, string stringTemplate);
+    string PreparePasswordResetEmail(Account account, string stringTemplate);
+    string PrepareVerifyStudentEmail(Student student, string stringTemplate);
 }

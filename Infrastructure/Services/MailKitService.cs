@@ -17,7 +17,7 @@ public class MailKitService : IMailKitService
         _emailSettings = emailSettings.Value;
     }
 
-    public async Task SendEmailAsync(string to, string subject, string html, string? from = null, CancellationToken cancellationToken = default)
+    public async Task SendAsync(string to, string subject, string html, string? from = null, CancellationToken cancellationToken = default)
     {
         // create message
         var email = new MimeMessage();

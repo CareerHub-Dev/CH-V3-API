@@ -46,7 +46,7 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
 
         template = template.MultipleReplace(new Dictionary<string, string> { { "{resetToken}", entity.ResetToken ?? "" } });
 
-        await _emailService.SendEmailAsync(entity.NormalizedEmail, "Reset Password", template);
+        await _emailService.SendAsync(entity.NormalizedEmail, "Reset Password", template);
 
         return Unit.Value;
     }

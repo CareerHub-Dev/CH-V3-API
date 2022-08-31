@@ -2,5 +2,5 @@
 
 public interface IMailKitService
 {
-    Task SendEmailAsync(string to, string subject, string html, string? from = null, CancellationToken cancellationToken = default);
+    Task SendAsync(string to, string subject, string html, string? from = null, CancellationToken cancellationToken = default);
 }

@@ -14,7 +14,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
         _clientSettings = clientSettings.Value;
     }
 
-    public string PrepareInviteAdminEmailAsync(Admin admin, string stringTemplate)
+    public string PrepareInviteAdminEmail(Admin admin, string stringTemplate)
     {
         var url = $"{_clientSettings.Url}/sampleRoute/token={admin.VerificationToken}";
 
@@ -23,7 +23,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
         return stringTemplate;
     }
 
-    public string PrepareInviteCompanyEmailAsync(Company company, string stringTemplate)
+    public string PrepareInviteCompanyEmail(Company company, string stringTemplate)
     {
         var url = $"{_clientSettings.Url}/sampleRoute/token={company.VerificationToken}";
 
@@ -32,7 +32,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
         return stringTemplate;
     }
 
-    public string PreparePasswordResetEmailAsync(Account account, string stringTemplate)
+    public string PreparePasswordResetEmail(Account account, string stringTemplate)
     {
         var url = $"{_clientSettings.Url}/sampleRoute/token={account.ResetToken}";
 
@@ -41,7 +41,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
         return stringTemplate;
     }
 
-    public string PrepareVerifyStudentEmailAsync(Student student, string stringTemplate)
+    public string PrepareVerifyStudentEmail(Student student, string stringTemplate)
     {
         var url = $"{_clientSettings.Url}/sampleRoute/token={student.VerificationToken}";
 
