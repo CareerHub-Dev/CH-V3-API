@@ -1,7 +1,6 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,14 +16,12 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
 {
     private readonly IApplicationDbContext _context;
     private readonly IEmailService _emailService;
-    private readonly ITemplateService _templateService;
     private readonly IProcedureService _procedureService;
 
-    public SendPasswordResetEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, ITemplateService templateService, IProcedureService procedureService)
+    public SendPasswordResetEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, IProcedureService procedureService)
     {
         _context = context;
         _emailService = emailService;
-        _templateService = templateService;
         _procedureService = procedureService;
     }
 

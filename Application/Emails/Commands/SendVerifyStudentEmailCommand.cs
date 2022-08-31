@@ -14,14 +14,12 @@ public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifySt
 {
     private readonly IApplicationDbContext _context;
     private readonly IEmailService _emailService;
-    private readonly ITemplateService _templateService;
     private readonly IProcedureService _procedureService;
 
-    public SendVerifyStudentEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, ITemplateService templateService, IProcedureService procedureService)
+    public SendVerifyStudentEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, IProcedureService procedureService)
     {
         _context = context;
         _emailService = emailService;
-        _templateService = templateService;
         _procedureService = procedureService;
     }
 

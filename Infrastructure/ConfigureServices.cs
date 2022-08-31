@@ -24,7 +24,6 @@ public static class ConfigureServices
 
         services.AddScoped<IMailKitService, MailKitService>();
         services.AddScoped<IFileIOService, FileIOService>();
-        services.AddScoped<ITemplateService, TemplateService>();
 
         return services;
     }
