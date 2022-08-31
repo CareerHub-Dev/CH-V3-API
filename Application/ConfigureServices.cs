@@ -1,6 +1,7 @@
 ﻿using Application.Common.Behaviours;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Common.Models.Email;
 using Application.Services;
 using Application.Services.Jwt;
 using Application.Services.Procedure;
@@ -27,7 +28,11 @@ public static class ConfigureServices
         services.AddScoped<IEmailTemplateParserService, EmailTemplateParserService>();
         services.AddScoped<IEmailTemplatesService, EmailTemplatesService>();
 
-        services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
+        services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
+        services.Configure<EmailTemplateSettings>(configuration.GetSection(nameof(EmailTemplateSettings)));
+        services.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
+        services.Configure<ClientSettings>(configuration.GetSection(nameof(ClientSettings)));
+        services.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
 
         return services;
     }
