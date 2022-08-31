@@ -8,11 +8,11 @@ using MimeKit.Text;
 
 namespace Infrastructure.Services;
 
-public class EmailService : IEmailService
+public class MailKitService : IMailKitService
 {
     private readonly AppSettings _appSettings;
 
-    public EmailService(IOptions<AppSettings> appSettings)
+    public MailKitService(IOptions<AppSettings> appSettings)
     {
         _appSettings = appSettings.Value;
     }

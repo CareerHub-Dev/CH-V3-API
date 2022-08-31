@@ -13,11 +13,11 @@ public record SendVerifyStudentEmailCommand(Guid StudentId) : IRequest;
 public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifyStudentEmailCommand>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IEmailService _emailService;
+    private readonly IMailKitService _emailService;
     private readonly ITemplateService _templateService;
     private readonly IProcedureService _procedureService;
 
-    public SendVerifyStudentEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, ITemplateService templateService, IProcedureService procedureService)
+    public SendVerifyStudentEmailCommandHandler(IApplicationDbContext context, IMailKitService emailService, ITemplateService templateService, IProcedureService procedureService)
     {
         _context = context;
         _emailService = emailService;
