@@ -19,13 +19,13 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtService _jwtService;
-    private readonly AppSettings _appSettings;
+    private readonly JwtSettings _jwtSettings;
 
-    public RefreshTokenCommandHandler(IApplicationDbContext context, IJwtService jwtService, IOptions<AppSettings> appSettings)
+    public RefreshTokenCommandHandler(IApplicationDbContext context, IJwtService jwtService, IOptions<JwtSettings> jwtSettings)
     {
         _context = context;
         _jwtService = jwtService;
-        _appSettings = appSettings.Value;
+        _jwtSettings = jwtSettings.Value;
     }
 
     public async Task<RefreshTokenResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
@@ -65,7 +65,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         // remove old refresh tokens from account
         account.RefreshTokens.RemoveAll(x =>
             !x.IsActive &&
-            x.Created.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.UtcNow);
+            x.Created.AddDays(_jwtSettings.RefreshTokenTTL) <= DateTime.UtcNow);
 
         // generate new jwt
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);

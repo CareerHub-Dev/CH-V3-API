@@ -15,14 +15,14 @@ namespace Application.Services.Jwt;
 public class JwtService : IJwtService
 {
     private readonly IApplicationDbContext _context;
-    private readonly AppSettings _appSettings;
+    private readonly JwtSettings _jwtSettings;
 
     public JwtService(
         IApplicationDbContext context,
-        IOptions<AppSettings> appSettings)
+        IOptions<JwtSettings> jwtSettings)
     {
         _context = context;
-        _appSettings = appSettings.Value;
+        _jwtSettings = jwtSettings.Value;
     }
 
     public JwtToken GenerateJwtToken(Guid accountId)
@@ -35,7 +35,7 @@ public class JwtService : IJwtService
         // generate token that is valid for 15 minutes
         var tokenHandler = new JwtSecurityTokenHandler();
 
-        var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
+        var key = Encoding.UTF8.GetBytes(_jwtSettings.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new[] { new Claim("Id", accountId.ToString()) }),
@@ -75,7 +75,7 @@ public class JwtService : IJwtService
     public async Task<Guid?> ValidateJwtTokenAsync(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
+        var key = Encoding.UTF8.GetBytes(_jwtSettings.Secret);
         try
         {
             var result = await tokenHandler.ValidateTokenAsync(token, new TokenValidationParameters

@@ -28,7 +28,6 @@ public static class ConfigureServices
         services.AddScoped<IEmailTemplateParserService, EmailTemplateParserService>();
         services.AddScoped<IEmailTemplatesService, EmailTemplatesService>();
 
-        services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
         services.Configure<EmailTemplateSettings>(configuration.GetSection(nameof(EmailTemplateSettings)));
         services.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
         services.Configure<ClientSettings>(configuration.GetSection(nameof(ClientSettings)));

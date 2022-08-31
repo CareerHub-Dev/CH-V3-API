@@ -7,16 +7,16 @@ namespace Application.Services;
 
 public class EmailTemplateParserService : IEmailTemplateParserService
 {
-    private readonly AppSettings _appSettings;
+    private readonly ClientSettings _clientSettings;
 
-    public EmailTemplateParserService(IOptions<AppSettings> appSettings)
+    public EmailTemplateParserService(IOptions<ClientSettings> clientSettings)
     {
-        _appSettings = appSettings.Value;
+        _clientSettings = clientSettings.Value;
     }
 
     public string PrepareInviteAdminEmailAsync(Admin admin, string stringTemplate)
     {
-        var url = $"{_appSettings.ClientUrl}/sampleRoute/token={admin.VerificationToken}";
+        var url = $"{_clientSettings.Url}/sampleRoute/token={admin.VerificationToken}";
 
         stringTemplate = stringTemplate.Replace("{{{url}}}", url);
 
@@ -25,7 +25,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
 
     public string PrepareInviteCompanyEmailAsync(Company company, string stringTemplate)
     {
-        var url = $"{_appSettings.ClientUrl}/sampleRoute/token={company.VerificationToken}";
+        var url = $"{_clientSettings.Url}/sampleRoute/token={company.VerificationToken}";
 
         stringTemplate = stringTemplate.Replace("{{{url}}}", url);
 
@@ -34,7 +34,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
 
     public string PreparePasswordResetEmailAsync(Account account, string stringTemplate)
     {
-        var url = $"{_appSettings.ClientUrl}/sampleRoute/token={account.ResetToken}";
+        var url = $"{_clientSettings.Url}/sampleRoute/token={account.ResetToken}";
 
         stringTemplate = stringTemplate.Replace("{{{url}}}", url);
 
@@ -43,7 +43,7 @@ public class EmailTemplateParserService : IEmailTemplateParserService
 
     public string PrepareVerifyStudentEmailAsync(Student student, string stringTemplate)
     {
-        var url = $"{_appSettings.ClientUrl}/sampleRoute/token={student.VerificationToken}";
+        var url = $"{_clientSettings.Url}/sampleRoute/token={student.VerificationToken}";
 
         stringTemplate = stringTemplate.Replace("{{{url}}}", url);
 

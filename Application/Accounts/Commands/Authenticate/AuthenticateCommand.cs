@@ -19,13 +19,13 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtService _jwtService;
-    private readonly AppSettings _appSettings;
+    private readonly JwtSettings _jwtSettings;
 
-    public AuthenticateCommandHandler(IApplicationDbContext context, IJwtService jwtService, IOptions<AppSettings> appSettings)
+    public AuthenticateCommandHandler(IApplicationDbContext context, IJwtService jwtService, IOptions<JwtSettings> jwtSettings)
     {
         _context = context;
         _jwtService = jwtService;
-        _appSettings = appSettings.Value;
+        _jwtSettings = jwtSettings.Value;
     }
 
     public async Task<AuthenticateResponse> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
@@ -47,7 +47,7 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
 
         account.RefreshTokens.RemoveAll(x =>
             !x.IsActive &&
-            x.Created.AddDays(_appSettings.RefreshTokenTTL) <= DateTime.UtcNow);
+            x.Created.AddDays(_jwtSettings.RefreshTokenTTL) <= DateTime.UtcNow);
 
         await _context.SaveChangesAsync(cancellationToken);
 
