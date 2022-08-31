@@ -1,6 +1,6 @@
 ﻿using Application.Common.Interfaces;
 
-namespace Infrastructure.Services;
+namespace Application.Services;
 
 public class EmailTemplatesService : IEmailTemplatesService
 {

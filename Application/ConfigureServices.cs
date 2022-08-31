@@ -25,6 +25,7 @@ public static class ConfigureServices
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IProcedureService, ProcedureService>();
         services.AddScoped<IEmailTemplateParserService, EmailTemplateParserService>();
+        services.AddScoped<IEmailTemplatesService, EmailTemplatesService>();
 
         services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
 
