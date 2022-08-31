@@ -13,11 +13,11 @@ public record SendInviteCompanyEmailCommand(Guid CompanyId) : IRequest;
 public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCompanyEmailCommand>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IMailKitService _emailService;
+    private readonly IEmailService _emailService;
     private readonly ITemplateService _templateService;
     private readonly IProcedureService _procedureService;
 
-    public SendInviteCompanyEmailCommandHandler(IApplicationDbContext context, IMailKitService emailService, ITemplateService templateService, IProcedureService procedureService)
+    public SendInviteCompanyEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, ITemplateService templateService, IProcedureService procedureService)
     {
         _context = context;
         _emailService = emailService;
@@ -42,11 +42,7 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
         entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync(cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
-        var template = await _templateService.GetTemplateAsync(TemplateConstants.CompanyInvitationEmail);
-
-        template = template.MultipleReplace(new Dictionary<string, string> { { "{verificationToken}", entity.VerificationToken ?? "" } });
-
-        await _emailService.SendAsync(entity.NormalizedEmail, "Invitation Email", template);
+        await _emailService.SendInviteCompanyEmailAsync(entity);
 
         return Unit.Value;
     }

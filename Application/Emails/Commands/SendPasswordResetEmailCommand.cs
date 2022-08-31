@@ -16,11 +16,11 @@ public record SendPasswordResetEmailCommand : IRequest
 public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPasswordResetEmailCommand>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IMailKitService _emailService;
+    private readonly IEmailService _emailService;
     private readonly ITemplateService _templateService;
     private readonly IProcedureService _procedureService;
 
-    public SendPasswordResetEmailCommandHandler(IApplicationDbContext context, IMailKitService emailService, ITemplateService templateService, IProcedureService procedureService)
+    public SendPasswordResetEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, ITemplateService templateService, IProcedureService procedureService)
     {
         _context = context;
         _emailService = emailService;
@@ -42,11 +42,7 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        var template = await _templateService.GetTemplateAsync(TemplateConstants.PasswordResetEmail);
-
-        template = template.MultipleReplace(new Dictionary<string, string> { { "{resetToken}", entity.ResetToken ?? "" } });
-
-        await _emailService.SendAsync(entity.NormalizedEmail, "Reset Password", template);
+        await _emailService.SendPasswordResetEmailAsync(entity);
 
         return Unit.Value;
     }
