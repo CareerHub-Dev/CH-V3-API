@@ -27,6 +27,7 @@ public static class ConfigureServices
         services.AddScoped<IProcedureService, ProcedureService>();
         services.AddScoped<IEmailTemplateParserService, EmailTemplateParserService>();
         services.AddScoped<IEmailTemplatesService, EmailTemplatesService>();
+        services.AddScoped<IEmailService, EmailService>();
 
         services.Configure<EmailTemplateSettings>(configuration.GetSection(nameof(EmailTemplateSettings)));
         services.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
