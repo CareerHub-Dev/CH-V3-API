@@ -19,7 +19,7 @@ public class PathService : IPathService
 
     public string GetEmailTemplatePath(string templateName)
     {
-        var path = Path.Combine("wwwroot", "EmailTemplates", templateName);
+        var path = Path.Combine(_webHostEnvironment.WebRootPath, "EmailTemplates", templateName);
         return path;
     }
 }
