@@ -13,4 +13,6 @@ public class AppSettings
     public int SmtpPort { get; set; }
     public string SmtpUser { get; set; } = string.Empty;
     public string SmtpPass { get; set; } = string.Empty;
+
+    public string ClientUrl { get; set; } = string.Empty;
 }
