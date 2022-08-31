@@ -1,7 +1,6 @@
 ﻿using Application.Common.Interfaces;
-using Microsoft.AspNetCore.Hosting;
 
-namespace Infrastructure.Services;
+namespace WebUI.Services;
 
 public class PathService : IPathService
 {

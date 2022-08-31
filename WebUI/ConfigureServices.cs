@@ -17,6 +17,7 @@ public static class ConfigureServices
         services.AddDatabaseDeveloperPageExceptionFilter();
 
         services.AddSingleton<ICurrentAccountService, CurrentAccountService>();
+        services.AddScoped<IPathService, PathService>();
 
         services.AddHttpContextAccessor();
 
