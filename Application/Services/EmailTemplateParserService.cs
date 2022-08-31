@@ -3,7 +3,7 @@ using Application.Common.Models;
 using Domain.Entities;
 using Microsoft.Extensions.Options;
 
-namespace Infrastructure.Services;
+namespace Application.Services;
 
 public class EmailTemplateParserService : IEmailTemplateParserService
 {

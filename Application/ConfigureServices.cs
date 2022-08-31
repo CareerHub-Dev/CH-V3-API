@@ -1,6 +1,7 @@
 ﻿using Application.Common.Behaviours;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.Services;
 using Application.Services.Jwt;
 using Application.Services.Procedure;
 using FluentValidation;
@@ -23,6 +24,7 @@ public static class ConfigureServices
 
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IProcedureService, ProcedureService>();
+        services.AddScoped<IEmailTemplateParserService, EmailTemplateParserService>();
 
         services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
 
