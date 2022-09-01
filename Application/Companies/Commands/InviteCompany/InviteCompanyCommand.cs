@@ -23,17 +23,17 @@ public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand,
 
     public async Task<Guid> Handle(InviteCompanyCommand request, CancellationToken cancellationToken)
     {
-        var entity = new Company
+        var company = new Company
         {
             Email = request.Email
         };
 
-        await _context.Companies.AddAsync(entity);
+        await _context.Companies.AddAsync(company);
 
         await _context.SaveChangesAsync();
 
-        await _mediator.Publish(new CompanyInvitedEvent(entity));
+        await _mediator.Publish(new CompanyInvitedEvent(company));
 
-        return entity.Id;
+        return company.Id;
     }
 }

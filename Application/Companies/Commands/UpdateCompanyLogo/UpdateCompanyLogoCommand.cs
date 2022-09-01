@@ -24,17 +24,17 @@ public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogo
 
     public async Task<Guid?> Handle(UpdateCompanyLogoCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Companies
+        var company = await _context.Companies
             .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
-        if (entity == null)
+        if (company == null)
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        if (entity.BannerId != null)
+        if (company.BannerId != null)
         {
-            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.LogoId);
+            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == company.LogoId);
 
             if (image != null)
             {
@@ -49,10 +49,10 @@ public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogo
             await _context.Images.AddAsync(newImage);
         }
 
-        entity.LogoId = newImage?.Id;
+        company.LogoId = newImage?.Id;
 
         await _context.SaveChangesAsync();
 
-        return entity.LogoId;
+        return company.LogoId;
     }
 }

@@ -19,16 +19,16 @@ public class DeleteCompanyCommandHandler : IRequestHandler<DeleteCompanyCommand>
 
     public async Task<Unit> Handle(DeleteCompanyCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Companies
+        var company = await _context.Companies
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == request.ComapnyId);
 
-        if (entity == null)
+        if (company == null)
         {
             throw new NotFoundException(nameof(Company), request.ComapnyId);
         }
 
-        _context.Companies.Remove(entity);
+        _context.Companies.Remove(company);
 
         await _context.SaveChangesAsync();
 

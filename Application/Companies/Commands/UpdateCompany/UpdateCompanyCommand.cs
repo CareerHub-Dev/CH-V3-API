@@ -25,16 +25,16 @@ public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand>
 
     public async Task<Unit> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Companies.FirstOrDefaultAsync(x => x.Id == request.CompanyId);
+        var company = await _context.Companies.FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
-        if (entity == null)
+        if (company == null)
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        entity.Name = request.Name;
-        entity.Motto = request.Motto;
-        entity.Description = request.Description;
+        company.Name = request.Name;
+        company.Motto = request.Motto;
+        company.Description = request.Description;
 
         await _context.SaveChangesAsync();
 
