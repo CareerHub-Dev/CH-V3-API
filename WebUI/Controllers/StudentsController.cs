@@ -30,7 +30,7 @@ public class StudentsController : ApiControllerBase
     [HttpGet]
     [Authorize("Student", "Company")]
     public async Task<IActionResult> GetStudents(
-        [FromQuery] PaginationParameters paginationParameters, 
+        [FromQuery] PaginationParameters paginationParameters,
         [FromQuery] SearchParameter searchParameter)
     {
         switch (AccountInfo!.Role)
@@ -63,6 +63,50 @@ public class StudentsController : ApiControllerBase
                     Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
                     return Ok(result.Select(x => new StudentBriefResponse(x)));
+                }
+            default:
+                return StatusCode(403);
+        }
+    }
+
+    /// <summary>
+    /// Student Company
+    /// </summary>
+    /// <remarks>
+    /// Student
+    /// 
+    ///     get Verified students
+    ///     
+    /// Company
+    /// 
+    ///     get Verified students
+    ///
+    /// </remarks>
+    [HttpGet("{studentId}")]
+    [Authorize("Student", "Company")]
+    public async Task<IActionResult> GetStudent(Guid studentId)
+    {
+        switch (AccountInfo!.Role)
+        {
+            case "Student":
+                {
+                    var result = await Mediator.Send(new GetStudentDetailedWithFilterQuery
+                    {
+                        StudentId = studentId,
+                        IsVerified = true
+                    });
+
+                    return Ok(new StudentBriefResponse(result));
+                }
+            case "Company":
+                {
+                    var result = await Mediator.Send(new GetStudentDetailedWithFilterQuery
+                    {
+                        StudentId = studentId,
+                        IsVerified = true
+                    });
+
+                    return Ok(new StudentBriefResponse(result));
                 }
             default:
                 return StatusCode(403);
