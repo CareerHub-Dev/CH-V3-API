@@ -21,26 +21,52 @@ public class StudentsController : ApiControllerBase
     /// Student
     /// 
     ///     get all Verified students
+    ///     
+    /// Company
+    /// 
+    ///     get all Verified students
     ///
     /// </remarks>
     [HttpGet]
-    [Authorize("Student")]
+    [Authorize("Student", "Company")]
     public async Task<IActionResult> GetStudents(
         [FromQuery] PaginationParameters paginationParameters, 
         [FromQuery] SearchParameter searchParameter)
     {
-        var result = await Mediator.Send(new GetStudentBriefsWithPaginationWithSearthWithFilterQuery
+        switch (AccountInfo!.Role)
         {
-            PageNumber = paginationParameters.PageNumber,
-            PageSize = paginationParameters.PageSize,
-            SearchTerm = searchParameter.SearchTerm,
-            WithoutStudentId = AccountInfo!.Id,
-            IsVerified = true
-        });
+            case "Student":
+                {
+                    var result = await Mediator.Send(new GetStudentBriefsWithPaginationWithSearthWithFilterQuery
+                    {
+                        PageNumber = paginationParameters.PageNumber,
+                        PageSize = paginationParameters.PageSize,
+                        SearchTerm = searchParameter.SearchTerm,
+                        WithoutStudentId = AccountInfo!.Id,
+                        IsVerified = true
+                    });
 
-        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return Ok(result.Select(x => new StudentBriefResponse(x)));
+                    return Ok(result.Select(x => new StudentBriefResponse(x)));
+                }
+            case "Company":
+                {
+                    var result = await Mediator.Send(new GetStudentBriefsWithPaginationWithSearthWithFilterQuery
+                    {
+                        PageNumber = paginationParameters.PageNumber,
+                        PageSize = paginationParameters.PageSize,
+                        SearchTerm = searchParameter.SearchTerm,
+                        IsVerified = true
+                    });
+
+                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+                    return Ok(result.Select(x => new StudentBriefResponse(x)));
+                }
+            default:
+                return StatusCode(403);
+        }
     }
 
     /// <summary>
