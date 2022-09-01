@@ -162,7 +162,7 @@ public class AccountController : ApiControllerBase
             return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required");
         }
 
-        if(!await Mediator.Send(new AccountOwnsTokenCommand { Token = revokeToken.Token, AccountId = AccountInfo!.Id }))
+        if(AccountInfo!.Role != "Admin" && !await Mediator.Send(new AccountOwnsTokenCommand { Token = revokeToken.Token, AccountId = AccountInfo!.Id }))
         {
             return Problem(title: "Not Found", statusCode: StatusCodes.Status404NotFound, detail: "Token is not found");
         }
