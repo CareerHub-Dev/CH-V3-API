@@ -20,22 +20,22 @@ public class GetStudentLogQueryHandler : IRequestHandler<GetAccountBriefQuery, A
 
     public async Task<AccountBriefDTO> Handle(GetAccountBriefQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Accounts
+        var account = await _context.Accounts
             .AsNoTracking()
             .Where(x => x.Id == request.AccountId)
             .FirstOrDefaultAsync();
 
-        if (entity == null)
+        if (account == null)
         {
             throw new NotFoundException(nameof(Account), request.AccountId);
         }
 
         return new AccountBriefDTO { 
-            Id = entity.Id, 
-            Email = entity.Email, 
-            Verified = entity.Verified, 
-            PasswordReset = entity.PasswordReset,
-            Role = entity.GetType().Name 
+            Id = account.Id, 
+            Email = account.Email, 
+            Verified = account.Verified, 
+            PasswordReset = account.PasswordReset,
+            Role = account.GetType().Name 
         };
     }
 }

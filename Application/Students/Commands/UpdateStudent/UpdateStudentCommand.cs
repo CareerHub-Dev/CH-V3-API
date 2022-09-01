@@ -27,10 +27,10 @@ public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand>
 
     public async Task<Unit> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Students
+        var student = await _context.Students
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
-        if (entity == null)
+        if (student == null)
         {
             throw new NotFoundException(nameof(Student), request.StudentId);
         }
@@ -40,11 +40,11 @@ public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand>
             throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
         }
 
-        entity.FirstName = request.FirstName;
-        entity.LastName = request.LastName;
-        entity.Phone = request.Phone;
-        entity.StudentGroupId = request.StudentGroupId;
-        entity.BirthDate = request.BirthDate;
+        student.FirstName = request.FirstName;
+        student.LastName = request.LastName;
+        student.Phone = request.Phone;
+        student.StudentGroupId = request.StudentGroupId;
+        student.BirthDate = request.BirthDate;
 
         await _context.SaveChangesAsync();
 

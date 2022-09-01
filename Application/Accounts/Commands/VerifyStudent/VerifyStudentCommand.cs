@@ -22,15 +22,15 @@ public class VerifyStudentCommandHandler : IRequestHandler<VerifyStudentCommand>
 
     public async Task<Unit> Handle(VerifyStudentCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Students.SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
+        var student = await _context.Students.SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
 
-        if (entity == null)
+        if (student == null)
         {
             throw new NotFoundException(nameof(Student), request.Token);
         }
 
-        entity.VerificationToken = null;
-        entity.Verified = DateTime.UtcNow;
+        student.VerificationToken = null;
+        student.Verified = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 

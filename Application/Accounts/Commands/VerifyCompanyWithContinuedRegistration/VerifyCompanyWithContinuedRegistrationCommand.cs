@@ -31,10 +31,10 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
 
     public async Task<Unit> Handle(VerifyCompanyWithContinuedRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Companies
+        var company = await _context.Companies
                 .SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
 
-        if (entity == null)
+        if (company == null)
         {
             throw new NotFoundException(nameof(Company), request.Token);
         }
@@ -45,14 +45,14 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
         if (imageLogo != null) await _context.Images.AddAsync(imageLogo);
         if (imageBanner != null) await _context.Images.AddAsync(imageBanner);
 
-        entity.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-        entity.VerificationToken = null;
-        entity.Verified = DateTime.UtcNow;
-        entity.Name = request.Name;
-        entity.Motto = request.Motto;
-        entity.Description = request.Description;
-        entity.LogoId = imageLogo?.Id;
-        entity.BannerId = imageBanner?.Id;
+        company.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        company.VerificationToken = null;
+        company.Verified = DateTime.UtcNow;
+        company.Name = request.Name;
+        company.Motto = request.Motto;
+        company.Description = request.Description;
+        company.LogoId = imageLogo?.Id;
+        company.BannerId = imageBanner?.Id;
 
         await _context.SaveChangesAsync();
 

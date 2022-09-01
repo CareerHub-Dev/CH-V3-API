@@ -25,22 +25,22 @@ public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifySt
 
     public async Task<Unit> Handle(SendVerifyStudentEmailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Students.FirstOrDefaultAsync(x => x.Id == request.StudentId);
+        var student = await _context.Students.FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
-        if (entity == null)
+        if (student == null)
         {
             throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
-        if (entity.IsVerified)
+        if (student.IsVerified)
         {
             throw new ArgumentException("Student is verified");
         }
 
-        entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync();
+        student.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync();
         await _context.SaveChangesAsync();
 
-        await _emailService.SendVerifyStudentEmailAsync(entity);
+        await _emailService.SendVerifyStudentEmailAsync(student);
 
         return Unit.Value;
     }

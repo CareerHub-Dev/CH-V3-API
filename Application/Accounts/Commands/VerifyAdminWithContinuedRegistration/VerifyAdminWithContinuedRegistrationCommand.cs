@@ -23,17 +23,17 @@ public class VerifyAdminWithContinuedRegistrationCommandHandler : IRequestHandle
 
     public async Task<Unit> Handle(VerifyAdminWithContinuedRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Admins
+        var admin = await _context.Admins
                 .SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
 
-        if (entity == null)
+        if (admin == null)
         {
             throw new NotFoundException(nameof(Admin), request.Token);
         }
 
-        entity.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
-        entity.VerificationToken = null;
-        entity.Verified = DateTime.UtcNow;
+        admin.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        admin.VerificationToken = null;
+        admin.Verified = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 

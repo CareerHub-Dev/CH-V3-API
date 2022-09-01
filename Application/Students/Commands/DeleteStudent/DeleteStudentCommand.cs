@@ -19,16 +19,16 @@ public class DeleteStudentCommandHandler : IRequestHandler<DeleteStudentCommand>
 
     public async Task<Unit> Handle(DeleteStudentCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Students
+        var student = await _context.Students
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
-        if (entity == null)
+        if (student == null)
         {
             throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
-        _context.Students.Remove(entity);
+        _context.Students.Remove(student);
 
         await _context.SaveChangesAsync();
 

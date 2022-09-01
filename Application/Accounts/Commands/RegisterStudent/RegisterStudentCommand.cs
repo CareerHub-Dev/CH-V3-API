@@ -43,7 +43,7 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
             throw new NotFoundException(nameof(StudentLog), request.Email);
         }
 
-        var entity = new Student
+        var student = new Student
         {
             Email = studentLog.Email,
             NormalizedEmail = studentLog.NormalizedEmail,
@@ -54,11 +54,11 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
             StudentGroupId = studentLog.StudentGroupId,
         };
 
-        await _context.Students.AddAsync(entity);
+        await _context.Students.AddAsync(student);
         _context.StudentLogs.Remove(studentLog);
         await _context.SaveChangesAsync();
 
-        await _mediator.Publish(new StudentRegisteredEvent(entity));
+        await _mediator.Publish(new StudentRegisteredEvent(student));
 
         return Unit.Value;
     }

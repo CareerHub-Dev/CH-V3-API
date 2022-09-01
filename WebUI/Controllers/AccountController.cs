@@ -88,7 +88,7 @@ public class AccountController : ApiControllerBase
     [HttpPost("verify-company-email")]
     public async Task<IActionResult> VerifyCompanyWithContinuedRegistration([FromForm] VerifyCompanyWithContinuedRegistrationRequest verifyCompany)
     {
-        var companyInfo = new VerifyCompanyWithContinuedRegistrationCommand
+        await Mediator.Send(new VerifyCompanyWithContinuedRegistrationCommand
         {
             Token = verifyCompany.Token,
             Logo = verifyCompany.LogoFile is IFormFile logo ? await logo.ToCreateImageAsync() : null,
@@ -97,21 +97,18 @@ public class AccountController : ApiControllerBase
             Motto = verifyCompany.Motto,
             Description = verifyCompany.Description,
             Password = verifyCompany.Password,
-        };
+        });
 
-        await Mediator.Send(companyInfo);
         return Ok(new { message = "Verification successful, you can now login" });
     }
     [HttpPost("verify-admin-email")]
     public async Task<IActionResult> VerifyAdminWithContinuedRegistration([FromForm] VerifyAdminWithContinuedRegistrationRequest verifyAdmin)
     {
-        var adminInfo = new VerifyAdminWithContinuedRegistrationCommand
+        await Mediator.Send(new VerifyAdminWithContinuedRegistrationCommand
         {
             Token = verifyAdmin.Token,
             Password = verifyAdmin.Password,
-        };
-
-        await Mediator.Send(adminInfo);
+        });
         return Ok(new { message = "Verification successful, you can now login" });
     }
     [HttpPost("verify-student-email")]
