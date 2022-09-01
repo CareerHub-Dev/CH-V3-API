@@ -72,6 +72,50 @@ public class CompaniesController : ApiControllerBase
     }
 
     /// <summary>
+    /// Student Company
+    /// </summary>
+    /// <remarks>
+    /// Student
+    /// 
+    ///     get Verified company
+    ///     
+    /// Company
+    /// 
+    ///     get Verified company
+    ///
+    /// </remarks>
+    [HttpGet("{companyId}")]
+    [Authorize("Student", "Company")]
+    public async Task<IActionResult> GetCompany(Guid companyId)
+    {
+        switch (AccountInfo!.Role)
+        {
+            case "Student":
+                {
+                    var result = await Mediator.Send(new GetCompanyDetailedWithFilterQuery
+                    {
+                        CompanyId = companyId,
+                        IsVerified = true
+                    });
+
+                    return Ok(new CompanyDetailedResponse(result));
+                }
+            case "Company":
+                {
+                    var result = await Mediator.Send(new GetCompanyDetailedWithFilterQuery
+                    {
+                        CompanyId = companyId,
+                        IsVerified = true
+                    });
+
+                    return Ok(new CompanyDetailedResponse(result));
+                }
+            default:
+                return StatusCode(403);
+        }
+    }
+
+    /// <summary>
     /// Admin
     /// </summary>
     /// <remarks>

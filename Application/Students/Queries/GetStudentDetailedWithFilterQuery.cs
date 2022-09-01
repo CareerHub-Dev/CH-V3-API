@@ -11,9 +11,9 @@ namespace Application.Students.Queries;
 
 public class GetStudentDetailedWithFilterQuery : IRequest<StudentDetailedDTO>
 {
-    public Guid StudentId { get; set; }
+    public Guid StudentId { get; init; }
 
-    public bool? IsVerified { get; set; }
+    public bool? IsVerified { get; init; }
 }
 
 public class GetStudentDetailedWithFilterQueryHandler : IRequestHandler<GetStudentDetailedWithFilterQuery, StudentDetailedDTO>

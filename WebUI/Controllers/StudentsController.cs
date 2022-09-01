@@ -75,11 +75,11 @@ public class StudentsController : ApiControllerBase
     /// <remarks>
     /// Student
     /// 
-    ///     get Verified students
+    ///     get Verified student
     ///     
     /// Company
     /// 
-    ///     get Verified students
+    ///     get Verified student
     ///
     /// </remarks>
     [HttpGet("{studentId}")]
@@ -96,7 +96,7 @@ public class StudentsController : ApiControllerBase
                         IsVerified = true
                     });
 
-                    return Ok(new StudentBriefResponse(result));
+                    return Ok(new StudentDetailedResponse(result));
                 }
             case "Company":
                 {
@@ -106,7 +106,7 @@ public class StudentsController : ApiControllerBase
                         IsVerified = true
                     });
 
-                    return Ok(new StudentBriefResponse(result));
+                    return Ok(new StudentDetailedResponse(result));
                 }
             default:
                 return StatusCode(403);
