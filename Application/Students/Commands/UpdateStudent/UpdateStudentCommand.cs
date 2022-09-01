@@ -35,6 +35,11 @@ public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand>
             throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
+        if (!await _context.StudentGroups.AnyAsync(x => x.Id == request.StudentGroupId))
+        {
+            throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
+        }
+
         entity.FirstName = request.FirstName;
         entity.LastName = request.LastName;
         entity.Phone = request.Phone;

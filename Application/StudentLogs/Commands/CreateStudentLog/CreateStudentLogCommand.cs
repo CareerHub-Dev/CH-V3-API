@@ -1,6 +1,8 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentLogs.Commands.CreateStudentLog;
 
@@ -23,7 +25,12 @@ public class CreateStudentLogCommandHandler : IRequestHandler<CreateStudentLogCo
 
     public async Task<Guid> Handle(CreateStudentLogCommand request, CancellationToken cancellationToken)
     {
-        var entity = new StudentLog
+        if(!await _context.StudentGroups.AnyAsync(x => x.Id == request.StudentGroupId))
+        {
+            throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
+        }
+
+        var studentLog = new StudentLog
         {
             FirstName = request.FirstName,
             LastName = request.LastName,
@@ -31,10 +38,10 @@ public class CreateStudentLogCommandHandler : IRequestHandler<CreateStudentLogCo
             StudentGroupId = request.StudentGroupId
         };
 
-        await _context.StudentLogs.AddAsync(entity, cancellationToken);
+        await _context.StudentLogs.AddAsync(studentLog);
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return entity.Id;
+        return studentLog.Id;
     }
 }

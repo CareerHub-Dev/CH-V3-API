@@ -26,18 +26,23 @@ public class UpdateStudentLogCommandHandler : IRequestHandler<UpdateStudentLogCo
 
     public async Task<Unit> Handle(UpdateStudentLogCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.StudentLogs
+        var studentLog = await _context.StudentLogs
             .FirstOrDefaultAsync(x => x.Id == request.StudentLogId, cancellationToken);
 
-        if (entity == null)
+        if (studentLog == null)
         {
             throw new NotFoundException(nameof(StudentLog), request.StudentLogId);
         }
 
-        entity.FirstName = request.FirstName;
-        entity.LastName = request.LastName;
-        entity.Email = request.Email;
-        entity.StudentGroupId = request.StudentGroupId;
+        if (!await _context.StudentGroups.AnyAsync(x => x.Id == request.StudentGroupId))
+        {
+            throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
+        }
+
+        studentLog.FirstName = request.FirstName;
+        studentLog.LastName = request.LastName;
+        studentLog.Email = request.Email;
+        studentLog.StudentGroupId = request.StudentGroupId;
 
         await _context.SaveChangesAsync(cancellationToken);
 
