@@ -23,7 +23,7 @@ public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdmi
 
     public async Task<Unit> Handle(SendInviteAdminEmailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Admins.FirstOrDefaultAsync(x => x.Id == request.AdminId, cancellationToken);
+        var entity = await _context.Admins.FirstOrDefaultAsync(x => x.Id == request.AdminId);
 
         if (entity == null)
         {
@@ -35,8 +35,8 @@ public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdmi
             throw new ArgumentException("Admin is verified");
         }
 
-        entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync(cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync();
+        await _context.SaveChangesAsync();
 
         await _emailService.SendInviteAdminEmailAsync(entity);
 

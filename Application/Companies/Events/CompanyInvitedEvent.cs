@@ -25,6 +25,6 @@ public class CompanyInvitedEventHandler : INotificationHandler<CompanyInvitedEve
 
     public async Task Handle(CompanyInvitedEvent notification, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new SendInviteCompanyEmailCommand(notification.Company.Id), cancellationToken);
+        await _mediator.Send(new SendInviteCompanyEmailCommand(notification.Company.Id));
     }
 }

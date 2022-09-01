@@ -21,7 +21,7 @@ public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
     {
         var entity = await _context.Admins
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.AdminId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.AdminId);
 
         if (entity == null)
         {
@@ -30,7 +30,7 @@ public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
 
         _context.Admins.Remove(entity);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

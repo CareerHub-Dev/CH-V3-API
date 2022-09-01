@@ -32,7 +32,7 @@ public class GetStudentGroupQueryHandler : IRequestHandler<GetStudentGroupQuery,
                 LastModified = x.LastModified,
                 LastModifiedBy = x.LastModifiedBy
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync();
 
         if (entity == null)
         {

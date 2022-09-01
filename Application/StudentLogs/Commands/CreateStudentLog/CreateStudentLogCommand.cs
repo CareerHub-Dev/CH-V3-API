@@ -40,7 +40,7 @@ public class CreateStudentLogCommandHandler : IRequestHandler<CreateStudentLogCo
 
         await _context.StudentLogs.AddAsync(studentLog);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return studentLog.Id;
     }

@@ -22,7 +22,7 @@ public class VerifyStudentCommandHandler : IRequestHandler<VerifyStudentCommand>
 
     public async Task<Unit> Handle(VerifyStudentCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Students.SingleOrDefaultAsync(x => x.VerificationToken == request.Token, cancellationToken);
+        var entity = await _context.Students.SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
 
         if (entity == null)
         {
@@ -32,7 +32,7 @@ public class VerifyStudentCommandHandler : IRequestHandler<VerifyStudentCommand>
         entity.VerificationToken = null;
         entity.Verified = DateTime.UtcNow;
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

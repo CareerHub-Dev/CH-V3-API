@@ -22,7 +22,7 @@ public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
     public async Task<Unit> Handle(RevokeTokenCommand request, CancellationToken cancellationToken)
     {
         var refreshToken = await _context.RefreshTokens
-                .SingleOrDefaultAsync(x => x.Token == request.Token, cancellationToken);
+                .SingleOrDefaultAsync(x => x.Token == request.Token);
 
         if (refreshToken == null)
         {
@@ -38,7 +38,7 @@ public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
         refreshToken.RevokedByIp = request.IpAddress;
         refreshToken.ReasonRevoked = "Revoked without replacement";
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

@@ -38,6 +38,6 @@ public class GetStudentGroupsWithPaginationWithSearchQueryHandler : IRequestHand
                 LastModified = x.LastModified,
                 LastModifiedBy = x.LastModifiedBy,
             })
-            .ToPagedListAsync(request.PageNumber, request.PageSize, cancellationToken);
+            .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

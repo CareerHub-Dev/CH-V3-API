@@ -30,12 +30,12 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
         var studentLog = await _context.StudentLogs
                 .AsNoTracking()
                 .SingleOrDefaultAsync(x =>
-                    x.NormalizedEmail == request.Email.NormalizeName(), cancellationToken
+                    x.NormalizedEmail == request.Email.NormalizeName()
                 );
 
         if (studentLog == null)
         {
-            if (await _context.Students.AnyAsync(x => x.NormalizedEmail == request.Email.NormalizeName(), cancellationToken))
+            if (await _context.Students.AnyAsync(x => x.NormalizedEmail == request.Email.NormalizeName()))
             {
                 throw new ArgumentException("This email address is already being used.");
             }
@@ -54,9 +54,9 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
             StudentGroupId = studentLog.StudentGroupId,
         };
 
-        await _context.Students.AddAsync(entity, cancellationToken);
+        await _context.Students.AddAsync(entity);
         _context.StudentLogs.Remove(studentLog);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         await _mediator.Publish(new StudentRegisteredEvent(entity));
 

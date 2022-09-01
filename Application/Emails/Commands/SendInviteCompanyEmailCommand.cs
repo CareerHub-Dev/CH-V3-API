@@ -23,7 +23,7 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
 
     public async Task<Unit> Handle(SendInviteCompanyEmailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Companies.FirstOrDefaultAsync(x => x.Id == request.CompanyId, cancellationToken);
+        var entity = await _context.Companies.FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (entity == null)
         {
@@ -35,8 +35,8 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
             throw new ArgumentException("Company is verified");
         }
 
-        entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync(cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        entity.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync();
+        await _context.SaveChangesAsync();
 
         await _emailService.SendInviteCompanyEmailAsync(entity);
 

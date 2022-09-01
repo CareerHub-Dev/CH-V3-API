@@ -27,7 +27,7 @@ public class UpdateStudentLogCommandHandler : IRequestHandler<UpdateStudentLogCo
     public async Task<Unit> Handle(UpdateStudentLogCommand request, CancellationToken cancellationToken)
     {
         var studentLog = await _context.StudentLogs
-            .FirstOrDefaultAsync(x => x.Id == request.StudentLogId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.StudentLogId);
 
         if (studentLog == null)
         {
@@ -44,7 +44,7 @@ public class UpdateStudentLogCommandHandler : IRequestHandler<UpdateStudentLogCo
         studentLog.Email = request.Email;
         studentLog.StudentGroupId = request.StudentGroupId;
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

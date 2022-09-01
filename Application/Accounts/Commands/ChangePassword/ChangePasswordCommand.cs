@@ -24,7 +24,7 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
 
     public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == request.AccountId, cancellationToken);
+        var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == request.AccountId);
 
         if (account == null)
         {
@@ -43,7 +43,7 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
 
         account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

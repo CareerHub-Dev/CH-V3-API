@@ -27,17 +27,17 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
 
     public async Task<Unit> Handle(SendPasswordResetEmailCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Accounts.FirstOrDefaultAsync(x => x.NormalizedEmail == request.Email.NormalizeName(), cancellationToken);
+        var entity = await _context.Accounts.FirstOrDefaultAsync(x => x.NormalizedEmail == request.Email.NormalizeName());
 
         if (entity == null)
         {
             throw new NotFoundException(nameof(Account), request.Email);
         }
 
-        entity.ResetToken = await _procedureService.GenerateAccountResetTokenAsync(cancellationToken);
+        entity.ResetToken = await _procedureService.GenerateAccountResetTokenAsync();
         entity.ResetTokenExpires = DateTime.UtcNow.AddDays(1);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         await _emailService.SendPasswordResetEmailAsync(entity);
 

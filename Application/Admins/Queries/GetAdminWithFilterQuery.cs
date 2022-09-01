@@ -37,7 +37,7 @@ public class GetAdminWithFilterQueryHandler : IRequestHandler<GetAdminWithFilter
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync();
 
         if (entity == null)
         {

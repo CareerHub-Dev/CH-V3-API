@@ -32,7 +32,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
     {
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
-                .SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == request.Token), cancellationToken);
+                .SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == request.Token));
 
         if (account == null)
         {
@@ -50,7 +50,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         {
             // revoke all descendant tokens in case this token has been compromised
             RevokeDescendantRefreshTokens(refreshToken, account, request.IpAddress, $"Attempted reuse of revoked ancestor token: {request.Token}");
-            await _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync();
         }
 
         if (!refreshToken.IsActive)
@@ -59,7 +59,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         }
 
         // replace old refresh token with a new one (rotate token)
-        var newRefreshToken = await RotateRefreshTokenAsync(refreshToken, request.IpAddress, cancellationToken);
+        var newRefreshToken = await RotateRefreshTokenAsync(refreshToken, request.IpAddress);
         account.RefreshTokens.Add(newRefreshToken);
 
         // remove old refresh tokens from account
@@ -70,7 +70,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         // generate new jwt
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return new RefreshTokenResponse
         {
@@ -103,9 +103,9 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         token.ReplacedByToken = replacedByToken;
     }
 
-    private async Task<RefreshTokenEntity> RotateRefreshTokenAsync(RefreshTokenEntity refreshToken, string ipAddress, CancellationToken cancellationToken)
+    private async Task<RefreshTokenEntity> RotateRefreshTokenAsync(RefreshTokenEntity refreshToken, string ipAddress)
     {
-        var newRefreshToken = await _jwtService.GenerateRefreshTokenAsync(ipAddress, cancellationToken);
+        var newRefreshToken = await _jwtService.GenerateRefreshTokenAsync(ipAddress);
         RevokeRefreshToken(refreshToken, ipAddress, "Replaced by new token", newRefreshToken.Token);
         return newRefreshToken;
     }

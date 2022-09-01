@@ -24,7 +24,7 @@ public class VerifyAdminWithContinuedRegistrationCommandHandler : IRequestHandle
     public async Task<Unit> Handle(VerifyAdminWithContinuedRegistrationCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.Admins
-                .SingleOrDefaultAsync(x => x.VerificationToken == request.Token, cancellationToken);
+                .SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
 
         if (entity == null)
         {
@@ -35,7 +35,7 @@ public class VerifyAdminWithContinuedRegistrationCommandHandler : IRequestHandle
         entity.VerificationToken = null;
         entity.Verified = DateTime.UtcNow;
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

@@ -33,8 +33,8 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
                 .SingleOrDefaultAsync(x =>
-                    x.NormalizedEmail == request.Email.NormalizeName(),
-                cancellationToken);
+                    x.NormalizedEmail == request.Email.NormalizeName()
+                );
 
         if (account == null || !account.IsVerified || !BCrypt.Net.BCrypt.Verify(request.Password, account.PasswordHash))
         {
@@ -42,14 +42,14 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
         }
 
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);
-        var refreshToken = await _jwtService.GenerateRefreshTokenAsync(request.IpAddress, cancellationToken);
+        var refreshToken = await _jwtService.GenerateRefreshTokenAsync(request.IpAddress);
         account.RefreshTokens.Add(refreshToken);
 
         account.RefreshTokens.RemoveAll(x =>
             !x.IsActive &&
             x.Created.AddDays(_jwtSettings.RefreshTokenTTL) <= DateTime.UtcNow);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return new AuthenticateResponse
         {

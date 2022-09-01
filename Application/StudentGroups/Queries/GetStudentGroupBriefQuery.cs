@@ -28,7 +28,7 @@ public class GetStudentGroupBriefQueryHandler : IRequestHandler<GetStudentGroupB
                 Id = x.Id,
                 Name = x.Name,
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync();
 
         if (entity == null)
         {

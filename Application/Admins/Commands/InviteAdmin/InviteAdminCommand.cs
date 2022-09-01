@@ -28,9 +28,9 @@ public class InviteAdminCommandHandler : IRequestHandler<InviteAdminCommand, Gui
             Email = request.Email
         };
 
-        await _context.Admins.AddAsync(entity, cancellationToken);
+        await _context.Admins.AddAsync(entity);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         await _mediator.Publish(new AdminInvitedEvent(entity));
 

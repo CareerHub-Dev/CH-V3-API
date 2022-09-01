@@ -25,6 +25,6 @@ public class AdminInvitedEventHandler : INotificationHandler<AdminInvitedEvent>
 
     public async Task Handle(AdminInvitedEvent notification, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new SendInviteAdminEmailCommand(notification.Admin.Id), cancellationToken);
+        await _mediator.Send(new SendInviteAdminEmailCommand(notification.Admin.Id));
     }
 }

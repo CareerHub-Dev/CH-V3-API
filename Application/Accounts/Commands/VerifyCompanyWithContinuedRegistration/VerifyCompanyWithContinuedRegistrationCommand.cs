@@ -32,7 +32,7 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
     public async Task<Unit> Handle(VerifyCompanyWithContinuedRegistrationCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.Companies
-                .SingleOrDefaultAsync(x => x.VerificationToken == request.Token, cancellationToken);
+                .SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
 
         if (entity == null)
         {
@@ -42,8 +42,8 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
         var imageLogo = request.Logo?.ToImageWithGeneratedId;
         var imageBanner = request.Banner?.ToImageWithGeneratedId;
 
-        if (imageLogo != null) await _context.Images.AddAsync(imageLogo, cancellationToken);
-        if (imageBanner != null) await _context.Images.AddAsync(imageBanner, cancellationToken);
+        if (imageLogo != null) await _context.Images.AddAsync(imageLogo);
+        if (imageBanner != null) await _context.Images.AddAsync(imageBanner);
 
         entity.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
         entity.VerificationToken = null;
@@ -54,7 +54,7 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
         entity.LogoId = imageLogo?.Id;
         entity.BannerId = imageBanner?.Id;
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

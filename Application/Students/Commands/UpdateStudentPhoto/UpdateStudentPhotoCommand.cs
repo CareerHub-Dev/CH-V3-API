@@ -25,7 +25,7 @@ public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPho
     public async Task<Guid?> Handle(UpdateStudentPhotoCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.Students
-            .FirstOrDefaultAsync(x => x.Id == request.StudentId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (entity == null)
         {
@@ -34,7 +34,7 @@ public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPho
 
         if(entity.PhotoId != null)
         {
-            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.PhotoId, cancellationToken);
+            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.PhotoId);
 
             if (image != null)
             {
@@ -46,12 +46,12 @@ public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPho
 
         if(newImage != null)
         {
-            await _context.Images.AddAsync(newImage, cancellationToken);
+            await _context.Images.AddAsync(newImage);
         }
 
         entity.PhotoId = newImage?.Id;
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return entity.PhotoId;
     }

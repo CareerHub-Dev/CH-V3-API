@@ -30,6 +30,6 @@ public class GetStudentGroupBriefsWithSearchQueryHandler : IRequestHandler<GetSt
                 Id = x.Id,
                 Name = x.Name,
             })
-            .ToListAsync(cancellationToken);
+            .ToListAsync();
     }
 }

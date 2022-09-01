@@ -40,6 +40,6 @@ public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestH
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset
             })
-            .ToPagedListAsync(request.PageNumber, request.PageSize, cancellationToken);
+            .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

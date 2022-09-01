@@ -25,6 +25,6 @@ public class StudentRegisteredEventHandler : INotificationHandler<StudentRegiste
 
     public async Task Handle(StudentRegisteredEvent notification, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new SendVerifyStudentEmailCommand(notification.Student.Id), cancellationToken);
+        await _mediator.Send(new SendVerifyStudentEmailCommand(notification.Student.Id));
     }
 }

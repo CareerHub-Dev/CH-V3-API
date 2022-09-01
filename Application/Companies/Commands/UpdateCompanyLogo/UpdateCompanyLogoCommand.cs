@@ -25,7 +25,7 @@ public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogo
     public async Task<Guid?> Handle(UpdateCompanyLogoCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.Companies
-            .FirstOrDefaultAsync(x => x.Id == request.CompanyId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (entity == null)
         {
@@ -34,7 +34,7 @@ public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogo
 
         if (entity.BannerId != null)
         {
-            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.LogoId, cancellationToken);
+            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == entity.LogoId);
 
             if (image != null)
             {
@@ -46,12 +46,12 @@ public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogo
 
         if (newImage != null)
         {
-            await _context.Images.AddAsync(newImage, cancellationToken);
+            await _context.Images.AddAsync(newImage);
         }
 
         entity.LogoId = newImage?.Id;
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return entity.LogoId;
     }

@@ -25,7 +25,7 @@ public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand>
 
     public async Task<Unit> Handle(UpdateCompanyCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Companies.FirstOrDefaultAsync(x => x.Id == request.CompanyId, cancellationToken);
+        var entity = await _context.Companies.FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (entity == null)
         {
@@ -36,7 +36,7 @@ public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand>
         entity.Motto = request.Motto;
         entity.Description = request.Description;
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

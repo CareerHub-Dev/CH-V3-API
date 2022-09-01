@@ -23,7 +23,7 @@ public class GetStudentLogQueryHandler : IRequestHandler<GetAccountBriefQuery, A
         var entity = await _context.Accounts
             .AsNoTracking()
             .Where(x => x.Id == request.AccountId)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync();
 
         if (entity == null)
         {

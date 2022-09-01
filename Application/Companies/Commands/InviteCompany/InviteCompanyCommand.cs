@@ -28,9 +28,9 @@ public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand,
             Email = request.Email
         };
 
-        await _context.Companies.AddAsync(entity, cancellationToken);
+        await _context.Companies.AddAsync(entity);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         await _mediator.Publish(new CompanyInvitedEvent(entity));
 

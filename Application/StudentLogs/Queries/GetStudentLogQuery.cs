@@ -36,7 +36,7 @@ public class GetStudentLogQueryHandler : IRequestHandler<GetStudentLogQuery, Stu
                 LastModifiedBy = x.LastModifiedBy,
                 StudentGroup = new StudentGroupBriefDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name }
             })
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync();
 
         if (entity == null)
         {

@@ -21,7 +21,7 @@ public class DeleteCompanyCommandHandler : IRequestHandler<DeleteCompanyCommand>
     {
         var entity = await _context.Companies
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.ComapnyId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.ComapnyId);
 
         if (entity == null)
         {
@@ -30,7 +30,7 @@ public class DeleteCompanyCommandHandler : IRequestHandler<DeleteCompanyCommand>
 
         _context.Companies.Remove(entity);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

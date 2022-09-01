@@ -21,7 +21,7 @@ public class DeleteStudentLogCommandHandler : IRequestHandler<DeleteStudentLogCo
     {
         var studentLog = await _context.StudentLogs
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.StudentLogId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.StudentLogId);
 
         if (studentLog == null)
         {
@@ -30,7 +30,7 @@ public class DeleteStudentLogCommandHandler : IRequestHandler<DeleteStudentLogCo
 
         _context.StudentLogs.Remove(studentLog);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

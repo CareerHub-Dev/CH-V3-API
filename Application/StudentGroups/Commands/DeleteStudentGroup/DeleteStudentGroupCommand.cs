@@ -21,7 +21,7 @@ public class DeleteStudentGroupCommandHandler : IRequestHandler<DeleteStudentGro
     {
         var entity = await _context.StudentGroups
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.StudentGroupId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.StudentGroupId);
 
         if (entity == null)
         {
@@ -30,7 +30,7 @@ public class DeleteStudentGroupCommandHandler : IRequestHandler<DeleteStudentGro
 
         _context.StudentGroups.Remove(entity);
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }

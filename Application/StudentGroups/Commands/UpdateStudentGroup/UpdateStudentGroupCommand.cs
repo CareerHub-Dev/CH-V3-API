@@ -24,7 +24,7 @@ public class UpdateStudentGroupCommandHandler : IRequestHandler<UpdateStudentGro
     public async Task<Unit> Handle(UpdateStudentGroupCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.StudentGroups
-            .FirstOrDefaultAsync(x => x.Id == request.StudentGroupId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == request.StudentGroupId);
 
         if (entity == null)
         {
@@ -33,7 +33,7 @@ public class UpdateStudentGroupCommandHandler : IRequestHandler<UpdateStudentGro
 
         entity.Name = request.Name;
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
         return Unit.Value;
     }
