@@ -17,7 +17,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
                 { typeof(ValidationException), HandleValidationException },
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(AuthenticationException), HandleAuthenticationException },
-                { typeof(ArgumentException), HandleArgumentException }
+                { typeof(ArgumentException), HandleArgumentException },
+                { typeof(ArgumentOutOfRangeException), HandleArgumentOutOfRangeException }
             };
     }
 
@@ -127,7 +128,23 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         var details = new ProblemDetails()
         {
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
-            Title = "Invalid arguments.",
+            Title = "Invalid argument.",
+            Detail = exception.Message
+        };
+
+        context.Result = new BadRequestObjectResult(details);
+
+        context.ExceptionHandled = true;
+    }
+
+    private void HandleArgumentOutOfRangeException(ExceptionContext context)
+    {
+        var exception = (ArgumentOutOfRangeException)context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            Title = "Invalid argument.",
             Detail = exception.Message
         };
 
