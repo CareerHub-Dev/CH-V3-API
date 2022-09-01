@@ -44,4 +44,17 @@ public static class SearchExtentions
                 x.NormalizedEmail.Trim().ToLower().Contains(lowerCaseTerm)
             );
     }
+
+    public static IQueryable<Student> Search(this IQueryable<Student> students, string searchTerm)
+    {
+        if(string.IsNullOrWhiteSpace(searchTerm))
+            return students;
+
+        var lowerCaseTerm = searchTerm.NormalizeName();
+
+        return students.Where(x => 
+            x.FirstName.ToLower().ToLower().Contains(lowerCaseTerm) || 
+            x.LastName.ToLower().ToLower().Contains(lowerCaseTerm)
+        );
+    }
 }

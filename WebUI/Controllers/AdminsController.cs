@@ -22,8 +22,7 @@ public class AdminsController : ApiControllerBase
     public async Task<ActionResult<IEnumerable<AdminResponse>>> GetAdmins(
         [FromQuery] PaginationParameters paginationParameters,
         [FromQuery] SearchParameter searchParameter,
-        [FromQuery] AdminListFilterParameters filterParameters
-        )
+        [FromQuery] AdminListFilterParameters filterParameters)
     {
         var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterQuery
         {

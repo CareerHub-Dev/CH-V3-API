@@ -2,15 +2,47 @@
 using Application.Students.Commands.DeleteStudent;
 using Application.Students.Commands.UpdateStudent;
 using Application.Students.Commands.UpdateStudentPhoto;
+using Application.Students.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebUI.Authorize;
 using WebUI.Common.Extentions;
+using WebUI.Common.Models;
 using WebUI.Common.Models.Student;
 
 namespace WebUI.Controllers;
 
 public class StudentsController : ApiControllerBase
 {
+    /// <summary>
+    /// Student
+    /// </summary>
+    /// <remarks>
+    /// Student
+    /// 
+    ///     get all Verified students
+    ///
+    /// </remarks>
+    [HttpGet]
+    [Authorize("Student")]
+    public async Task<IActionResult> GetStudents(
+        [FromQuery] PaginationParameters paginationParameters, 
+        [FromQuery] SearchParameter searchParameter)
+    {
+        var result = await Mediator.Send(new GetStudentBriefsWithPaginationWithSearthWithFilterQuery
+        {
+            PageNumber = paginationParameters.PageNumber,
+            PageSize = paginationParameters.PageSize,
+            SearchTerm = searchParameter.SearchTerm,
+            WithoutStudentId = AccountInfo!.Id,
+            IsVerified = true
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result.Select(x => new StudentBriefResponse(x)));
+    }
+
     /// <summary>
     /// Admin
     /// </summary>
