@@ -21,7 +21,7 @@ public class GetStudentLogQueryHandler : IRequestHandler<GetStudentLogQuery, Stu
 
     public async Task<StudentLogDTO> Handle(GetStudentLogQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _context.StudentLogs
+        var studentLog = await _context.StudentLogs
             .AsNoTracking()
             .Where(x => x.Id == request.StudentLogId)
             .Select(x => new StudentLogDTO
@@ -38,11 +38,11 @@ public class GetStudentLogQueryHandler : IRequestHandler<GetStudentLogQuery, Stu
             })
             .FirstOrDefaultAsync();
 
-        if (entity == null)
+        if (studentLog == null)
         {
             throw new NotFoundException(nameof(StudentLog), request.StudentLogId);
         }
 
-        return entity;
+        return studentLog;
     }
 }

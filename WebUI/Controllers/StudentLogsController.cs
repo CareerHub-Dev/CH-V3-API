@@ -14,7 +14,7 @@ namespace WebUI.Controllers;
 public class StudentLogsController : ApiControllerBase
 {
     /// <summary>
-    /// Auth
+    /// Admin
     /// </summary>
     [HttpGet]
     public async Task<IEnumerable<StudentLogResponse>> GetStudentLogs(
