@@ -19,16 +19,16 @@ public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
 
     public async Task<Unit> Handle(DeleteAdminCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Admins
+        var admin = await _context.Admins
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == request.AdminId);
 
-        if (entity == null)
+        if (admin == null)
         {
             throw new NotFoundException(nameof(Admin), request.AdminId);
         }
 
-        _context.Admins.Remove(entity);
+        _context.Admins.Remove(admin);
 
         await _context.SaveChangesAsync();
 

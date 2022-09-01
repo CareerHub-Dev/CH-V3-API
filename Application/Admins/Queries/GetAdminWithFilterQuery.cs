@@ -26,7 +26,7 @@ public class GetAdminWithFilterQueryHandler : IRequestHandler<GetAdminWithFilter
 
     public async Task<AdminDTO> Handle(GetAdminWithFilterQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _context.Admins
+        var admin = await _context.Admins
             .AsNoTracking()
             .Where(x => x.Id == request.AdminId)
             .Filter(IsVerified: request.IsVerified)
@@ -39,11 +39,11 @@ public class GetAdminWithFilterQueryHandler : IRequestHandler<GetAdminWithFilter
             })
             .FirstOrDefaultAsync();
 
-        if (entity == null)
+        if (admin == null)
         {
             throw new NotFoundException(nameof(Admin), request.AdminId);
         }
 
-        return entity;
+        return admin;
     }
 }

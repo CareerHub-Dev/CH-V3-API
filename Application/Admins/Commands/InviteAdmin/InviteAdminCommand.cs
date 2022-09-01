@@ -23,17 +23,17 @@ public class InviteAdminCommandHandler : IRequestHandler<InviteAdminCommand, Gui
 
     public async Task<Guid> Handle(InviteAdminCommand request, CancellationToken cancellationToken)
     {
-        var entity = new Admin
+        var admin = new Admin
         {
             Email = request.Email
         };
 
-        await _context.Admins.AddAsync(entity);
+        await _context.Admins.AddAsync(admin);
 
         await _context.SaveChangesAsync();
 
-        await _mediator.Publish(new AdminInvitedEvent(entity));
+        await _mediator.Publish(new AdminInvitedEvent(admin));
 
-        return entity.Id;
+        return admin.Id;
     }
 }

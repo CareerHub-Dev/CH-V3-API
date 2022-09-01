@@ -1,7 +1,6 @@
 ﻿using Application.Admins.Commands.DeleteAdmin;
 using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Queries;
-using Application.Common.Models.Pagination;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -28,7 +27,7 @@ public class AdminsController : ApiControllerBase
             PageNumber = paginationParameters.PageNumber,
             PageSize = paginationParameters.PageSize,
             SearchTerm = searchParameter.SearchTerm,
-            WithoutAdminId = AccountInfo!.Id, 
+            WithoutAdminId = AccountInfo!.Id,
             IsVerified = filterParameters.IsVerified
         });
 
