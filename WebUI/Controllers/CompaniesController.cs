@@ -3,16 +3,74 @@ using Application.Companies.Commands.InviteCompany;
 using Application.Companies.Commands.UpdateCompany;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
+using Application.Companies.Query;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebUI.Authorize;
 using WebUI.Common.Extentions;
+using WebUI.Common.Models;
 using WebUI.Common.Models.Company;
 
 namespace WebUI.Controllers;
 
 public class CompaniesController : ApiControllerBase
 {
+    /// <summary>
+    /// Student Company
+    /// </summary>
+    /// <remarks>
+    /// Student
+    /// 
+    ///     get all Verified companies
+    ///     
+    /// Company
+    /// 
+    ///     get all Verified companies
+    ///
+    /// </remarks>
+    [HttpGet]
+    [Authorize("Student", "Company")]
+    public async Task<IActionResult> GetCompanies(
+        [FromQuery] PaginationParameters paginationParameters,
+        [FromQuery] SearchParameter searchParameter)
+    {
+        switch (AccountInfo!.Role)
+        {
+            case "Company":
+                {
+                    var result = await Mediator.Send(new GetCompanyBriefsWithPaginationWithSearchWithFilterQuery
+                    {
+                        PageNumber = paginationParameters.PageNumber,
+                        PageSize = paginationParameters.PageSize,
+                        SearchTerm = searchParameter.SearchTerm,
+                        WithoutCompanyId = AccountInfo!.Id,
+                        IsVerified = true
+                    });
+
+                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+                    return Ok(result.Select(x => new CompanyBriefResponse(x)));
+                }
+            case "Student":
+                {
+                    var result = await Mediator.Send(new GetCompanyBriefsWithPaginationWithSearchWithFilterQuery
+                    {
+                        PageNumber = paginationParameters.PageNumber,
+                        PageSize = paginationParameters.PageSize,
+                        SearchTerm = searchParameter.SearchTerm,
+                        IsVerified = true
+                    });
+
+                    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+                    return Ok(result.Select(x => new CompanyBriefResponse(x)));
+                }
+            default:
+                return StatusCode(403);
+        }
+    }
+
     /// <summary>
     /// Admin
     /// </summary>

@@ -51,4 +51,23 @@ public static class FiltrationExtentions
 
         return students;
     }
+
+    public static IQueryable<Company> Filter(this IQueryable<Company> companies, Guid? WithoutCompanyId = null, bool? IsVerified = null)
+    {
+        if (WithoutCompanyId.HasValue)
+        {
+            companies = companies.Where(x => x.Id != WithoutCompanyId);
+        }
+
+        if (IsVerified.HasValue && IsVerified == true)
+        {
+            companies = companies.Where(x => x.Verified != null || x.PasswordReset != null);
+        }
+        else if (IsVerified.HasValue && IsVerified == false)
+        {
+            companies = companies.Where(x => x.Verified == null && x.PasswordReset == null);
+        }
+
+        return companies;
+    }
 }

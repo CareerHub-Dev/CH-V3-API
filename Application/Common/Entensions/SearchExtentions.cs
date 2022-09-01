@@ -57,4 +57,15 @@ public static class SearchExtentions
             x.LastName.ToLower().ToLower().Contains(lowerCaseTerm)
         );
     }
+
+    public static IQueryable<Company> Search(this IQueryable<Company> companies, string searchTerm)
+    {
+
+        if (string.IsNullOrWhiteSpace(searchTerm))
+            return companies;
+
+        var lowerCaseTerm = searchTerm.NormalizeName();
+
+        return companies.Where(x => x.Name.Trim().ToLower().Contains(lowerCaseTerm));
+    }
 }

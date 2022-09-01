@@ -15,7 +15,7 @@ namespace WebUI.Controllers;
 public class StudentsController : ApiControllerBase
 {
     /// <summary>
-    /// Student
+    /// Student Company
     /// </summary>
     /// <remarks>
     /// Student
