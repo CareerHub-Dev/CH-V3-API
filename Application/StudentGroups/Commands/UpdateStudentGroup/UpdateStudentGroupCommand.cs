@@ -23,15 +23,15 @@ public class UpdateStudentGroupCommandHandler : IRequestHandler<UpdateStudentGro
 
     public async Task<Unit> Handle(UpdateStudentGroupCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _context.StudentGroups
+        var studentGroup = await _context.StudentGroups
             .FirstOrDefaultAsync(x => x.Id == request.StudentGroupId);
 
-        if (entity == null)
+        if (studentGroup == null)
         {
             throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
         }
 
-        entity.Name = request.Name;
+        studentGroup.Name = request.Name;
 
         await _context.SaveChangesAsync();
 

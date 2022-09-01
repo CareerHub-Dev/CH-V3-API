@@ -17,6 +17,16 @@ public class StudentGroupsController : ApiControllerBase
     /// <summary>
     /// Auth
     /// </summary>
+    /// <remarks>
+    /// Admin:
+    /// 
+    ///     Get paginated list of groups. (use paginationParameters, searchParameter)
+    ///
+    /// else:
+    /// 
+    ///     Get all brief groups. (use searchParameter)
+    ///
+    /// </remarks>
     [HttpGet]
     [Authorize]
     public async Task<IEnumerable<StudentGroupBriefResponse>> GetStudentGroups(
@@ -53,6 +63,16 @@ public class StudentGroupsController : ApiControllerBase
     /// <summary>
     /// Auth
     /// </summary>
+    /// <remarks>
+    /// Admin:
+    /// 
+    ///     Get group. (use paginationParameters, searchParameter)
+    ///
+    /// else:
+    /// 
+    ///     Get brief group. (use searchParameter)
+    ///
+    /// </remarks>
     [HttpGet("{studentGroupId}")]
     [Authorize]
     public async Task<StudentGroupBriefResponse> GetStudentGroup(Guid studentGroupId)

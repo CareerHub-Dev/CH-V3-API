@@ -77,7 +77,7 @@ public class CompaniesController : ApiControllerBase
     }
 
     /// <summary>
-    /// Admin Student
+    /// Admin Company
     /// </summary>
     /// <remarks>
     /// Admin:
@@ -115,7 +115,7 @@ public class CompaniesController : ApiControllerBase
     }
 
     /// <summary>
-    /// Admin Student
+    /// Admin Company
     /// </summary>
     /// <remarks>
     /// Admin:
@@ -148,7 +148,7 @@ public class CompaniesController : ApiControllerBase
     }
 
     /// <summary>
-    /// Admin Student
+    /// Admin Company
     /// </summary>
     /// <remarks>
     /// Admin:

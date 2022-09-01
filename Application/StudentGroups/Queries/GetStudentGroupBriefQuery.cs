@@ -20,7 +20,7 @@ public class GetStudentGroupBriefQueryHandler : IRequestHandler<GetStudentGroupB
 
     public async Task<StudentGroupBriefDTO> Handle(GetStudentGroupBriefQuery request, CancellationToken cancellationToken)
     {
-        var entity = await _context.StudentGroups
+        var studentGroup = await _context.StudentGroups
             .AsNoTracking()
             .Where(x => x.Id == request.StudentGroupId)
             .Select(x => new StudentGroupBriefDTO
@@ -30,11 +30,11 @@ public class GetStudentGroupBriefQueryHandler : IRequestHandler<GetStudentGroupB
             })
             .FirstOrDefaultAsync();
 
-        if (entity == null)
+        if (studentGroup == null)
         {
             throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
         }
 
-        return entity;
+        return studentGroup;
     }
 }

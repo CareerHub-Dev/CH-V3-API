@@ -20,15 +20,15 @@ public class CreateStudentGroupCommandHandler : IRequestHandler<CreateStudentGro
 
     public async Task<Guid> Handle(CreateStudentGroupCommand request, CancellationToken cancellationToken)
     {
-        var entity = new StudentGroup
+        var studentGroup = new StudentGroup
         {
             Name = request.Name,
         };
 
-        await _context.StudentGroups.AddAsync(entity);
+        await _context.StudentGroups.AddAsync(studentGroup);
 
         await _context.SaveChangesAsync();
 
-        return entity.Id;
+        return studentGroup.Id;
     }
 }
