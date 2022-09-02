@@ -2,15 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
-namespace WebUI.Controllers;
+namespace WebUI.Areas.Auth;
 
+[Authorize]
+[Route("api/Auth/[controller]")]
 public class ImagesController : ApiControllerBase
 {
-    /// <summary>
-    /// Auth
-    /// </summary>
     [HttpGet("{imageId}")]
-    [Authorize]
     public async Task<IActionResult> GetImage(Guid imageId)
     {
         var image = await Mediator.Send(new GetImageQuery(imageId));

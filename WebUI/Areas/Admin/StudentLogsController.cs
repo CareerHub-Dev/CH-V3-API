@@ -8,14 +8,12 @@ using WebUI.Authorize;
 using WebUI.Common.Models;
 using WebUI.Common.Models.StudentLog;
 
-namespace WebUI.Controllers;
+namespace WebUI.Areas.Admin;
 
 [Authorize("Admin")]
+[Route("api/Admin/[controller]")]
 public class StudentLogsController : ApiControllerBase
 {
-    /// <summary>
-    /// Admin
-    /// </summary>
     [HttpGet]
     public async Task<IEnumerable<StudentLogResponse>> GetStudentLogs(
         [FromQuery] PaginationParameters paginationParameters,
@@ -35,9 +33,6 @@ public class StudentLogsController : ApiControllerBase
         return result.Select(x => new StudentLogResponse(x));
     }
 
-    /// <summary>
-    /// Admin
-    /// </summary>
     [HttpGet("{studentLogId}")]
     public async Task<StudentLogResponse> GetStudentLog(Guid studentLogId)
     {
@@ -45,9 +40,6 @@ public class StudentLogsController : ApiControllerBase
         return new StudentLogResponse(result);
     }
 
-    /// <summary>
-    /// Admin
-    /// </summary>
     [HttpDelete("{studentLogId}")]
     public async Task<IActionResult> DeleteStudentLog(Guid studentLogId)
     {
@@ -55,9 +47,6 @@ public class StudentLogsController : ApiControllerBase
         return NoContent();
     }
 
-    /// <summary>
-    /// Admin
-    /// </summary>
     [HttpPost]
     public async Task<Guid> CreateStudentLog(CreateStudentLogRequest createStudentLog)
     {
@@ -70,9 +59,6 @@ public class StudentLogsController : ApiControllerBase
         });
     }
 
-    /// <summary>
-    /// Admin
-    /// </summary>
     [HttpPut("{studentLogId}")]
     public async Task<IActionResult> UpdateStudentLog(Guid studentLogId, UpdateStudentLogRequest updateStudentLog)
     {
