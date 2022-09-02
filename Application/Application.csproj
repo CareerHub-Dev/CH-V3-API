@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="CompanyLinks\Command\CreateCompanyLink\" />
-    <Folder Include="CompanyLinks\Query\" />
   </ItemGroup>
 
 </Project>
