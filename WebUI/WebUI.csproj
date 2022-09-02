@@ -32,9 +32,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\Student\" />
-    <Folder Include="Areas\Company\" />
-  </ItemGroup>
-
 </Project>
