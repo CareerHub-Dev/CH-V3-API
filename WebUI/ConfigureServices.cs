@@ -4,7 +4,6 @@ using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
-using WebUI.Controllers;
 using WebUI.Filters;
 using WebUI.Services;
 
