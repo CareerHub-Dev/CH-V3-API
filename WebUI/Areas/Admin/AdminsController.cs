@@ -8,16 +8,12 @@ using WebUI.Authorize;
 using WebUI.Common.Models;
 using WebUI.Common.Models.Admin;
 
-namespace WebUI.Controllers;
+namespace WebUI.Areas.Admin;
 
-[Route("api/[controller]")]
-[ApiController]
 [Authorize("Admin")]
+[Route("api/Admin/[controller]")]
 public class AdminsController : ApiControllerBase
 {
-    /// <summary>
-    /// Admin
-    /// </summary>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AdminResponse>>> GetAdmins(
         [FromQuery] PaginationParameters paginationParameters,
@@ -38,9 +34,6 @@ public class AdminsController : ApiControllerBase
         return Ok(result.Select(x => new AdminResponse(x)));
     }
 
-    /// <summary>
-    /// Admin
-    /// </summary>
     [HttpGet("{adminId}")]
     public async Task<ActionResult<AdminResponse>> GetAdmin(Guid adminId)
     {
@@ -52,9 +45,6 @@ public class AdminsController : ApiControllerBase
         return new AdminResponse(result);
     }
 
-    /// <summary>
-    /// Admin
-    /// </summary>
     /// <remarks>
     /// Admin:
     /// 
@@ -67,9 +57,6 @@ public class AdminsController : ApiControllerBase
         return await Mediator.Send(new InviteAdminCommand { Email = inviteAdmin.Email });
     }
 
-    /// <summary>
-    /// Admin
-    /// </summary>
     /// <remarks>
     /// Admin:
     /// 
@@ -83,9 +70,6 @@ public class AdminsController : ApiControllerBase
         return Ok();
     }
 
-    /// <summary>
-    /// Admin
-    /// </summary>
     [HttpDelete("{adminId}")]
     public async Task<IActionResult> DeleteAdmin(Guid adminId)
     {

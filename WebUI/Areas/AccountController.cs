@@ -1,16 +1,12 @@
-﻿using Application.Accounts.Commands.AccountOwnsToken;
-using Application.Accounts.Commands.Authenticate;
-using Application.Accounts.Commands.ChangePassword;
+﻿using Application.Accounts.Commands.Authenticate;
 using Application.Accounts.Commands.RefreshToken;
 using Application.Accounts.Commands.RegisterStudent;
 using Application.Accounts.Commands.ResetPassword;
-using Application.Accounts.Commands.RevokeToken;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyStudent;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
-using WebUI.Authorize;
 using WebUI.Common.Extentions;
 using WebUI.Common.Models.Account;
 
