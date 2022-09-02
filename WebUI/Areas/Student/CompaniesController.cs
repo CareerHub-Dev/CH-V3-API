@@ -18,7 +18,7 @@ public class CompaniesController : ApiControllerBase
     ///
     /// </remarks>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<CompanyBriefResponse>>> GetCompanies(
+    public async Task<IEnumerable<CompanyBriefResponse>> GetCompanies(
         [FromQuery] PaginationParameters paginationParameters,
         [FromQuery] SearchParameter searchParameter)
     {
@@ -32,7 +32,7 @@ public class CompaniesController : ApiControllerBase
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return Ok(result.Select(x => new CompanyBriefResponse(x)));
+        return result.Select(x => new CompanyBriefResponse(x));
     }
 
     /// <remarks>   
