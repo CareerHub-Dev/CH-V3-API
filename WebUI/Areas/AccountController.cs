@@ -8,15 +8,15 @@ using Application.Accounts.Commands.RevokeToken;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyStudent;
-using Application.Accounts.Query;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.Common.Extentions;
 using WebUI.Common.Models.Account;
 
-namespace WebUI.Controllers;
+namespace WebUI.Areas;
 
+[Route("api/[controller]")]
 public class AccountController : ApiControllerBase
 {
     [HttpPost("authenticate-{clientType}")]
@@ -140,61 +140,6 @@ public class AccountController : ApiControllerBase
         await Mediator.Send(new ResetPasswordCommand { Token = resetPassword.Token, Password = resetPassword.Password });
 
         return Ok(new { message = "Password reset successful, you can now login" });
-    }
-    
-    /// <summary>
-    /// Auth
-    /// </summary>
-    [Authorize]
-    [HttpPost("revoke-token")]
-    public async Task<IActionResult> RevokeTokenAsync(RevokeTokenRequest revokeToken)
-    {
-        if (string.IsNullOrWhiteSpace(revokeToken.Token))
-        {
-            revokeToken.Token = Request.Cookies["refreshToken"];
-        }
-
-        if (string.IsNullOrWhiteSpace(revokeToken.Token))
-        {
-            return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required");
-        }
-
-        if(AccountInfo!.Role != "Admin" && !await Mediator.Send(new AccountOwnsTokenCommand { Token = revokeToken.Token, AccountId = AccountInfo!.Id }))
-        {
-            return Problem(title: "Not Found", statusCode: StatusCodes.Status404NotFound, detail: "Token is not found");
-        }
-
-        await Mediator.Send(new RevokeTokenCommand { Token = revokeToken.Token, IpAddress = IpAddress() });
-
-        return Ok(new { message = "Token revoked" });
-    }
-
-    /// <summary>
-    /// Auth
-    /// </summary>
-    [Authorize]
-    [HttpPost("change-password")]
-    public async Task<IActionResult> ChangePassword(ChangePasswordRequest changePassword)
-    {
-        await Mediator.Send(new ChangePasswordCommand {
-            OldPassword = changePassword.OldPassword,
-            NewPassword = changePassword.NewPassword,
-            AccountId = AccountInfo!.Id,
-        });
-
-        return Ok(new { message = "Password change successful" });
-    }
-
-    /// <summary>
-    /// Admin
-    /// </summary>
-    [Authorize("Admin")]
-    [HttpGet("{accountId}")]
-    public async Task<AccountBriefResponse> GetAccountBrief(Guid accountId)
-    {
-        var result = await Mediator.Send(new GetAccountBriefQuery(accountId));
-
-        return new AccountBriefResponse(result);
     }
 
     // helper methods
