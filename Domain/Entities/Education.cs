@@ -1,10 +1,10 @@
-﻿using Domain.Enums;
+﻿using Domain.Common;
+using Domain.Enums;
 
 namespace Domain.Entities;
 
-public class Education
+public class Education : BaseEntity
 {
-    public Guid Id { get; set; }
     public string University { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
     public string Country { get; set; } = string.Empty;
