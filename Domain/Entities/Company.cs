@@ -9,4 +9,5 @@ public class Company : Account
     public string Description { get; set; } = string.Empty;
 
     public List<CompanyLink> Links { get; set; } = new List<CompanyLink>();
+    public List<Student> SubscribedStudents { get; set; } = new List<Student>();
 }

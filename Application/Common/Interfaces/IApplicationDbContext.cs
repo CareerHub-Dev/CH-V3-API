@@ -14,5 +14,6 @@ public interface IApplicationDbContext
     DbSet<StudentGroup> StudentGroups { get; }
     DbSet<StudentLog> StudentLogs { get; }
     DbSet<CompanyLink> CompanyLinks { get; }
+    DbSet<StudentSubscription> StudentSubscriptions { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

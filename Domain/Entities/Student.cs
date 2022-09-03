@@ -10,4 +10,9 @@ public class Student : Account
 
     public Guid StudentGroupId { get; set; }
     public StudentGroup? StudentGroup { get; set; }
+
+    public List<Company> CompanySubscriptions { get; set; } = new List<Company>();
+
+    public List<StudentSubscription> StudentSubscriptions { get; set; } = new List<StudentSubscription>();
+    public List<StudentSubscription> StudentsSubscribed { get; set; } = new List<StudentSubscription>();
 }

@@ -35,6 +35,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<StudentGroup> StudentGroups => Set<StudentGroup>();
     public DbSet<StudentLog> StudentLogs => Set<StudentLog>();
     public DbSet<CompanyLink> CompanyLinks => Set<CompanyLink>();
+    public DbSet<StudentSubscription> StudentSubscriptions => Set<StudentSubscription>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
