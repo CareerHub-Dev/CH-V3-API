@@ -15,6 +15,17 @@ public static class SearchExtentions
         return studentGroups.Where(x => x.Name.Trim().ToLower().Contains(lowerCaseTerm));
     }
 
+    public static IQueryable<JobPosition> Search(this IQueryable<JobPosition> jobPositions, string searchTerm)
+    {
+
+        if (string.IsNullOrWhiteSpace(searchTerm))
+            return jobPositions;
+
+        var lowerCaseTerm = searchTerm.NormalizeName();
+
+        return jobPositions.Where(x => x.Name.Trim().ToLower().Contains(lowerCaseTerm));
+    }
+
     public static IQueryable<StudentLog> Search(this IQueryable<StudentLog> studentLogs, string searchTerm)
     {
 

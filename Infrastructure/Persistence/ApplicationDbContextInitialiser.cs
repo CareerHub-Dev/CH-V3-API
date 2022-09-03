@@ -90,6 +90,44 @@ public class ApplicationDbContextInitialiser
             );
         }
 
+        if(!await _context.JobPositions.AnyAsync())
+        {
+            await _context.JobPositions.AddRangeAsync(
+                new JobPosition()
+                {
+                    Name = "Software development"
+                },
+                new JobPosition()
+                {
+                    Name = "Quality assurance"
+                },
+                new JobPosition()
+                {
+                    Name = "Design"
+                },
+                new JobPosition()
+                {
+                    Name = "DevOps"
+                },
+                new JobPosition()
+                {
+                    Name = "Support"
+                },
+                new JobPosition()
+                {
+                    Name = "HR"
+                },
+                new JobPosition()
+                {
+                    Name = "Finances"
+                },
+                new JobPosition()
+                {
+                    Name = "Other"
+                }
+            );
+        }
+
         await _context.SaveChangesAsync();
     }
 }

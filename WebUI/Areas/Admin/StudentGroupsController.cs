@@ -6,8 +6,6 @@ using Application.StudentGroups.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Models;
-using WebUI.Common.Models.StudentGroup;
 
 namespace WebUI.Areas.Admin;
 
@@ -42,7 +40,7 @@ public class StudentGroupsController : ApiControllerBase
     [HttpPut("{studentGroupId}")]
     public async Task<IActionResult> UpdateStudentGroup(Guid studentGroupId, UpdateStudentGroupCommand command)
     {
-        if(studentGroupId != command.StudentGroupId)
+        if (studentGroupId != command.StudentGroupId)
         {
             return BadRequest();
         }
