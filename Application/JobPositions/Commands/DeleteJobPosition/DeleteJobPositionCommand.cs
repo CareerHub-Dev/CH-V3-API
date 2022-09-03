@@ -25,7 +25,7 @@ public class DeleteJobPositionCommandHandler : IRequestHandler<DeleteJobposition
 
         if (jobPosition == null)
         {
-            throw new NotFoundException(nameof(StudentGroup), request.JobPositionId);
+            throw new NotFoundException(nameof(JobPosition), request.JobPositionId);
         }
 
         _context.JobPositions.Remove(jobPosition);

@@ -33,6 +33,16 @@ public static class FiltrationExtentions
         return studentLogs;
     }
 
+    public static IQueryable<Tag> Filter(this IQueryable<Tag> tags, bool? IsAccepted = null)
+    {
+        if (IsAccepted.HasValue)
+        {
+            tags = tags.Where(x => x.IsAccepted == IsAccepted);
+        }
+
+        return tags;
+    }
+
     public static IQueryable<Student> Filter(this IQueryable<Student> students, Guid? WithoutStudentId = null, bool? IsVerified = null)
     {
         if (WithoutStudentId.HasValue)

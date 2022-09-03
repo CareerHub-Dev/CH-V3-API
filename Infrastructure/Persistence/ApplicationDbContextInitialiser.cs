@@ -128,6 +128,52 @@ public class ApplicationDbContextInitialiser
             );
         }
 
+        if (!await _context.Tags.AnyAsync())
+        {
+            await _context.Tags.AddRangeAsync(
+                new Tag()
+                {
+                    Name = "C#"
+                },
+                new Tag()
+                {
+                    Name = "F#"
+                },
+                new Tag()
+                {
+                    Name = "OOP"
+                },
+                new Tag()
+                {
+                    Name = "OOD"
+                },
+                new Tag()
+                {
+                    Name = "ASP.NET Core"
+                },
+                new Tag()
+                {
+                    Name = ".NET"
+                },
+                new Tag()
+                {
+                    Name = "EF Core"
+                },
+                new Tag()
+                {
+                    Name = "MediatR"
+                },
+                new Tag()
+                {
+                    Name = "RabbitMQ"
+                },
+                new Tag()
+                {
+                    Name = "xUnit"
+                }
+            );
+        }
+
         await _context.SaveChangesAsync();
     }
 }

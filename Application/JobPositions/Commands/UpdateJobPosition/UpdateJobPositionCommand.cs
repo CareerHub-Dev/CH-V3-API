@@ -28,7 +28,7 @@ public class UpdateJobPositionCommandHandler : IRequestHandler<UpdateJobPosition
 
         if (jobPosition == null)
         {
-            throw new NotFoundException(nameof(StudentGroup), request.JobPositionId);
+            throw new NotFoundException(nameof(JobPosition), request.JobPositionId);
         }
 
         jobPosition.Name = request.Name;
