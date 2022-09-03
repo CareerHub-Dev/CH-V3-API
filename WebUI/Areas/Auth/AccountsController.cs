@@ -9,11 +9,8 @@ namespace WebUI.Areas.Auth;
 
 [Authorize]
 [Route("api/Auth/[controller]")]
-public class AccountController : ApiControllerBase
+public class AccountsController : ApiControllerBase
 {
-    /// <summary>
-    /// Auth
-    /// </summary>
     [HttpPost("revoke-token")]
     public async Task<IActionResult> RevokeTokenAsync(RevokeTokenRequest revokeToken)
     {
@@ -37,9 +34,6 @@ public class AccountController : ApiControllerBase
         return Ok(new { message = "Token revoked" });
     }
 
-    /// <summary>
-    /// Auth
-    /// </summary>
     [Authorize]
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword(ChangePasswordRequest changePassword)

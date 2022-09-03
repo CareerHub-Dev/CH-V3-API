@@ -13,7 +13,7 @@ using WebUI.Common.Models.Account;
 namespace WebUI.Areas;
 
 [Route("api/[controller]")]
-public class AccountController : ApiControllerBase
+public class AccountsController : ApiControllerBase
 {
     [HttpPost("authenticate-{clientType}")]
     public async Task<IActionResult> Authenticate(AuthenticateRequest authenticate, string clientType)

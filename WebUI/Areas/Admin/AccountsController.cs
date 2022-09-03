@@ -8,7 +8,7 @@ namespace WebUI.Areas.Admin;
 
 [Authorize("Admin")]
 [Route("api/Admin/[controller]")]
-public class AccountController : ApiControllerBase
+public class AccountsController : ApiControllerBase
 {
     /// <remarks>
     /// Admin:
