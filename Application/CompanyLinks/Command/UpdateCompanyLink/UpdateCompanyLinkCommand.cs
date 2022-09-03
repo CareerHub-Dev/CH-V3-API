@@ -32,7 +32,7 @@ public class UpdateCompanyLinkCommandHandler : IRequestHandler<UpdateCompanyLink
             throw new NotFoundException(nameof(CompanyLink), request.CompanyLinkId);
         }
 
-        companyLink.Name = request.Name;
+        companyLink.Title = request.Name;
         companyLink.Uri = request.Uri;
 
         await _context.SaveChangesAsync();

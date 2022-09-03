@@ -2,9 +2,9 @@
 
 namespace Domain.Entities;
 
-public class CompanyLink : BaseAuditableEntity
+public class CompanyLink : BaseEntity
 {
-    public string Name { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
     public string Uri { get; set; } = string.Empty;
 
     public Guid CompanyId { get; set; }

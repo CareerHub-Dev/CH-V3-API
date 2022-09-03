@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class StudentGroupConfiguration : IEntityTypeConfiguration<StudentGroup>
+public class ForeignLanguageConfigurations : IEntityTypeConfiguration<ForeignLanguage>
 {
-    public void Configure(EntityTypeBuilder<StudentGroup> builder)
+    public void Configure(EntityTypeBuilder<ForeignLanguage> builder)
     {
         builder.Property(x => x.Name)
             .HasMaxLength(32)

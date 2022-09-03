@@ -11,14 +11,14 @@ public class StudentConfiguration : IEntityTypeConfiguration<Student>
         builder.ToTable("Students");
 
         builder.Property(x => x.FirstName)
-            .HasMaxLength(30)
+            .HasMaxLength(32)
             .IsRequired();
 
         builder.Property(x => x.LastName)
-            .HasMaxLength(30)
+            .HasMaxLength(32)
             .IsRequired();
 
         builder.Property(x => x.Phone)
-            .HasMaxLength(20);
+            .HasMaxLength(32);
     }
 }

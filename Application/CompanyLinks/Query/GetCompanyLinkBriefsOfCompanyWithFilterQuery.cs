@@ -35,7 +35,7 @@ public class GetCompanyLinkBriefsOfCompanyWithFilterQueryHandler : IRequestHandl
             .Select(x => new CompanyLinkBriefDTO
             {
                 Id = x.Id,
-                Name = x.Name,
+                Name = x.Title,
                 Uri = x.Uri,
                 CompanyId = x.CompanyId
             })

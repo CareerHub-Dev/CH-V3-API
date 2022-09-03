@@ -11,7 +11,7 @@ public class CompanyConfigurations : IEntityTypeConfiguration<Company>
         builder.ToTable("Companies");
 
         builder.Property(x => x.Name)
-            .HasMaxLength(50)
+            .HasMaxLength(32)
             .IsRequired();
 
         builder.Property(x => x.Motto)
@@ -19,7 +19,7 @@ public class CompanyConfigurations : IEntityTypeConfiguration<Company>
             .IsRequired();
 
         builder.Property(x => x.Description)
-            .HasMaxLength(256)
+            .HasMaxLength(1024)
             .IsRequired();
     }
 }

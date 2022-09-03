@@ -10,4 +10,5 @@ public class Company : Account
 
     public List<CompanyLink> Links { get; set; } = new List<CompanyLink>();
     public List<Student> SubscribedStudents { get; set; } = new List<Student>();
+    public List<JobOffer> JobOffers { get; set; } = new List<JobOffer>();
 }

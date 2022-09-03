@@ -12,7 +12,10 @@ public class Student : Account
     public StudentGroup? StudentGroup { get; set; }
 
     public List<Company> CompanySubscriptions { get; set; } = new List<Company>();
+    public List<JobOffer> JobOfferSubscriptions { get; set; } = new List<JobOffer>();
 
     public List<StudentSubscription> StudentSubscriptions { get; set; } = new List<StudentSubscription>();
     public List<StudentSubscription> StudentsSubscribed { get; set; } = new List<StudentSubscription>();
+
+    public List<CV> CVs { get; set; } = new List<CV>();
 }

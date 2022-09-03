@@ -19,11 +19,11 @@ public class StudentLogConfigurations : IEntityTypeConfiguration<StudentLog>
             .HasComputedColumnSql(@"LOWER(TRIM(""Email""))", true);
 
         builder.Property(x => x.FirstName)
-            .HasMaxLength(30)
+            .HasMaxLength(32)
             .IsRequired();
 
         builder.Property(x => x.LastName)
-            .HasMaxLength(30)
+            .HasMaxLength(32)
             .IsRequired();
     }
 }

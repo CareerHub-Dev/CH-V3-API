@@ -41,7 +41,7 @@ public class CreateCompanyLinkCommandHandler : IRequestHandler<CreateCompanyLink
 
         var companyLink = new CompanyLink
         {
-            Name = request.Name,
+            Title = request.Name,
             Uri = request.Uri,
         };
 

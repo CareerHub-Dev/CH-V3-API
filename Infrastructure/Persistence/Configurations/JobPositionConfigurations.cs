@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations;
 
-public class StudentGroupConfiguration : IEntityTypeConfiguration<StudentGroup>
+public class JobPositionConfigurations : IEntityTypeConfiguration<JobPosition>
 {
-    public void Configure(EntityTypeBuilder<StudentGroup> builder)
+    public void Configure(EntityTypeBuilder<JobPosition> builder)
     {
         builder.Property(x => x.Name)
             .HasMaxLength(32)

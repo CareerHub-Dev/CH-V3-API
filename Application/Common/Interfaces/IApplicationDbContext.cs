@@ -5,15 +5,23 @@ namespace Application.Common.Interfaces;
 
 public interface IApplicationDbContext
 {
-    DbSet<Account> Accounts { get; }
-    DbSet<RefreshToken> RefreshTokens { get; }
-    DbSet<Student> Students { get; }
-    DbSet<Company> Companies { get; }
-    DbSet<Admin> Admins { get; }
-    DbSet<Image> Images { get; }
-    DbSet<StudentGroup> StudentGroups { get; }
-    DbSet<StudentLog> StudentLogs { get; }
-    DbSet<CompanyLink> CompanyLinks { get; }
-    DbSet<StudentSubscription> StudentSubscriptions { get; }
+    public DbSet<Account> Accounts { get; }
+    public DbSet<RefreshToken> RefreshTokens { get; }
+    public DbSet<Student> Students { get; }
+    public DbSet<Company> Companies { get; }
+    public DbSet<Admin> Admins { get; }
+    public DbSet<CompanyLink> CompanyLinks { get; }
+    public DbSet<JobOffer> JobOffers { get; }
+    public DbSet<Tag> Tags { get; }
+    public DbSet<StudentSubscription> StudentSubscriptions { get; }
+    public DbSet<StudentGroup> StudentGroups { get; }
+    public DbSet<JobPosition> JobPositions { get; }
+    public DbSet<Experience> Experiences { get; }
+    public DbSet<Image> Images { get; }
+    public DbSet<ForeignLanguage> ForeignLanguages { get; }
+    public DbSet<CVProjectLink> CVProjectLinks { get; }
+    public DbSet<Education> Educations { get; }
+    public DbSet<CV> CVs { get; }
+    public DbSet<StudentLog> StudentLogs { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

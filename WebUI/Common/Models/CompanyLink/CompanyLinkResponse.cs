@@ -14,7 +14,5 @@ public class CompanyLinkResponse : CompanyLinkDetailedResponse
 
     public CompanyLinkResponse(CompanyLinkDTO model) : base(model)
     {
-        CreatedBy = model.CreatedBy;
-        LastModifiedBy = model.LastModifiedBy;
     }
 }

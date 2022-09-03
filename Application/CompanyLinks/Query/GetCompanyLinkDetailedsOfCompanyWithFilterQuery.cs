@@ -35,11 +35,9 @@ public class GetCompanyLinkDetailedsOfCompanyWithFilterQueryHandler : IRequestHa
             .Select(x => new CompanyLinkDetailedDTO
             {
                 Id = x.Id,
-                Name = x.Name,
+                Name = x.Title,
                 Uri = x.Uri,
-                CompanyId = x.CompanyId,
-                Created = x.Created,
-                LastModified = x.LastModified,
+                CompanyId = x.CompanyId
             })
             .ToListAsync();
     }

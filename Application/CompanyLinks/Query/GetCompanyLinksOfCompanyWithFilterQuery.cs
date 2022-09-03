@@ -35,13 +35,9 @@ public class GetCompanyLinksOfCompanyWithFilterQueryHandler : IRequestHandler<Ge
             .Select(x => new CompanyLinkDTO
             {
                 Id = x.Id,
-                Name = x.Name,
+                Name = x.Title,
                 Uri = x.Uri,
-                CompanyId = x.CompanyId,
-                Created = x.Created,
-                LastModified = x.LastModified,
-                CreatedBy = x.CreatedBy,
-                LastModifiedBy = x.LastModifiedBy,
+                CompanyId = x.CompanyId
             })
             .ToListAsync();
     }
