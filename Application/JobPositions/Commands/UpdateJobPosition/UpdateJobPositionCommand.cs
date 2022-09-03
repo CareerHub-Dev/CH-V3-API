@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobPositions.Commands.UpdateJobPosition;
 
-public class UpdateJobPositionCommand : IRequest
+public record UpdateJobPositionCommand : IRequest
 {
     public Guid JobPositionId { get; init; }
     public string Name { get; init; } = string.Empty;

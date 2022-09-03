@@ -25,7 +25,7 @@ public class GetJobPositionBriefsWithSearchQueryHandler : IRequestHandler<GetJob
         return await _context.JobPositions
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
-            .OrderByDescending(x => x.Name)
+            .OrderBy(x => x.Name)
             .Select(x => new JobPositionBriefDTO
             {
                 Id = x.Id,

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Commands.UpdateTag;
 
-public class UpdateTagCommand : IRequest
+public record UpdateTagCommand : IRequest
 {
     public Guid TagId { get; init; }
     public string Name { get; init; } = string.Empty;

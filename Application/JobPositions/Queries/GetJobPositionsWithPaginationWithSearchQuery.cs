@@ -29,7 +29,7 @@ public class GetJobPositionsWithPaginationWithSearchQueryHandler : IRequestHandl
         return await _context.JobPositions
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
-            .OrderByDescending(x => x.Name)
+            .OrderBy(x => x.Name)
             .Select(x => new JobPositionDTO
             {
                 Id = x.Id,

@@ -133,7 +133,8 @@ public class ApplicationDbContextInitialiser
             await _context.Tags.AddRangeAsync(
                 new Tag()
                 {
-                    Name = "C#"
+                    Name = "C#",
+                    IsAccepted = true
                 },
                 new Tag()
                 {
@@ -141,7 +142,8 @@ public class ApplicationDbContextInitialiser
                 },
                 new Tag()
                 {
-                    Name = "OOP"
+                    Name = "OOP",
+                    IsAccepted = true
                 },
                 new Tag()
                 {
@@ -149,7 +151,8 @@ public class ApplicationDbContextInitialiser
                 },
                 new Tag()
                 {
-                    Name = "ASP.NET Core"
+                    Name = "ASP.NET Core",
+                    IsAccepted = true
                 },
                 new Tag()
                 {
@@ -157,7 +160,8 @@ public class ApplicationDbContextInitialiser
                 },
                 new Tag()
                 {
-                    Name = "EF Core"
+                    Name = "EF Core",
+                    IsAccepted = true
                 },
                 new Tag()
                 {
@@ -165,7 +169,8 @@ public class ApplicationDbContextInitialiser
                 },
                 new Tag()
                 {
-                    Name = "RabbitMQ"
+                    Name = "RabbitMQ",
+                    IsAccepted = true
                 },
                 new Tag()
                 {

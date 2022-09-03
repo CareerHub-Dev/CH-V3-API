@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentGroups.Commands.UpdateStudentGroup;
 
-public class UpdateStudentGroupCommand : IRequest
+public record UpdateStudentGroupCommand : IRequest
 {
     public Guid StudentGroupId { get; init; }
     public string Name { get; init; } = string.Empty;

@@ -25,7 +25,7 @@ public class GetStudentGroupBriefsWithSearchQueryHandler : IRequestHandler<GetSt
         return await _context.StudentGroups
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
-            .OrderByDescending(x => x.Name)
+            .OrderBy(x => x.Name)
             .Select(x => new StudentGroupBriefDTO
             {
                 Id = x.Id,

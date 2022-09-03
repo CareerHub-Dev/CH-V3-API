@@ -32,7 +32,7 @@ public class GetTagsWithPaginationWithSearchWithFilterQueryHandler : IRequestHan
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
             .Filter(request.IsAccepted)
-            .OrderByDescending(x => x.Name)
+            .OrderBy(x => x.Name)
             .Select(x => new TagDTO
             {
                 Id = x.Id,

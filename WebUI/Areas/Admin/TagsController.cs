@@ -33,9 +33,9 @@ public class TagsController : ApiControllerBase
     }
 
     [HttpPost]
-    public async Task<Guid> CreateTag(CreateTagView view)
+    public async Task<Guid> CreateTag(CreateTagCommand command)
     {
-        return await Mediator.Send(new CreateTagCommand { Name = view.Name, IsAccepted = true });
+        return await Mediator.Send(command);
     }
 
     [HttpPut("{tagId}")]

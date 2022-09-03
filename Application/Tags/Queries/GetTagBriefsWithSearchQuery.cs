@@ -25,7 +25,7 @@ public class GetTagBriefsWithSearchQueryHandler : IRequestHandler<GetTagBriefsWi
         return await _context.Tags
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
-            .OrderByDescending(x => x.Name)
+            .OrderBy(x => x.Name)
             .Select(x => new TagBriefDTO
             {
                 Id = x.Id,

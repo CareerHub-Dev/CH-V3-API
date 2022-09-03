@@ -10,7 +10,7 @@ namespace WebUI.Areas.Auth;
 public class TagsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<TagBriefDTO>> GetJobPositions([FromQuery] GetTagBriefsWithSearchQuery query)
+    public async Task<IEnumerable<TagBriefDTO>> GetTags([FromQuery] GetTagBriefsWithSearchQuery query)
     {
         return await Mediator.Send(query);
     }
