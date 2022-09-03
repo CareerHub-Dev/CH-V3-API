@@ -29,6 +29,7 @@ public class GetStudentGroupsWithPaginationWithSearchQueryHandler : IRequestHand
         return await _context.StudentGroups
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
+            .OrderByDescending(x => x.Name)
             .Select(x => new StudentGroupDTO
             {
                 Id = x.Id,

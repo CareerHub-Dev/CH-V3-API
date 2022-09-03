@@ -3,6 +3,7 @@ using FluentValidation;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using System.Globalization;
 using System.Reflection;
 using WebUI.Filters;
 using WebUI.Services;
@@ -32,6 +33,7 @@ public static class ConfigureServices
         services.AddEndpointsApiExplorer();
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("en-US");
 
         // Customise default API behaviour
         services.Configure<ApiBehaviorOptions>(options =>

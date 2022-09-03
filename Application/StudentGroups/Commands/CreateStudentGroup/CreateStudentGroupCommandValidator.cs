@@ -15,7 +15,7 @@ public class CreateStudentGroupCommandValidator : AbstractValidator<CreateStuden
 
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(20)
+            .MaximumLength(32)
             .MustAsync(BeUniqueName).WithMessage("The specified name already exists.");
     }
 

@@ -12,9 +12,9 @@ public class StudentGroupBriefResponse
 
     }
 
-    public StudentGroupBriefResponse(StudentGroupBriefDTO studentGroup)
+    public StudentGroupBriefResponse(StudentGroupBriefDTO model)
     {
-        Id = studentGroup.Id;
-        Name = studentGroup.Name;
+        Id = model.Id;
+        Name = model.Name;
     }
 }
