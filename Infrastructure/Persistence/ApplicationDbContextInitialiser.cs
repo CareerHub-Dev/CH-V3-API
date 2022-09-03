@@ -46,6 +46,8 @@ public class ApplicationDbContextInitialiser
 
     public async Task TrySeedAsync()
     {
+        #region SeedAdmins
+
         if (!await _context.Admins.AnyAsync())
         {
             await _context.Admins.AddAsync(new Admin
@@ -55,6 +57,10 @@ public class ApplicationDbContextInitialiser
                 Verified = DateTime.UtcNow
             });
         }
+
+        #endregion
+
+        #region SeedStudentGroups
 
         if (!await _context.StudentGroups.AnyAsync())
         {
@@ -90,7 +96,11 @@ public class ApplicationDbContextInitialiser
             );
         }
 
-        if(!await _context.JobPositions.AnyAsync())
+        #endregion
+
+        #region SeedJobPositions
+
+        if (!await _context.JobPositions.AnyAsync())
         {
             await _context.JobPositions.AddRangeAsync(
                 new JobPosition()
@@ -127,6 +137,10 @@ public class ApplicationDbContextInitialiser
                 }
             );
         }
+
+        #endregion
+
+        #region SeedTags
 
         if (!await _context.Tags.AnyAsync())
         {
@@ -178,6 +192,39 @@ public class ApplicationDbContextInitialiser
                 }
             );
         }
+
+        #endregion
+
+        #region SeedStudentLogs
+
+        if (!await _context.StudentLogs.AnyAsync() && await _context.StudentGroups.AnyAsync())
+        {
+            await _context.StudentLogs.AddRangeAsync(
+                new StudentLog()
+                {
+                    FirstName = "Микола",
+                    LastName = "Берковський",
+                    Email = "mykola.berkovskyi@nure.ua",
+                    StudentGroup = await _context.StudentGroups.OrderBy(x => Guid.NewGuid()).FirstOrDefaultAsync()
+                },
+                new StudentLog()
+                {
+                    FirstName = "Юлія",
+                    LastName = "Коба",
+                    Email = "yuliia.koba@nure.ua",
+                    StudentGroup = await _context.StudentGroups.OrderBy(x => Guid.NewGuid()).FirstOrDefaultAsync()
+                },
+                new StudentLog()
+                {
+                    FirstName = "Сергій",
+                    LastName = "Бурцев",
+                    Email = "serhii.burtsev@nure.ua",
+                    StudentGroup = await _context.StudentGroups.OrderBy(x => Guid.NewGuid()).FirstOrDefaultAsync()
+                }
+            );
+        }
+
+        #endregion
 
         await _context.SaveChangesAsync();
     }

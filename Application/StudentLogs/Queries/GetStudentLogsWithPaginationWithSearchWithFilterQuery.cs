@@ -33,6 +33,7 @@ public class GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler : IReq
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
             .Filter(request.StudentGroupId)
+            .OrderBy(x => x.Email)
             .Select(x => new StudentLogDTO
             {
                 Id = x.Id,
