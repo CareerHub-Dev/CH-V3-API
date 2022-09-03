@@ -4,15 +4,15 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Accounts.Commands.AccountOwnsToken;
+namespace Application.Accounts.Query;
 
-public record AccountOwnsTokenCommand : IRequest<bool>
+public record AccountOwnsTokenQuery : IRequest<bool>
 {
     public Guid AccountId { get; init; }
     public string Token { get; init; } = string.Empty;
 }
 
-public class AccountOwnsTokenCommandHandler : IRequestHandler<AccountOwnsTokenCommand, bool>
+public class AccountOwnsTokenCommandHandler : IRequestHandler<AccountOwnsTokenQuery, bool>
 {
     private readonly IApplicationDbContext _context;
 
@@ -21,7 +21,7 @@ public class AccountOwnsTokenCommandHandler : IRequestHandler<AccountOwnsTokenCo
         _context = context;
     }
 
-    public async Task<bool> Handle(AccountOwnsTokenCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(AccountOwnsTokenQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Accounts.AnyAsync(x => x.Id == request.AccountId))
         {

@@ -1,6 +1,6 @@
-﻿using Application.Accounts.Commands.AccountOwnsToken;
-using Application.Accounts.Commands.ChangePassword;
+﻿using Application.Accounts.Commands.ChangePassword;
 using Application.Accounts.Commands.RevokeToken;
+using Application.Accounts.Query;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.Common.Models.Account;
@@ -24,12 +24,12 @@ public class AccountController : ApiControllerBase
 
         if (string.IsNullOrWhiteSpace(revokeToken.Token))
         {
-            return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required");
+            return Problem(title: "Token is required.", statusCode: StatusCodes.Status400BadRequest, detail: "Body or cookies don't contain token.");
         }
 
-        if (!await Mediator.Send(new AccountOwnsTokenCommand { Token = revokeToken.Token, AccountId = AccountInfo!.Id }))
+        if (!await Mediator.Send(new AccountOwnsTokenQuery { Token = revokeToken.Token, AccountId = AccountInfo!.Id }))
         {
-            return Problem(title: "Not Found", statusCode: StatusCodes.Status404NotFound, detail: "Token is not found");
+            return Problem(title: "Token was not found.", statusCode: StatusCodes.Status404NotFound, detail: "Token was not found.");
         }
 
         await Mediator.Send(new RevokeTokenCommand { Token = revokeToken.Token, IpAddress = IpAddress() });
