@@ -20,11 +20,11 @@ public class CreateStudentLogCommandValidator : AbstractValidator<CreateStudentL
 
         RuleFor(x => x.FirstName)
             .NotEmpty()
-            .MaximumLength(30);
+            .MaximumLength(32);
 
         RuleFor(x => x.LastName)
             .NotEmpty()
-            .MaximumLength(30);
+            .MaximumLength(32);
     }
 
     private async Task<bool> BeUniqueEmail(string email, CancellationToken cancellationToken)

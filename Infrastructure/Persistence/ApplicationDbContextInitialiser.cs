@@ -195,31 +195,34 @@ public class ApplicationDbContextInitialiser
 
         #endregion
 
+        await _context.SaveChangesAsync();
+
         #region SeedStudentLogs
 
         if (!await _context.StudentLogs.AnyAsync() && await _context.StudentGroups.AnyAsync())
         {
+            var studentLog = await _context.StudentGroups.ToListAsync();
             await _context.StudentLogs.AddRangeAsync(
                 new StudentLog()
                 {
                     FirstName = "Микола",
                     LastName = "Берковський",
                     Email = "mykola.berkovskyi@nure.ua",
-                    StudentGroup = await _context.StudentGroups.OrderBy(x => Guid.NewGuid()).FirstOrDefaultAsync()
+                    StudentGroup = studentLog.OrderBy(x => Guid.NewGuid()).First()
                 },
                 new StudentLog()
                 {
                     FirstName = "Юлія",
                     LastName = "Коба",
                     Email = "yuliia.koba@nure.ua",
-                    StudentGroup = await _context.StudentGroups.OrderBy(x => Guid.NewGuid()).FirstOrDefaultAsync()
+                    StudentGroup = studentLog.OrderBy(x => Guid.NewGuid()).First()
                 },
                 new StudentLog()
                 {
                     FirstName = "Сергій",
                     LastName = "Бурцев",
                     Email = "serhii.burtsev@nure.ua",
-                    StudentGroup = await _context.StudentGroups.OrderBy(x => Guid.NewGuid()).FirstOrDefaultAsync()
+                    StudentGroup = studentLog.OrderBy(x => Guid.NewGuid()).First()
                 }
             );
         }
