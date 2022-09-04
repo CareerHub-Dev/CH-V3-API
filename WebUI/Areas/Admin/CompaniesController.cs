@@ -3,9 +3,12 @@ using Application.Companies.Commands.InviteCompany;
 using Application.Companies.Commands.UpdateCompany;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
+using Application.Companies.Query;
+using Application.Companies.Query.Models;
 using Application.CompanyLinks.Query;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebUI.Authorize;
 using WebUI.Common.Extentions;
 using WebUI.Common.Models.Company;
@@ -17,6 +20,16 @@ namespace WebUI.Areas.Admin;
 [Route("api/Admin/[controller]")]
 public class CompaniesController : ApiControllerBase
 {
+    [HttpGet]
+    public async Task<IEnumerable<CompanyBriefWithAmountStatisticDTO>> GetCompanies([FromQuery] GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilterQuery query)
+    {
+        var result = await Mediator.Send(query);
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return result;
+    }
+
     /// <remarks>
     /// Admin:
     /// 

@@ -45,8 +45,8 @@ public class GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilte
                 BannerId = x.BannerId,
                 AmountStatistic = new AmountStatistic
                 {
-                    AmountJobOffers = x.JobOffers.AsQueryable().Filter(request.IsSubscriberVerified).Count(),
-                    AmountSubscribers = x.SubscribedStudents.AsQueryable().Filter(null, request.IsSubscriberVerified).Count()
+                    AmountJobOffers = x.JobOffers.Filter(request.IsSubscriberVerified).Count(),
+                    AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberVerified).Count()
                 }
             })
             .ToPagedListAsync(request.PageNumber, request.PageSize);
