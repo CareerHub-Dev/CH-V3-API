@@ -16,7 +16,7 @@ using WebUI.Common.Models.CompanyLink;
 
 namespace WebUI.Areas.Admin;
 
-[Authorize("Admin")]
+[Authorize("Admin", "SuperAdmin")]
 [Route("api/Admin/[controller]")]
 public class CompaniesController : ApiControllerBase
 {

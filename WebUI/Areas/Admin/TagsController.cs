@@ -6,11 +6,10 @@ using Application.Tags.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Models.Tag;
 
 namespace WebUI.Areas.Admin;
 
-[Authorize("Admin")]
+[Authorize("Admin", "SuperAdmin")]
 [Route("api/Admin/[controller]")]
 public class TagsController : ApiControllerBase
 {

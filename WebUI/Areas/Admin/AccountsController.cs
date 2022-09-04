@@ -6,7 +6,7 @@ using WebUI.Common.Models.Account;
 
 namespace WebUI.Areas.Admin;
 
-[Authorize("Admin")]
+[Authorize("Admin", "SuperAdmin")]
 [Route("api/Admin/[controller]")]
 public class AccountsController : ApiControllerBase
 {

@@ -10,7 +10,7 @@ using WebUI.Common.Models.Admin;
 
 namespace WebUI.Areas.Admin;
 
-[Authorize("Admin")]
+[Authorize("SuperAdmin")]
 [Route("api/Admin/[controller]")]
 public class AdminsController : ApiControllerBase
 {

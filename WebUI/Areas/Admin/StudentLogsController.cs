@@ -9,7 +9,7 @@ using WebUI.Authorize;
 
 namespace WebUI.Areas.Admin;
 
-[Authorize("Admin")]
+[Authorize("Admin", "SuperAdmin")]
 [Route("api/Admin/[controller]")]
 public class StudentLogsController : ApiControllerBase
 {
