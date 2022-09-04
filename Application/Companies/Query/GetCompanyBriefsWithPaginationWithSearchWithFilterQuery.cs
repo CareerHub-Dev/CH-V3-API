@@ -39,7 +39,8 @@ public class GetCompanyBriefsWithPaginationWithSearchWithFilterQueryHandler : IR
                 Id = x.Id,
                 Email = x.Email,
                 Name = x.Name,
-                LogoId = x.LogoId
+                LogoId = x.LogoId,
+                BannerId = x.BannerId,
             })
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

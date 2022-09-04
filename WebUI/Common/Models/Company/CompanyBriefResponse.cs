@@ -8,7 +8,7 @@ public class CompanyBriefResponse
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public Guid? LogoId { get; set; }
-
+    public Guid? BannerId { get; set; }
     public CompanyBriefResponse()
     {
 
@@ -20,5 +20,6 @@ public class CompanyBriefResponse
         Name = model.Name;
         Email = model.Email;
         LogoId = model.LogoId;
+        BannerId = model.BannerId;
     }
 }
