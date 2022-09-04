@@ -5,7 +5,7 @@ using WebUI.Common.Models.Tag;
 
 namespace WebUI.Areas.Company;
 
-[Authorize]
+[Authorize("Company")]
 [Route("api/Company/[controller]")]
 public class TagsController : ApiControllerBase
 {
