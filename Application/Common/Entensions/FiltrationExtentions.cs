@@ -43,6 +43,20 @@ public static class FiltrationExtentions
         return tags;
     }
 
+    public static IQueryable<JobOffer> Filter(this IQueryable<JobOffer> jobOffers, bool? IsActive = null)
+    {
+        if (IsActive.HasValue && IsActive == true)
+        {
+            jobOffers = jobOffers.Where(x => x.EndDate >= DateTime.UtcNow && x.StartDate <= DateTime.UtcNow);
+        }
+        else if (IsActive.HasValue && IsActive == false)
+        {
+            jobOffers = jobOffers.Where(x => x.StartDate > DateTime.UtcNow);
+        }
+
+        return jobOffers;
+    }
+
     public static IQueryable<Student> Filter(this IQueryable<Student> students, Guid? WithoutStudentId = null, bool? IsVerified = null)
     {
         if (WithoutStudentId.HasValue)
