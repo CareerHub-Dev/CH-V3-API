@@ -35,10 +35,7 @@ public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
             throw new ArgumentException("Token is not active.");
         }
 
-        RefreshTokenHelper.RevokeRefreshToken(refreshToken, request.IpAddress, "Replaced by new token", newRefreshToken.Token);
-        refreshToken.Revoked = DateTime.UtcNow;
-        refreshToken.RevokedByIp = request.IpAddress;
-        refreshToken.ReasonRevoked = "Revoked without replacement";
+        RefreshTokenHelper.RevokeRefreshToken(refreshToken, request.IpAddress, "Revoked without replacement");
 
         await _context.SaveChangesAsync();
 
