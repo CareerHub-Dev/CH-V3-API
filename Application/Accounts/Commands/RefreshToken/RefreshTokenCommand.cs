@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.Common.Helpers;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Domain.Entities;
@@ -49,23 +50,20 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
         if (refreshToken.IsRevoked)
         {
             // revoke all descendant tokens in case this token has been compromised
-            RevokeDescendantRefreshTokens(refreshToken, account, request.IpAddress, $"Attempted reuse of revoked ancestor token: {request.Token}");
+            RefreshTokenHelper.RevokeDescendantRefreshTokens(refreshToken, account, request.IpAddress, $"Attempted reuse of revoked ancestor token: {request.Token}");
             await _context.SaveChangesAsync();
         }
 
         if (!refreshToken.IsActive)
         {
-            throw new ArgumentException("Token is not active");
+            throw new ArgumentException("Token is not active.");
         }
 
         // replace old refresh token with a new one (rotate token)
         var newRefreshToken = await RotateRefreshTokenAsync(refreshToken, request.IpAddress);
         account.RefreshTokens.Add(newRefreshToken);
 
-        // remove old refresh tokens from account
-        account.RefreshTokens.RemoveAll(x =>
-            !x.IsActive &&
-            x.Created.AddDays(_jwtSettings.RefreshTokenTTL) <= DateTime.UtcNow);
+        AccountHelper.RemoveOldRefreshTokens(account, _jwtSettings.RefreshTokenTTL);
 
         // generate new jwt
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);
@@ -78,35 +76,14 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
             JwtTokenExpires = jwtToken.Expires,
             RefreshToken = newRefreshToken.Token,
             AccountId = account.Id,
-            Role = account.GetType().Name
+            Role = AccountHelper.GetRole(account)
         };
-    }
-
-    private void RevokeDescendantRefreshTokens(RefreshTokenEntity refreshToken, Account account, string ipAddress, string reason)
-    {
-        // recursively traverse the refresh token chain and ensure all descendants are revoked
-        if (!string.IsNullOrEmpty(refreshToken.ReplacedByToken))
-        {
-            var childToken = account.RefreshTokens.Single(x => x.Token == refreshToken.ReplacedByToken);
-            if (childToken.IsActive)
-                RevokeRefreshToken(childToken, ipAddress, reason);
-            else
-                RevokeDescendantRefreshTokens(childToken, account, ipAddress, reason);
-        }
-    }
-
-    private void RevokeRefreshToken(RefreshTokenEntity token, string ipAddress, string reason = "", string replacedByToken = "")
-    {
-        token.Revoked = DateTime.UtcNow;
-        token.RevokedByIp = ipAddress;
-        token.ReasonRevoked = reason;
-        token.ReplacedByToken = replacedByToken;
     }
 
     private async Task<RefreshTokenEntity> RotateRefreshTokenAsync(RefreshTokenEntity refreshToken, string ipAddress)
     {
         var newRefreshToken = await _jwtService.GenerateRefreshTokenAsync(ipAddress);
-        RevokeRefreshToken(refreshToken, ipAddress, "Replaced by new token", newRefreshToken.Token);
+        RefreshTokenHelper.RevokeRefreshToken(refreshToken, ipAddress, "Replaced by new token", newRefreshToken.Token);
         return newRefreshToken;
     }
 }

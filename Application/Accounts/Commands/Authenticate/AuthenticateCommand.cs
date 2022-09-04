@@ -1,4 +1,5 @@
 ﻿using Application.Common.Entensions;
+using Application.Common.Helpers;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using MediatR;
@@ -45,9 +46,7 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
         var refreshToken = await _jwtService.GenerateRefreshTokenAsync(request.IpAddress);
         account.RefreshTokens.Add(refreshToken);
 
-        account.RefreshTokens.RemoveAll(x =>
-            !x.IsActive &&
-            x.Created.AddDays(_jwtSettings.RefreshTokenTTL) <= DateTime.UtcNow);
+        AccountHelper.RemoveOldRefreshTokens(account, _jwtSettings.RefreshTokenTTL);
 
         await _context.SaveChangesAsync();
 
@@ -57,7 +56,7 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
             JwtTokenExpires = jwtToken.Expires,
             RefreshToken = refreshToken.Token,
             AccountId = account.Id,
-            Role = account.GetType().Name
+            Role = AccountHelper.GetRole(account)
         };
     }
 }

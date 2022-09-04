@@ -1,4 +1,5 @@
 ﻿using Application.Common.Exceptions;
+using Application.Common.Helpers;
 using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,7 @@ public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
             throw new ArgumentException("Token is not active.");
         }
 
+        RefreshTokenHelper.RevokeRefreshToken(refreshToken, request.IpAddress, "Replaced by new token", newRefreshToken.Token);
         refreshToken.Revoked = DateTime.UtcNow;
         refreshToken.RevokedByIp = request.IpAddress;
         refreshToken.ReasonRevoked = "Revoked without replacement";

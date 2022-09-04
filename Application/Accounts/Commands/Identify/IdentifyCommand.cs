@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Helpers;
+using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,6 +31,6 @@ public class IdentifyCommandHandler : IRequestHandler<IdentifyCommand, IdentifyR
 
         if (account == null) return null;
 
-        return new IdentifyResponse { Id = account.Id, Role = account.GetType().Name, IsVerified = account.IsVerified };
+        return new IdentifyResponse { Id = account.Id, Role = AccountHelper.GetRole(account), IsVerified = account.IsVerified };
     }
 }
