@@ -229,6 +229,46 @@ public class ApplicationDbContextInitialiser
 
         #endregion
 
+        #region SeedCompanies
+
+        if (!await _context.Companies.AnyAsync())
+        {
+            await _context.Companies.AddRangeAsync(
+                new Company()
+                {
+                    Name = "Company1",
+                    Motto = "Motto1",
+                    Description = "Description1",
+                    Email = "Company1@company.com",
+                    PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
+                    Verified = DateTime.UtcNow,
+                    Links = new List<CompanyLink> { new CompanyLink { Title = "Title", Uri = "Uri"} }
+                },
+                new Company()
+                {
+                    Name = "Company2",
+                    Motto = "Motto2",
+                    Description = "Description2",
+                    Email = "Company2@company.com",
+                    PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
+                    Verified = DateTime.UtcNow,
+                    Links = new List<CompanyLink> { new CompanyLink { Title = "Title", Uri = "Uri" } }
+                },
+                new Company()
+                {
+                    Name = "Company3",
+                    Motto = "Motto3",
+                    Description = "Description3",
+                    Email = "Company3@company.com",
+                    PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
+                    Verified = DateTime.UtcNow,
+                    Links = new List<CompanyLink> { new CompanyLink { Title = "Title", Uri = "Uri" } }
+                }
+            );
+        }
+
+        #endregion
+
         await _context.SaveChangesAsync();
     }
 }
