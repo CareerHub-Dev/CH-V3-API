@@ -37,9 +37,9 @@ public class CompaniesController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("invite")]
-    public async Task<ActionResult<Guid>> InviteCompany(InviteCompanyRequest inviteCompany)
+    public async Task<ActionResult<Guid>> InviteCompany(InviteCompanyCommand command)
     {
-        return await Mediator.Send(new InviteCompanyCommand { Email = inviteCompany.Email });
+        return await Mediator.Send(command);
     }
 
     /// <remarks>
@@ -49,10 +49,11 @@ public class CompaniesController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("send-invite-email")]
-    public async Task<IActionResult> SendInviteCompanyEmail(SendInviteCompanyEmailRequest sendInviteCompanyEmail)
+    public async Task<IActionResult> SendInviteCompanyEmail(SendInviteCompanyEmailCommand command)
     {
-        await Mediator.Send(new SendInviteCompanyEmailCommand(sendInviteCompanyEmail.CompanyId));
-        return Ok();
+        await Mediator.Send(command);
+
+        return NoContent();
     }
 
     [HttpDelete("{companyId}")]
