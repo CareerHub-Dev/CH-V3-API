@@ -6,8 +6,6 @@ using Application.StudentLogs.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Models;
-using WebUI.Common.Models.StudentLog;
 
 namespace WebUI.Areas.Admin;
 
