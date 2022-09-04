@@ -21,9 +21,14 @@ namespace WebUI.Areas.Admin;
 public class CompaniesController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<CompanyBriefWithAmountStatisticDTO>> GetCompanies([FromQuery] GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilterQuery query)
+    public async Task<IEnumerable<CompanyBriefWithAmountStatisticDTO>> GetCompanies([FromQuery] GetCompanyBriefWithAmountStatisticWithPaginationWithSearchView view)
     {
-        var result = await Mediator.Send(query);
+        var result = await Mediator.Send(new GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilterQuery
+        {
+            PageNumber = view.PageNumber,
+            PageSize = view.PageSize,
+            SearchTerm = view.SearchTerm,
+        });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
