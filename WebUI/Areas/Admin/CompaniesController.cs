@@ -21,9 +21,9 @@ namespace WebUI.Areas.Admin;
 public class CompaniesController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<CompanyBriefWithAmountStatisticDTO>> GetCompanies([FromQuery] GetCompanyBriefWithAmountStatisticWithPaginationWithSearchView view)
+    public async Task<IEnumerable<CompanyBriefWithAmountStatisticDTO>> GetCompanies([FromQuery] GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchView view)
     {
-        var result = await Mediator.Send(new GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilterQuery
+        var result = await Mediator.Send(new GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQuery
         {
             PageNumber = view.PageNumber,
             PageSize = view.PageSize,

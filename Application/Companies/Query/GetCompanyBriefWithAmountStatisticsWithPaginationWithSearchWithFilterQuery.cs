@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Query;
 
-public record GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<CompanyBriefWithAmountStatisticDTO>>
+public record GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<CompanyBriefWithAmountStatisticDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -21,16 +21,16 @@ public record GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilt
     public bool? IsSubscriberVerified { get; init; }
 }
 
-public class GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyBriefWithAmountStatisticDTO>>
+public class GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyBriefWithAmountStatisticDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<CompanyBriefWithAmountStatisticDTO>> Handle(GetCompanyBriefWithAmountStatisticWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<CompanyBriefWithAmountStatisticDTO>> Handle(GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
     {
         return await _context.Companies
             .AsNoTracking()
