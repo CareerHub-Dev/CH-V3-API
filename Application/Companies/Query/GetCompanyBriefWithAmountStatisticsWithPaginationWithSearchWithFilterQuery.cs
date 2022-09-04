@@ -36,6 +36,7 @@ public class GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilt
             .AsNoTracking()
             .Filter(request.WithoutCompanyId, request.IsVerified)
             .Search(request.SearchTerm ?? "")
+            .OrderBy(x => x.Name)
             .Select(x => new CompanyBriefWithAmountStatisticDTO
             {
                 Id = x.Id,
