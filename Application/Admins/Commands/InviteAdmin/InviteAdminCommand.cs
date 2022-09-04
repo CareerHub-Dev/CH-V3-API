@@ -8,6 +8,7 @@ namespace Application.Admins.Commands.InviteAdmin;
 public record InviteAdminCommand : IRequest<Guid>
 {
     public string Email { get; init; } = string.Empty;
+    public bool IsSuperAdmin { get; init; }
 }
 
 public class InviteAdminCommandHandler : IRequestHandler<InviteAdminCommand, Guid>
@@ -25,7 +26,8 @@ public class InviteAdminCommandHandler : IRequestHandler<InviteAdminCommand, Gui
     {
         var admin = new Admin
         {
-            Email = request.Email
+            Email = request.Email,
+            IsSuperAdmin = request.IsSuperAdmin,
         };
 
         await _context.Admins.AddAsync(admin);

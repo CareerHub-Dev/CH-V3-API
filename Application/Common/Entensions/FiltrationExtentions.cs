@@ -4,7 +4,7 @@ namespace Application.Common.Entensions;
 
 public static class FiltrationExtentions
 {
-    public static IQueryable<Admin> Filter(this IQueryable<Admin> admins, Guid? WithoutAdminId = null, bool? IsVerified = null)
+    public static IQueryable<Admin> Filter(this IQueryable<Admin> admins, Guid? WithoutAdminId = null, bool? IsVerified = null, bool? IsSuperAdmin = null)
     {
         if (WithoutAdminId.HasValue)
         {
@@ -18,6 +18,11 @@ public static class FiltrationExtentions
         else if (IsVerified.HasValue && IsVerified == false)
         {
             admins = admins.Where(x => x.Verified == null && x.PasswordReset == null);
+        }
+
+        if (IsSuperAdmin.HasValue)
+        {
+            admins = admins.Where(x => x.IsSuperAdmin == IsSuperAdmin);
         }
 
         return admins;

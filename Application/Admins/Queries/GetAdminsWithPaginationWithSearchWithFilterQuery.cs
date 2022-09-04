@@ -16,6 +16,7 @@ public record GetAdminsWithPaginationWithSearchWithFilterQuery : IRequest<Pagina
 
     public bool? IsVerified { get; init; }
     public Guid? WithoutAdminId { get; init; }
+    public bool? IsSuperAdmin { get; init; }
 }
 
 public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetAdminsWithPaginationWithSearchWithFilterQuery, PaginatedList<AdminDTO>>
@@ -31,14 +32,16 @@ public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestH
     {
         return await _context.Admins
             .AsNoTracking()
-            .Filter(request.WithoutAdminId, request.IsVerified)
+            .Filter(request.WithoutAdminId, request.IsVerified, request.IsSuperAdmin)
             .Search(request.SearchTerm ?? "")
+            .OrderBy(x => x.Email)
             .Select(x => new AdminDTO
             {
                 Id = x.Id,
                 Email = x.Email,
                 Verified = x.Verified,
-                PasswordReset = x.PasswordReset
+                PasswordReset = x.PasswordReset,
+                IsSuperAdmin = x.IsSuperAdmin
             })
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

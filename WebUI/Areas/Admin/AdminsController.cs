@@ -1,6 +1,8 @@
 ﻿using Application.Admins.Commands.DeleteAdmin;
 using Application.Admins.Commands.InviteAdmin;
+using Application.Admins.Commands.UpdateAdmin;
 using Application.Admins.Queries;
+using Application.Admins.Queries.Models;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -15,34 +17,21 @@ namespace WebUI.Areas.Admin;
 public class AdminsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AdminResponse>>> GetAdmins(
-        [FromQuery] PaginationParameters paginationParameters,
-        [FromQuery] SearchParameter searchParameter,
-        [FromQuery] AdminListFilterParameters filterParameters)
+    public async Task<IEnumerable<AdminDTO>> GetAdmins([FromQuery] GetAdminsWithPaginationWithSearchWithFilterView view)
     {
         var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterQuery
         {
-            PageNumber = paginationParameters.PageNumber,
-            PageSize = paginationParameters.PageSize,
-            SearchTerm = searchParameter.SearchTerm,
+            PageNumber = view.PageNumber,
+            PageSize = view.PageSize,
+            SearchTerm = view.SearchTerm,
             WithoutAdminId = AccountInfo!.Id,
-            IsVerified = filterParameters.IsVerified
+            IsVerified = view.IsVerified,
+            IsSuperAdmin = view.IsSuperAdmin,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return Ok(result.Select(x => new AdminResponse(x)));
-    }
-
-    [HttpGet("{adminId}")]
-    public async Task<ActionResult<AdminResponse>> GetAdmin(Guid adminId)
-    {
-        var result = await Mediator.Send(new GetAdminWithFilterQuery
-        {
-            AdminId = adminId
-        });
-
-        return new AdminResponse(result);
+        return result;
     }
 
     /// <remarks>
@@ -52,9 +41,22 @@ public class AdminsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("invite")]
-    public async Task<ActionResult<Guid>> InviteAdmin(InviteAdminRequest inviteAdmin)
+    public async Task<ActionResult<Guid>> InviteAdmin(InviteAdminCommand command)
     {
-        return await Mediator.Send(new InviteAdminCommand { Email = inviteAdmin.Email });
+        return await Mediator.Send(command);
+    }
+
+    [HttpPut("{adminId}")]
+    public async Task<IActionResult> UpdateAdmin(Guid adminId, UpdateAdminCommand command)
+    {
+        if (adminId != command.AdminId)
+        {
+            return BadRequest();
+        }
+
+        await Mediator.Send(command);
+
+        return NoContent();
     }
 
     /// <remarks>
@@ -64,10 +66,11 @@ public class AdminsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("send-invite-email")]
-    public async Task<IActionResult> SendInviteAdminEmail(SendInviteAdminEmailRequest sendInviteAdminEmail)
+    public async Task<IActionResult> SendInviteAdminEmail(SendInviteAdminEmailCommand command)
     {
-        await Mediator.Send(new SendInviteAdminEmailCommand(sendInviteAdminEmail.AdminId));
-        return Ok();
+        await Mediator.Send(command);
+
+        return NoContent();
     }
 
     [HttpDelete("{adminId}")]
