@@ -15,7 +15,7 @@ public record GetStudentLogsWithPaginationWithSearchWithFilterQuery : IRequest<P
 
     public string? SearchTerm { get; init; }
 
-    public Guid? StudentGroupId { get; init; }
+    public List<Guid>? StudentGroupIds { get; init; }
 }
 
 public class GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetStudentLogsWithPaginationWithSearchWithFilterQuery, PaginatedList<StudentLogDTO>>
@@ -32,8 +32,8 @@ public class GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler : IReq
         return await _context.StudentLogs
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
-            .Filter(request.StudentGroupId)
-            .OrderBy(x => x.Email)
+            .Filter(request.StudentGroupIds)
+            .OrderBy(x => x.FirstName).ThenBy(x => x.LastName)
             .Select(x => new StudentLogDTO
             {
                 Id = x.Id,

@@ -28,11 +28,11 @@ public static class FiltrationExtentions
         return admins;
     }
 
-    public static IQueryable<StudentLog> Filter(this IQueryable<StudentLog> studentLogs, Guid? StudentGroupId = null)
+    public static IQueryable<StudentLog> Filter(this IQueryable<StudentLog> studentLogs, List<Guid>? studentGroupIds = null)
     {
-        if (StudentGroupId.HasValue)
+        if (studentGroupIds != null && studentGroupIds.Count != 0)
         {
-            studentLogs = studentLogs.Where(x => x.StudentGroupId == StudentGroupId);
+            studentLogs = studentLogs.Where(x => studentGroupIds.Contains(x.StudentGroupId));
         }
 
         return studentLogs;
