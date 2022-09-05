@@ -1,10 +1,10 @@
 ﻿using Application.Emails.Commands;
 using Application.Students.Commands.DeleteStudent;
-using Application.Students.Commands.UpdateStudent;
-using Application.Students.Commands.UpdateStudentPhoto;
+using Application.Students.Queries;
+using Application.Students.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Extentions;
 using WebUI.Common.Models.Student;
 
 namespace WebUI.Areas.Admin;
@@ -13,6 +13,24 @@ namespace WebUI.Areas.Admin;
 [Route("api/Admin/[controller]")]
 public class StudentsController : ApiControllerBase
 {
+    [HttpGet]
+    public async Task<IEnumerable<StudentDTO>> GetStudents(
+        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterView view)
+    {
+        var result = await Mediator.Send(new GetStudentsWithPaginationWithSearthWithFilterQuery
+        {
+            PageNumber = view.PageNumber,
+            PageSize = view.PageSize,
+            SearchTerm = view.SearchTerm,
+            IsVerified = view.IsVerified,
+            StudentGroupIds = view.StudentGroupIds,
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return result;
+    }
+
     /// <remarks>
     /// Admin:
     /// 
@@ -20,26 +38,10 @@ public class StudentsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("send-verification-email")]
-    public async Task<IActionResult> SendVerifyStudentEmail(SendVerifyStudentEmailRequest sendVerifyStudentEmail)
+    public async Task<IActionResult> SendVerifyStudentEmail(SendVerifyStudentEmailCommand command)
     {
-        await Mediator.Send(new SendVerifyStudentEmailCommand(sendVerifyStudentEmail.StudentId));
+        await Mediator.Send(command);
         return Ok();
-    }
-
-    [HttpPut("{studentId}")]
-    public async Task<IActionResult> UpdateStudent(Guid studentId, UpdateStudentRequest updateStudent)
-    {
-        await Mediator.Send(new UpdateStudentCommand
-        {
-            StudentId = studentId,
-            FirstName = updateStudent.FirstName,
-            LastName = updateStudent.LastName,
-            Phone = updateStudent.Phone,
-            StudentGroupId = updateStudent.StudentGroupId,
-            BirthDate = updateStudent.BirthDate
-        });
-
-        return NoContent();
     }
 
     [HttpDelete("{studentId}")]
@@ -48,15 +50,5 @@ public class StudentsController : ApiControllerBase
         await Mediator.Send(new DeleteStudentCommand(studentId));
 
         return NoContent();
-    }
-
-    [HttpPut("{studentId}/photo")]
-    public async Task<ActionResult<Guid?>> UpdateStudentPhoto(Guid studentId, [FromForm] UpdateStudentPhotoRequest updateStudentPhoto)
-    {
-        return await Mediator.Send(new UpdateStudentPhotoCommand
-        {
-            StudentId = studentId,
-            Photo = updateStudentPhoto.PhotoFile is IFormFile photo ? await photo.ToCreateImageAsync() : null,
-        });
     }
 }

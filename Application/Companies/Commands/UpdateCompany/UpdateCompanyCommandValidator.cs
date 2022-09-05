@@ -8,7 +8,7 @@ public class UpdateCompanyCommandValidator : AbstractValidator<UpdateCompanyComm
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(50);
+            .MaximumLength(64);
 
         RuleFor(x => x.Motto)
             .NotEmpty()

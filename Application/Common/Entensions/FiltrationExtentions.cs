@@ -76,11 +76,16 @@ public static class FiltrationExtentions
         return jobOffers;
     }
 
-    public static IQueryable<Student> Filter(this IQueryable<Student> students, Guid? WithoutStudentId = null, bool? IsVerified = null)
+    public static IQueryable<Student> Filter(this IQueryable<Student> students, Guid? WithoutStudentId = null, bool? IsVerified = null, List<Guid>? studentGroupIds = null)
     {
         if (WithoutStudentId.HasValue)
         {
             students = students.Where(x => x.Id != WithoutStudentId);
+        }
+
+        if (studentGroupIds != null && studentGroupIds.Count != 0)
+        {
+            students = students.Where(x => studentGroupIds.Contains(x.StudentGroupId));
         }
 
         if (IsVerified.HasValue && IsVerified == true)

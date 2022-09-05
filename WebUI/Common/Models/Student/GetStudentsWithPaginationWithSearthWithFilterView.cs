@@ -1,6 +1,6 @@
-﻿namespace WebUI.Common.Models.Company;
+﻿namespace WebUI.Common.Models.Student;
 
-public record GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterView
+public record GetStudentsWithPaginationWithSearthWithFilterView
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -8,4 +8,5 @@ public record GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterV
     public string? SearchTerm { get; init; }
 
     public bool? IsVerified { get; init; }
+    public List<Guid>? StudentGroupIds { get; init; }
 }

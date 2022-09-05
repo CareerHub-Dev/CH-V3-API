@@ -9,11 +9,11 @@ public class UpdateStudentCommandValidator : AbstractValidator<UpdateStudentComm
     {
         RuleFor(x => x.LastName)
             .NotEmpty()
-            .MaximumLength(30);
+            .MaximumLength(32);
 
         RuleFor(x => x.FirstName)
             .NotEmpty()
-            .MaximumLength(30);
+            .MaximumLength(32);
 
         When(x => x.Phone != null, () =>
         {

@@ -2,9 +2,9 @@
 
 namespace Application.Students.Queries;
 
-public class GetStudentBriefsWithPaginationWithSearthWithFilterQueryValidator : AbstractValidator<GetStudentBriefsWithPaginationWithSearthWithFilterQuery>
+public class GetStudentsWithPaginationWithSearthWithFilterQueryValidator : AbstractValidator<GetStudentsWithPaginationWithSearthWithFilterQuery>
 {
-    public GetStudentBriefsWithPaginationWithSearthWithFilterQueryValidator()
+    public GetStudentsWithPaginationWithSearthWithFilterQueryValidator()
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);
