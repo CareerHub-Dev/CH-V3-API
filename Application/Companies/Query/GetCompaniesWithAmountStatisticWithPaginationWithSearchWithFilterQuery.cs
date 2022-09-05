@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Query;
 
-public record GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQuery 
-    : IRequest<PaginatedList<CompanyBriefWithAmountStatisticWithVerificationInfoDTO>>
+public record GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery 
+    : IRequest<PaginatedList<CompanyWithAmountStatisticDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -22,24 +22,24 @@ public record GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWit
     public bool? IsSubscriberVerified { get; init; }
 }
 
-public class GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQueryHandler
-    : IRequestHandler<GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyBriefWithAmountStatisticWithVerificationInfoDTO>>
+public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQueryHandler
+    : IRequestHandler<GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyWithAmountStatisticDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<CompanyBriefWithAmountStatisticWithVerificationInfoDTO>> Handle(GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<CompanyWithAmountStatisticDTO>> Handle(GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
     {
         return await _context.Companies
             .AsNoTracking()
             .Filter(request.WithoutCompanyId, request.IsVerified)
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
-            .Select(x => new CompanyBriefWithAmountStatisticWithVerificationInfoDTO
+            .Select(x => new CompanyWithAmountStatisticDTO
             {
                 Id = x.Id,
                 Email = x.Email,

@@ -21,10 +21,10 @@ namespace WebUI.Areas.Admin;
 public class CompaniesController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<CompanyBriefWithAmountStatisticDTO>> GetCompanies(
-        [FromQuery] GetCompanyBriefWithAmountStatisticsWithVerifyInfoWithPaginationWithSearchWithFilterView view)
+    public async Task<IEnumerable<CompanyWithAmountStatisticDTO>> GetCompanies(
+        [FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterView view)
     {
-        var result = await Mediator.Send(new GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQuery
+        var result = await Mediator.Send(new GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery
         {
             PageNumber = view.PageNumber,
             PageSize = view.PageSize,
@@ -69,40 +69,6 @@ public class CompaniesController : ApiControllerBase
         await Mediator.Send(new DeleteCompanyCommand(companyId));
 
         return NoContent();
-    }
-
-    [HttpPut("{companyId}")]
-    public async Task<IActionResult> UpdateCompany(Guid companyId, UpdateCompanyRequest updateCompany)
-    {
-        await Mediator.Send(new UpdateCompanyCommand
-        {
-            CompanyId = companyId,
-            Name = updateCompany.Name,
-            Motto = updateCompany.Motto,
-            Description = updateCompany.Description
-        });
-
-        return NoContent();
-    }
-
-    [HttpPut("{companyId}/logo")]
-    public async Task<ActionResult<Guid?>> UpdateCompanyLogo(Guid companyId, [FromForm] UpdateCompanyLogoRequest updateCompanyLogo)
-    {
-        return await Mediator.Send(new UpdateCompanyLogoCommand
-        {
-            CompanyId = companyId,
-            Logo = updateCompanyLogo.LogoFile is IFormFile logo ? await logo.ToCreateImageAsync() : null,
-        });
-    }
-
-    [HttpPut("{companyId}/banner")]
-    public async Task<ActionResult<Guid?>> UpdateCompanyBanner(Guid companyId, [FromForm] UpdateCompanyBannerRequest updateCompanyBanner)
-    {
-        return await Mediator.Send(new UpdateCompanyBannerCommand
-        {
-            CompanyId = companyId,
-            Banner = updateCompanyBanner.BannerFile is IFormFile banner ? await banner.ToCreateImageAsync() : null,
-        });
     }
 
     /// <remarks>   

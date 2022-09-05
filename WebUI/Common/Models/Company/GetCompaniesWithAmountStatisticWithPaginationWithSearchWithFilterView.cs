@@ -1,6 +1,6 @@
 ﻿namespace WebUI.Common.Models.Company;
 
-public class GetCompanyBriefWithAmountStatisticsWithVerifyInfoWithPaginationWithSearchWithFilterView
+public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterView
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
