@@ -2,13 +2,13 @@
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Companies.Query.Models;
-using Application.Students.Queries.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Query;
 
-public record GetCompanyBriefsWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<CompanyBriefDTO>>
+public record GetCompanyBriefsWithPaginationWithSearchWithFilterQuery 
+    : IRequest<PaginatedList<CompanyBriefDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -19,7 +19,8 @@ public record GetCompanyBriefsWithPaginationWithSearchWithFilterQuery : IRequest
     public Guid? WithoutCompanyId { get; init; }
 }
 
-public class GetCompanyBriefsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetCompanyBriefsWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyBriefDTO>>
+public class GetCompanyBriefsWithPaginationWithSearchWithFilterQueryHandler 
+    : IRequestHandler<GetCompanyBriefsWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyBriefDTO>>
 {
     private readonly IApplicationDbContext _context;
 

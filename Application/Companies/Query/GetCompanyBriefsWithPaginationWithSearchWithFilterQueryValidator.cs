@@ -2,7 +2,8 @@
 
 namespace Application.Companies.Query;
 
-public class GetCompanyBriefsWithPaginationWithSearchWithFilterQueryValidator : AbstractValidator<GetCompanyBriefsWithPaginationWithSearchWithFilterQuery>
+public class GetCompanyBriefsWithPaginationWithSearchWithFilterQueryValidator 
+    : AbstractValidator<GetCompanyBriefsWithPaginationWithSearchWithFilterQuery>
 {
     public GetCompanyBriefsWithPaginationWithSearchWithFilterQueryValidator()
     {

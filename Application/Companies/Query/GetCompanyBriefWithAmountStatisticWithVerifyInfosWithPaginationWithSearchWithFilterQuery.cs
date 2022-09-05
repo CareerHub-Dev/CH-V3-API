@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Query;
 
-public record GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQuery 
-    : IRequest<PaginatedList<CompanyBriefWithAmountStatisticDTO>>
+public record GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQuery 
+    : IRequest<PaginatedList<CompanyBriefWithAmountStatisticWithVerificationInfoDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -22,24 +22,24 @@ public record GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFil
     public bool? IsSubscriberVerified { get; init; }
 }
 
-public class GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQueryHandler 
-    : IRequestHandler<GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyBriefWithAmountStatisticDTO>>
+public class GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQueryHandler
+    : IRequestHandler<GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyBriefWithAmountStatisticWithVerificationInfoDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<CompanyBriefWithAmountStatisticDTO>> Handle(GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<CompanyBriefWithAmountStatisticWithVerificationInfoDTO>> Handle(GetCompanyBriefWithAmountStatisticWithVerifyInfosWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
     {
         return await _context.Companies
             .AsNoTracking()
             .Filter(request.WithoutCompanyId, request.IsVerified)
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
-            .Select(x => new CompanyBriefWithAmountStatisticDTO
+            .Select(x => new CompanyBriefWithAmountStatisticWithVerificationInfoDTO
             {
                 Id = x.Id,
                 Email = x.Email,
@@ -50,7 +50,9 @@ public class GetCompanyBriefWithAmountStatisticsWithPaginationWithSearchWithFilt
                 {
                     AmountJobOffers = x.JobOffers.Filter(request.IsSubscriberVerified).Count(),
                     AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberVerified).Count()
-                }
+                },
+                Verified = x.Verified,
+                PasswordReset = x.PasswordReset,
             })
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
