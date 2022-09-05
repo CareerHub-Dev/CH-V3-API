@@ -1,6 +1,6 @@
 ﻿namespace WebUI.Common.Models.Account;
 
-public class VerifyCompanyWithContinuedRegistrationRequest : IValidatableMarker
+public class VerifyCompanyWithContinuedRegistrationRequest
 {
     public string Token { get; set; } = string.Empty;
 

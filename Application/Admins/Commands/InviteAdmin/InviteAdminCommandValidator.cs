@@ -16,6 +16,7 @@ public class InviteAdminCommandValidator : AbstractValidator<InviteAdminCommand>
         RuleFor(x => x.Email)
             .NotEmpty()
             .EmailAddress()
+            .MaximumLength(256)
             .MustAsync(BeUniqueEmail).WithMessage("The specified email already exists.");
     }
 

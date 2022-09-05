@@ -48,8 +48,7 @@ public static class SearchExtentions
         return studentLogs
             .Where(x => 
                 x.FirstName.Trim().ToLower().Contains(lowerCaseTerm) ||
-                x.LastName.Trim().ToLower().Contains(lowerCaseTerm) ||
-                x.NormalizedEmail.Contains(lowerCaseTerm)
+                x.LastName.Trim().ToLower().Contains(lowerCaseTerm)
             );
     }
 

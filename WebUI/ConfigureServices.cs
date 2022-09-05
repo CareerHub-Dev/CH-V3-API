@@ -27,7 +27,6 @@ public static class ConfigureServices
         services.AddControllers(options =>
         {
             options.Filters.Add<ApiExceptionFilterAttribute>();
-            options.Filters.Add<ApiValidationFilter>();
         });
 
         services.AddEndpointsApiExplorer();

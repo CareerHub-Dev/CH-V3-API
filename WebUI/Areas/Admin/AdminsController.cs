@@ -7,7 +7,6 @@ using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Models;
 using WebUI.Common.Models.Admin;
 
 namespace WebUI.Areas.Admin;

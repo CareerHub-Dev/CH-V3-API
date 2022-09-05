@@ -1,18 +1,12 @@
 ﻿using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.InviteCompany;
-using Application.Companies.Commands.UpdateCompany;
-using Application.Companies.Commands.UpdateCompanyBanner;
-using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Query;
 using Application.Companies.Query.Models;
-using Application.CompanyLinks.Query;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Extentions;
 using WebUI.Common.Models.Company;
-using WebUI.Common.Models.CompanyLink;
 
 namespace WebUI.Areas.Admin;
 
@@ -69,22 +63,5 @@ public class CompaniesController : ApiControllerBase
         await Mediator.Send(new DeleteCompanyCommand(companyId));
 
         return NoContent();
-    }
-
-    /// <remarks>   
-    /// Company
-    /// 
-    ///     get all CompanyLinks Of Company
-    ///
-    /// </remarks>
-    [HttpGet("{companyId}/companyLinks")]
-    public async Task<IEnumerable<CompanyLinkResponse>> GetCompanyLinksOfCompany(Guid companyId)
-    {
-        var result = await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
-        {
-            CompanyId = companyId
-        });
-
-        return result.Select(x => new CompanyLinkResponse(x));
     }
 }

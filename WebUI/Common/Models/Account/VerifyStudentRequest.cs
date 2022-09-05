@@ -1,6 +1,6 @@
 ﻿namespace WebUI.Common.Models.Account;
 
-public class VerifyStudentRequest : IValidatableMarker
+public class VerifyStudentRequest
 {
     public string Token { get; set; } = string.Empty;
 }

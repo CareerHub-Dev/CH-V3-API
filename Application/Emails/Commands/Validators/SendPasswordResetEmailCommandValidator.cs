@@ -8,6 +8,7 @@ public class SendPasswordResetEmailCommandValidator : AbstractValidator<SendPass
     {
         RuleFor(x => x.Email)
             .NotEmpty()
+            .MaximumLength(256)
             .EmailAddress();
     }
 }
