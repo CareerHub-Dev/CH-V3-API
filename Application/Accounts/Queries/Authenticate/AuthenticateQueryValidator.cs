@@ -8,6 +8,7 @@ public class AuthenticateQueryValidator : AbstractValidator<AuthenticateQuery>
     {
         RuleFor(x => x.Email)
             .NotEmpty()
+            .MaximumLength(256)
             .EmailAddress();
 
         RuleFor(x => x.Password)

@@ -1,8 +1,9 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Models.Image;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
@@ -11,8 +12,8 @@ public record VerifyCompanyWithContinuedRegistrationCommand : IRequest
 {
     public string Token { get; init; } = string.Empty;
 
-    public CreateImage? Logo { get; init; }
-    public CreateImage? Banner { get; init; }
+    public IFormFile? Logo { get; init; }
+    public IFormFile? Banner { get; init; }
 
     public string Name { get; init; } = string.Empty;
     public string Motto { get; init; } = string.Empty;
@@ -39,20 +40,26 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
             throw new NotFoundException(nameof(Company), request.Token);
         }
 
-        var imageLogo = request.Logo?.ToImageWithGeneratedId;
-        var imageBanner = request.Banner?.ToImageWithGeneratedId;
-
-        if (imageLogo != null) await _context.Images.AddAsync(imageLogo);
-        if (imageBanner != null) await _context.Images.AddAsync(imageBanner);
-
         company.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
         company.VerificationToken = null;
         company.Verified = DateTime.UtcNow;
         company.Name = request.Name;
         company.Motto = request.Motto;
         company.Description = request.Description;
-        company.LogoId = imageLogo?.Id;
-        company.BannerId = imageBanner?.Id;
+
+        if (request.Logo != null)
+        {
+            var imageLogo = await request.Logo.ToImageWithGeneratedIdAsync();
+            await _context.Images.AddAsync(imageLogo);
+            company.LogoId = imageLogo?.Id;
+        }
+
+        if (request.Banner != null)
+        {
+            var imageBanner = await request.Banner.ToImageWithGeneratedIdAsync();
+            await _context.Images.AddAsync(imageBanner);
+            company.BannerId = imageBanner?.Id;
+        }
 
         await _context.SaveChangesAsync();
 

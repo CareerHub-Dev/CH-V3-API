@@ -1,8 +1,9 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Models.Image;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Commands.UpdateCompanyLogo;
@@ -10,7 +11,7 @@ namespace Application.Companies.Commands.UpdateCompanyLogo;
 public record UpdateCompanyLogoCommand : IRequest<Guid?>
 {
     public Guid CompanyId { get; init; }
-    public CreateImage? Logo { get; init; }
+    public IFormFile? Logo { get; init; }
 }
 
 public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogoCommand, Guid?>
@@ -42,14 +43,16 @@ public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogo
             }
         }
 
-        var newImage = request.Logo?.ToImageWithGeneratedId;
-
-        if (newImage != null)
+        if (request.Logo != null)
         {
-            await _context.Images.AddAsync(newImage);
+            var imageLogo = await request.Logo.ToImageWithGeneratedIdAsync();
+            await _context.Images.AddAsync(imageLogo);
+            company.LogoId = imageLogo.Id;
         }
-
-        company.LogoId = newImage?.Id;
+        else
+        {
+            company.LogoId = null;
+        }
 
         await _context.SaveChangesAsync();
 

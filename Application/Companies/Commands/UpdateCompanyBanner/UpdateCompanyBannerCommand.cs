@@ -1,8 +1,9 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Models.Image;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Commands.UpdateCompanyBanner;
@@ -10,7 +11,7 @@ namespace Application.Companies.Commands.UpdateCompanyBanner;
 public record UpdateCompanyBannerCommand : IRequest<Guid?>
 {
     public Guid CompanyId { get; init; }
-    public CreateImage? Banner { get; init; }
+    public IFormFile? Banner { get; init; }
 }
 
 public class UpdateCompanyBannerCommandHandler : IRequestHandler<UpdateCompanyBannerCommand, Guid?>
@@ -42,14 +43,16 @@ public class UpdateCompanyBannerCommandHandler : IRequestHandler<UpdateCompanyBa
             }
         }
 
-        var newImage = request.Banner?.ToImageWithGeneratedId;
-
-        if (newImage != null)
+        if (request.Banner != null)
         {
-            await _context.Images.AddAsync(newImage);
+            var imageBanner = await request.Banner.ToImageWithGeneratedIdAsync();
+            await _context.Images.AddAsync(imageBanner);
+            company.BannerId = imageBanner.Id;
         }
-
-        company.BannerId = newImage?.Id;
+        else
+        {
+            company.BannerId = null;
+        }
 
         await _context.SaveChangesAsync();
 

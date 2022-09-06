@@ -16,6 +16,7 @@ public class UpdateStudentLogCommandValidator : AbstractValidator<UpdateStudentL
         RuleFor(x => x.Email)
             .NotEmpty()
             .NureEmailAddress()
+            .MaximumLength(256)
             .MustAsync(BeUniqueEmail).WithMessage("The specified email already exists.");
 
         RuleFor(x => x.FirstName)

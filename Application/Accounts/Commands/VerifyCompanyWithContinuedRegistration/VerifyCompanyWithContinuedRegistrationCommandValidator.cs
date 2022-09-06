@@ -1,30 +1,31 @@
 ﻿using Application.Common.Entensions;
-using Application.Common.Models.Image;
 using FluentValidation;
 
 namespace Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 
 public class VerifyCompanyWithContinuedRegistrationCommandValidator : AbstractValidator<VerifyCompanyWithContinuedRegistrationCommand>
 {
-    public VerifyCompanyWithContinuedRegistrationCommandValidator(IValidator<CreateImage> imageValidator)
+    public VerifyCompanyWithContinuedRegistrationCommandValidator()
     {
         RuleFor(x => x.Token)
             .NotEmpty();
 
         When(x => x.Logo != null, () =>
         {
-            RuleFor(x => x.Logo)
-                .SetValidator(imageValidator!);
+            RuleFor(x => x.Logo!)
+                .AllowedExtensions(".jpg", ".jpeg", ".png")
+                .MaxFileSize(2 * 1024 * 1024);
         });
         When(x => x.Banner != null, () =>
         {
-            RuleFor(x => x.Banner)
-                .SetValidator(imageValidator!);
+            RuleFor(x => x.Banner!)
+                .AllowedExtensions(".jpg", ".jpeg", ".png")
+                .MaxFileSize(2 * 1024 * 1024);
         });
 
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(50);
+            .MaximumLength(32);
 
         RuleFor(x => x.Motto)
             .NotEmpty()
@@ -32,7 +33,7 @@ public class VerifyCompanyWithContinuedRegistrationCommandValidator : AbstractVa
 
         RuleFor(x => x.Description)
             .NotEmpty()
-            .MaximumLength(256);
+            .MaximumLength(1024);
 
         RuleFor(x => x.Password)
             .NotEmpty()

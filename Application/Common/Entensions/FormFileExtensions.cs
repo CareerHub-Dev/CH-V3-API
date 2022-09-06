@@ -1,6 +1,7 @@
-﻿using Application.Common.Models.Image;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 
-namespace WebUI.Common.Extentions;
+namespace Application.Common.Entensions;
 
 public static class FormFileExtensions
 {
@@ -11,10 +12,11 @@ public static class FormFileExtensions
         return memoryStream.ToArray();
     }
 
-    public static async Task<CreateImage> ToCreateImageAsync(this IFormFile formFile)
+    public static async Task<Image> ToImageWithGeneratedIdAsync(this IFormFile formFile)
     {
-        return new CreateImage
+        return new Image
         {
+            Id = Guid.NewGuid(),
             ContentType = formFile.ContentType,
             Content = await formFile.ToByteArrayAsync()
         };

@@ -1,5 +1,4 @@
-﻿using Application.Admins.Queries.Models;
-using Application.Common.Entensions;
+﻿using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using MediatR;

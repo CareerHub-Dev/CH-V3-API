@@ -7,7 +7,6 @@ using Application.Accounts.Queries.Authenticate;
 using Application.Accounts.Queries.RefreshToken;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
-using WebUI.Common.Extentions;
 using WebUI.Common.Models.Account;
 
 namespace WebUI.Areas;
@@ -82,18 +81,9 @@ public class AccountsController : ApiControllerBase
     }
 
     [HttpPost("verify-company-email")]
-    public async Task<IActionResult> VerifyCompanyWithContinuedRegistration([FromForm] VerifyCompanyWithContinuedRegistrationRequest verifyCompany)
+    public async Task<IActionResult> VerifyCompanyWithContinuedRegistration([FromForm] VerifyCompanyWithContinuedRegistrationCommand command)
     {
-        await Mediator.Send(new VerifyCompanyWithContinuedRegistrationCommand
-        {
-            Token = verifyCompany.Token,
-            Logo = verifyCompany.LogoFile is IFormFile logo ? await logo.ToCreateImageAsync() : null,
-            Banner = verifyCompany.BannerFile is IFormFile banner ? await banner.ToCreateImageAsync() : null,
-            Name = verifyCompany.Name,
-            Motto = verifyCompany.Motto,
-            Description = verifyCompany.Description,
-            Password = verifyCompany.Password,
-        });
+        await Mediator.Send(command);
 
         return Ok(new { message = "Verification successful, you can now login" });
     }

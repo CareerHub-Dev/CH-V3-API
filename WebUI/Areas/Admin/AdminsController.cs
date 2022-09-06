@@ -2,7 +2,6 @@
 using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Commands.UpdateAdmin;
 using Application.Admins.Queries;
-using Application.Admins.Queries.Models;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

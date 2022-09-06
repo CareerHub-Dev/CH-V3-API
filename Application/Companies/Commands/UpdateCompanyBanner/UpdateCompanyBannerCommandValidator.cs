@@ -1,16 +1,17 @@
-﻿using Application.Common.Models.Image;
+﻿using Application.Common.Entensions;
 using FluentValidation;
 
 namespace Application.Companies.Commands.UpdateCompanyBanner;
 
 public class UpdateCompanyBannerCommandValidator : AbstractValidator<UpdateCompanyBannerCommand>
 {
-    public UpdateCompanyBannerCommandValidator(IValidator<CreateImage> imageValidator)
+    public UpdateCompanyBannerCommandValidator()
     {
         When(x => x.Banner != null, () =>
         {
-            RuleFor(x => x.Banner)
-                .SetValidator(imageValidator!);
+            RuleFor(x => x.Banner!)
+                .AllowedExtensions(".jpg", ".jpeg", ".png")
+                .MaxFileSize(2 * 1024 * 1024);
         });
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Application.Images.Queries.Models;
+﻿namespace Application.Images.Queries;
 
 public class ImageDTO
 {

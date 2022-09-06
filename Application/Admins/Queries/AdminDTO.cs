@@ -1,4 +1,4 @@
-﻿namespace Application.Admins.Queries.Models;
+﻿namespace Application.Admins.Queries;
 
 public class AdminDTO
 {

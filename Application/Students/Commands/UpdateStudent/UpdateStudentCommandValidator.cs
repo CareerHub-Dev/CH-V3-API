@@ -19,6 +19,7 @@ public class UpdateStudentCommandValidator : AbstractValidator<UpdateStudentComm
         {
             RuleFor(x => x.Phone!)
                 .NotEmpty()
+                .MaximumLength(32)
                 .Phone();
         });
 

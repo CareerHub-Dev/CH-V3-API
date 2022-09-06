@@ -1,8 +1,9 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Models.Image;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Commands.UpdateStudentPhoto;
@@ -10,7 +11,7 @@ namespace Application.Students.Commands.UpdateStudentPhoto;
 public record UpdateStudentPhotoCommand : IRequest<Guid?>
 {
     public Guid StudentId { get; init; }
-    public CreateImage? Photo { get; init; }
+    public IFormFile? Photo { get; init; }
 }
 
 public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPhotoCommand, Guid?>
@@ -42,14 +43,16 @@ public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPho
             }
         }
 
-        var newImage = request.Photo?.ToImageWithGeneratedId;
-
-        if(newImage != null)
+        if (request.Photo != null)
         {
-            await _context.Images.AddAsync(newImage);
+            var imagePhoto = await request.Photo.ToImageWithGeneratedIdAsync();
+            await _context.Images.AddAsync(imagePhoto);
+            student.PhotoId = imagePhoto.Id;
         }
-
-        student.PhotoId = newImage?.Id;
+        else
+        {
+            student.PhotoId = null;
+        }
 
         await _context.SaveChangesAsync();
 
