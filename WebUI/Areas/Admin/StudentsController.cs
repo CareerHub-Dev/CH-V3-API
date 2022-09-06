@@ -1,5 +1,7 @@
 ﻿using Application.Emails.Commands;
 using Application.Students.Commands.DeleteStudent;
+using Application.Students.Commands.UpdateStudent;
+using Application.Students.Commands.UpdateStudentPhoto;
 using Application.Students.Queries;
 using Application.Students.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +33,15 @@ public class StudentsController : ApiControllerBase
         return result;
     }
 
+    [HttpGet("{studentId}")]
+    public async Task<StudentDTO> GetStudent(Guid studentId)
+    {
+        return await Mediator.Send(new GetStudentWithFilterQuery
+        {
+            StudentId = studentId
+        });
+    }
+
     /// <remarks>
     /// Admin:
     /// 
@@ -50,5 +61,24 @@ public class StudentsController : ApiControllerBase
         await Mediator.Send(new DeleteStudentCommand(studentId));
 
         return NoContent();
+    }
+
+    [HttpPut("{studentId}")]
+    public async Task<IActionResult> UpdateStudent(Guid studentId, UpdateStudentCommand command)
+    {
+        if (studentId != command.StudentId)
+        {
+            return BadRequest();
+        }
+
+        await Mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpPost("{studentId}/photo")]
+    public async Task<Guid?> UpdateStudentPhoto(Guid studentId, IFormFile? file)
+    {
+        return await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = studentId, Photo = file });
     }
 }
