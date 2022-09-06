@@ -1,6 +1,6 @@
-﻿namespace Application.CompanyLinks.Query.Models;
+﻿namespace Application.CompanyLinks.Queries;
 
-public class CompanyLinkBriefDTO
+public class CompanyLinkDTO
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

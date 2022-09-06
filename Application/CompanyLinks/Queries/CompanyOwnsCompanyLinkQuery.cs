@@ -4,24 +4,24 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.CompanyLinks.Command.CompanyOwnsCompanyLink;
+namespace Application.CompanyLinks.Queries;
 
-public record CompanyOwnsCompanyLinkCommand : IRequest<bool>
+public record CompanyOwnsCompanyLinkQuery : IRequest<bool>
 {
     public Guid CompanyId { get; init; }
     public Guid CompanyLinkId { get; init; }
 }
 
-public class CompanyOwnsCompanyLinkCommandHandler : IRequestHandler<CompanyOwnsCompanyLinkCommand, bool>
+public class CompanyOwnsCompanyLinkQueryHandler : IRequestHandler<CompanyOwnsCompanyLinkQuery, bool>
 {
     private readonly IApplicationDbContext _context;
 
-    public CompanyOwnsCompanyLinkCommandHandler(IApplicationDbContext context)
+    public CompanyOwnsCompanyLinkQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<bool> Handle(CompanyOwnsCompanyLinkCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(CompanyOwnsCompanyLinkQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Companies.AnyAsync(x => x.Id == request.CompanyId))
         {

@@ -1,29 +1,28 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.CompanyLinks.Query.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.CompanyLinks.Query;
+namespace Application.CompanyLinks.Queries;
 
-public record GetCompanyLinkDetailedsOfCompanyWithFilterQuery : IRequest<IEnumerable<CompanyLinkDetailedDTO>>
+public record GetCompanyLinksOfCompanyWithFilterQuery : IRequest<IEnumerable<CompanyLinkDTO>>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyVerified { get; init; }
 }
 
-public class GetCompanyLinkDetailedsOfCompanyWithFilterQueryHandler : IRequestHandler<GetCompanyLinkDetailedsOfCompanyWithFilterQuery, IEnumerable<CompanyLinkDetailedDTO>>
+public class GetCompanyLinksOfCompanyWithFilterQueryHandler : IRequestHandler<GetCompanyLinksOfCompanyWithFilterQuery, IEnumerable<CompanyLinkDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyLinkDetailedsOfCompanyWithFilterQueryHandler(IApplicationDbContext context)
+    public GetCompanyLinksOfCompanyWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<CompanyLinkDetailedDTO>> Handle(GetCompanyLinkDetailedsOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CompanyLinkDTO>> Handle(GetCompanyLinksOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Companies.Filter(isVerified: request.IsCompanyVerified).AnyAsync(x => x.Id == request.CompanyId))
         {
@@ -32,7 +31,7 @@ public class GetCompanyLinkDetailedsOfCompanyWithFilterQueryHandler : IRequestHa
 
         return await _context.CompanyLinks
             .AsNoTracking()
-            .Select(x => new CompanyLinkDetailedDTO
+            .Select(x => new CompanyLinkDTO
             {
                 Id = x.Id,
                 Name = x.Title,
