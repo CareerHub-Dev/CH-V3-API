@@ -46,6 +46,8 @@ public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQu
                 Name = x.Name,
                 LogoId = x.LogoId,
                 BannerId = x.BannerId,
+                Motto = x.Motto,
+                Description = x.Description,
                 AmountStatistic = new AmountStatistic
                 {
                     AmountJobOffers = x.JobOffers.Filter(request.IsSubscriberVerified).Count(),

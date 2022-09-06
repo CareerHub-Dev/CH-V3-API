@@ -1,5 +1,8 @@
 ﻿using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.InviteCompany;
+using Application.Companies.Commands.UpdateCompany;
+using Application.Companies.Commands.UpdateCompanyBanner;
+using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Query;
 using Application.Companies.Query.Models;
 using Application.Emails.Commands;
@@ -29,6 +32,33 @@ public class CompaniesController : ApiControllerBase
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
         return result;
+    }
+
+    [HttpGet("{companyId}")]
+    public async Task<CompanyDTO> GetCompany(Guid companyId)
+    {
+        return await Mediator.Send(new GetCompanyWithFilterQuery
+        {
+            CompanyId = companyId
+        });
+    }
+
+    [HttpGet("{companyId}/amountSubscribers")]
+    public async Task<int> GetCompanyAmountSubscribers(Guid companyId)
+    {
+        return await Mediator.Send(new GetCompanyAmountSubscribersWithFilterQuery
+        {
+            CompanyId = companyId
+        });
+    }
+
+    [HttpGet("{companyId}/amountJobOffers")]
+    public async Task<int> GetCompanyAmountJobOffers(Guid companyId)
+    {
+        return await Mediator.Send(new GetCompanyAmountJobOffersWithFilterQuery
+        {
+            CompanyId = companyId
+        });
     }
 
     /// <remarks>
@@ -63,5 +93,30 @@ public class CompaniesController : ApiControllerBase
         await Mediator.Send(new DeleteCompanyCommand(companyId));
 
         return NoContent();
+    }
+
+    [HttpPut("{companyId}")]
+    public async Task<IActionResult> UpdateCompany(Guid companyId, UpdateCompanyCommand command)
+    {
+        if (companyId != command.CompanyId)
+        {
+            return BadRequest();
+        }
+
+        await Mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpPost("{companyId}/logo")]
+    public async Task<Guid?> UpdateCompanyLogo(Guid companyId, IFormFile? file)
+    {
+        return await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file });
+    }
+
+    [HttpPost("{companyId}/banner")]
+    public async Task<Guid?> UpdateCompanyBanner(Guid companyId, IFormFile? file)
+    {
+        return await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = companyId, Logo = file });
     }
 }

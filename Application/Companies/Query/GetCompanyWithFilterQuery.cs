@@ -37,6 +37,8 @@ public class GetCompanyWithFilterQueryHandler
                 Name = x.Name,
                 LogoId = x.LogoId,
                 BannerId = x.BannerId,
+                Motto = x.Motto,
+                Description = x.Description,
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
             })
