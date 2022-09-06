@@ -42,6 +42,42 @@ public class StudentsController : ApiControllerBase
         });
     }
 
+    [HttpGet("{studentId}/amountCompanySubscriptions")]
+    public async Task<int> GetAmountCompanySubscriptionsOfStudent(Guid studentId)
+    {
+        return await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentWithFilterQuery
+        {
+            StudentId = studentId
+        });
+    }
+
+    [HttpGet("{studentId}/amountCVs")]
+    public async Task<int> GetAmountCVsOfStudent(Guid studentId)
+    {
+        return await Mediator.Send(new GetAmountCVsOfStudentWithFilterQuery
+        {
+            StudentId = studentId
+        });
+    }
+
+    [HttpGet("{studentId}/amountJobOfferSubscriptions")]
+    public async Task<int> GetAmountJobOfferSubscriptionsOfStudent(Guid studentId)
+    {
+        return await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery
+        {
+            StudentId = studentId
+        });
+    }
+
+    [HttpGet("{studentId}/amountStudentSubscriptions")]
+    public async Task<int> GetAmountStudentSubscriptionsOfStudent(Guid studentId)
+    {
+        return await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentWithFilterQuery
+        {
+            StudentId = studentId
+        });
+    }
+
     /// <remarks>
     /// Admin:
     /// 
