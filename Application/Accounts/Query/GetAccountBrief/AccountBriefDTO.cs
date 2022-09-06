@@ -1,4 +1,4 @@
-﻿namespace Application.Accounts.Query.Models;
+﻿namespace Application.Accounts.Query.GetAccountBrief;
 
 public class AccountBriefDTO
 {

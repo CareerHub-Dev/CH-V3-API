@@ -3,25 +3,25 @@ using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Accounts.Commands.Identify;
+namespace Application.Accounts.Query.Identify;
 
-public record IdentifyCommand : IRequest<IdentifyResponse?>
+public record IdentifyQuery : IRequest<IdentifyResult?>
 {
     public string JwtToken { get; init; } = string.Empty;
 }
 
-public class IdentifyCommandHandler : IRequestHandler<IdentifyCommand, IdentifyResponse?>
+public class IdentifyQueryHandler : IRequestHandler<IdentifyQuery, IdentifyResult?>
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtService _jwtService;
 
-    public IdentifyCommandHandler(IApplicationDbContext context, IJwtService jwtService)
+    public IdentifyQueryHandler(IApplicationDbContext context, IJwtService jwtService)
     {
         _context = context;
         _jwtService = jwtService;
     }
 
-    public async Task<IdentifyResponse?> Handle(IdentifyCommand request, CancellationToken cancellationToken)
+    public async Task<IdentifyResult?> Handle(IdentifyQuery request, CancellationToken cancellationToken)
     {
         var accountId = await _jwtService.ValidateJwtTokenAsync(request.JwtToken);
 
@@ -31,6 +31,6 @@ public class IdentifyCommandHandler : IRequestHandler<IdentifyCommand, IdentifyR
 
         if (account == null) return null;
 
-        return new IdentifyResponse { Id = account.Id, Role = AccountHelper.GetRole(account), IsVerified = account.IsVerified };
+        return new IdentifyResult { Id = account.Id, Role = AccountHelper.GetRole(account), IsVerified = account.IsVerified };
     }
 }

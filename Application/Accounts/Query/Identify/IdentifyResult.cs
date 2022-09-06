@@ -1,6 +1,6 @@
-﻿namespace Application.Accounts.Commands.Identify;
+﻿namespace Application.Accounts.Query.Identify;
 
-public class IdentifyResponse
+public class IdentifyResult
 {
     public Guid Id { get; set; }
     public string Role { get; set; } = string.Empty;

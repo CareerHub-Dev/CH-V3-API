@@ -1,4 +1,4 @@
-﻿using Application.Accounts.Commands.Identify;
+﻿using Application.Accounts.Query.Identify;
 using MediatR;
 
 namespace WebUI.Authorize;
@@ -18,7 +18,7 @@ public class JwtMiddleware
 
         if (token != null)
         {
-            var result = await mediator.Send(new IdentifyCommand { JwtToken = token });
+            var result = await mediator.Send(new IdentifyQuery { JwtToken = token });
 
             context.Items["Account"] = result != null && result.IsVerified ? new AccountInfo { Id = result.Id, Role = result.Role } : null;
         }

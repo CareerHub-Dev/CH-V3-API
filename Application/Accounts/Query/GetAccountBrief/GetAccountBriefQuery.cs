@@ -1,11 +1,10 @@
-﻿using Application.Accounts.Query.Models;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Accounts.Query;
+namespace Application.Accounts.Query.GetAccountBrief;
 
 public record GetAccountBriefQuery(Guid AccountId) : IRequest<AccountBriefDTO>;
 
@@ -30,12 +29,13 @@ public class GetStudentLogQueryHandler : IRequestHandler<GetAccountBriefQuery, A
             throw new NotFoundException(nameof(Account), request.AccountId);
         }
 
-        return new AccountBriefDTO { 
-            Id = account.Id, 
-            Email = account.Email, 
-            Verified = account.Verified, 
+        return new AccountBriefDTO
+        {
+            Id = account.Id,
+            Email = account.Email,
+            Verified = account.Verified,
             PasswordReset = account.PasswordReset,
-            Role = account.GetType().Name 
+            Role = account.GetType().Name
         };
     }
 }

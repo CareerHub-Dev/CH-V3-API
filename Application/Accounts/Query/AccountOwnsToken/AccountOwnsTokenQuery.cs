@@ -4,7 +4,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Accounts.Query;
+namespace Application.Accounts.Query.AccountOwnsToken;
 
 public record AccountOwnsTokenQuery : IRequest<bool>
 {
