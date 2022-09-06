@@ -1,10 +1,10 @@
-﻿using Application.Accounts.Commands.Authenticate;
-using Application.Accounts.Commands.RefreshToken;
+﻿using Application.Accounts.Commands.RefreshToken;
 using Application.Accounts.Commands.RegisterStudent;
 using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyStudent;
+using Application.Accounts.Query.Authenticate;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Common.Extentions;
@@ -18,7 +18,7 @@ public class AccountsController : ApiControllerBase
     [HttpPost("authenticate-{clientType}")]
     public async Task<IActionResult> Authenticate(AuthenticateRequest authenticate, string clientType)
     {
-        var response = await Mediator.Send(new AuthenticateCommand
+        var response = await Mediator.Send(new AuthenticateQuery
         {
             Email = authenticate.Email,
             Password = authenticate.Password,

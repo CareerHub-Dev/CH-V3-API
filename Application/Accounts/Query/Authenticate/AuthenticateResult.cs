@@ -1,6 +1,6 @@
-﻿namespace Application.Accounts.Commands.Authenticate;
+﻿namespace Application.Accounts.Query.Authenticate;
 
-public class AuthenticateResponse
+public class AuthenticateResult
 {
     public Guid AccountId { get; set; }
     public string Role { get; set; } = string.Empty;

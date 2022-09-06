@@ -7,29 +7,29 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Security.Authentication;
 
-namespace Application.Accounts.Commands.Authenticate;
+namespace Application.Accounts.Query.Authenticate;
 
-public record AuthenticateCommand : IRequest<AuthenticateResponse>
+public record AuthenticateQuery : IRequest<AuthenticateResult>
 {
     public string Email { get; init; } = string.Empty;
     public string Password { get; init; } = string.Empty;
     public string IpAddress { get; init; } = string.Empty;
 }
 
-public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, AuthenticateResponse>
+public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, AuthenticateResult>
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtService _jwtService;
     private readonly JwtSettings _jwtSettings;
 
-    public AuthenticateCommandHandler(IApplicationDbContext context, IJwtService jwtService, IOptions<JwtSettings> jwtSettings)
+    public AuthenticateQueryHandler(IApplicationDbContext context, IJwtService jwtService, IOptions<JwtSettings> jwtSettings)
     {
         _context = context;
         _jwtService = jwtService;
         _jwtSettings = jwtSettings.Value;
     }
 
-    public async Task<AuthenticateResponse> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
+    public async Task<AuthenticateResult> Handle(AuthenticateQuery request, CancellationToken cancellationToken)
     {
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
@@ -50,7 +50,7 @@ public class AuthenticateCommandHandler : IRequestHandler<AuthenticateCommand, A
 
         await _context.SaveChangesAsync();
 
-        return new AuthenticateResponse
+        return new AuthenticateResult
         {
             JwtToken = jwtToken.Token,
             JwtTokenExpires = jwtToken.Expires,

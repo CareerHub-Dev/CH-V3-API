@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Application.Accounts.Commands.Authenticate;
+namespace Application.Accounts.Query.Authenticate;
 
-public class AuthenticateCommandValidator : AbstractValidator<AuthenticateCommand>
+public class AuthenticateQueryValidator : AbstractValidator<AuthenticateQuery>
 {
-    public AuthenticateCommandValidator()
+    public AuthenticateQueryValidator()
     {
         RuleFor(x => x.Email)
             .NotEmpty()
