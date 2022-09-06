@@ -44,18 +44,18 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpGet("{companyId}/amountSubscribers")]
-    public async Task<int> GetCompanyAmountSubscribers(Guid companyId)
+    public async Task<int> GetAmountSubscribersOfCompany(Guid companyId)
     {
-        return await Mediator.Send(new GetCompanyAmountSubscribersWithFilterQuery
+        return await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
         {
             CompanyId = companyId
         });
     }
 
     [HttpGet("{companyId}/amountJobOffers")]
-    public async Task<int> GetCompanyAmountJobOffers(Guid companyId)
+    public async Task<int> GetAmountJobOffersOfCompany(Guid companyId)
     {
-        return await Mediator.Send(new GetCompanyAmountJobOffersWithFilterQuery
+        return await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
         {
             CompanyId = companyId
         });

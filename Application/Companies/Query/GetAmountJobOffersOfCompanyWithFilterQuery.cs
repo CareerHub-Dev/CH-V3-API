@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Query;
 
-public record GetCompanyAmountJobOffersWithFilterQuery : IRequest<int>
+public record GetAmountJobOffersOfCompanyWithFilterQuery : IRequest<int>
 {
     public Guid CompanyId { get; init; }
     public bool? IsVerified { get; init; }
@@ -15,17 +15,17 @@ public record GetCompanyAmountJobOffersWithFilterQuery : IRequest<int>
     public bool? IsJobOfferActive { get; init; }
 }
 
-public class GetCompanyAmountJobOffersWithFilterQueryHandler
-    : IRequestHandler<GetCompanyAmountJobOffersWithFilterQuery, int>
+public class GetAmountJobOffersOfCompanyWithFilterQueryHandler
+    : IRequestHandler<GetAmountJobOffersOfCompanyWithFilterQuery, int>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyAmountJobOffersWithFilterQueryHandler(IApplicationDbContext context)
+    public GetAmountJobOffersOfCompanyWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<int> Handle(GetCompanyAmountJobOffersWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<int> Handle(GetAmountJobOffersOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Companies
             .Filter(IsVerified: request.IsVerified)
