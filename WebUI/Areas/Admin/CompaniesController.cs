@@ -5,6 +5,7 @@ using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Query;
 using Application.Companies.Query.Models;
+using Application.CompanyLinks.Queries;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -38,6 +39,15 @@ public class CompaniesController : ApiControllerBase
     public async Task<CompanyDTO> GetCompany(Guid companyId)
     {
         return await Mediator.Send(new GetCompanyWithFilterQuery
+        {
+            CompanyId = companyId
+        });
+    }
+
+    [HttpGet("{companyId}/companyLinks")]
+    public async Task<IEnumerable<CompanyLinkDTO>> GetCompanyLinksOfCompany(Guid companyId)
+    {
+        return await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
         {
             CompanyId = companyId
         });
