@@ -1,6 +1,6 @@
-﻿namespace Application.Accounts.Commands.RefreshToken;
+﻿namespace Application.Accounts.Query.RefreshToken;
 
-public class RefreshTokenResponse
+public class RefreshTokenResult
 {
     public Guid AccountId { get; set; }
     public string Role { get; set; } = string.Empty;

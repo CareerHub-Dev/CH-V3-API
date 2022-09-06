@@ -1,10 +1,10 @@
-﻿using Application.Accounts.Commands.RefreshToken;
-using Application.Accounts.Commands.RegisterStudent;
+﻿using Application.Accounts.Commands.RegisterStudent;
 using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyStudent;
 using Application.Accounts.Query.Authenticate;
+using Application.Accounts.Query.RefreshToken;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Common.Extentions;
@@ -53,10 +53,10 @@ public class AccountsController : ApiControllerBase
 
         if (string.IsNullOrWhiteSpace(refreshToken.Token))
         {
-            return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required");
+            return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required.");
         }
 
-        var response = await Mediator.Send(new RefreshTokenCommand
+        var response = await Mediator.Send(new RefreshTokenQuery
         {
             Token = refreshToken.Token,
             IpAddress = IpAddress()

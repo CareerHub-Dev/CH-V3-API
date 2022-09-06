@@ -8,28 +8,28 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RefreshTokenEntity = Domain.Entities.RefreshToken;
 
-namespace Application.Accounts.Commands.RefreshToken;
+namespace Application.Accounts.Query.RefreshToken;
 
-public record RefreshTokenCommand : IRequest<RefreshTokenResponse>
+public record RefreshTokenQuery : IRequest<RefreshTokenResult>
 {
     public string Token { init; get; } = string.Empty;
     public string IpAddress { init; get; } = string.Empty;
 }
 
-public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, RefreshTokenResponse>
+public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, RefreshTokenResult>
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtService _jwtService;
     private readonly JwtSettings _jwtSettings;
 
-    public RefreshTokenCommandHandler(IApplicationDbContext context, IJwtService jwtService, IOptions<JwtSettings> jwtSettings)
+    public RefreshTokenQueryHandler(IApplicationDbContext context, IJwtService jwtService, IOptions<JwtSettings> jwtSettings)
     {
         _context = context;
         _jwtService = jwtService;
         _jwtSettings = jwtSettings.Value;
     }
 
-    public async Task<RefreshTokenResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
+    public async Task<RefreshTokenResult> Handle(RefreshTokenQuery request, CancellationToken cancellationToken)
     {
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
@@ -70,7 +70,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, R
 
         await _context.SaveChangesAsync();
 
-        return new RefreshTokenResponse
+        return new RefreshTokenResult
         {
             JwtToken = jwtToken.Token,
             JwtTokenExpires = jwtToken.Expires,
