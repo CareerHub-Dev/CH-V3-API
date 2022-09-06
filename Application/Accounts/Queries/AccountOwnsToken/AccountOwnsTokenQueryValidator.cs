@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Accounts.Query.AccountOwnsToken;
+namespace Application.Accounts.Queries.AccountOwnsToken;
 
 public class AccountOwnsTokenQueryValidator : AbstractValidator<AccountOwnsTokenQuery>
 {

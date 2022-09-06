@@ -1,4 +1,4 @@
-﻿namespace Application.Accounts.Query.Identify;
+﻿namespace Application.Accounts.Queries.Identify;
 
 public class IdentifyResult
 {

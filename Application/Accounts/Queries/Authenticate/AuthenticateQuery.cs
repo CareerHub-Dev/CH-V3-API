@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Security.Authentication;
 
-namespace Application.Accounts.Query.Authenticate;
+namespace Application.Accounts.Queries.Authenticate;
 
 public record AuthenticateQuery : IRequest<AuthenticateResult>
 {

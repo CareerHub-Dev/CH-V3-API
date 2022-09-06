@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Accounts.Query.Authenticate;
+namespace Application.Accounts.Queries.Authenticate;
 
 public class AuthenticateQueryValidator : AbstractValidator<AuthenticateQuery>
 {

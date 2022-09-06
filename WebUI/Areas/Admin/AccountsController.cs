@@ -1,5 +1,5 @@
 ﻿using Application.Accounts.Commands.RevokeToken;
-using Application.Accounts.Query.GetAccountBrief;
+using Application.Accounts.Queries.GetAccountBrief;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.Common.Models.Account;

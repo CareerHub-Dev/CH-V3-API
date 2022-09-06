@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Accounts.Query.Identify;
+namespace Application.Accounts.Queries.Identify;
 
 public class IdentifyQueryValidator : AbstractValidator<IdentifyQuery>
 {

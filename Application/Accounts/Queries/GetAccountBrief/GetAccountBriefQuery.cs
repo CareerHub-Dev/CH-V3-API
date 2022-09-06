@@ -4,7 +4,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Accounts.Query.GetAccountBrief;
+namespace Application.Accounts.Queries.GetAccountBrief;
 
 public record GetAccountBriefQuery(Guid AccountId) : IRequest<AccountBriefDTO>;
 

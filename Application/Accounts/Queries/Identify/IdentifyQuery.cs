@@ -3,7 +3,7 @@ using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Accounts.Query.Identify;
+namespace Application.Accounts.Queries.Identify;
 
 public record IdentifyQuery : IRequest<IdentifyResult?>
 {

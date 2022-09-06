@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using RefreshTokenEntity = Domain.Entities.RefreshToken;
 
-namespace Application.Accounts.Query.RefreshToken;
+namespace Application.Accounts.Queries.RefreshToken;
 
 public record RefreshTokenQuery : IRequest<RefreshTokenResult>
 {
