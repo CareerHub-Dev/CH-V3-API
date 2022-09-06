@@ -31,6 +31,7 @@ public class GetCompanyLinksOfCompanyWithFilterQueryHandler : IRequestHandler<Ge
 
         return await _context.CompanyLinks
             .AsNoTracking()
+            .Where(x => x.CompanyId == request.CompanyId)
             .Select(x => new CompanyLinkDTO
             {
                 Id = x.Id,
