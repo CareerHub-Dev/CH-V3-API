@@ -9,6 +9,7 @@ public class RegisterStudentCommandValidator : AbstractValidator<RegisterStudent
     {
         RuleFor(x => x.Email)
             .NotEmpty()
+            .MaximumLength(256)
             .NureEmailAddress();
 
         RuleFor(x => x.Password)

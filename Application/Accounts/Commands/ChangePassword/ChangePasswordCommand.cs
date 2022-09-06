@@ -31,11 +31,6 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
             throw new NotFoundException(nameof(Account), request.AccountId);
         }
 
-        if (!account.IsVerified)
-        {
-            throw new ArgumentException("Account is not Verified.");
-        }
-
         if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, account.PasswordHash))
         {
             throw new ArgumentException("The old password does not match.");

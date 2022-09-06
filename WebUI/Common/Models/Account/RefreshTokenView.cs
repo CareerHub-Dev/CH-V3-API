@@ -2,7 +2,7 @@
 
 namespace WebUI.Common.Models.Account;
 
-public class RefreshTokenRequest
+public class RefreshTokenView
 {
     [DefaultValue("")]
     public string? Token { get; set; }

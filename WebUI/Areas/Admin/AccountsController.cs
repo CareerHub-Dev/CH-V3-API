@@ -1,5 +1,6 @@
 ﻿using Application.Accounts.Commands.RevokeToken;
 using Application.Accounts.Query;
+using Application.Accounts.Query.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.Common.Models.Account;
@@ -17,11 +18,11 @@ public class AccountsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpGet("{accountId}")]
-    public async Task<AccountBriefResponse> GetAccountBrief(Guid accountId)
+    public async Task<AccountBriefDTO> GetAccountBrief(Guid accountId)
     {
         var result = await Mediator.Send(new GetAccountBriefQuery(accountId));
 
-        return new AccountBriefResponse(result);
+        return result;
     }
 
     /// <remarks>
@@ -31,19 +32,19 @@ public class AccountsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("revoke-token")]
-    public async Task<IActionResult> RevokeTokenAsync(RevokeTokenRequest revokeToken)
+    public async Task<IActionResult> RevokeTokenAsync(RevokeTokenView view)
     {
-        if (string.IsNullOrWhiteSpace(revokeToken.Token))
+        if (string.IsNullOrWhiteSpace(view.Token))
         {
-            revokeToken.Token = Request.Cookies["refreshToken"];
+            view.Token = Request.Cookies["refreshToken"];
         }
 
-        if (string.IsNullOrWhiteSpace(revokeToken.Token))
+        if (string.IsNullOrWhiteSpace(view.Token))
         {
-            return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required");
+            return Problem(title: "Token is required.", statusCode: StatusCodes.Status400BadRequest, detail: "Body or cookies don't contain token.");
         }
 
-        await Mediator.Send(new RevokeTokenCommand { Token = revokeToken.Token, IpAddress = IpAddress() });
+        await Mediator.Send(new RevokeTokenCommand { Token = view.Token, IpAddress = IpAddress() });
 
         return Ok(new { message = "Token revoked" });
     }

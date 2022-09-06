@@ -16,12 +16,12 @@ namespace WebUI.Areas;
 public class AccountsController : ApiControllerBase
 {
     [HttpPost("authenticate-{clientType}")]
-    public async Task<IActionResult> Authenticate(AuthenticateRequest authenticate, string clientType)
+    public async Task<IActionResult> Authenticate(AuthenticateView view, string clientType)
     {
         var response = await Mediator.Send(new AuthenticateQuery
         {
-            Email = authenticate.Email,
-            Password = authenticate.Password,
+            Email = view.Email,
+            Password = view.Password,
             IpAddress = IpAddress()
         });
 
@@ -44,21 +44,21 @@ public class AccountsController : ApiControllerBase
     }
 
     [HttpPost("refresh-token-{clientType}")]
-    public async Task<IActionResult> RefreshToken(RefreshTokenRequest refreshToken, string clientType)
+    public async Task<IActionResult> RefreshToken(RefreshTokenView view, string clientType)
     {
-        if (string.IsNullOrWhiteSpace(refreshToken.Token))
+        if (string.IsNullOrWhiteSpace(view.Token))
         {
-            refreshToken.Token = Request.Cookies["refreshToken"];
+            view.Token = Request.Cookies["refreshToken"];
         }
 
-        if (string.IsNullOrWhiteSpace(refreshToken.Token))
+        if (string.IsNullOrWhiteSpace(view.Token))
         {
-            return Problem(title: "Bad Request", statusCode: StatusCodes.Status400BadRequest, detail: "Token is required.");
+            return Problem(title: "Token is required.", statusCode: StatusCodes.Status400BadRequest, detail: "Body or cookies don't contain token.");
         }
 
         var response = await Mediator.Send(new RefreshTokenQuery
         {
-            Token = refreshToken.Token,
+            Token = view.Token,
             IpAddress = IpAddress()
         });
 
@@ -98,42 +98,40 @@ public class AccountsController : ApiControllerBase
         return Ok(new { message = "Verification successful, you can now login" });
     }
     [HttpPost("verify-admin-email")]
-    public async Task<IActionResult> VerifyAdminWithContinuedRegistration([FromForm] VerifyAdminWithContinuedRegistrationRequest verifyAdmin)
+    public async Task<IActionResult> VerifyAdminWithContinuedRegistration(VerifyAdminWithContinuedRegistrationCommand command)
     {
-        await Mediator.Send(new VerifyAdminWithContinuedRegistrationCommand
-        {
-            Token = verifyAdmin.Token,
-            Password = verifyAdmin.Password,
-        });
+        await Mediator.Send(command);
+
         return Ok(new { message = "Verification successful, you can now login" });
     }
     [HttpPost("verify-student-email")]
-    public async Task<IActionResult> VerifyStudent([FromForm] VerifyStudentRequest verifyStudent)
+    public async Task<IActionResult> VerifyStudent(VerifyStudentCommand command)
     {
-        await Mediator.Send(new VerifyStudentCommand { Token = verifyStudent.Token });
+        await Mediator.Send(command);
+
         return Ok(new { message = "Verification successful, you can now login" });
     }
 
     [HttpPost("register/student")]
-    public async Task<IActionResult> RegisterStudent(RegisterStudentRequest registerStudent)
+    public async Task<IActionResult> RegisterStudent(RegisterStudentCommand command)
     {
-        await Mediator.Send(new RegisterStudentCommand { Email = registerStudent.Email, Password = registerStudent.Password });
+        await Mediator.Send(command);
 
         return Ok(new { message = "Registration successful, please check your email for verification instructions" });
     }
 
     [HttpPost("forgot-password")]
-    public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest forgotPassword)
+    public async Task<IActionResult> ForgotPassword(SendPasswordResetEmailCommand command)
     {
-        await Mediator.Send(new SendPasswordResetEmailCommand { Email = forgotPassword.Email });
+        await Mediator.Send(command);
 
         return Ok(new { message = "Please check your email for password reset instructions" });
     }
 
     [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword(ResetPasswordRequest resetPassword)
+    public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
-        await Mediator.Send(new ResetPasswordCommand { Token = resetPassword.Token, Password = resetPassword.Password });
+        await Mediator.Send(command);
 
         return Ok(new { message = "Password reset successful, you can now login" });
     }

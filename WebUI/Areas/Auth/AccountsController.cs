@@ -12,36 +12,36 @@ namespace WebUI.Areas.Auth;
 public class AccountsController : ApiControllerBase
 {
     [HttpPost("revoke-token")]
-    public async Task<IActionResult> RevokeTokenAsync(RevokeTokenRequest revokeToken)
+    public async Task<IActionResult> RevokeTokenAsync(RevokeTokenView view)
     {
-        if (string.IsNullOrWhiteSpace(revokeToken.Token))
+        if (string.IsNullOrWhiteSpace(view.Token))
         {
-            revokeToken.Token = Request.Cookies["refreshToken"];
+            view.Token = Request.Cookies["refreshToken"];
         }
 
-        if (string.IsNullOrWhiteSpace(revokeToken.Token))
+        if (string.IsNullOrWhiteSpace(view.Token))
         {
             return Problem(title: "Token is required.", statusCode: StatusCodes.Status400BadRequest, detail: "Body or cookies don't contain token.");
         }
 
-        if (!await Mediator.Send(new AccountOwnsTokenQuery { Token = revokeToken.Token, AccountId = AccountInfo!.Id }))
+        if (!await Mediator.Send(new AccountOwnsTokenQuery { Token = view.Token, AccountId = AccountInfo!.Id }))
         {
-            return Problem(title: "Token was not found.", statusCode: StatusCodes.Status404NotFound, detail: "Token was not found.");
+            return Problem(title: "Token was not found.", statusCode: StatusCodes.Status404NotFound, detail: "Account don't own this token.");
         }
 
-        await Mediator.Send(new RevokeTokenCommand { Token = revokeToken.Token, IpAddress = IpAddress() });
+        await Mediator.Send(new RevokeTokenCommand { Token = view.Token, IpAddress = IpAddress() });
 
         return Ok(new { message = "Token revoked" });
     }
 
     [Authorize]
     [HttpPost("change-password")]
-    public async Task<IActionResult> ChangePassword(ChangePasswordRequest changePassword)
+    public async Task<IActionResult> ChangePassword(ChangePasswordView view)
     {
         await Mediator.Send(new ChangePasswordCommand
         {
-            OldPassword = changePassword.OldPassword,
-            NewPassword = changePassword.NewPassword,
+            OldPassword = view.OldPassword,
+            NewPassword = view.NewPassword,
             AccountId = AccountInfo!.Id,
         });
 
