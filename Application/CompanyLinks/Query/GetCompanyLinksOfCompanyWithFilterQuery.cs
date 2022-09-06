@@ -25,7 +25,7 @@ public class GetCompanyLinksOfCompanyWithFilterQueryHandler : IRequestHandler<Ge
 
     public async Task<IEnumerable<CompanyLinkDTO>> Handle(GetCompanyLinksOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
-        if (!await _context.Companies.Filter(IsVerified: request.IsCompanyVerified).AnyAsync(x => x.Id == request.CompanyId))
+        if (!await _context.Companies.Filter(isVerified: request.IsCompanyVerified).AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }

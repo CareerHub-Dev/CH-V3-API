@@ -33,7 +33,11 @@ public class GetStudentsWithPaginationWithSearthWithFilterQueryHandler : IReques
     {
         return await _context.Students
             .AsNoTracking()
-            .Filter(request.WithoutStudentId, request.IsVerified, request.StudentGroupIds)
+            .Filter(
+                withoutStudentId: request.WithoutStudentId, 
+                isVerified: request.IsVerified, 
+                studentGroupIds: request.StudentGroupIds
+            )
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.FirstName).ThenBy(x => x.LastName)
             .Select(x => new StudentDTO

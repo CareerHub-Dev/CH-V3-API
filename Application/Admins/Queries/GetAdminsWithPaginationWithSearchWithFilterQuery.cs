@@ -31,7 +31,11 @@ public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestH
     {
         return await _context.Admins
             .AsNoTracking()
-            .Filter(request.WithoutAdminId, request.IsVerified, request.IsSuperAdmin)
+            .Filter(
+                withoutAdminId: request.WithoutAdminId,
+                isVerified: request.IsVerified, 
+                isSuperAdmin: request.IsSuperAdmin
+             )
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Email)
             .Select(x => new AdminDTO

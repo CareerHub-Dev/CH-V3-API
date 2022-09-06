@@ -28,7 +28,7 @@ public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
     public async Task<int> Handle(GetAmountSubscribersOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
         if(!await _context.Companies
-            .Filter(IsVerified: request.IsVerified)
+            .Filter(isVerified: request.IsVerified)
             .AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
@@ -37,7 +37,7 @@ public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
         return await _context.Companies
             .Where(x => x.Id == request.CompanyId)
             .SelectMany(x => x.SubscribedStudents)
-            .Filter(IsVerified: request.IsSubscriberVerified)
+            .Filter(isVerified: request.IsSubscriberVerified)
             .CountAsync();
     }
 }

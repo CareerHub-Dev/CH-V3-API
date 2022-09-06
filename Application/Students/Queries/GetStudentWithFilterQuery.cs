@@ -30,7 +30,7 @@ public class GetStudentWithFilterQueryHandler
         var student = await _context.Students
             .AsNoTracking()
             .Where(x => x.Id == request.StudentId)
-            .Filter(IsVerified: request.IsVerified)
+            .Filter(isVerified: request.IsVerified)
             .Select(x => new StudentDTO
             {
                 Id = x.Id,

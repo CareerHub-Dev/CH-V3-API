@@ -29,7 +29,7 @@ public class GetCompanyWithFilterQueryHandler
         var company = await _context.Companies
             .AsNoTracking()
             .Where(x => x.Id == request.CompanyId)
-            .Filter(IsVerified: request.IsVerified)
+            .Filter(isVerified: request.IsVerified)
             .Select(x => new CompanyDTO
             {
                 Id = x.Id,

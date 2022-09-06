@@ -28,12 +28,12 @@ public class IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQueryHandler
             throw new ArgumentException("StudentOwnerId and StudentTargetId are same.");
         }
 
-        if (!await _context.Students.Filter(IsVerified: true).AnyAsync(x => x.Id == request.StudentOwnerId))
+        if (!await _context.Students.Filter(isVerified: true).AnyAsync(x => x.Id == request.StudentOwnerId))
         {
             throw new NotFoundException("StudentOwner", request.StudentOwnerId);
         }
 
-        if (!await _context.Students.Filter(IsVerified: true).AnyAsync(x => x.Id == request.StudentTargetId))
+        if (!await _context.Students.Filter(isVerified: true).AnyAsync(x => x.Id == request.StudentTargetId))
         {
             throw new NotFoundException("StudentTarget", request.StudentTargetId);
         }

@@ -36,7 +36,10 @@ public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQu
     {
         return await _context.Companies
             .AsNoTracking()
-            .Filter(request.WithoutCompanyId, request.IsVerified)
+            .Filter(
+                withoutCompanyId: request.WithoutCompanyId, 
+                isVerified: request.IsVerified
+            )
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
             .Select(x => new CompanyWithAmountStatisticDTO
@@ -50,8 +53,8 @@ public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQu
                 Description = x.Description,
                 AmountStatistic = new AmountStatistic
                 {
-                    AmountJobOffers = x.JobOffers.Filter(request.IsSubscriberVerified).Count(),
-                    AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberVerified).Count()
+                    AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferActive, null).Count(),
+                    AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberVerified, null).Count()
                 },
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,

@@ -28,12 +28,12 @@ public class GetAmountJobOffersOfCompanyWithFilterQueryHandler
     public async Task<int> Handle(GetAmountJobOffersOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Companies
-            .Filter(IsVerified: request.IsVerified)
+            .Filter(isVerified: request.IsVerified)
             .AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        return await _context.JobOffers.Filter(request.IsJobOfferActive).CountAsync();
+        return await _context.JobOffers.Filter(isActive: request.IsJobOfferActive).CountAsync();
     }
 }
