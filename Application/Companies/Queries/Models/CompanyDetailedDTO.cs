@@ -1,4 +1,4 @@
-﻿namespace Application.Companies.Query.Models;
+﻿namespace Application.Companies.Queries.Models;
 
 public class CompanyDetailedDTO
 {

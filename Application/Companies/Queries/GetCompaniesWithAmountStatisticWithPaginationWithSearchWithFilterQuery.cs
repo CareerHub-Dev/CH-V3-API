@@ -1,11 +1,11 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
-using Application.Companies.Query.Models;
+using Application.Companies.Queries.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Query;
+namespace Application.Companies.Queries;
 
 public record GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery 
     : IRequest<PaginatedList<CompanyWithAmountStatisticDTO>>

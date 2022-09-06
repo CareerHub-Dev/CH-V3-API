@@ -5,7 +5,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Query;
+namespace Application.Companies.Queries;
 
 public record GetAmountSubscribersOfCompanyWithFilterQuery : IRequest<int>
 {

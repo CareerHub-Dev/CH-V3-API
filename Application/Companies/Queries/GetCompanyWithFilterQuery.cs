@@ -1,12 +1,12 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Companies.Query.Models;
+using Application.Companies.Queries.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Query;
+namespace Application.Companies.Queries;
 
 public record GetCompanyWithFilterQuery : IRequest<CompanyDTO>
 {
