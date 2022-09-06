@@ -30,7 +30,7 @@ public class GetCompanyWithFilterQueryHandler
             .AsNoTracking()
             .Where(x => x.Id == request.CompanyId)
             .Filter(IsVerified: request.IsVerified)
-            .Select(x => new CompanyWithAmountStatisticDTO
+            .Select(x => new CompanyDTO
             {
                 Id = x.Id,
                 Email = x.Email,
