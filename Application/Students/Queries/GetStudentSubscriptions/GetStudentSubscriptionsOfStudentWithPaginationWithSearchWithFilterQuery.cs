@@ -8,7 +8,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Queries;
+namespace Application.Students.Queries.GetStudentSubscriptions;
 
 public record GetStudentSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery
     : IRequest<PaginatedList<StudentDTO>>
