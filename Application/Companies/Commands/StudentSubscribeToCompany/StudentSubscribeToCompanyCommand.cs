@@ -5,29 +5,26 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Commands.StudentSubscribeToCompanyWithConfiguration;
+namespace Application.Companies.Commands.StudentSubscribeToCompany;
 
-public record StudentSubscribeToCompanyWithConfigurationCommand : IRequest
+public record StudentSubscribeToCompanyCommand : IRequest
 {
     public Guid StudentId { get; init; }
-    public bool? IsStudentVerified { get; init; }
     public Guid CompanytId { get; init; }
-    public bool? IsCompanyVerified { get; init; }
 }
 
-public class StudentSubscribeToCompanyWithConfigurationCommandHandler : IRequestHandler<StudentSubscribeToCompanyWithConfigurationCommand>
+public class StudentSubscribeToCompanyCommandHandler : IRequestHandler<StudentSubscribeToCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public StudentSubscribeToCompanyWithConfigurationCommandHandler(IApplicationDbContext context)
+    public StudentSubscribeToCompanyCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(StudentSubscribeToCompanyWithConfigurationCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(StudentSubscribeToCompanyCommand request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Filter(isVerified: request.IsStudentVerified)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
@@ -36,7 +33,6 @@ public class StudentSubscribeToCompanyWithConfigurationCommandHandler : IRequest
         }
 
         var company = await _context.Companies
-            .Filter(isVerified: request.IsStudentVerified)
             .Include(x => x.SubscribedStudents)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 

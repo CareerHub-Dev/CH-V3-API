@@ -1,42 +1,39 @@
-﻿using Application.Common.Entensions;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Commands.StudentOwnerSubscribeToStudentTargetWithConfiguration;
+namespace Application.Students.Commands.StudentOwnerSubscribeToStudentTarget;
 
-public record StudentOwnerSubscribeToStudentTargetWithConfigurationCommand : IRequest
+public record StudentOwnerSubscribeToStudentTargetCommand : IRequest
 {
     public Guid StudentOwnerId { get; init; }
-    public bool? IsStudentOwnerVerified { get; init; }
     public Guid StudentTargetId { get; init; }
-    public bool? IsStudentTargetVerified { get; init; }
 }
 
-public class StudentOwnerSubscribeToStudentTargetWithConfigurationCommandHandler : IRequestHandler<StudentOwnerSubscribeToStudentTargetWithConfigurationCommand>
+public class StudentOwnerSubscribeToStudentTargetCommandHandler : IRequestHandler<StudentOwnerSubscribeToStudentTargetCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public StudentOwnerSubscribeToStudentTargetWithConfigurationCommandHandler(IApplicationDbContext context)
+    public StudentOwnerSubscribeToStudentTargetCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(StudentOwnerSubscribeToStudentTargetWithConfigurationCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(StudentOwnerSubscribeToStudentTargetCommand request, CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)
         {
             throw new ArgumentException("StudentOwnerId and StudentTargetId are same.");
         }
 
-        if (!await _context.Students.Filter(isVerified: request.IsStudentOwnerVerified).AnyAsync(x => x.Id == request.StudentOwnerId))
+        if (!await _context.Students.AnyAsync(x => x.Id == request.StudentOwnerId))
         {
             throw new NotFoundException("StudentOwner", request.StudentOwnerId);
         }
 
-        if (!await _context.Students.Filter(isVerified: request.IsStudentTargetVerified).AnyAsync(x => x.Id == request.StudentTargetId))
+        if (!await _context.Students.AnyAsync(x => x.Id == request.StudentTargetId))
         {
             throw new NotFoundException("StudentTarget", request.StudentTargetId);
         }
@@ -46,7 +43,7 @@ public class StudentOwnerSubscribeToStudentTargetWithConfigurationCommandHandler
             x.SubscriptionTargetId == request.StudentTargetId
         );
 
-        if(isStudentSubscriptionExists)
+        if (isStudentSubscriptionExists)
         {
             return Unit.Value;
         }
