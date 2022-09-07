@@ -6,13 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Queries;
 
-public record IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQuery : IRequest<bool>
+public record IsStudentOwnerSubscribedToStudentTargetQuery : IRequest<bool>
 {
     public Guid StudentOwnerId { get; init; }
+    public bool? IsStudentOwnerVerified { get; init; }
     public Guid StudentTargetId { get; init; }
+    public bool? IsStudentTargetVerified { get; init; }
 }
 
-public class IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQueryHandler : IRequestHandler<IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQuery, bool>
+public class IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQueryHandler : IRequestHandler<IsStudentOwnerSubscribedToStudentTargetQuery, bool>
 {
     private readonly IApplicationDbContext _context;
 
@@ -21,19 +23,19 @@ public class IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQueryHandler
         _context = context;
     }
 
-    public async Task<bool> Handle(IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQuery request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(IsStudentOwnerSubscribedToStudentTargetQuery request, CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)
         {
             throw new ArgumentException("StudentOwnerId and StudentTargetId are same.");
         }
 
-        if (!await _context.Students.Filter(isVerified: true).AnyAsync(x => x.Id == request.StudentOwnerId))
+        if (!await _context.Students.Filter(isVerified: request.IsStudentOwnerVerified).AnyAsync(x => x.Id == request.StudentOwnerId))
         {
             throw new NotFoundException("StudentOwner", request.StudentOwnerId);
         }
 
-        if (!await _context.Students.Filter(isVerified: true).AnyAsync(x => x.Id == request.StudentTargetId))
+        if (!await _context.Students.Filter(isVerified: request.IsStudentTargetVerified).AnyAsync(x => x.Id == request.StudentTargetId))
         {
             throw new NotFoundException("StudentTarget", request.StudentTargetId);
         }

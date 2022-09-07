@@ -6,34 +6,36 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Commands.StudentOwnerUnsubscribeFromStudentTarget;
 
-public record VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand : IRequest
+public record StudentOwnerUnsubscribeFromStudentTargetCommand : IRequest
 {
     public Guid StudentOwnerId { get; init; }
+    public bool? IsStudentOwnerVerified { get; init; }
     public Guid StudentTargetId { get; init; }
+    public bool? IsStudentTargetVerified { get; init; }
 }
 
-public class VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommandHandler : IRequestHandler<VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand>
+public class StudentOwnerUnsubscribeFromStudentTargetCommandHandler : IRequestHandler<StudentOwnerUnsubscribeFromStudentTargetCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommandHandler(IApplicationDbContext context)
+    public StudentOwnerUnsubscribeFromStudentTargetCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(StudentOwnerUnsubscribeFromStudentTargetCommand request, CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)
         {
             throw new ArgumentException("StudentOwnerId and StudentTargetId are same.");
         }
 
-        if (!await _context.Students.Filter(isVerified: true).AnyAsync(x => x.Id == request.StudentOwnerId))
+        if (!await _context.Students.Filter(isVerified: request.IsStudentOwnerVerified).AnyAsync(x => x.Id == request.StudentOwnerId))
         {
             throw new NotFoundException("StudentOwner", request.StudentOwnerId);
         }
 
-        if (!await _context.Students.Filter(isVerified: true).AnyAsync(x => x.Id == request.StudentTargetId))
+        if (!await _context.Students.Filter(isVerified: request.IsStudentTargetVerified).AnyAsync(x => x.Id == request.StudentTargetId))
         {
             throw new NotFoundException("StudentTarget", request.StudentTargetId);
         }
