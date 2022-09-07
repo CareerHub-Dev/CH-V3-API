@@ -3,6 +3,7 @@ using Application.Students.Commands.DeleteStudent;
 using Application.Students.Commands.UpdateStudent;
 using Application.Students.Commands.UpdateStudentPhoto;
 using Application.Students.Queries;
+using Application.Students.Queries.GetStudentSubscriptions;
 using Application.Students.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -76,6 +77,26 @@ public class StudentsController : ApiControllerBase
         {
             StudentId = studentId
         });
+    }
+
+    [HttpGet("{studentId}/student-subscriptions")]
+    public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
+        Guid studentId, 
+        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterView view)
+    {
+        var result = await Mediator.Send(new GetStudentSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery
+        {
+            StudentId = studentId,
+            PageNumber = view.PageNumber,
+            PageSize = view.PageSize,
+            SearchTerm = view.SearchTerm,
+            IsVerified = view.IsVerified,
+            StudentGroupIds = view.StudentGroupIds,
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
     }
 
     /// <remarks>
