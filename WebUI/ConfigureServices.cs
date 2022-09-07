@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using System.Globalization;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using WebUI.Filters;
 using WebUI.Services;
 
@@ -27,6 +28,11 @@ public static class ConfigureServices
         services.AddControllers(options =>
         {
             options.Filters.Add<ApiExceptionFilterAttribute>();
+        })
+        .AddJsonOptions(options =>
+        {
+            var enumConverter = new JsonStringEnumConverter();
+            options.JsonSerializerOptions.Converters.Add(enumConverter);
         });
 
         services.AddEndpointsApiExplorer();
