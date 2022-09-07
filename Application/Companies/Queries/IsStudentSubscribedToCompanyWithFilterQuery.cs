@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries;
 
-public class IsStudentSubscribedToCompanyQuery : IRequest<bool>
+public class IsStudentSubscribedToCompanyWithFilterQuery : IRequest<bool>
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentVerified { get; init; }
@@ -15,16 +15,16 @@ public class IsStudentSubscribedToCompanyQuery : IRequest<bool>
     public bool? IsCompanyVerified { get; init; }
 }
 
-public class IsStudentSubscribedToCompanyQueryHandler : IRequestHandler<IsStudentSubscribedToCompanyQuery, bool>
+public class IsStudentSubscribedToCompanyWithFilterQueryHandler : IRequestHandler<IsStudentSubscribedToCompanyWithFilterQuery, bool>
 {
     private readonly IApplicationDbContext _context;
 
-    public IsStudentSubscribedToCompanyQueryHandler(IApplicationDbContext context)
+    public IsStudentSubscribedToCompanyWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<bool> Handle(IsStudentSubscribedToCompanyQuery request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(IsStudentSubscribedToCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .Filter(isVerified: request.IsStudentVerified)

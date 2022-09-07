@@ -12,7 +12,6 @@ public class GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery : IRequest<i
     public Guid StudentId { get; init; }
     public bool? IsVerified { get; init; }
 
-    public bool? IsJobOfferCompanyVerified { get; init; }
     public bool? IsJobOfferActive { get; init; }
 }
 

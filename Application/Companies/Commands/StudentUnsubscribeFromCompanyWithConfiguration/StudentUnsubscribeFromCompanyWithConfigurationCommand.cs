@@ -5,9 +5,9 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Commands.StudentUnsubscribeFromCompany;
+namespace Application.Companies.Commands.StudentUnsubscribeFromCompanyWithConfiguration;
 
-public record StudentUnsubscribeFromCompanyCommand : IRequest
+public record StudentUnsubscribeFromCompanyWithConfigurationCommand : IRequest
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentVerified { get; init; }
@@ -15,16 +15,16 @@ public record StudentUnsubscribeFromCompanyCommand : IRequest
     public bool? IsCompanyVerified { get; init; }
 }
 
-public class StudentUnsubscribeFromCompanyCommandHandler : IRequestHandler<StudentUnsubscribeFromCompanyCommand>
+public class StudentUnsubscribeFromCompanyWithConfigurationCommandHandler : IRequestHandler<StudentUnsubscribeFromCompanyWithConfigurationCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public StudentUnsubscribeFromCompanyCommandHandler(IApplicationDbContext context)
+    public StudentUnsubscribeFromCompanyWithConfigurationCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(StudentUnsubscribeFromCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(StudentUnsubscribeFromCompanyWithConfigurationCommand request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .Filter(isVerified: request.IsStudentVerified)

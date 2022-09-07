@@ -5,9 +5,9 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Commands.StudentOwnerSubscribeToStudentTarget;
+namespace Application.Students.Commands.StudentOwnerSubscribeToStudentTargetWithConfiguration;
 
-public record StudentOwnerSubscribeToStudentTargetCommand : IRequest
+public record StudentOwnerSubscribeToStudentTargetWithConfigurationCommand : IRequest
 {
     public Guid StudentOwnerId { get; init; }
     public bool? IsStudentOwnerVerified { get; init; }
@@ -15,16 +15,16 @@ public record StudentOwnerSubscribeToStudentTargetCommand : IRequest
     public bool? IsStudentTargetVerified { get; init; }
 }
 
-public class StudentOwnerSubscribeToStudentTargetCommandHandler : IRequestHandler<StudentOwnerSubscribeToStudentTargetCommand>
+public class StudentOwnerSubscribeToStudentTargetWithConfigurationCommandHandler : IRequestHandler<StudentOwnerSubscribeToStudentTargetWithConfigurationCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public StudentOwnerSubscribeToStudentTargetCommandHandler(IApplicationDbContext context)
+    public StudentOwnerSubscribeToStudentTargetWithConfigurationCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(StudentOwnerSubscribeToStudentTargetCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(StudentOwnerSubscribeToStudentTargetWithConfigurationCommand request, CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)
         {

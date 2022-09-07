@@ -4,9 +4,9 @@ using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Commands.StudentOwnerUnsubscribeFromStudentTarget;
+namespace Application.Students.Queries;
 
-public record StudentOwnerUnsubscribeFromStudentTargetCommand : IRequest
+public record IsStudentOwnerSubscribedToStudentTargetWithFilterQuery : IRequest<bool>
 {
     public Guid StudentOwnerId { get; init; }
     public bool? IsStudentOwnerVerified { get; init; }
@@ -14,16 +14,16 @@ public record StudentOwnerUnsubscribeFromStudentTargetCommand : IRequest
     public bool? IsStudentTargetVerified { get; init; }
 }
 
-public class StudentOwnerUnsubscribeFromStudentTargetCommandHandler : IRequestHandler<StudentOwnerUnsubscribeFromStudentTargetCommand>
+public class IsStudentOwnerSubscribedToStudentTargetWithFilterQueryHandler : IRequestHandler<IsStudentOwnerSubscribedToStudentTargetWithFilterQuery, bool>
 {
     private readonly IApplicationDbContext _context;
 
-    public StudentOwnerUnsubscribeFromStudentTargetCommandHandler(IApplicationDbContext context)
+    public IsStudentOwnerSubscribedToStudentTargetWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(StudentOwnerUnsubscribeFromStudentTargetCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(IsStudentOwnerSubscribedToStudentTargetWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)
         {
@@ -40,20 +40,9 @@ public class StudentOwnerUnsubscribeFromStudentTargetCommandHandler : IRequestHa
             throw new NotFoundException("StudentTarget", request.StudentTargetId);
         }
 
-        var StudentSubscription = await _context.StudentSubscriptions.AsNoTracking().FirstOrDefaultAsync(x =>
+        return await _context.StudentSubscriptions.AnyAsync(x => 
             x.SubscriptionOwnerId == request.StudentOwnerId &&
             x.SubscriptionTargetId == request.StudentTargetId
         );
-
-        if (StudentSubscription == null)
-        {
-            return Unit.Value;
-        }
-
-        _context.StudentSubscriptions.Remove(StudentSubscription);
-
-        await _context.SaveChangesAsync();
-
-        return Unit.Value;
     }
 }

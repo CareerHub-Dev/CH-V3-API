@@ -5,9 +5,9 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Commands.StudentSubscribeToCompany;
+namespace Application.Companies.Commands.StudentSubscribeToCompanyWithConfiguration;
 
-public record StudentSubscribeToCompanyCommand : IRequest
+public record StudentSubscribeToCompanyWithConfigurationCommand : IRequest
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentVerified { get; init; }
@@ -15,16 +15,16 @@ public record StudentSubscribeToCompanyCommand : IRequest
     public bool? IsCompanyVerified { get; init; }
 }
 
-public class StudentSubscribeToCompanyCommandHandler : IRequestHandler<StudentSubscribeToCompanyCommand>
+public class StudentSubscribeToCompanyWithConfigurationCommandHandler : IRequestHandler<StudentSubscribeToCompanyWithConfigurationCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public StudentSubscribeToCompanyCommandHandler(IApplicationDbContext context)
+    public StudentSubscribeToCompanyWithConfigurationCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(StudentSubscribeToCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(StudentSubscribeToCompanyWithConfigurationCommand request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .Filter(isVerified: request.IsStudentVerified)
