@@ -13,8 +13,5 @@ public class AuthenticateQueryValidator : AbstractValidator<AuthenticateQuery>
 
         RuleFor(x => x.Password)
             .NotEmpty();
-
-        RuleFor(x => x.IpAddress)
-            .NotEmpty();
     }
 }

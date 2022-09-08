@@ -2,7 +2,6 @@
 using Application.Accounts.Queries.GetAccountBrief;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.Common.Models.Account;
 
 namespace WebUI.Areas.Admin;
 
@@ -31,32 +30,10 @@ public class AccountsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("revoke-token")]
-    public async Task<IActionResult> RevokeTokenAsync(RevokeTokenView view)
+    public async Task<IActionResult> RevokeTokenAsync(RevokeTokenCommand command)
     {
-        if (string.IsNullOrWhiteSpace(view.Token))
-        {
-            view.Token = Request.Cookies["refreshToken"];
-        }
-
-        if (string.IsNullOrWhiteSpace(view.Token))
-        {
-            return Problem(title: "Token is required.", statusCode: StatusCodes.Status400BadRequest, detail: "Body or cookies don't contain token.");
-        }
-
-        await Mediator.Send(new RevokeTokenCommand { Token = view.Token, IpAddress = IpAddress() });
+        await Mediator.Send(command);
 
         return Ok(new { message = "Token revoked" });
-    }
-
-    private string IpAddress()
-    {
-        if (Request.Headers.ContainsKey("X-Forwarded-For"))
-        {
-            return Request.Headers["X-Forwarded-For"];
-        }
-        else
-        {
-            return HttpContext.Connection.RemoteIpAddress!.MapToIPv4().ToString();
-        }
     }
 }

@@ -15,14 +15,9 @@ namespace WebUI.Areas;
 public class AccountsController : ApiControllerBase
 {
     [HttpPost("authenticate-{clientType}")]
-    public async Task<IActionResult> Authenticate(AuthenticateView view, string clientType)
+    public async Task<IActionResult> Authenticate(AuthenticateQuery query, string clientType)
     {
-        var response = await Mediator.Send(new AuthenticateQuery
-        {
-            Email = view.Email,
-            Password = view.Password,
-            IpAddress = IpAddress()
-        });
+        var response = await Mediator.Send(query);
 
         switch (clientType)
         {
@@ -57,8 +52,7 @@ public class AccountsController : ApiControllerBase
 
         var response = await Mediator.Send(new RefreshTokenQuery
         {
-            Token = view.Token,
-            IpAddress = IpAddress()
+            Token = view.Token
         });
 
         switch (clientType)
@@ -137,17 +131,5 @@ public class AccountsController : ApiControllerBase
             Secure = true,
         };
         Response.Cookies.Append("refreshToken", token, cookieOptions);
-    }
-
-    private string IpAddress()
-    {
-        if (Request.Headers.ContainsKey("X-Forwarded-For"))
-        {
-            return Request.Headers["X-Forwarded-For"];
-        }
-        else
-        {
-            return HttpContext.Connection.RemoteIpAddress!.MapToIPv4().ToString();
-        }
     }
 }

@@ -9,15 +9,16 @@ namespace Application.Accounts.Commands.RevokeToken;
 public record RevokeTokenCommand : IRequest
 {
     public string Token { init; get; } = string.Empty;
-    public string IpAddress { init; get; } = string.Empty;
 }
 public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IСurrentRemoteIpAddressService _сurrentRemoteIpAddressService;
 
-    public RevokeTokenCommandHandler(IApplicationDbContext context)
+    public RevokeTokenCommandHandler(IApplicationDbContext context, IСurrentRemoteIpAddressService сurrentRemoteIpAddressService)
     {
         _context = context;
+        _сurrentRemoteIpAddressService = сurrentRemoteIpAddressService;
     }
 
     public async Task<Unit> Handle(RevokeTokenCommand request, CancellationToken cancellationToken)
@@ -35,7 +36,7 @@ public class RevokeTokenCommandHandler : IRequestHandler<RevokeTokenCommand>
             throw new ArgumentException("Token is not active.");
         }
 
-        RefreshTokenHelper.RevokeRefreshToken(refreshToken, request.IpAddress, "Revoked without replacement");
+        RefreshTokenHelper.RevokeRefreshToken(refreshToken, _сurrentRemoteIpAddressService.IpAddress, "Revoked without replacement");
 
         await _context.SaveChangesAsync();
 

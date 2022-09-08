@@ -8,8 +8,5 @@ public class RevokeTokenCommandValidator : AbstractValidator<RevokeTokenCommand>
     {
         RuleFor(x => x.Token)
             .NotEmpty();
-
-        RuleFor(x => x.IpAddress)
-            .NotEmpty();
     }
 }

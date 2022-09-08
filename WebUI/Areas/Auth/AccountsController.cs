@@ -30,7 +30,7 @@ public class AccountsController : ApiControllerBase
             return Problem(title: "Token was not found.", statusCode: StatusCodes.Status404NotFound, detail: "Account don't own this token.");
         }
 
-        await Mediator.Send(new RevokeTokenCommand { Token = view.Token, IpAddress = IpAddress() });
+        await Mediator.Send(new RevokeTokenCommand { Token = view.Token });
 
         return Ok(new { message = "Token revoked" });
     }
@@ -55,18 +55,5 @@ public class AccountsController : ApiControllerBase
         await Mediator.Send(new DeleteAccountCommand(AccountInfo!.Id));
 
         return Ok(new { message = "Account delete successful" });
-    }
-
-    // helper methods
-    private string IpAddress()
-    {
-        if (Request.Headers.ContainsKey("X-Forwarded-For"))
-        {
-            return Request.Headers["X-Forwarded-For"];
-        }
-        else
-        {
-            return HttpContext.Connection.RemoteIpAddress!.MapToIPv4().ToString();
-        }
     }
 }

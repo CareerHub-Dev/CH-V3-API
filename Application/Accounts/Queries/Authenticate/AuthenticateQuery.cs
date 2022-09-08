@@ -13,7 +13,6 @@ public record AuthenticateQuery : IRequest<AuthenticateResult>
 {
     public string Email { get; init; } = string.Empty;
     public string Password { get; init; } = string.Empty;
-    public string IpAddress { get; init; } = string.Empty;
 }
 
 public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, AuthenticateResult>
@@ -21,12 +20,18 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
     private readonly IApplicationDbContext _context;
     private readonly IJwtService _jwtService;
     private readonly JwtSettings _jwtSettings;
+    private readonly IСurrentRemoteIpAddressService _сurrentRemoteIpAddressService;
 
-    public AuthenticateQueryHandler(IApplicationDbContext context, IJwtService jwtService, IOptions<JwtSettings> jwtSettings)
+    public AuthenticateQueryHandler(
+        IApplicationDbContext context, 
+        IJwtService jwtService, 
+        IOptions<JwtSettings> jwtSettings, 
+        IСurrentRemoteIpAddressService сurrentRemoteIpAddressService)
     {
         _context = context;
         _jwtService = jwtService;
         _jwtSettings = jwtSettings.Value;
+        _сurrentRemoteIpAddressService = сurrentRemoteIpAddressService;
     }
 
     public async Task<AuthenticateResult> Handle(AuthenticateQuery request, CancellationToken cancellationToken)
@@ -43,7 +48,7 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
         }
 
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);
-        var refreshToken = await _jwtService.GenerateRefreshTokenAsync(request.IpAddress);
+        var refreshToken = await _jwtService.GenerateRefreshTokenAsync(_сurrentRemoteIpAddressService.IpAddress);
         account.RefreshTokens.Add(refreshToken);
 
         AccountHelper.RemoveOldRefreshTokens(account, _jwtSettings.RefreshTokenTTL);
