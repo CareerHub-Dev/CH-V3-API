@@ -4,13 +4,12 @@ using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Common.Models.StudentGroup;
 using Application.Students.Queries.Models;
-using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Queries;
+namespace Application.Students.Queries.GetStudentSubscriptions;
 
-public record GetFollowedStudentDetailedsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQuery
+public record GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQuery
     : IRequest<PaginatedList<FollowedStudentDetailedDTO>>
 {
     public Guid FollowerStudentId { get; init; }
@@ -30,17 +29,17 @@ public record GetFollowedStudentDetailedsOfStudentOwnerForFollowerStudentWithPag
     public List<Guid>? StudentGroupIds { get; init; }
 }
 
-public class GetFollowedStudentDetailedsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler
-    : IRequestHandler<GetFollowedStudentDetailedsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQuery, PaginatedList<FollowedStudentDetailedDTO>>
+public class GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler
+    : IRequestHandler<GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQuery, PaginatedList<FollowedStudentDetailedDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetFollowedStudentDetailedsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<FollowedStudentDetailedDTO>> Handle(GetFollowedStudentDetailedsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<FollowedStudentDetailedDTO>> Handle(GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(isVerified: request.IsFollowerStudentVerified)

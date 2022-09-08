@@ -1,6 +1,7 @@
 ﻿using Application.Students.Queries.GetAmount;
 using Application.Students.Queries.GetStudent;
 using Application.Students.Queries.GetStudents;
+using Application.Students.Queries.GetStudentSubscriptions;
 using Application.Students.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -89,5 +90,32 @@ public class StudentsController : ApiControllerBase
             IsVerified = true,
             IsStudentTargetOfSubscriptionVerified = true
         });
+    }
+
+    [HttpGet("{studentId}/student-subscriptions")]
+    public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
+        Guid studentId,
+        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
+    {
+        var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQuery
+        {
+            FollowerStudentId = AccountInfo!.Id,
+            IsFollowerStudentVerified = true,
+
+            StudentOwnerId = studentId,
+            IsStudentOwnerVerified = true,
+
+            PageNumber = view.PageNumber,
+            PageSize = view.PageSize,
+            SearchTerm = view.SearchTerm,
+
+            IsVerified = view.IsVerified,
+            WithoutStudentId = AccountInfo!.Id,
+            StudentGroupIds = view.StudentGroupIds,
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
     }
 }
