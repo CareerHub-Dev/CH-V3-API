@@ -31,7 +31,7 @@ public class GetStudentDetailedWithQueryHandler
             .AsNoTracking()
             .Where(x => x.Id == request.StudentId)
             .Filter(isVerified: request.IsVerified)
-            .Select(x => new StudentDTO
+            .Select(x => new StudentDetailedDTO
             {
                 Id = x.Id,
                 Email = x.Email,
@@ -41,8 +41,6 @@ public class GetStudentDetailedWithQueryHandler
                 Phone = x.Phone,
                 BirthDate = x.BirthDate,
                 StudentGroup = new StudentGroupBriefDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
-                Verified = x.Verified,
-                PasswordReset = x.PasswordReset
             })
             .FirstOrDefaultAsync();
 
