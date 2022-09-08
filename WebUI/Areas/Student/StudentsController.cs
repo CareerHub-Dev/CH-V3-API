@@ -122,14 +122,14 @@ public class StudentsController : ApiControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{studentId}")]
-    public async Task<bool> IsStudentOwnerSubscribedToStudentTarget(Guid studentId)
+    [HttpGet("{studentTargetId}/subscribe")]
+    public async Task<bool> IsStudentOwnerSubscribedToStudentTarget(Guid studentTargetId)
     {
         var result = await Mediator.Send(new IsStudentOwnerSubscribedToStudentTargetWithFilterQuery
         {
             StudentOwnerId = AccountInfo!.Id,
             IsStudentOwnerVerified = true,
-            StudentTargetId = studentId,
+            StudentTargetId = studentTargetId,
             IsStudentTargetVerified = true
         });
 
