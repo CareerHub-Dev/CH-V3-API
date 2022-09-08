@@ -1,4 +1,7 @@
-﻿using Application.Students.Queries.GetAmount;
+﻿using Application.Students.Commands.UpdateStudent;
+using Application.Students.Commands.UpdateStudentPhoto;
+using Application.Students.Queries;
+using Application.Students.Queries.GetAmount;
 using Application.Students.Queries.GetStudent;
 using Application.Students.Queries.GetStudents;
 using Application.Students.Queries.GetStudentSubscriptions;
@@ -117,5 +120,48 @@ public class StudentsController : ApiControllerBase
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
         return Ok(result);
+    }
+
+    [HttpGet("{studentId}")]
+    public async Task<bool> IsStudentOwnerSubscribedToStudentTarget(Guid studentId)
+    {
+        var result = await Mediator.Send(new IsStudentOwnerSubscribedToStudentTargetWithFilterQuery
+        {
+            StudentOwnerId = AccountInfo!.Id,
+            IsStudentOwnerVerified = true,
+            StudentTargetId = studentId,
+            IsStudentTargetVerified = true
+        });
+
+        return result;
+    }
+
+    [HttpPut("{studentId}")]
+    public async Task<IActionResult> UpdateOwnStudentAccount(Guid studentId, UpdateStudentCommand command)
+    {
+        if (studentId != command.StudentId)
+        {
+            return BadRequest();
+        }
+
+        if(studentId != AccountInfo!.Id)
+        {
+            return StatusCode(403);
+        }
+
+        await Mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpPost("{studentId}/photo")]
+    public async Task<ActionResult<Guid?>> UpdateOwnStudentPhoto(Guid studentId, IFormFile? file)
+    {
+        if (studentId != AccountInfo!.Id)
+        {
+            return StatusCode(403);
+        }
+
+        return await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = studentId, Photo = file });
     }
 }
