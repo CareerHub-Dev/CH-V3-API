@@ -18,7 +18,7 @@ public class StudentsController : ApiControllerBase
 {
     [HttpGet]
     public async Task<IEnumerable<StudentDTO>> GetStudents(
-        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterView view)
+        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
     {
         var result = await Mediator.Send(new GetStudentsWithPaginationWithSearthWithFilterQuery
         {
@@ -82,7 +82,7 @@ public class StudentsController : ApiControllerBase
     [HttpGet("{studentId}/student-subscriptions")]
     public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
         Guid studentId, 
-        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterView view)
+        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
     {
         var result = await Mediator.Send(new GetStudentSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery
         {

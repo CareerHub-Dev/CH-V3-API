@@ -1,6 +1,9 @@
-﻿using Application.Students.Commands.DeleteStudent;
+﻿using Application.Students.Queries.GetStudents;
+using Application.Students.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebUI.Authorize;
+using WebUI.Common.Models.Student;
 
 namespace WebUI.Areas.Student;
 
@@ -9,30 +12,24 @@ namespace WebUI.Areas.Student;
 public class StudentsController : ApiControllerBase
 {
 
-    /// <remarks> 
-    /// Student:
-    /// 
-    ///     delete own account
-    ///
-    /// </remarks>
-    [HttpDelete("{studentId}")]
-    public async Task<IActionResult> DeleteStudent(Guid studentId)
+    [HttpGet]
+    public async Task<IEnumerable<FollowedStudentDetailedDTO>> GetStudents(
+        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForStudentView view)
     {
-        if (studentId != AccountInfo!.Id)
+        var result = await Mediator.Send(new GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterQuery
         {
-            return StatusCode(403);
-        }
+            FollowerStudentId = AccountInfo!.Id,
+            IsFollowerStudentVerified = true,
+            PageNumber = view.PageNumber,
+            PageSize = view.PageSize,
+            SearchTerm = view.SearchTerm,
+            IsVerified = true,
+            WithoutStudentId = AccountInfo!.Id,
+            StudentGroupIds = view.StudentGroupIds,
+        });
 
-        switch (AccountInfo!.Role)
-        {
-            case "Admin":
-            case "Student" when studentId == AccountInfo.Id:
-                await Mediator.Send(new DeleteStudentCommand(studentId));
-                break;
-            default:
-                return StatusCode(403);
-        }
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return NoContent();
+        return result;
     }
 }
