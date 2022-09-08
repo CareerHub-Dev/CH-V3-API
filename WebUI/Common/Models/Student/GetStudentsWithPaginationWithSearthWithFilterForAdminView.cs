@@ -1,6 +1,6 @@
 ﻿namespace WebUI.Common.Models.Student;
 
-public record GetStudentsWithPaginationWithSearthWithFilterView
+public record GetStudentsWithPaginationWithSearthWithFilterForAdminView
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
