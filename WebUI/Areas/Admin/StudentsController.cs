@@ -3,6 +3,7 @@ using Application.Students.Commands.DeleteStudent;
 using Application.Students.Commands.UpdateStudent;
 using Application.Students.Commands.UpdateStudentPhoto;
 using Application.Students.Queries;
+using Application.Students.Queries.GetAmount;
 using Application.Students.Queries.GetStudent;
 using Application.Students.Queries.GetStudents;
 using Application.Students.Queries.GetStudentSubscriptions;

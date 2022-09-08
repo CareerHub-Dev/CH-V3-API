@@ -5,7 +5,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Queries;
+namespace Application.Students.Queries.GetAmount;
 
 public class GetAmountCVsOfStudentWithFilterQuery : IRequest<int>
 {
