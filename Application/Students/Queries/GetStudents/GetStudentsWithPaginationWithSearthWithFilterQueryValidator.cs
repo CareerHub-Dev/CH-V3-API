@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Students.Queries;
+namespace Application.Students.Queries.GetStudents;
 
 public class GetStudentsWithPaginationWithSearthWithFilterQueryValidator : AbstractValidator<GetStudentsWithPaginationWithSearthWithFilterQuery>
 {

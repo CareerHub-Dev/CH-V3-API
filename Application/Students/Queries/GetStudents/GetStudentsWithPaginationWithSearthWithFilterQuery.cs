@@ -6,7 +6,7 @@ using Application.Students.Queries.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Queries;
+namespace Application.Students.Queries.GetStudents;
 
 public record GetStudentsWithPaginationWithSearthWithFilterQuery : IRequest<PaginatedList<StudentDTO>>
 {
@@ -34,8 +34,8 @@ public class GetStudentsWithPaginationWithSearthWithFilterQueryHandler : IReques
         return await _context.Students
             .AsNoTracking()
             .Filter(
-                withoutStudentId: request.WithoutStudentId, 
-                isVerified: request.IsVerified, 
+                withoutStudentId: request.WithoutStudentId,
+                isVerified: request.IsVerified,
                 studentGroupIds: request.StudentGroupIds
             )
             .Search(request.SearchTerm ?? "")

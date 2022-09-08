@@ -7,7 +7,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Queries;
+namespace Application.Students.Queries.GetStudent;
 
 public record GetStudentWithFilterQuery : IRequest<StudentDTO>
 {

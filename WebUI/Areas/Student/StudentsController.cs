@@ -1,4 +1,5 @@
-﻿using Application.Students.Queries.GetStudents;
+﻿using Application.Students.Queries.GetStudent;
+using Application.Students.Queries.GetStudents;
 using Application.Students.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -20,9 +21,11 @@ public class StudentsController : ApiControllerBase
         {
             FollowerStudentId = AccountInfo!.Id,
             IsFollowerStudentVerified = true,
+
             PageNumber = view.PageNumber,
             PageSize = view.PageSize,
             SearchTerm = view.SearchTerm,
+
             IsVerified = true,
             WithoutStudentId = AccountInfo!.Id,
             StudentGroupIds = view.StudentGroupIds,
@@ -31,5 +34,15 @@ public class StudentsController : ApiControllerBase
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
         return result;
+    }
+
+    [HttpGet("{studentId}")]
+    public async Task<StudentDetailedDTO> GetStudent(Guid studentId)
+    {
+        return await Mediator.Send(new GetStudentDetailedWithQuery
+        {
+            StudentId = studentId,
+            IsVerified = true
+        });
     }
 }
