@@ -1,4 +1,5 @@
 ﻿using Application.Accounts.Commands.ChangePassword;
+using Application.Accounts.Commands.DeleteAccount;
 using Application.Accounts.Commands.RevokeToken;
 using Application.Accounts.Queries.AccountOwnsToken;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,14 @@ public class AccountsController : ApiControllerBase
         });
 
         return Ok(new { message = "Password change successful" });
+    }
+
+    [HttpDelete("own")]
+    public async Task<IActionResult> DeleteAccount()
+    {
+        await Mediator.Send(new DeleteAccountCommand(AccountInfo!.Id));
+
+        return Ok(new { message = "Account delete successful" });
     }
 
     // helper methods
