@@ -4,11 +4,10 @@ using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Common.Models.StudentGroup;
 using Application.Students.Queries.Models;
-using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Queries;
+namespace Application.Students.Queries.GetStudents;
 
 public record GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterQuery
     : IRequest<PaginatedList<FollowedStudentDetailedDTO>>
@@ -27,7 +26,7 @@ public record GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSea
     public List<Guid>? StudentGroupIds { get; init; }
 }
 
-public class GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler 
+public class GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler
     : IRequestHandler<GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterQuery, PaginatedList<FollowedStudentDetailedDTO>>
 {
     private readonly IApplicationDbContext _context;
