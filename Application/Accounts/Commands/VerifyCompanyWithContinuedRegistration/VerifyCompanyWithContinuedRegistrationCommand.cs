@@ -4,6 +4,7 @@ using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
@@ -24,10 +25,12 @@ public record VerifyCompanyWithContinuedRegistrationCommand : IRequest
 public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHandler<VerifyCompanyWithContinuedRegistrationCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IPasswordHasher<Account> _passwordHasher;
 
-    public VerifyCompanyWithContinuedRegistrationCommandHandler(IApplicationDbContext context)
+    public VerifyCompanyWithContinuedRegistrationCommandHandler(IApplicationDbContext context, IPasswordHasher<Account> passwordHasher)
     {
         _context = context;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<Unit> Handle(VerifyCompanyWithContinuedRegistrationCommand request, CancellationToken cancellationToken)
@@ -40,7 +43,7 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
             throw new NotFoundException(nameof(Company), request.Token);
         }
 
-        company.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        company.PasswordHash = _passwordHasher.HashPassword(company, request.Password);
         company.VerificationToken = null;
         company.Verified = DateTime.UtcNow;
         company.Name = request.Name;

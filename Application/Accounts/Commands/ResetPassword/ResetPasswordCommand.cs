@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Accounts.Commands.ResetPassword;
@@ -15,10 +16,12 @@ public record ResetPasswordCommand : IRequest
 public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IPasswordHasher<Account> _passwordHasher;
 
-    public ResetPasswordCommandHandler(IApplicationDbContext context)
+    public ResetPasswordCommandHandler(IApplicationDbContext context, IPasswordHasher<Account> passwordHasher)
     {
         _context = context;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<Unit> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
@@ -36,7 +39,7 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand>
             throw new ArgumentException("Token is expired.");
         }
 
-        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        account.PasswordHash = _passwordHasher.HashPassword(account, request.Password);
         account.ResetToken = null;
         account.ResetTokenExpires = null;
         account.PasswordReset = DateTime.UtcNow;

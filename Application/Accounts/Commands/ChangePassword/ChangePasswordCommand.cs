@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Accounts.Commands.ChangePassword;
@@ -16,10 +17,12 @@ public record ChangePasswordCommand : IRequest
 public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IPasswordHasher<Account> _passwordHasher;
 
-    public ChangePasswordCommandHandler(IApplicationDbContext context)
+    public ChangePasswordCommandHandler(IApplicationDbContext context, IPasswordHasher<Account> passwordHasher)
     {
         _context = context;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
@@ -31,12 +34,17 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
             throw new NotFoundException(nameof(Account), request.AccountId);
         }
 
-        if (!BCrypt.Net.BCrypt.Verify(request.OldPassword, account.PasswordHash))
-        {
-            throw new ArgumentException("The old password does not match.");
-        }
+        var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(account, account.PasswordHash, request.OldPassword);
 
-        account.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        switch (passwordVerificationResult)
+        {
+            case PasswordVerificationResult.Failed:
+                throw new ArgumentException("The old password does not match.");
+
+            case PasswordVerificationResult.SuccessRehashNeeded or PasswordVerificationResult.Success:
+                account.PasswordHash = _passwordHasher.HashPassword(account, request.NewPassword);
+                break;
+        }
 
         await _context.SaveChangesAsync();
 

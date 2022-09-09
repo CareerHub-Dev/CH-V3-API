@@ -1,4 +1,4 @@
-﻿using Application.Accounts.Commands.RevokeToken;
+﻿using Application.Accounts.Commands.RevokeRefreshToken;
 using Application.Accounts.Queries.GetAccountBrief;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
@@ -28,7 +28,7 @@ public class AccountsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("revoke-token")]
-    public async Task<IActionResult> RevokeTokenAsync(RevokeTokenCommand command)
+    public async Task<IActionResult> RevokeTokenAsync(RevokeRefreshTokenCommand command)
     {
         await Mediator.Send(command);
 

@@ -1,6 +1,6 @@
 ﻿using Application.Accounts.Commands.ChangePassword;
 using Application.Accounts.Commands.DeleteAccount;
-using Application.Accounts.Commands.RevokeToken;
+using Application.Accounts.Commands.RevokeRefreshToken;
 using Application.Accounts.Queries.AccountOwnsRefreshTokenWithFilter;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
@@ -33,7 +33,7 @@ public class AccountsController : ApiControllerBase
                 detail: $"Entity \"RefreshToken\" ({view.Token}) was not found.");
         }
 
-        await Mediator.Send(new RevokeTokenCommand { Token = view.Token ?? "" });
+        await Mediator.Send(new RevokeRefreshTokenCommand { Token = view.Token ?? "" });
 
         return Ok(new { message = "Token revoked" });
     }

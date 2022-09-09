@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
@@ -15,10 +16,12 @@ public record VerifyAdminWithContinuedRegistrationCommand : IRequest
 public class VerifyAdminWithContinuedRegistrationCommandHandler : IRequestHandler<VerifyAdminWithContinuedRegistrationCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IPasswordHasher<Account> _passwordHasher;
 
-    public VerifyAdminWithContinuedRegistrationCommandHandler(IApplicationDbContext context)
+    public VerifyAdminWithContinuedRegistrationCommandHandler(IApplicationDbContext context, IPasswordHasher<Account> passwordHasher)
     {
         _context = context;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<Unit> Handle(VerifyAdminWithContinuedRegistrationCommand request, CancellationToken cancellationToken)
@@ -31,7 +34,7 @@ public class VerifyAdminWithContinuedRegistrationCommandHandler : IRequestHandle
             throw new NotFoundException(nameof(Admin), request.Token);
         }
 
-        admin.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+        admin.PasswordHash = _passwordHasher.HashPassword(admin, request.Password);
         admin.VerificationToken = null;
         admin.Verified = DateTime.UtcNow;
 
