@@ -5,8 +5,10 @@ using Application.Common.Models.Email;
 using Application.Services;
 using Application.Services.Jwt;
 using Application.Services.Procedure;
+using Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -28,6 +30,7 @@ public static class ConfigureServices
         services.AddScoped<IEmailTemplateParserService, EmailTemplateParserService>();
         services.AddScoped<IEmailTemplatesService, EmailTemplatesService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IPasswordHasher<Account>, BCryptPasswordHasher<Account>>();
 
         services.Configure<EmailTemplateSettings>(configuration.GetSection(nameof(EmailTemplateSettings)));
         services.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
