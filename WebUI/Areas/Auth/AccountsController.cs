@@ -1,7 +1,7 @@
 ﻿using Application.Accounts.Commands.ChangePassword;
 using Application.Accounts.Commands.DeleteAccount;
 using Application.Accounts.Commands.RevokeToken;
-using Application.Accounts.Queries.AccountOwnsToken;
+using Application.Accounts.Queries.AccountOwnsRefreshTokenWithFilter;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.Common.Models.Account;
@@ -20,17 +20,20 @@ public class AccountsController : ApiControllerBase
             view.Token = Request.Cookies["refreshToken"];
         }
 
-        if (string.IsNullOrWhiteSpace(view.Token))
+        if (!await Mediator.Send(new AccountOwnsRefreshTokenWithFilterQuery
         {
-            return Problem(title: "Token is required.", statusCode: StatusCodes.Status400BadRequest, detail: "Body or cookies don't contain token.");
+            Token = view.Token ?? "",
+            AccountId = AccountInfo!.Id,
+            IsAccountVerified = true
+        }))
+        {
+            return Problem(
+                title: "The specified resource was not found.", 
+                statusCode: StatusCodes.Status404NotFound, 
+                detail: $"Entity \"RefreshToken\" ({view.Token}) was not found.");
         }
 
-        if (!await Mediator.Send(new AccountOwnsTokenQuery { Token = view.Token, AccountId = AccountInfo!.Id }))
-        {
-            return Problem(title: "Token was not found.", statusCode: StatusCodes.Status404NotFound, detail: "Account don't own this token.");
-        }
-
-        await Mediator.Send(new RevokeTokenCommand { Token = view.Token });
+        await Mediator.Send(new RevokeTokenCommand { Token = view.Token ?? "" });
 
         return Ok(new { message = "Token revoked" });
     }

@@ -11,10 +11,11 @@ public record GetAccountBriefQuery(Guid AccountId) : IRequest<AccountBriefDTO>;
 public class GetStudentLogQueryHandler : IRequestHandler<GetAccountBriefQuery, AccountBriefDTO>
 {
     private readonly IApplicationDbContext _context;
-
-    public GetStudentLogQueryHandler(IApplicationDbContext context)
+    private readonly IAccountHelper _accountHelper;
+    public GetStudentLogQueryHandler(IApplicationDbContext context, IAccountHelper accountHelper)
     {
         _context = context;
+        _accountHelper = accountHelper;
     }
 
     public async Task<AccountBriefDTO> Handle(GetAccountBriefQuery request, CancellationToken cancellationToken)
@@ -35,7 +36,7 @@ public class GetStudentLogQueryHandler : IRequestHandler<GetAccountBriefQuery, A
             Email = account.Email,
             Verified = account.Verified,
             PasswordReset = account.PasswordReset,
-            Role = account.GetType().Name
+            Role = _accountHelper.GetRole(account)
         };
     }
 }

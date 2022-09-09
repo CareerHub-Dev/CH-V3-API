@@ -4,6 +4,19 @@ namespace Application.Common.Entensions;
 
 public static class FiltrationExtentions
 {
+    public static IQueryable<Account> Filter(this IQueryable<Account> accounts, bool? isVerified = null)
+    {
+        if (isVerified.HasValue && isVerified == true)
+        {
+            accounts = accounts.Where(x => x.Verified != null || x.PasswordReset != null);
+        }
+        else if (isVerified.HasValue && isVerified == false)
+        {
+            accounts = accounts.Where(x => x.Verified == null && x.PasswordReset == null);
+        }
+
+        return accounts;
+    }
     public static IQueryable<Admin> Filter(this IQueryable<Admin> admins, Guid? withoutAdminId = null, bool? isVerified = null, bool? isSuperAdmin = null)
     {
         if (withoutAdminId.HasValue)
