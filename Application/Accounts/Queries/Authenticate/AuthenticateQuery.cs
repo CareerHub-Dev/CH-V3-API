@@ -1,10 +1,10 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Helpers;
 using Application.Common.Interfaces;
-using Application.Common.Models;
+using Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using System.Security.Authentication;
 
 namespace Application.Accounts.Queries.Authenticate;
@@ -19,19 +19,21 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtService _jwtService;
-    private readonly JwtSettings _jwtSettings;
     private readonly IСurrentRemoteIpAddressService _сurrentRemoteIpAddressService;
-
+    private readonly IPasswordHasher<Account> _passwordHasher;
+    private readonly IAccountHelper _accountHelper;
     public AuthenticateQueryHandler(
-        IApplicationDbContext context, 
-        IJwtService jwtService, 
-        IOptions<JwtSettings> jwtSettings, 
-        IСurrentRemoteIpAddressService сurrentRemoteIpAddressService)
+        IApplicationDbContext context,
+        IJwtService jwtService,
+        IСurrentRemoteIpAddressService сurrentRemoteIpAddressService,
+        IPasswordHasher<Account> passwordHasher,
+        IAccountHelper accountHelper)
     {
         _context = context;
         _jwtService = jwtService;
-        _jwtSettings = jwtSettings.Value;
         _сurrentRemoteIpAddressService = сurrentRemoteIpAddressService;
+        _passwordHasher = passwordHasher;
+        _accountHelper = accountHelper;
     }
 
     public async Task<AuthenticateResult> Handle(AuthenticateQuery request, CancellationToken cancellationToken)
@@ -42,16 +44,29 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
                     x.NormalizedEmail == request.Email.NormalizeName()
                 );
 
-        if (account == null || !account.IsVerified || !BCrypt.Net.BCrypt.Verify(request.Password, account.PasswordHash))
+        if (account == null || !account.IsVerified)
         {
             throw new AuthenticationException("This combination of email and password doesn't exist");
         }
 
+        var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(account, account.PasswordHash, request.Password);
+
+        switch (passwordVerificationResult)
+        {
+            case PasswordVerificationResult.Failed:
+                throw new AuthenticationException("This combination of email and password doesn't exist");
+
+            case PasswordVerificationResult.SuccessRehashNeeded:
+                account.PasswordHash = _passwordHasher.HashPassword(account, request.Password);
+                break;
+        }
+
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);
         var refreshToken = await _jwtService.GenerateRefreshTokenAsync(_сurrentRemoteIpAddressService.IpAddress);
+
         account.RefreshTokens.Add(refreshToken);
 
-        AccountHelper.RemoveOldRefreshTokens(account, _jwtSettings.RefreshTokenTTL);
+        _accountHelper.RemoveOldRefreshTokensOfAccount(account);
 
         await _context.SaveChangesAsync();
 
@@ -61,7 +76,7 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
             JwtTokenExpires = jwtToken.Expires,
             RefreshToken = refreshToken.Token,
             AccountId = account.Id,
-            Role = AccountHelper.GetRole(account)
+            Role = _accountHelper.GetRole(account)
         };
     }
 }
