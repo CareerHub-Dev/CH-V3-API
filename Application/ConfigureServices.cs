@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Common.Models.Email;
+using Application.Helpers;
 using Application.Services;
 using Application.Services.Jwt;
 using Application.Services.Procedure;
@@ -31,6 +32,9 @@ public static class ConfigureServices
         services.AddScoped<IEmailTemplatesService, EmailTemplatesService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IPasswordHasher<Account>, BCryptPasswordHasher<Account>>();
+
+        services.AddScoped<IAccountHelper, AccountHelper>();
+        services.AddScoped<IRefreshTokenHelper, RefreshTokenHelper>();
 
         services.Configure<EmailTemplateSettings>(configuration.GetSection(nameof(EmailTemplateSettings)));
         services.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
