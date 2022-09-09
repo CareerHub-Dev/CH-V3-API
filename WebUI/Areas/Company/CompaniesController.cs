@@ -3,6 +3,7 @@ using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries;
 using Application.Companies.Queries.Models;
+using Application.CompanyLinks.Queries;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.Common.Models.Company;
@@ -47,5 +48,36 @@ public class CompaniesController : ApiControllerBase
     public async Task<Guid?> UpdateOwnCompanyBanner(IFormFile? file)
     {
         return await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = AccountInfo!.Id, Banner = file });
+    }
+
+    [HttpGet("own/companyLinks")]
+    public async Task<IEnumerable<CompanyLinkDTO>> GetCompanyLinksOfOwnCompany()
+    {
+        return await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
+        {
+            CompanyId = AccountInfo!.Id,
+            IsCompanyVerified = true,
+        });
+    }
+
+    [HttpGet("own/amountSubscribers")]
+    public async Task<int> GetAmountSubscribersOfOwnCompany()
+    {
+        return await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
+        {
+            CompanyId = AccountInfo!.Id,
+            IsVerified = true,
+            IsSubscriberVerified = true
+        });
+    }
+
+    [HttpGet("own/amountJobOffers")]
+    public async Task<int> GetAmountJobOffersOfOwnCompany()
+    {
+        return await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
+        {
+            CompanyId = AccountInfo!.Id,
+            IsVerified = true,
+        });
     }
 }
