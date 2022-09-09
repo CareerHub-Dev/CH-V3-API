@@ -45,14 +45,9 @@ public class AccountsController : ApiControllerBase
             view.Token = Request.Cookies["refreshToken"];
         }
 
-        if (string.IsNullOrWhiteSpace(view.Token))
-        {
-            return Problem(title: "Token is required.", statusCode: StatusCodes.Status400BadRequest, detail: "Body or cookies don't contain token.");
-        }
-
         var response = await Mediator.Send(new RefreshTokenQuery
         {
-            Token = view.Token
+            Token = view.Token ?? ""
         });
 
         switch (clientType)

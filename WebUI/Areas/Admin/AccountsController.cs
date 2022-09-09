@@ -18,9 +18,7 @@ public class AccountsController : ApiControllerBase
     [HttpGet("{accountId}")]
     public async Task<AccountBriefDTO> GetAccountBrief(Guid accountId)
     {
-        var result = await Mediator.Send(new GetAccountBriefQuery(accountId));
-
-        return result;
+        return await Mediator.Send(new GetAccountBriefQuery(accountId));
     }
 
     /// <remarks>

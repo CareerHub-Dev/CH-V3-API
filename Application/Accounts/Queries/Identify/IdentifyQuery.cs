@@ -1,5 +1,4 @@
-﻿using Application.Common.Helpers;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,11 +13,13 @@ public class IdentifyQueryHandler : IRequestHandler<IdentifyQuery, IdentifyResul
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtService _jwtService;
+    private readonly IAccountHelper _accountHelper;
 
-    public IdentifyQueryHandler(IApplicationDbContext context, IJwtService jwtService)
+    public IdentifyQueryHandler(IApplicationDbContext context, IJwtService jwtService, IAccountHelper accountHelper)
     {
         _context = context;
         _jwtService = jwtService;
+        _accountHelper = accountHelper;
     }
 
     public async Task<IdentifyResult?> Handle(IdentifyQuery request, CancellationToken cancellationToken)
@@ -31,6 +32,6 @@ public class IdentifyQueryHandler : IRequestHandler<IdentifyQuery, IdentifyResul
 
         if (account == null) return null;
 
-        return new IdentifyResult { Id = account.Id, Role = AccountHelper.GetRole(account), IsVerified = account.IsVerified };
+        return new IdentifyResult { Id = account.Id, Role = _accountHelper.GetRole(account), IsVerified = account.IsVerified };
     }
 }
