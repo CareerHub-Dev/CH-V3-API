@@ -136,32 +136,25 @@ public class StudentsController : ApiControllerBase
         return result;
     }
 
-    [HttpPut("{studentId}")]
-    public async Task<IActionResult> UpdateOwnStudentAccount(Guid studentId, UpdateStudentCommand command)
+    [HttpPut("own")]
+    public async Task<IActionResult> UpdateOwnStudentAccount(UpdateOwnStudentAccountView view)
     {
-        if (studentId != command.StudentId)
+        await Mediator.Send(new UpdateStudentCommand
         {
-            return BadRequest();
-        }
-
-        if(studentId != AccountInfo!.Id)
-        {
-            return StatusCode(403);
-        }
-
-        await Mediator.Send(command);
+            StudentId = AccountInfo!.Id,
+            FirstName = view.FirstName,
+            LastName = view.LastName,
+            Phone = view.Phone,
+            BirthDate = view.BirthDate,
+            StudentGroupId = view.StudentGroupId,
+        });
 
         return NoContent();
     }
 
-    [HttpPost("{studentId}/photo")]
-    public async Task<ActionResult<Guid?>> UpdateOwnStudentPhoto(Guid studentId, IFormFile? file)
+    [HttpPost("own/photo")]
+    public async Task<ActionResult<Guid?>> UpdateOwnStudentPhoto(IFormFile? file)
     {
-        if (studentId != AccountInfo!.Id)
-        {
-            return StatusCode(403);
-        }
-
-        return await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = studentId, Photo = file });
+        return await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = AccountInfo!.Id, Photo = file });
     }
 }
