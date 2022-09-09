@@ -121,12 +121,12 @@ public class CompaniesController : ApiControllerBase
     [HttpPost("{companyId}/logo")]
     public async Task<Guid?> UpdateCompanyLogo(Guid companyId, IFormFile? file)
     {
-        return await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file });
+        return await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = companyId, Logo = file });
     }
 
     [HttpPost("{companyId}/banner")]
     public async Task<Guid?> UpdateCompanyBanner(Guid companyId, IFormFile? file)
     {
-        return await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = companyId, Logo = file });
+        return await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file });
     }
 }
