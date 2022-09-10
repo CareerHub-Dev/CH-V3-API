@@ -62,7 +62,6 @@ public class AdminsController : ApiControllerBase
     [HttpPut("{adminId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAdmin(Guid adminId, UpdateAdminCommand command)
     {
         if (adminId != command.AdminId)
