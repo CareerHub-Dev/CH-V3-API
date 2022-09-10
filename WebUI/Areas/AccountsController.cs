@@ -16,7 +16,7 @@ public class AccountsController : ApiControllerBase
 {
     [HttpPost("authenticate")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticateResult))]
-    public async Task<IActionResult> Authenticate(AuthenticateQuery query, string clientType)
+    public async Task<IActionResult> Authenticate(AuthenticateQuery query)
     {
         var response = await Mediator.Send(query);
 
@@ -26,7 +26,7 @@ public class AccountsController : ApiControllerBase
 
     [HttpPost("refresh-token")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResult))]
-    public async Task<IActionResult> RefreshToken(RefreshTokenView view, string clientType)
+    public async Task<IActionResult> RefreshToken(RefreshTokenView view)
     {
         if (string.IsNullOrWhiteSpace(view.Token))
         {

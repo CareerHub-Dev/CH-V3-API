@@ -15,21 +15,32 @@ namespace WebUI.Areas.Admin;
 public class AdminsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<AdminDTO>> GetAdmins([FromQuery] GetAdminsWithPaginationWithSearchWithFilterView view)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AdminDTO>))]
+    public async Task<IActionResult> GetAdmins([FromQuery] GetAdminsWithPaginationWithSearchWithFilterView view)
     {
         var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterQuery
         {
             PageNumber = view.PageNumber,
             PageSize = view.PageSize,
+
             SearchTerm = view.SearchTerm,
+
             WithoutAdminId = AccountInfo!.Id,
-            IsVerified = view.IsVerified,
+            IsAdminVerified = view.IsAdminVerified,
             IsSuperAdmin = view.IsSuperAdmin,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return result;
+        return Ok(result);
+    }
+
+    [HttpGet("{adminId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AdminDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAdmin(Guid adminId)
+    {
+        return Ok(await Mediator.Send(new GetAdminQuery(adminId)));
     }
 
     /// <remarks>
@@ -39,12 +50,19 @@ public class AdminsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("invite")]
-    public async Task<ActionResult<Guid>> InviteAdmin(InviteAdminCommand command)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> InviteAdmin(InviteAdminCommand command)
     {
-        return await Mediator.Send(command);
+        var result = await Mediator.Send(command);
+
+        return CreatedAtAction(nameof(GetAdmin), new { adminId = result }, result);
     }
 
     [HttpPut("{adminId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAdmin(Guid adminId, UpdateAdminCommand command)
     {
         if (adminId != command.AdminId)
@@ -64,6 +82,9 @@ public class AdminsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("send-invite-email")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SendInviteAdminEmail(SendInviteAdminEmailCommand command)
     {
         await Mediator.Send(command);
@@ -72,6 +93,8 @@ public class AdminsController : ApiControllerBase
     }
 
     [HttpDelete("{adminId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteAdmin(Guid adminId)
     {
         await Mediator.Send(new DeleteAdminCommand(adminId));
