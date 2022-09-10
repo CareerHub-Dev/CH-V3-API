@@ -14,105 +14,86 @@ namespace WebUI.Areas;
 [Route("api/[controller]")]
 public class AccountsController : ApiControllerBase
 {
-    [HttpPost("authenticate-{clientType}")]
+    [HttpPost("authenticate")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticateResult))]
     public async Task<IActionResult> Authenticate(AuthenticateQuery query, string clientType)
     {
         var response = await Mediator.Send(query);
 
-        switch (clientType)
-        {
-            case "web":
-                {
-                    SetTokenCookie(response.RefreshToken);
-                    return Ok(new
-                    {
-                        response.AccountId,
-                        response.JwtToken,
-                        response.JwtTokenExpires,
-                        response.Role
-                    });
-                }
-            default:
-                return Ok(response);
-        }
+        SetTokenCookie(response.RefreshToken);
+        return Ok(response);
     }
 
-    [HttpPost("refresh-token-{clientType}")]
+    [HttpPost("refresh-token")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResult))]
     public async Task<IActionResult> RefreshToken(RefreshTokenView view, string clientType)
     {
         if (string.IsNullOrWhiteSpace(view.Token))
         {
-            view.Token = Request.Cookies["refreshToken"];
+            view.Token = Request.Cookies["refreshToken"] ?? "";
         }
 
         var response = await Mediator.Send(new RefreshTokenQuery
         {
-            Token = view.Token ?? ""
+            Token = view.Token
         });
 
-        switch (clientType)
-        {
-            case "web":
-                {
-                    SetTokenCookie(response.RefreshToken);
-                    return Ok(new
-                    {
-                        response.AccountId,
-                        response.JwtToken,
-                        response.JwtTokenExpires,
-                        response.Role
-                    });
-                }
-            default:
-                return Ok(response);
-
-        }
+        SetTokenCookie(response.RefreshToken);
+        return Ok(response);
     }
 
     [HttpPost("verify-company-email")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> VerifyCompanyWithContinuedRegistration([FromForm] VerifyCompanyWithContinuedRegistrationCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok(new { message = "Verification successful, you can now login" });
+        return Ok();
     }
+
     [HttpPost("verify-admin-email")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> VerifyAdminWithContinuedRegistration(VerifyAdminWithContinuedRegistrationCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok(new { message = "Verification successful, you can now login" });
+        return Ok();
     }
+
     [HttpPost("verify-student-email")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> VerifyStudent(VerifyStudentCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok(new { message = "Verification successful, you can now login" });
+        return Ok();
     }
 
     [HttpPost("register/student")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> RegisterStudent(RegisterStudentCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok(new { message = "Registration successful, please check your email for verification instructions" });
+        return Ok();
     }
 
     [HttpPost("forgot-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ForgotPassword(SendPasswordResetEmailCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok(new { message = "Please check your email for password reset instructions" });
+        return Ok();
     }
 
     [HttpPost("reset-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok(new { message = "Password reset successful, you can now login" });
+        return Ok();
     }
 
     // helper methods

@@ -1,4 +1,5 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -27,7 +28,9 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
 
     public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        var account = await _context.Accounts.FirstOrDefaultAsync(x => x.Id == request.AccountId);
+        var account = await _context.Accounts
+            .Filter(isVerified: true)
+            .FirstOrDefaultAsync(x => x.Id == request.AccountId);
 
         if (account == null)
         {

@@ -1,4 +1,5 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -38,9 +39,10 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
     {
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
+                .Filter(isVerified: true)
                 .SingleOrDefaultAsync(x => x.RefreshTokens.Any(t => t.Token == request.Token));
 
-        if (account == null || !account.IsVerified)
+        if (account == null)
         {
             throw new NotFoundException(nameof(Account), request.Token);
         }

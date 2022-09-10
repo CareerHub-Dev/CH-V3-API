@@ -16,9 +16,10 @@ public class AccountsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpGet("{accountId}")]
-    public async Task<AccountBriefDTO> GetAccountBrief(Guid accountId)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccountBriefDTO))]
+    public async Task<IActionResult> GetAccountBrief(Guid accountId)
     {
-        return await Mediator.Send(new GetAccountBriefQuery(accountId));
+        return Ok(await Mediator.Send(new GetAccountBriefQuery(accountId)));
     }
 
     /// <remarks>
@@ -28,10 +29,11 @@ public class AccountsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("revoke-token")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> RevokeTokenAsync(RevokeRefreshTokenCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok(new { message = "Token revoked" });
+        return Ok();
     }
 }

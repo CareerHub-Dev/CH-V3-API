@@ -39,11 +39,12 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
     {
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
+                .Filter(isVerified: true)
                 .SingleOrDefaultAsync(x =>
                     x.NormalizedEmail == request.Email.NormalizeName()
                 );
 
-        if (account == null || !account.IsVerified)
+        if (account == null)
         {
             throw new AuthenticationException("This combination of email and password doesn't exist");
         }

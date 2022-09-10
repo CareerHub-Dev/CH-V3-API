@@ -13,16 +13,17 @@ namespace WebUI.Areas.Auth;
 public class AccountsController : ApiControllerBase
 {
     [HttpPost("revoke-token")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> RevokeTokenAsync(RevokeTokenView view)
     {
         if (string.IsNullOrWhiteSpace(view.Token))
         {
-            view.Token = Request.Cookies["refreshToken"];
+            view.Token = Request.Cookies["refreshToken"] ?? "";
         }
 
         if (!await Mediator.Send(new AccountOwnsRefreshTokenWithFilterQuery
         {
-            Token = view.Token ?? "",
+            Token = view.Token,
             AccountId = AccountInfo!.Id,
             IsAccountVerified = true
         }))
@@ -33,13 +34,14 @@ public class AccountsController : ApiControllerBase
                 detail: $"Entity \"RefreshToken\" ({view.Token}) was not found.");
         }
 
-        await Mediator.Send(new RevokeRefreshTokenCommand { Token = view.Token ?? "" });
+        await Mediator.Send(new RevokeRefreshTokenCommand { Token = view.Token });
 
-        return Ok(new { message = "Token revoked" });
+        return Ok();
     }
 
     [Authorize]
     [HttpPost("change-password")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> ChangePassword(ChangePasswordView view)
     {
         await Mediator.Send(new ChangePasswordCommand
@@ -49,14 +51,15 @@ public class AccountsController : ApiControllerBase
             AccountId = AccountInfo!.Id,
         });
 
-        return Ok(new { message = "Password change successful" });
+        return Ok();
     }
 
     [HttpDelete("own")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteAccount()
     {
         await Mediator.Send(new DeleteAccountCommand(AccountInfo!.Id));
 
-        return Ok(new { message = "Account delete successful" });
+        return Ok();
     }
 }
