@@ -14,6 +14,6 @@ public class Experience : BaseEntity
     public DateTime StartDate { get; set; }
     public DateTime? EndDate { get; set; }
 
-    public Guid CVId { get; set; }
-    public CV? CV { get; set; }
+    public Guid StudentId { get; set; }
+    public Student? Student { get; set; }
 }

@@ -26,7 +26,6 @@ public class CV : BaseEntity
 
     public List<JobOffer> TargetJobOffers { get; set; } = new List<JobOffer>();
     public List<ForeignLanguage> ForeignLanguages { get; set; } = new List<ForeignLanguage>();
-    public List<Experience> Experiences { get; set; } = new List<Experience>();
     public List<CVProjectLink> ProjectLinks { get; set; } = new List<CVProjectLink>();
     public List<Education> Educations { get; set; } = new List<Education>();
 }

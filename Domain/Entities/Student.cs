@@ -17,5 +17,7 @@ public class Student : Account
     public List<StudentSubscription> StudentSubscriptions { get; set; } = new List<StudentSubscription>();
     public List<StudentSubscription> StudentsSubscribed { get; set; } = new List<StudentSubscription>();
 
+    public List<Experience> Experiences { get; set; } = new List<Experience>();
+
     public List<CV> CVs { get; set; } = new List<CV>();
 }
