@@ -7,22 +7,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Experiences.Queries;
 
-public class GetExperiencesOfStudentWithFilterQuery : IRequest<IEnumerable<ExperienceDTO>>
+public class GetExperiencesOfStudentWithPaginationWithFilterQuery : IRequest<IEnumerable<ExperienceDTO>>
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentVerified { get; init; }
+
+    public int PageNumber { get; init; } = 1;
+    public int PageSize { get; init; } = 10;
 }
 
-public class GetExperiencesOfStudentWithFilterQueryHandler : IRequestHandler<GetExperiencesOfStudentWithFilterQuery, IEnumerable<ExperienceDTO>>
+public class GetExperiencesOfStudentWithPaginationWithFilterQueryHandler : IRequestHandler<GetExperiencesOfStudentWithPaginationWithFilterQuery, IEnumerable<ExperienceDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetExperiencesOfStudentWithFilterQueryHandler(IApplicationDbContext context)
+    public GetExperiencesOfStudentWithPaginationWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<ExperienceDTO>> Handle(GetExperiencesOfStudentWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ExperienceDTO>> Handle(GetExperiencesOfStudentWithPaginationWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Students.Filter(isVerified: request.IsStudentVerified).AnyAsync(x => x.Id == request.StudentId))
         {
