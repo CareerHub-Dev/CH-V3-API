@@ -1,7 +1,6 @@
 ﻿using Application.Accounts.Commands.ChangePassword;
 using Application.Accounts.Commands.DeleteAccount;
-using Application.Accounts.Commands.RevokeRefreshToken;
-using Application.Accounts.Queries.AccountOwnsRefreshTokenWithFilter;
+using Application.Accounts.Commands.RevokeRefreshTokenOfAccount;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.Common.Models.Account;
@@ -21,20 +20,7 @@ public class AccountsController : ApiControllerBase
             view.Token = Request.Cookies["refreshToken"] ?? "";
         }
 
-        if (!await Mediator.Send(new AccountOwnsRefreshTokenWithFilterQuery
-        {
-            Token = view.Token,
-            AccountId = AccountInfo!.Id,
-            IsAccountVerified = true
-        }))
-        {
-            return Problem(
-                title: "The specified resource was not found.", 
-                statusCode: StatusCodes.Status404NotFound, 
-                detail: $"Entity \"RefreshToken\" ({view.Token}) was not found.");
-        }
-
-        await Mediator.Send(new RevokeRefreshTokenCommand { Token = view.Token });
+        await Mediator.Send(new RevokeRefreshTokenOfAccountCommand { Token = view.Token, AccountId = AccountInfo!.Id });
 
         return Ok();
     }

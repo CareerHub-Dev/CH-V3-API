@@ -4,17 +4,18 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Accounts.Commands.RevokeRefreshToken;
+namespace Application.Accounts.Commands.RevokeRefreshTokenOfAccount;
 
-public record RevokeRefreshTokenCommand : IRequest
+public record RevokeRefreshTokenOfAccountCommand : IRequest
 {
     public string Token { init; get; } = string.Empty;
+    public Guid AccountId { get; init; }
 }
-public class RevokeTokenCommandHandler : IRequestHandler<RevokeRefreshTokenCommand>
+public class RevokeRefreshTokenOfAccountCommandHandler : IRequestHandler<RevokeRefreshTokenOfAccountCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly IСurrentRemoteIpAddressService _сurrentRemoteIpAddressService;
-    public RevokeTokenCommandHandler(
+    public RevokeRefreshTokenOfAccountCommandHandler(
         IApplicationDbContext context, 
         IСurrentRemoteIpAddressService сurrentRemoteIpAddressService)
     {
@@ -22,10 +23,10 @@ public class RevokeTokenCommandHandler : IRequestHandler<RevokeRefreshTokenComma
         _сurrentRemoteIpAddressService = сurrentRemoteIpAddressService;
     }
 
-    public async Task<Unit> Handle(RevokeRefreshTokenCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(RevokeRefreshTokenOfAccountCommand request, CancellationToken cancellationToken)
     {
         var refreshToken = await _context.RefreshTokens
-            .SingleOrDefaultAsync(x => x.Token == request.Token);
+            .SingleOrDefaultAsync(x => x.Token == request.Token && x.AccountId == request.AccountId);
 
         if (refreshToken == null)
         {
