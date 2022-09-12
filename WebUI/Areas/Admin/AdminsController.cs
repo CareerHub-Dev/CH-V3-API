@@ -51,7 +51,6 @@ public class AdminsController : ApiControllerBase
     /// </remarks>
     [HttpPost("invite")]
     [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> InviteAdmin(InviteAdminCommand command)
     {
         var result = await Mediator.Send(command);

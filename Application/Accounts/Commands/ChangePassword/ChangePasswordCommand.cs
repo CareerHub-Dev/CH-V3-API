@@ -29,7 +29,6 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
     public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
         var account = await _context.Accounts
-            .Filter(isVerified: true)
             .FirstOrDefaultAsync(x => x.Id == request.AccountId);
 
         if (account == null)

@@ -12,7 +12,9 @@ namespace WebUI.Areas.Auth;
 public class AccountsController : ApiControllerBase
 {
     [HttpPost("revoke-token")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RevokeTokenAsync(RevokeTokenView view)
     {
         if (string.IsNullOrWhiteSpace(view.Token))
@@ -22,12 +24,14 @@ public class AccountsController : ApiControllerBase
 
         await Mediator.Send(new RevokeRefreshTokenOfAccountCommand { Token = view.Token, AccountId = AccountInfo!.Id });
 
-        return Ok();
+        return NoContent();
     }
 
     [Authorize]
     [HttpPost("change-password")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ChangePassword(ChangePasswordView view)
     {
         await Mediator.Send(new ChangePasswordCommand
@@ -41,11 +45,12 @@ public class AccountsController : ApiControllerBase
     }
 
     [HttpDelete("own")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteAccount()
     {
         await Mediator.Send(new DeleteAccountCommand(AccountInfo!.Id));
 
-        return Ok();
+        return NoContent();
     }
 }

@@ -17,6 +17,7 @@ public class AccountsController : ApiControllerBase
     /// </remarks>
     [HttpGet("{accountId}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccountBriefDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAccountBrief(Guid accountId)
     {
         return Ok(await Mediator.Send(new GetAccountBriefQuery(accountId)));
@@ -29,11 +30,13 @@ public class AccountsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("revoke-token")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RevokeTokenAsync(RevokeRefreshTokenCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok();
+        return NoContent();
     }
 }

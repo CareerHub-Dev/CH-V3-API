@@ -16,6 +16,7 @@ public class AccountsController : ApiControllerBase
 {
     [HttpPost("authenticate")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticateResult))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Authenticate(AuthenticateQuery query)
     {
         var response = await Mediator.Send(query);
@@ -26,6 +27,8 @@ public class AccountsController : ApiControllerBase
 
     [HttpPost("refresh-token")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResult))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RefreshToken(RefreshTokenView view)
     {
         if (string.IsNullOrWhiteSpace(view.Token))
@@ -43,57 +46,65 @@ public class AccountsController : ApiControllerBase
     }
 
     [HttpPost("verify-company-email")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> VerifyCompanyWithContinuedRegistration([FromForm] VerifyCompanyWithContinuedRegistrationCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost("verify-admin-email")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> VerifyAdminWithContinuedRegistration(VerifyAdminWithContinuedRegistrationCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost("verify-student-email")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> VerifyStudent(VerifyStudentCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok();
+        return NoContent();
     }
 
-    [HttpPost("register/student")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [HttpPost("register-student")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterStudent(RegisterStudentCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost("forgot-password")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ForgotPassword(SendPasswordResetEmailCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok();
+        return NoContent();
     }
 
     [HttpPost("reset-password")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
         await Mediator.Send(command);
 
-        return Ok();
+        return NoContent();
     }
 
     // helper methods
