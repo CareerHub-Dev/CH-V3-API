@@ -56,7 +56,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
             Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.6.1",
             Title = "Internal Server Error.",
             Detail = exception.Message,
-            Status = 500
+            Status = StatusCodes.Status500InternalServerError
         };
 
         context.Result = new ObjectResult(details);
