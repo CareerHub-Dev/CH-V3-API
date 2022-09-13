@@ -25,6 +25,8 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPut("own")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateOwnCompanyAccount(UpdateOwnCompanyAccountView view)
     {
         await Mediator.Send(new UpdateCompanyCommand
@@ -39,15 +41,19 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPost("own/logo")]
-    public async Task<Guid?> UpdateOwnCompanyLogo(IFormFile? file)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateOwnCompanyLogo(IFormFile? file)
     {
-        return await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file });
+        return Ok(await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file }));
     }
 
     [HttpPost("own/banner")]
-    public async Task<Guid?> UpdateOwnCompanyBanner(IFormFile? file)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateOwnCompanyBanner(Guid companyId, IFormFile? file)
     {
-        return await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = AccountInfo!.Id, Banner = file });
+        return Ok(await Mediator.Send(new UpdateCompanyBannerCommand { Banner = file }));
     }
 
     [HttpGet("own/companyLinks")]

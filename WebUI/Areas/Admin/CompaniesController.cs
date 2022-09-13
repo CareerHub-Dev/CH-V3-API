@@ -78,9 +78,12 @@ public class CompaniesController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("invite")]
-    public async Task<ActionResult<Guid>> InviteCompany(InviteCompanyCommand command)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    public async Task<IActionResult> InviteCompany(InviteCompanyCommand command)
     {
-        return await Mediator.Send(command);
+        var result = await Mediator.Send(command);
+
+        return CreatedAtAction(nameof(GetCompany), new { companyId = result }, result);
     }
 
     /// <remarks>
@@ -90,6 +93,9 @@ public class CompaniesController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("send-invite-email")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SendInviteCompanyEmail(SendInviteCompanyEmailCommand command)
     {
         await Mediator.Send(command);
@@ -98,6 +104,8 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpDelete("{companyId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCompany(Guid companyId)
     {
         await Mediator.Send(new DeleteCompanyCommand(companyId));
@@ -106,6 +114,9 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPut("{companyId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateCompany(Guid companyId, UpdateCompanyCommand command)
     {
         if (companyId != command.CompanyId)
@@ -119,14 +130,18 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPost("{companyId}/logo")]
-    public async Task<Guid?> UpdateCompanyLogo(Guid companyId, IFormFile? file)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateCompanyLogo(Guid companyId, IFormFile? file)
     {
-        return await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = companyId, Logo = file });
+        return Ok(await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = companyId, Logo = file }));
     }
 
     [HttpPost("{companyId}/banner")]
-    public async Task<Guid?> UpdateCompanyBanner(Guid companyId, IFormFile? file)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateCompanyBanner(Guid companyId, IFormFile? file)
     {
-        return await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file });
+        return Ok(await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file }));
     }
 }
