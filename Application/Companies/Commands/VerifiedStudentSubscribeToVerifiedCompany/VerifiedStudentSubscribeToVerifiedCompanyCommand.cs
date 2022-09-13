@@ -5,26 +5,27 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Commands.StudentSubscribeToCompany;
+namespace Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
 
-public record StudentSubscribeToCompanyCommand : IRequest
+public record VerifiedStudentSubscribeToVerifiedCompanyCommand : IRequest
 {
     public Guid StudentId { get; init; }
     public Guid CompanytId { get; init; }
 }
 
-public class StudentSubscribeToCompanyCommandHandler : IRequestHandler<StudentSubscribeToCompanyCommand>
+public class VerifiedStudentSubscribeToVerifiedCompanyCommandHandler : IRequestHandler<VerifiedStudentSubscribeToVerifiedCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public StudentSubscribeToCompanyCommandHandler(IApplicationDbContext context)
+    public VerifiedStudentSubscribeToVerifiedCompanyCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(StudentSubscribeToCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(VerifiedStudentSubscribeToVerifiedCompanyCommand request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
+            .Filter(isVerified: true)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
@@ -34,6 +35,7 @@ public class StudentSubscribeToCompanyCommandHandler : IRequestHandler<StudentSu
 
         var company = await _context.Companies
             .Include(x => x.SubscribedStudents)
+            .Filter(isVerified: true)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (company == null)
