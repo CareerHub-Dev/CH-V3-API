@@ -16,7 +16,7 @@ public class CV : BaseEntity
     public Guid? PhotoId { get; set; }
     public string Goals { get; set; } = string.Empty;
     public string SkillsAndTechnologies { get; set; } = string.Empty;
-    public string OtherExperience { get; set; } = string.Empty;
+    public string ExperienceHighlights { get; set; } = string.Empty;
 
     public DateTime Created { get; set; }
     public DateTime? Modified { get; set; }

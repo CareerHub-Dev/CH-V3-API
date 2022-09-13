@@ -20,7 +20,7 @@ public class CVConfigurations : IEntityTypeConfiguration<CV>
             .HasMaxLength(1024)
             .IsRequired();
 
-        builder.Property(x => x.OtherExperience)
+        builder.Property(x => x.ExperienceHighlights)
             .HasMaxLength(1024)
             .IsRequired();
     }
