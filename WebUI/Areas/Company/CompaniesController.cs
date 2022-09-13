@@ -5,6 +5,7 @@ using Application.Companies.Queries;
 using Application.Companies.Queries.Models;
 using Application.CompanyLinks.Queries;
 using Microsoft.AspNetCore.Mvc;
+using WebUI.Areas.Auth;
 using WebUI.Authorize;
 using WebUI.Common.Models.Company;
 
@@ -41,19 +42,29 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPost("own/logo")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid?))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateOwnCompanyLogo(IFormFile? file)
     {
-        return Ok(await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file }));
+        var result = await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file });
+
+        return Created(
+            Url.ActionLink("GetImage", "Images", new { imageId = result }) ?? "",
+            result
+        );
     }
 
     [HttpPost("own/banner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid?))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateOwnCompanyBanner(Guid companyId, IFormFile? file)
+    public async Task<IActionResult> UpdateOwnCompanyBanner(IFormFile? file)
     {
-        return Ok(await Mediator.Send(new UpdateCompanyBannerCommand { Banner = file }));
+        var result = await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = AccountInfo!.Id, Banner = file });
+
+        return Created(
+            Url.ActionLink("GetImage", "Images", new { imageId = result }) ?? "",
+            result
+        );
     }
 
     [HttpGet("own/companyLinks")]
