@@ -6,12 +6,12 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Queries;
+namespace Application.Companies.Queries.GetCompany;
 
 public record GetCompanyDetailedWithFilterQuery : IRequest<CompanyDetailedDTO>
 {
     public Guid CompanyId { get; init; }
-    public bool? IsVerified { get; init; }
+    public bool? IsCompanyMustBeVerified { get; init; }
 }
 
 public class GetCompanyDetailedWithFilterQueryHandler
@@ -29,7 +29,7 @@ public class GetCompanyDetailedWithFilterQueryHandler
         var company = await _context.Companies
             .AsNoTracking()
             .Where(x => x.Id == request.CompanyId)
-            .Filter(isVerified: request.IsVerified)
+            .Filter(isVerified: request.IsCompanyMustBeVerified)
             .Select(x => new CompanyDetailedDTO
             {
                 Id = x.Id,

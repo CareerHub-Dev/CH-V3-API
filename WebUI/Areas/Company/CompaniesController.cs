@@ -2,10 +2,10 @@
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries;
+using Application.Companies.Queries.GetCompany;
 using Application.Companies.Queries.Models;
 using Application.CompanyLinks.Queries;
 using Microsoft.AspNetCore.Mvc;
-using WebUI.Areas.Auth;
 using WebUI.Authorize;
 using WebUI.Common.Models.Company;
 
@@ -16,13 +16,15 @@ namespace WebUI.Areas.Company;
 public class CompaniesController : ApiControllerBase
 {
     [HttpGet("own")]
-    public async Task<CompanyDetailedDTO> GetCompany()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CompanyDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompany()
     {
-        return await Mediator.Send(new GetCompanyDetailedWithFilterQuery
+        return Ok(await Mediator.Send(new GetCompanyDetailedWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
-            IsVerified = true
-        });
+            IsCompanyMustBeVerified = true
+        }));
     }
 
     [HttpPut("own")]

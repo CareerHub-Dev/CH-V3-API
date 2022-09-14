@@ -4,12 +4,12 @@ using Application.Companies.Commands.UpdateCompany;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries;
+using Application.Companies.Queries.GetCompany;
 using Application.Companies.Queries.Models;
 using Application.CompanyLinks.Queries;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using WebUI.Areas.Auth;
 using WebUI.Authorize;
 using WebUI.Common.Models.Company;
 
@@ -37,12 +37,14 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpGet("{companyId}")]
-    public async Task<CompanyDTO> GetCompany(Guid companyId)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CompanyDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompany(Guid companyId)
     {
-        return await Mediator.Send(new GetCompanyWithFilterQuery
+        return Ok(await Mediator.Send(new GetCompanyWithFilterQuery
         {
             CompanyId = companyId
-        });
+        }));
     }
 
     [HttpGet("{companyId}/companyLinks")]
