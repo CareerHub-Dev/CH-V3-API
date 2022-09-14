@@ -5,14 +5,14 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Queries;
+namespace Application.Companies.Queries.GetAmount;
 
 public record GetAmountJobOffersOfCompanyWithFilterQuery : IRequest<int>
 {
     public Guid CompanyId { get; init; }
-    public bool? IsVerified { get; init; }
+    public bool? IsCompanyMustBeVerified { get; init; }
 
-    public bool? IsJobOfferActive { get; init; }
+    public bool? IsJobOfferMustBeActive { get; init; }
 }
 
 public class GetAmountJobOffersOfCompanyWithFilterQueryHandler
@@ -28,12 +28,12 @@ public class GetAmountJobOffersOfCompanyWithFilterQueryHandler
     public async Task<int> Handle(GetAmountJobOffersOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Companies
-            .Filter(isVerified: request.IsVerified)
+            .Filter(isVerified: request.IsCompanyMustBeVerified)
             .AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        return await _context.JobOffers.Filter(isActive: request.IsJobOfferActive).CountAsync();
+        return await _context.JobOffers.Filter(isActive: request.IsJobOfferMustBeActive).CountAsync();
     }
 }

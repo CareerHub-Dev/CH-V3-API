@@ -26,7 +26,7 @@ public class AdminsController : ApiControllerBase
             SearchTerm = view.SearchTerm,
 
             WithoutAdminId = AccountInfo!.Id,
-            IsAdminVerified = view.IsAdminVerified,
+            IsAdminMustBeVerified = view.IsAdminMustBeVerified,
             IsSuperAdmin = view.IsSuperAdmin,
         });
 

@@ -7,6 +7,6 @@ public record GetAdminsWithPaginationWithSearchWithFilterView
 
     public string? SearchTerm { get; init; }
 
-    public bool? IsAdminVerified { get; init; }
+    public bool? IsAdminMustBeVerified { get; init; }
     public bool? IsSuperAdmin { get; init; }
 }

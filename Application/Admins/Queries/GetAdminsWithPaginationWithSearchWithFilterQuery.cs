@@ -13,7 +13,7 @@ public record GetAdminsWithPaginationWithSearchWithFilterQuery : IRequest<Pagina
 
     public string? SearchTerm { get; init; }
 
-    public bool? IsAdminVerified { get; init; }
+    public bool? IsAdminMustBeVerified { get; init; }
     public Guid? WithoutAdminId { get; init; }
     public bool? IsSuperAdmin { get; init; }
 }
@@ -33,7 +33,7 @@ public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestH
             .AsNoTracking()
             .Filter(
                 withoutAdminId: request.WithoutAdminId,
-                isVerified: request.IsAdminVerified, 
+                isVerified: request.IsAdminMustBeVerified, 
                 isSuperAdmin: request.IsSuperAdmin
              )
             .Search(request.SearchTerm ?? "")

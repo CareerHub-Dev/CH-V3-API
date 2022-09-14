@@ -1,5 +1,6 @@
 ﻿using Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
 using Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
+using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompany;
 using Application.Companies.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,32 @@ public class CompaniesController : ApiControllerBase
             IsFollowerStudentMustBeVerified = true,
             CompanyId = companyId,
             IsCompanyMustBeVerified = true
+        }));
+    }
+
+    [HttpGet("{companyId}/amountSubscribers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountSubscribersOfOwnCompany(Guid companyId)
+    {
+        return Ok(await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
+        {
+            CompanyId = companyId,
+            IsCompanyMustBeVerified = true,
+            IsSubscriberMustBeVerified = true
+        }));
+    }
+
+    [HttpGet("{companyId}/amountJobOffers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountJobOffersOfOwnCompany(Guid companyId)
+    {
+        return Ok(await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
+        {
+            CompanyId = companyId,
+            IsCompanyMustBeVerified = true,
+            IsJobOfferMustBeActive = true
         }));
     }
 

@@ -2,6 +2,7 @@
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries;
+using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompany;
 using Application.Companies.Queries.Models;
 using Application.CompanyLinks.Queries;
@@ -80,23 +81,27 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpGet("own/amountSubscribers")]
-    public async Task<int> GetAmountSubscribersOfOwnCompany()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountSubscribersOfOwnCompany()
     {
-        return await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
-            IsVerified = true,
-            IsSubscriberVerified = true
-        });
+            IsCompanyMustBeVerified = true,
+            IsSubscriberMustBeVerified = true
+        }));
     }
 
     [HttpGet("own/amountJobOffers")]
-    public async Task<int> GetAmountJobOffersOfOwnCompany()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountJobOffersOfOwnCompany()
     {
-        return await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
-            IsVerified = true,
-        });
+            IsCompanyMustBeVerified = true,
+        }));
     }
 }

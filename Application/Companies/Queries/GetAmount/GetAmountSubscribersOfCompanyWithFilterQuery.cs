@@ -5,14 +5,14 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Queries;
+namespace Application.Companies.Queries.GetAmount;
 
 public record GetAmountSubscribersOfCompanyWithFilterQuery : IRequest<int>
 {
     public Guid CompanyId { get; init; }
-    public bool? IsVerified { get; init; }
+    public bool? IsCompanyMustBeVerified { get; init; }
 
-    public bool? IsSubscriberVerified { get; init; }
+    public bool? IsSubscriberMustBeVerified { get; init; }
 }
 
 public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
@@ -27,8 +27,8 @@ public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
 
     public async Task<int> Handle(GetAmountSubscribersOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
-        if(!await _context.Companies
-            .Filter(isVerified: request.IsVerified)
+        if (!await _context.Companies
+            .Filter(isVerified: request.IsCompanyMustBeVerified)
             .AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
@@ -37,7 +37,7 @@ public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
         return await _context.Companies
             .Where(x => x.Id == request.CompanyId)
             .SelectMany(x => x.SubscribedStudents)
-            .Filter(isVerified: request.IsSubscriberVerified)
+            .Filter(isVerified: request.IsSubscriberMustBeVerified)
             .CountAsync();
     }
 }
