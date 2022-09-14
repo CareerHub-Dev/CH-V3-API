@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 
-namespace Application.Companies.Queries
+namespace Application.Companies.Queries.GetCompanies
 {
-    public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQueryValidator 
+    public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQueryValidator
         : AbstractValidator<GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery>
     {
         public GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQueryValidator()

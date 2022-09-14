@@ -3,8 +3,8 @@ using Application.Companies.Commands.InviteCompany;
 using Application.Companies.Commands.UpdateCompany;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
-using Application.Companies.Queries;
 using Application.Companies.Queries.GetAmount;
+using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
 using Application.Companies.Queries.Models;
 using Application.CompanyLinks.Queries;
@@ -21,7 +21,8 @@ namespace WebUI.Areas.Admin;
 public class CompaniesController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<CompanyWithAmountStatisticDTO>> GetCompanies(
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithAmountStatisticDTO>))]
+    public async Task<IActionResult> GetCompanies(
         [FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterView view)
     {
         var result = await Mediator.Send(new GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery
@@ -29,12 +30,12 @@ public class CompaniesController : ApiControllerBase
             PageNumber = view.PageNumber,
             PageSize = view.PageSize,
             SearchTerm = view.SearchTerm,
-            IsVerified = view.IsVerified,
+            IsCompanyMustBeVerified = view.IsCompanyMustBeVerified,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return result;
+        return Ok(result);
     }
 
     [HttpGet("{companyId}")]

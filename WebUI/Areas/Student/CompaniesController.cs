@@ -1,10 +1,13 @@
 ﻿using Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
 using Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
 using Application.Companies.Queries.GetAmount;
+using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
 using Application.Companies.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebUI.Authorize;
+using WebUI.Common.Models.Company;
 
 namespace WebUI.Areas.Student;
 
@@ -12,6 +15,27 @@ namespace WebUI.Areas.Student;
 [Route("api/Student/[controller]")]
 public class CompaniesController : ApiControllerBase
 {
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithAmountStatisticDTO>))]
+    public async Task<IActionResult> GetCompanies([FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterView view)
+    {
+        var result = await Mediator.Send(new GetFollowedCompaniesDetailedWithAmountStatisticForFollowerStudentWithPaginationWithSearchWithFilterQuery
+        {
+            FollowerStudentId = AccountInfo!.Id,
+            IsFollowerStudentMustBeVerified = true,
+            PageNumber = view.PageNumber,
+            PageSize = view.PageSize,
+            SearchTerm = view.SearchTerm,
+            IsCompanyMustBeVerified = view.IsCompanyMustBeVerified,
+            IsJobOfferMustBeActive = true,
+            IsSubscriberMustBeVerified = true
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
     [HttpGet("{companyId}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FollowedCompanyDetailedDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -5,9 +5,9 @@ using Application.Companies.Queries.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Queries;
+namespace Application.Companies.Queries.GetCompanies;
 
-public record GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery 
+public record GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery
     : IRequest<PaginatedList<CompanyWithAmountStatisticDTO>>
 {
     public int PageNumber { get; init; } = 1;
@@ -15,11 +15,11 @@ public record GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQ
 
     public string? SearchTerm { get; init; }
 
-    public bool? IsVerified { get; init; }
+    public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
 
-    public bool? IsJobOfferActive { get; init; }
-    public bool? IsSubscriberVerified { get; init; }
+    public bool? IsJobOfferMustBeActive { get; init; }
+    public bool? IsSubscriberMustBeVerified { get; init; }
 }
 
 public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQueryHandler
@@ -37,8 +37,8 @@ public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQu
         return await _context.Companies
             .AsNoTracking()
             .Filter(
-                withoutCompanyId: request.WithoutCompanyId, 
-                isVerified: request.IsVerified
+                withoutCompanyId: request.WithoutCompanyId,
+                isVerified: request.IsCompanyMustBeVerified
             )
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
@@ -53,8 +53,8 @@ public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQu
                 Description = x.Description,
                 AmountStatistic = new AmountStatistic
                 {
-                    AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferActive, null).Count(),
-                    AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberVerified, null).Count()
+                    AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferMustBeActive, null).Count(),
+                    AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberMustBeVerified, null).Count()
                 },
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,

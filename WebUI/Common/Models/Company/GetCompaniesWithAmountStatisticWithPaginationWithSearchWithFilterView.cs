@@ -7,5 +7,5 @@ public record GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterV
 
     public string? SearchTerm { get; init; }
 
-    public bool? IsVerified { get; init; }
+    public bool? IsCompanyMustBeVerified { get; init; }
 }
