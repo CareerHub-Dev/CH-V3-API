@@ -1,5 +1,6 @@
 ﻿using Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
 using Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
+using Application.Companies.Queries;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
@@ -76,6 +77,20 @@ public class CompaniesController : ApiControllerBase
         }));
     }
 
+    [HttpGet("{companyId}/subscribe")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> IsStudentSubscribedToCompany(Guid companyId)
+    {
+        await Mediator.Send(new IsVerifiedStudentSubscribedToVerifiedCompanyQuery
+        {
+            StudentId = AccountInfo!.Id,
+            CompanyId = companyId
+        });
+
+        return NoContent();
+    }
+
     [HttpPost("{companyId}/subscribe")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -84,7 +99,7 @@ public class CompaniesController : ApiControllerBase
         await Mediator.Send(new VerifiedStudentSubscribeToVerifiedCompanyCommand
         {
             StudentId = AccountInfo!.Id,
-            CompanytId = companyId
+            CompanyId = companyId
         });
 
         return NoContent();
@@ -98,7 +113,7 @@ public class CompaniesController : ApiControllerBase
         await Mediator.Send(new VerifiedStudentUnsubscribeFromVerifiedCompanyCommand
         {
             StudentId = AccountInfo!.Id,
-            CompanytId = companyId
+            CompanyId = companyId
         });
 
         return NoContent();

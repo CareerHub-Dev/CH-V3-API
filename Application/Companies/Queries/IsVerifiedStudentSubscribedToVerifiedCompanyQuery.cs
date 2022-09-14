@@ -7,27 +7,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries;
 
-public class IsStudentSubscribedToCompanyWithFilterQuery : IRequest<bool>
+public class IsVerifiedStudentSubscribedToVerifiedCompanyQuery : IRequest<bool>
 {
     public Guid StudentId { get; init; }
-    public bool? IsStudentVerified { get; init; }
     public Guid CompanyId { get; init; }
-    public bool? IsCompanyVerified { get; init; }
 }
 
-public class IsStudentSubscribedToCompanyWithFilterQueryHandler : IRequestHandler<IsStudentSubscribedToCompanyWithFilterQuery, bool>
+public class IsVerifiedStudentSubscribedToVerifiedCompanyQueryHandler : IRequestHandler<IsVerifiedStudentSubscribedToVerifiedCompanyQuery, bool>
 {
     private readonly IApplicationDbContext _context;
 
-    public IsStudentSubscribedToCompanyWithFilterQueryHandler(IApplicationDbContext context)
+    public IsVerifiedStudentSubscribedToVerifiedCompanyQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<bool> Handle(IsStudentSubscribedToCompanyWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(IsVerifiedStudentSubscribedToVerifiedCompanyQuery request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Filter(isVerified: request.IsStudentVerified)
+            .Filter(isVerified: true)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
@@ -36,7 +34,7 @@ public class IsStudentSubscribedToCompanyWithFilterQueryHandler : IRequestHandle
         }
 
         var company = await _context.Companies
-            .Filter(isVerified: request.IsStudentVerified)
+            .Filter(isVerified: true)
             .Include(x => x.SubscribedStudents)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 

@@ -10,7 +10,7 @@ namespace Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompa
 public record VerifiedStudentSubscribeToVerifiedCompanyCommand : IRequest
 {
     public Guid StudentId { get; init; }
-    public Guid CompanytId { get; init; }
+    public Guid CompanyId { get; init; }
 }
 
 public class VerifiedStudentSubscribeToVerifiedCompanyCommandHandler : IRequestHandler<VerifiedStudentSubscribeToVerifiedCompanyCommand>
@@ -40,7 +40,7 @@ public class VerifiedStudentSubscribeToVerifiedCompanyCommandHandler : IRequestH
 
         if (company == null)
         {
-            throw new NotFoundException(nameof(Company), request.CompanytId);
+            throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
         if (company.SubscribedStudents.Any(x => x.Id == request.StudentId))

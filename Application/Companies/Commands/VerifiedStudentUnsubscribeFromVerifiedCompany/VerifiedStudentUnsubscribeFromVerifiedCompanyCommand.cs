@@ -10,7 +10,7 @@ namespace Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedC
 public record VerifiedStudentUnsubscribeFromVerifiedCompanyCommand : IRequest
 {
     public Guid StudentId { get; init; }
-    public Guid CompanytId { get; init; }
+    public Guid CompanyId { get; init; }
 }
 
 public class VerifiedStudentUnsubscribeFromVerifiedCompanyCommandHandler : IRequestHandler<VerifiedStudentUnsubscribeFromVerifiedCompanyCommand>
@@ -40,7 +40,7 @@ public class VerifiedStudentUnsubscribeFromVerifiedCompanyCommandHandler : IRequ
 
         if (company == null)
         {
-            throw new NotFoundException(nameof(Company), request.CompanytId);
+            throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
         var subscribedStudent = company.SubscribedStudents.FirstOrDefault(x => x.Id == request.StudentId);
