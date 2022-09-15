@@ -36,7 +36,7 @@ public class IsVerifiedStudentSubscribedToVerifiedCompanyQueryHandler : IRequest
         var company = await _context.Companies
             .Filter(isVerified: true)
             .Include(x => x.SubscribedStudents)
-            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
+            .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (company == null)
         {

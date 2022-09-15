@@ -23,7 +23,7 @@ public class CompaniesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithAmountStatisticDTO>))]
     public async Task<IActionResult> GetCompanies(
-        [FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterView view)
+        [FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterForAdminView view)
     {
         var result = await Mediator.Send(new GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery
         {

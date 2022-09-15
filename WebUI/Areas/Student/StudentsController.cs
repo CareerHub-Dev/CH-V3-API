@@ -1,4 +1,6 @@
-﻿using Application.Students.Commands.UpdateStudent;
+﻿using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
+using Application.Companies.Queries.Models;
+using Application.Students.Commands.UpdateStudent;
 using Application.Students.Commands.UpdateStudentPhoto;
 using Application.Students.Queries;
 using Application.Students.Queries.GetAmount;
@@ -9,6 +11,7 @@ using Application.Students.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
+using WebUI.Common.Models.Company;
 using WebUI.Common.Models.Student;
 
 namespace WebUI.Areas.Student;
@@ -115,6 +118,35 @@ public class StudentsController : ApiControllerBase
             IsVerified = view.IsVerified,
             WithoutStudentId = AccountInfo!.Id,
             StudentGroupIds = view.StudentGroupIds,
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{studentId}/company-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedCompanyDetailedWithAmountStatisticDTO>))]
+    public async Task<IActionResult> GetCompanySubscriptionsOfStudent(
+        Guid studentId,
+        [FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterForStudentView view)
+    {
+        var result = await Mediator.Send(new GetFollowedCompaniesDetailedWithAmountStatisticOfStudentForFollowerStudentWithPaginationWithSearchWithFilterQuery
+        {
+            FollowerStudentId = AccountInfo!.Id,
+            IsFollowerStudentMustBeVerified = true,
+
+            StudentOwnerId = studentId,
+            IsStudentOwnerMustBeVerified = true,
+
+            PageNumber = view.PageNumber,
+            PageSize = view.PageSize,
+            SearchTerm = view.SearchTerm,
+
+            IsCompanyMustBeVerified = true,
+
+            IsJobOfferMustBeActive = true,
+            IsSubscriberMustBeVerified = true,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
