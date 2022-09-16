@@ -31,8 +31,11 @@ public class CompaniesController : ApiControllerBase
             PageSize = pageSize,
             SearchTerm = searchTerm,
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
-            IsJobOfferMustBeActive = true,
-            IsSubscriberMustBeVerified = true
+            StatsFilter = new StatsFilter
+            {
+                IsJobOfferMustBeActive = true,
+                IsSubscriberMustBeVerified = true
+            }
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

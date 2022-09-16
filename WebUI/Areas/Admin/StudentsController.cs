@@ -12,7 +12,6 @@ using Application.Students.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Models.Company;
 using WebUI.Common.Models.Student;
 
 namespace WebUI.Areas.Admin;
@@ -86,7 +85,7 @@ public class StudentsController : ApiControllerBase
 
     [HttpGet("{studentId}/student-subscriptions")]
     public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
-        Guid studentId, 
+        Guid studentId,
         [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
     {
         var result = await Mediator.Send(new GetStudentSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery

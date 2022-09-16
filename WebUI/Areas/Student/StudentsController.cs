@@ -11,7 +11,6 @@ using Application.Students.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Models.Company;
 using WebUI.Common.Models.Student;
 
 namespace WebUI.Areas.Student;
@@ -147,8 +146,11 @@ public class StudentsController : ApiControllerBase
 
             IsCompanyMustBeVerified = true,
 
-            IsJobOfferMustBeActive = true,
-            IsSubscriberMustBeVerified = true,
+            StatsFilter = new StatsFilter
+            {
+                IsJobOfferMustBeActive = true,
+                IsSubscriberMustBeVerified = true,
+            }
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

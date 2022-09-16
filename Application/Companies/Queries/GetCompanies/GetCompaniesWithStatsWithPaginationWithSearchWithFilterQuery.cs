@@ -18,8 +18,7 @@ public record GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
 
-    public bool? IsJobOfferMustBeActive { get; init; }
-    public bool? IsSubscriberMustBeVerified { get; init; }
+    public StatsFilter StatsFilter { get; init; } = new StatsFilter();
 }
 
 public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryHandler
@@ -51,8 +50,8 @@ public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryHandler
                 BannerId = x.BannerId,
                 Motto = x.Motto,
                 Description = x.Description,
-                AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferMustBeActive, null).Count(),
-                AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberMustBeVerified, null).Count(),
+                AmountJobOffers = x.JobOffers.Filter(request.StatsFilter.IsJobOfferMustBeActive, null).Count(),
+                AmountSubscribers = x.SubscribedStudents.Filter(null, request.StatsFilter.IsSubscriberMustBeVerified, null).Count(),
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
             })

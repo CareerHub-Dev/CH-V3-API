@@ -26,8 +26,7 @@ public record GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollow
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
 
-    public bool? IsJobOfferMustBeActive { get; init; }
-    public bool? IsSubscriberMustBeVerified { get; init; }
+    public StatsFilter StatsFilter { get; init; } = new StatsFilter();
 }
 
 public class GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler
@@ -74,8 +73,8 @@ public class GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowe
                 BannerId = x.BannerId,
                 Motto = x.Motto,
                 Description = x.Description,
-                AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferMustBeActive, null).Count(),
-                AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberMustBeVerified, null).Count(),
+                AmountJobOffers = x.JobOffers.Filter(request.StatsFilter.IsJobOfferMustBeActive, null).Count(),
+                AmountSubscribers = x.SubscribedStudents.Filter(null, request.StatsFilter.IsSubscriberMustBeVerified, null).Count(),
                 IsFollowed = x.SubscribedStudents.Any(x => x.Id == request.FollowerStudentId),
             })
             .ToPagedListAsync(request.PageNumber, request.PageSize);
