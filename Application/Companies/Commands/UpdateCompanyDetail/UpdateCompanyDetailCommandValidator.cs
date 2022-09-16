@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Application.Companies.Commands.UpdateCompany;
+namespace Application.Companies.Commands.UpdateCompanyDetail;
 
-public class UpdateCompanyCommandValidator : AbstractValidator<UpdateCompanyCommand>
+public class UpdateCompanyDetailCommandValidator : AbstractValidator<UpdateCompanyDetailCommand>
 {
-    public UpdateCompanyCommandValidator()
+    public UpdateCompanyDetailCommandValidator()
     {
         RuleFor(x => x.Name)
             .NotEmpty()

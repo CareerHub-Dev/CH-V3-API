@@ -1,6 +1,6 @@
 ﻿namespace WebUI.Common.Models.Company;
 
-public record UpdateOwnCompanyAccountView
+public record UpdateOwnCompanyDetailView
 {
     public string Name { get; init; } = string.Empty;
     public string Motto { get; init; } = string.Empty;

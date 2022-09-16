@@ -1,4 +1,4 @@
-﻿using Application.Companies.Commands.UpdateCompany;
+﻿using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries;
@@ -31,9 +31,9 @@ public class CompaniesController : ApiControllerBase
     [HttpPut("own")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateOwnCompanyAccount(UpdateOwnCompanyAccountView view)
+    public async Task<IActionResult> UpdateOwnCompanyDetailAccount(UpdateOwnCompanyAccountView view)
     {
-        await Mediator.Send(new UpdateCompanyCommand
+        await Mediator.Send(new UpdateCompanyDetailCommand
         {
             CompanyId = AccountInfo!.Id,
             Motto = view.Motto,

@@ -1,6 +1,6 @@
 ﻿using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.InviteCompany;
-using Application.Companies.Commands.UpdateCompany;
+using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
@@ -126,7 +126,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateCompany(Guid companyId, UpdateCompanyCommand command)
+    public async Task<IActionResult> UpdateCompanyDetail(Guid companyId, UpdateCompanyDetailCommand command)
     {
         if (companyId != command.CompanyId)
         {
