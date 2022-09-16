@@ -12,7 +12,7 @@ using WebUI.Common.Models.Account;
 namespace WebUI.Areas;
 
 [Route("api/[controller]")]
-public class AccountsController : ApiControllerBase
+public class AccountController : ApiControllerBase
 {
     [HttpPost("authenticate")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticateResult))]

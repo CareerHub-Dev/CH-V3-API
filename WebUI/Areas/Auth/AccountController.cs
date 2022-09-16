@@ -9,25 +9,9 @@ namespace WebUI.Areas.Auth;
 
 [Authorize]
 [Route("api/Auth/[controller]")]
-public class AccountsController : ApiControllerBase
+public class AccountController : ApiControllerBase
 {
-    [HttpPost("revoke-token")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RevokeTokenAsync(RevokeTokenView view)
-    {
-        if (string.IsNullOrWhiteSpace(view.Token))
-        {
-            view.Token = Request.Cookies["refreshToken"] ?? "";
-        }
-
-        await Mediator.Send(new RevokeRefreshTokenOfAccountCommand { Token = view.Token, AccountId = AccountInfo!.Id });
-
-        return NoContent();
-    }
-
-    [HttpPut("change-password")]
+    [HttpPost("change-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

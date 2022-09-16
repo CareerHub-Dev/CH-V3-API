@@ -1,5 +1,4 @@
-﻿using Application.Accounts.Commands.RevokeRefreshToken;
-using Application.Accounts.Queries.GetBriefAccount;
+﻿using Application.Accounts.Queries.GetBriefAccount;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
@@ -21,22 +20,5 @@ public class AccountsController : ApiControllerBase
     public async Task<IActionResult> GetBriefAccount(Guid accountId)
     {
         return Ok(await Mediator.Send(new GetBriefAccountQuery(accountId)));
-    }
-
-    /// <remarks>
-    /// Admin:
-    /// 
-    ///     Revoke any Token
-    ///
-    /// </remarks>
-    [HttpPost("revoke-token")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RevokeTokenAsync(RevokeRefreshTokenCommand command)
-    {
-        await Mediator.Send(command);
-
-        return NoContent();
     }
 }
