@@ -129,7 +129,9 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedCompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanySubscriptionsOfStudent(
         Guid studentId,
-        [FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterForStudentView view)
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? searchTerm = null)
     {
         var result = await Mediator.Send(new GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterQuery
         {
@@ -139,9 +141,9 @@ public class StudentsController : ApiControllerBase
             StudentOwnerId = studentId,
             IsStudentOwnerMustBeVerified = true,
 
-            PageNumber = view.PageNumber,
-            PageSize = view.PageSize,
-            SearchTerm = view.SearchTerm,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = searchTerm,
 
             IsCompanyMustBeVerified = true,
 

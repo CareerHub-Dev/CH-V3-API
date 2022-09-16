@@ -8,7 +8,6 @@ using Application.Companies.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Models.Company;
 
 namespace WebUI.Areas.Student;
 
@@ -18,16 +17,20 @@ public class CompaniesController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
-    public async Task<IActionResult> GetCompanies([FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterForAdminView view)
+    public async Task<IActionResult> GetCompanies(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? searchTerm = null,
+        [FromQuery] bool? isCompanyMustBeVerified = null)
     {
         var result = await Mediator.Send(new GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery
         {
             FollowerStudentId = AccountInfo!.Id,
             IsFollowerStudentMustBeVerified = true,
-            PageNumber = view.PageNumber,
-            PageSize = view.PageSize,
-            SearchTerm = view.SearchTerm,
-            IsCompanyMustBeVerified = view.IsCompanyMustBeVerified,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = searchTerm,
+            IsCompanyMustBeVerified = isCompanyMustBeVerified,
             IsJobOfferMustBeActive = true,
             IsSubscriberMustBeVerified = true
         });

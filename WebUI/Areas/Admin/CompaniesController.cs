@@ -23,14 +23,17 @@ public class CompaniesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
-        [FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterForAdminView view)
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? searchTerm = null,
+        [FromQuery] bool? isCompanyMustBeVerified = null)
     {
         var result = await Mediator.Send(new GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery
         {
-            PageNumber = view.PageNumber,
-            PageSize = view.PageSize,
-            SearchTerm = view.SearchTerm,
-            IsCompanyMustBeVerified = view.IsCompanyMustBeVerified,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = searchTerm,
+            IsCompanyMustBeVerified = isCompanyMustBeVerified,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
