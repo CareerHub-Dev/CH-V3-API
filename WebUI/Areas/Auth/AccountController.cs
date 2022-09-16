@@ -1,6 +1,5 @@
 ﻿using Application.Accounts.Commands.ChangePassword;
 using Application.Accounts.Commands.DeleteAccount;
-using Application.Accounts.Commands.RevokeRefreshTokenOfAccount;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.Common.Models.Account;

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Accounts.Commands.RevokeRefreshToken;
+namespace Application.RefreshTokens.Commands.RevokeRefreshToken;
 
 public class RevokeRefreshTokenCommandValidator : AbstractValidator<RevokeRefreshTokenCommand>
 {

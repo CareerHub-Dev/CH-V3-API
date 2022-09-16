@@ -1,4 +1,4 @@
-﻿using Application.Accounts.Commands.RevokeRefreshToken;
+﻿using Application.RefreshTokens.Commands.RevokeRefreshToken;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
