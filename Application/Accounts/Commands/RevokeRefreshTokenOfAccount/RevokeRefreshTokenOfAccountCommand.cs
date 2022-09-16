@@ -1,4 +1,5 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -25,6 +26,13 @@ public class RevokeRefreshTokenOfAccountCommandHandler : IRequestHandler<RevokeR
 
     public async Task<Unit> Handle(RevokeRefreshTokenOfAccountCommand request, CancellationToken cancellationToken)
     {
+        if (!await _context.Accounts
+            .Filter(isVerified: true)
+            .AnyAsync(x => x.Id == request.AccountId))
+        {
+            throw new NotFoundException(nameof(Account), request.AccountId);
+        }
+
         var refreshToken = await _context.RefreshTokens
             .SingleOrDefaultAsync(x => x.Token == request.Token && x.AccountId == request.AccountId);
 
