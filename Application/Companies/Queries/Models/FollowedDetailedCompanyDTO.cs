@@ -1,6 +1,6 @@
 ﻿namespace Application.Companies.Queries.Models;
 
-public class FollowedCompanyDetailedDTO : CompanyDetailedDTO
+public class FollowedDetailedCompanyDTO : DetailedCompanyDTO
 {
     public bool IsFollowed { get; set; }
 }

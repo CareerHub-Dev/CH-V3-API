@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetCompanies;
 
-public record GetFollowedCompaniesDetailedWithAmountStatisticForFollowerStudentWithPaginationWithSearchWithFilterQuery
-    : IRequest<PaginatedList<FollowedCompanyDetailedWithAmountStatisticDTO>>
+public record GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery
+    : IRequest<PaginatedList<FollowedDetailedCompanyWithStatsDTO>>
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
@@ -27,17 +27,17 @@ public record GetFollowedCompaniesDetailedWithAmountStatisticForFollowerStudentW
     public bool? IsSubscriberMustBeVerified { get; init; }
 }
 
-public class GetFollowedCompaniesDetailedWithAmountStatisticForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler
-    : IRequestHandler<GetFollowedCompaniesDetailedWithAmountStatisticForFollowerStudentWithPaginationWithSearchWithFilterQuery, PaginatedList<FollowedCompanyDetailedWithAmountStatisticDTO>>
+public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler
+    : IRequestHandler<GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery, PaginatedList<FollowedDetailedCompanyWithStatsDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetFollowedCompaniesDetailedWithAmountStatisticForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<FollowedCompanyDetailedWithAmountStatisticDTO>> Handle(GetFollowedCompaniesDetailedWithAmountStatisticForFollowerStudentWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<FollowedDetailedCompanyWithStatsDTO>> Handle(GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(isVerified: request.IsFollowerStudentMustBeVerified)
@@ -54,7 +54,7 @@ public class GetFollowedCompaniesDetailedWithAmountStatisticForFollowerStudentWi
             )
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
-            .Select(x => new FollowedCompanyDetailedWithAmountStatisticDTO
+            .Select(x => new FollowedDetailedCompanyWithStatsDTO
             {
                 Id = x.Id,
                 Email = x.Email,
@@ -63,11 +63,8 @@ public class GetFollowedCompaniesDetailedWithAmountStatisticForFollowerStudentWi
                 BannerId = x.BannerId,
                 Motto = x.Motto,
                 Description = x.Description,
-                AmountStatistic = new AmountStatistic
-                {
-                    AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferMustBeActive, null).Count(),
-                    AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberMustBeVerified, null).Count()
-                },
+                AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferMustBeActive, null).Count(),
+                AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberMustBeVerified, null).Count(),
                 IsFollowed = x.SubscribedStudents.Any(x => x.Id == request.FollowerStudentId),
             })
             .ToPagedListAsync(request.PageNumber, request.PageSize);

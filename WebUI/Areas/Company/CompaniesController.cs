@@ -17,11 +17,11 @@ namespace WebUI.Areas.Company;
 public class CompaniesController : ApiControllerBase
 {
     [HttpGet("own")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CompanyDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedCompanyDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompany()
     {
-        return Ok(await Mediator.Send(new GetCompanyDetailedWithFilterQuery
+        return Ok(await Mediator.Send(new GetDetailedCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
             IsCompanyMustBeVerified = true

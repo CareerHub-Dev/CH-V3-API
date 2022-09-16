@@ -105,12 +105,12 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("{studentId}/company-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithAmountStatisticDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanySubscriptionsOfStudent(
         Guid studentId,
         [FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterForAdminView view)
     {
-        var result = await Mediator.Send(new GetCompaniesWithAmountStatisticOfStudentWithPaginationWithSearchWithFilterQuery
+        var result = await Mediator.Send(new GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery
         {
             StudentOwnerId = studentId,
             IsStudentOwnerMustBeVerified = true,

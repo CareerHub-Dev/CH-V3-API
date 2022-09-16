@@ -8,29 +8,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetCompany;
 
-public record GetCompanyDetailedWithFilterQuery : IRequest<CompanyDetailedDTO>
+public record GetDetailedCompanyWithFilterQuery : IRequest<DetailedCompanyDTO>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
 }
 
-public class GetCompanyDetailedWithFilterQueryHandler
-    : IRequestHandler<GetCompanyDetailedWithFilterQuery, CompanyDetailedDTO>
+public class GetDetailedCompanyWithFilterQueryHandler
+    : IRequestHandler<GetDetailedCompanyWithFilterQuery, DetailedCompanyDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyDetailedWithFilterQueryHandler(IApplicationDbContext context)
+    public GetDetailedCompanyWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<CompanyDetailedDTO> Handle(GetCompanyDetailedWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<DetailedCompanyDTO> Handle(GetDetailedCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
         var company = await _context.Companies
             .AsNoTracking()
             .Where(x => x.Id == request.CompanyId)
             .Filter(isVerified: request.IsCompanyMustBeVerified)
-            .Select(x => new CompanyDetailedDTO
+            .Select(x => new DetailedCompanyDTO
             {
                 Id = x.Id,
                 Email = x.Email,

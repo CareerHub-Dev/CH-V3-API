@@ -1,6 +1,6 @@
 ﻿namespace Application.Companies.Queries.Models;
 
-public class CompanyDetailedDTO
+public class DetailedCompanyDTO
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;

@@ -7,8 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetCompanies;
 
-public record GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery
-    : IRequest<PaginatedList<CompanyWithAmountStatisticDTO>>
+public record GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery
+    : IRequest<PaginatedList<CompanyWithStatsDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -22,17 +22,17 @@ public record GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQ
     public bool? IsSubscriberMustBeVerified { get; init; }
 }
 
-public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQueryHandler
-    : IRequestHandler<GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyWithAmountStatisticDTO>>
+public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryHandler
+    : IRequestHandler<GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyWithStatsDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<CompanyWithAmountStatisticDTO>> Handle(GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<CompanyWithStatsDTO>> Handle(GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
     {
         return await _context.Companies
             .AsNoTracking()
@@ -42,7 +42,7 @@ public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQu
             )
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
-            .Select(x => new CompanyWithAmountStatisticDTO
+            .Select(x => new CompanyWithStatsDTO
             {
                 Id = x.Id,
                 Email = x.Email,
@@ -51,11 +51,8 @@ public class GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQu
                 BannerId = x.BannerId,
                 Motto = x.Motto,
                 Description = x.Description,
-                AmountStatistic = new AmountStatistic
-                {
-                    AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferMustBeActive, null).Count(),
-                    AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberMustBeVerified, null).Count()
-                },
+                AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferMustBeActive, null).Count(),
+                AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberMustBeVerified, null).Count(),
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
             })

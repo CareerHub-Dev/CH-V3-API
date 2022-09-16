@@ -8,8 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetCompany;
 
-public record GetFollowedCompanyDetailedForFollowerStudentWithFilterQuery
-    : IRequest<FollowedCompanyDetailedDTO>
+public record GetFollowedDetailedCompanyForFollowerStudentWithFilterQuery
+    : IRequest<FollowedDetailedCompanyDTO>
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
@@ -18,17 +18,17 @@ public record GetFollowedCompanyDetailedForFollowerStudentWithFilterQuery
     public bool? IsCompanyMustBeVerified { get; init; }
 }
 
-public class GetFollowedCompanyDetailedForFollowerStudentWithFilterQueryHandler
-    : IRequestHandler<GetFollowedCompanyDetailedForFollowerStudentWithFilterQuery, FollowedCompanyDetailedDTO>
+public class GetFollowedDetailedCompanyForFollowerStudentWithFilterQueryHandler
+    : IRequestHandler<GetFollowedDetailedCompanyForFollowerStudentWithFilterQuery, FollowedDetailedCompanyDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetFollowedCompanyDetailedForFollowerStudentWithFilterQueryHandler(IApplicationDbContext context)
+    public GetFollowedDetailedCompanyForFollowerStudentWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<FollowedCompanyDetailedDTO> Handle(GetFollowedCompanyDetailedForFollowerStudentWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<FollowedDetailedCompanyDTO> Handle(GetFollowedDetailedCompanyForFollowerStudentWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(isVerified: request.IsFollowerStudentMustBeVerified)
@@ -41,7 +41,7 @@ public class GetFollowedCompanyDetailedForFollowerStudentWithFilterQueryHandler
             .AsNoTracking()
             .Where(x => x.Id == request.CompanyId)
             .Filter(isVerified: request.IsCompanyMustBeVerified)
-            .Select(x => new FollowedCompanyDetailedDTO
+            .Select(x => new FollowedDetailedCompanyDTO
             {
                 Id = x.Id,
                 Email = x.Email,

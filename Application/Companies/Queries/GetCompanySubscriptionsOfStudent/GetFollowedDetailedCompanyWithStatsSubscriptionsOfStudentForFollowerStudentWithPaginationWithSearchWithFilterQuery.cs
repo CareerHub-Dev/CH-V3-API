@@ -9,9 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 
-public record GetCompaniesWithAmountStatisticOfStudentWithPaginationWithSearchWithFilterQuery
-    : IRequest<PaginatedList<CompanyWithAmountStatisticDTO>>
+public record GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterQuery
+    : IRequest<PaginatedList<FollowedDetailedCompanyWithStatsDTO>>
 {
+    public Guid FollowerStudentId { get; init; }
+    public bool? IsFollowerStudentMustBeVerified { get; init; }
+
     public Guid StudentOwnerId { get; init; }
     public bool? IsStudentOwnerMustBeVerified { get; init; }
 
@@ -27,18 +30,25 @@ public record GetCompaniesWithAmountStatisticOfStudentWithPaginationWithSearchWi
     public bool? IsSubscriberMustBeVerified { get; init; }
 }
 
-public class GetCompaniesWithAmountStatisticOfStudentWithPaginationWithSearchWithFilterQueryHandler
-    : IRequestHandler<GetCompaniesWithAmountStatisticOfStudentWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyWithAmountStatisticDTO>>
+public class GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler
+    : IRequestHandler<GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterQuery, PaginatedList<FollowedDetailedCompanyWithStatsDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompaniesWithAmountStatisticOfStudentWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<CompanyWithAmountStatisticDTO>> Handle(GetCompaniesWithAmountStatisticOfStudentWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<FollowedDetailedCompanyWithStatsDTO>> Handle(GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
     {
+        if (!await _context.Students
+            .Filter(isVerified: request.IsFollowerStudentMustBeVerified)
+            .AnyAsync(x => x.Id == request.FollowerStudentId))
+        {
+            throw new NotFoundException(nameof(Student), request.FollowerStudentId);
+        }
+
         if (!await _context.Students
             .Filter(isVerified: request.IsStudentOwnerMustBeVerified)
             .AnyAsync(x => x.Id == request.StudentOwnerId))
@@ -55,7 +65,7 @@ public class GetCompaniesWithAmountStatisticOfStudentWithPaginationWithSearchWit
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
             .Where(x => x.SubscribedStudents.Any(x => x.Id == request.StudentOwnerId))
-            .Select(x => new CompanyWithAmountStatisticDTO
+            .Select(x => new FollowedDetailedCompanyWithStatsDTO
             {
                 Id = x.Id,
                 Email = x.Email,
@@ -64,13 +74,9 @@ public class GetCompaniesWithAmountStatisticOfStudentWithPaginationWithSearchWit
                 BannerId = x.BannerId,
                 Motto = x.Motto,
                 Description = x.Description,
-                AmountStatistic = new AmountStatistic
-                {
-                    AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferMustBeActive, null).Count(),
-                    AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberMustBeVerified, null).Count()
-                },
-                Verified = x.Verified,
-                PasswordReset = x.PasswordReset,
+                AmountJobOffers = x.JobOffers.Filter(request.IsJobOfferMustBeActive, null).Count(),
+                AmountSubscribers = x.SubscribedStudents.Filter(null, request.IsSubscriberMustBeVerified, null).Count(),
+                IsFollowed = x.SubscribedStudents.Any(x => x.Id == request.FollowerStudentId),
             })
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

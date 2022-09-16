@@ -21,11 +21,11 @@ namespace WebUI.Areas.Admin;
 public class CompaniesController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithAmountStatisticDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
         [FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterForAdminView view)
     {
-        var result = await Mediator.Send(new GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterQuery
+        var result = await Mediator.Send(new GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery
         {
             PageNumber = view.PageNumber,
             PageSize = view.PageSize,

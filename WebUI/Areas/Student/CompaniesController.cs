@@ -17,10 +17,10 @@ namespace WebUI.Areas.Student;
 public class CompaniesController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithAmountStatisticDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies([FromQuery] GetCompaniesWithAmountStatisticWithPaginationWithSearchWithFilterForAdminView view)
     {
-        var result = await Mediator.Send(new GetFollowedCompaniesDetailedWithAmountStatisticForFollowerStudentWithPaginationWithSearchWithFilterQuery
+        var result = await Mediator.Send(new GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery
         {
             FollowerStudentId = AccountInfo!.Id,
             IsFollowerStudentMustBeVerified = true,
@@ -38,11 +38,11 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpGet("{companyId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FollowedCompanyDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FollowedDetailedCompanyDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new GetFollowedCompanyDetailedForFollowerStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetFollowedDetailedCompanyForFollowerStudentWithFilterQuery
         {
             FollowerStudentId = AccountInfo!.Id,
             IsFollowerStudentMustBeVerified = true,
