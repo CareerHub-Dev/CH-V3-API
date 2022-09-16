@@ -4,21 +4,21 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Accounts.Queries.GetAccountBrief;
+namespace Application.Accounts.Queries.GetBriefAccount;
 
-public record GetAccountBriefQuery(Guid AccountId) : IRequest<AccountBriefDTO>;
+public record GetBriefAccountQuery(Guid AccountId) : IRequest<BriefAccountDTO>;
 
-public class GetStudentLogQueryHandler : IRequestHandler<GetAccountBriefQuery, AccountBriefDTO>
+public class GetBriefAccountQueryHandler : IRequestHandler<GetBriefAccountQuery, BriefAccountDTO>
 {
     private readonly IApplicationDbContext _context;
     private readonly IAccountHelper _accountHelper;
-    public GetStudentLogQueryHandler(IApplicationDbContext context, IAccountHelper accountHelper)
+    public GetBriefAccountQueryHandler(IApplicationDbContext context, IAccountHelper accountHelper)
     {
         _context = context;
         _accountHelper = accountHelper;
     }
 
-    public async Task<AccountBriefDTO> Handle(GetAccountBriefQuery request, CancellationToken cancellationToken)
+    public async Task<BriefAccountDTO> Handle(GetBriefAccountQuery request, CancellationToken cancellationToken)
     {
         var account = await _context.Accounts
             .AsNoTracking()
@@ -30,7 +30,7 @@ public class GetStudentLogQueryHandler : IRequestHandler<GetAccountBriefQuery, A
             throw new NotFoundException(nameof(Account), request.AccountId);
         }
 
-        return new AccountBriefDTO
+        return new BriefAccountDTO
         {
             Id = account.Id,
             Email = account.Email,

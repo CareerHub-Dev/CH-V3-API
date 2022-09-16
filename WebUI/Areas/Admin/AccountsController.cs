@@ -1,5 +1,5 @@
 ﻿using Application.Accounts.Commands.RevokeRefreshToken;
-using Application.Accounts.Queries.GetAccountBrief;
+using Application.Accounts.Queries.GetBriefAccount;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
@@ -16,11 +16,11 @@ public class AccountsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpGet("{accountId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AccountBriefDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BriefAccountDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAccountBrief(Guid accountId)
+    public async Task<IActionResult> GetBriefAccount(Guid accountId)
     {
-        return Ok(await Mediator.Send(new GetAccountBriefQuery(accountId)));
+        return Ok(await Mediator.Send(new GetBriefAccountQuery(accountId)));
     }
 
     /// <remarks>

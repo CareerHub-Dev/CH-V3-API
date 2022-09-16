@@ -1,6 +1,6 @@
-﻿namespace Application.Accounts.Queries.GetAccountBrief;
+﻿namespace Application.Accounts.Queries.GetBriefAccount;
 
-public class AccountBriefDTO
+public class BriefAccountDTO
 {
     public Guid Id { get; set; }
     public string Email { get; set; } = string.Empty;
