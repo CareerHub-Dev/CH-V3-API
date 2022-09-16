@@ -31,7 +31,7 @@ public class CompaniesController : ApiControllerBase
     [HttpPut("own")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateOwnCompanyDetailAccount(UpdateOwnCompanyAccountView view)
+    public async Task<IActionResult> UpdateOwnCompanyDetailAccount(UpdateOwnCompanyDetailView view)
     {
         await Mediator.Send(new UpdateCompanyDetailCommand
         {
