@@ -36,7 +36,9 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
         _context = context;
     }
 
-    public async Task<PaginatedList<FollowedDetailedCompanyWithStatsDTO>> Handle(GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<FollowedDetailedCompanyWithStatsDTO>> Handle(
+        GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(isVerified: request.IsFollowerStudentMustBeVerified)

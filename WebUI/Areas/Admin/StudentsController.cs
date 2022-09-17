@@ -105,6 +105,7 @@ public class StudentsController : ApiControllerBase
 
     [HttpGet("{studentId}/company-subscriptions")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanySubscriptionsOfStudent(
         Guid studentId,
         [FromQuery] int pageNumber = 1,

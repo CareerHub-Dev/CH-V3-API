@@ -36,7 +36,9 @@ public class GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWi
         _context = context;
     }
 
-    public async Task<PaginatedList<CompanyWithStatsDTO>> Handle(GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<CompanyWithStatsDTO>> Handle(
+        GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(isVerified: request.IsStudentOwnerMustBeVerified)

@@ -31,7 +31,9 @@ public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryHandler
         _context = context;
     }
 
-    public async Task<PaginatedList<CompanyWithStatsDTO>> Handle(GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<CompanyWithStatsDTO>> Handle(
+        GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery request, 
+        CancellationToken cancellationToken)
     {
         return await _context.Companies
             .AsNoTracking()

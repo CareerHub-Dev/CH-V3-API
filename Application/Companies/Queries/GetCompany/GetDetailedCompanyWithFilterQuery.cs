@@ -24,7 +24,9 @@ public class GetDetailedCompanyWithFilterQueryHandler
         _context = context;
     }
 
-    public async Task<DetailedCompanyDTO> Handle(GetDetailedCompanyWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<DetailedCompanyDTO> Handle(
+        GetDetailedCompanyWithFilterQuery request, 
+        CancellationToken cancellationToken)
     {
         var company = await _context.Companies
             .AsNoTracking()

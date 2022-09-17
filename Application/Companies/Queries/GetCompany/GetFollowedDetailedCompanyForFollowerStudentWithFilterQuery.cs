@@ -28,7 +28,9 @@ public class GetFollowedDetailedCompanyForFollowerStudentWithFilterQueryHandler
         _context = context;
     }
 
-    public async Task<FollowedDetailedCompanyDTO> Handle(GetFollowedDetailedCompanyForFollowerStudentWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<FollowedDetailedCompanyDTO> Handle(
+        GetFollowedDetailedCompanyForFollowerStudentWithFilterQuery request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(isVerified: request.IsFollowerStudentMustBeVerified)
