@@ -47,7 +47,7 @@ public class StudentsController : ApiControllerBase
         });
     }
 
-    [HttpGet("{studentId}/amountCompanySubscriptions")]
+    [HttpGet("{studentId}/amount-company-subscriptions")]
     public async Task<int> GetAmountCompanySubscriptionsOfStudent(Guid studentId)
     {
         return await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentWithFilterQuery
@@ -56,7 +56,7 @@ public class StudentsController : ApiControllerBase
         });
     }
 
-    [HttpGet("{studentId}/amountCVs")]
+    [HttpGet("{studentId}/amount-cvs")]
     public async Task<int> GetAmountCVsOfStudent(Guid studentId)
     {
         return await Mediator.Send(new GetAmountCVsOfStudentWithFilterQuery
@@ -65,7 +65,7 @@ public class StudentsController : ApiControllerBase
         });
     }
 
-    [HttpGet("{studentId}/amountJobOfferSubscriptions")]
+    [HttpGet("{studentId}/amount-jobOffer-subscriptions")]
     public async Task<int> GetAmountJobOfferSubscriptionsOfStudent(Guid studentId)
     {
         return await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery
@@ -74,7 +74,7 @@ public class StudentsController : ApiControllerBase
         });
     }
 
-    [HttpGet("{studentId}/amountStudentSubscriptions")]
+    [HttpGet("{studentId}/amount-student-subscriptions")]
     public async Task<int> GetAmountStudentSubscriptionsOfStudent(Guid studentId)
     {
         return await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentWithFilterQuery
