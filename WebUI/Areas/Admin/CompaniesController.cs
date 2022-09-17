@@ -63,7 +63,7 @@ public class CompaniesController : ApiControllerBase
         }));
     }
 
-    [HttpGet("{companyId}/amountSubscribers")]
+    [HttpGet("{companyId}/amount-subscribers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountSubscribersOfCompany(Guid companyId)
@@ -74,7 +74,7 @@ public class CompaniesController : ApiControllerBase
         }));
     }
 
-    [HttpGet("{companyId}/amountJobOffers")]
+    [HttpGet("{companyId}/amount-jobOffers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOffersOfCompany(Guid companyId)

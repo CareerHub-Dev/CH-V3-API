@@ -5,8 +5,8 @@ using WebUI.Common.Models.Account;
 
 namespace WebUI.Areas.Auth;
 
-[Authorize("Student")]
-[Route("api/Student/[controller]")]
+[Authorize]
+[Route("api/Auth/[controller]")]
 public class RefreshTokensController : ApiControllerBase
 {
     [HttpPost("revoke-token")]
