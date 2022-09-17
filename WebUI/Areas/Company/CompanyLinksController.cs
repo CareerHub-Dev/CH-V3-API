@@ -1,10 +1,10 @@
 ﻿using Application.CompanyLinks.Command.CreateCompanyLink;
-using Application.CompanyLinks.Command.DeleteCompanyLink;
-using Application.CompanyLinks.Command.UpdateCompanyLink;
+using Application.CompanyLinks.Command.DeleteCompanyLinkOfCompany;
+using Application.CompanyLinks.Command.UpdateCompanyLinkOfCompany;
 using Application.CompanyLinks.Queries;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.Common.Models.Company;
+using WebUI.Common.Models.CompanyLink;
 
 namespace WebUI.Areas.Company;
 
@@ -12,44 +12,63 @@ namespace WebUI.Areas.Company;
 [Route("api/Company/[controller]")]
 public class CompanyLinksController : ApiControllerBase
 {
-    [HttpPost]
-    public async Task<ActionResult<Guid>> CreateCompanyLink(CreateCompanyLinkView view)
+    [HttpGet("{companyLinkId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CompanyLinkDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompanyLink(Guid companyLinkId)
     {
-        return await Mediator.Send(new CreateCompanyLinkCommand
+        return Ok(await Mediator.Send(new GetCompanyLinkOfCompanyQuery
+        {
+            CompanyLinkId = companyLinkId,
+            CompanyId = AccountInfo!.Id,
+            IsCompanyMustBeVerified = true
+        }));
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateCompanyLink(CreateCompanyLinkView view)
+    {
+        var result = await Mediator.Send(new CreateCompanyLinkCommand
         {
             Name = view.Name,
             Uri = view.Uri,
             CompanyId = AccountInfo!.Id
         });
+
+        return CreatedAtAction(nameof(GetCompanyLink), new { companyLinkId = result }, result);
     }
 
     [HttpDelete("{companyLinkId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCompanyLink(Guid companyLinkId)
     {
-        if (!await Mediator.Send(new CompanyOwnsCompanyLinkQuery { CompanyLinkId = companyLinkId, CompanyId = AccountInfo!.Id }))
-        {
-            return Problem(title: "CompanyLink was not found.", statusCode: StatusCodes.Status404NotFound, detail: "Company don't own this company link.");
-        }
-
-        await Mediator.Send(new DeleteCompanyLinkCommand(companyLinkId));
+        await Mediator.Send(new DeleteCompanyLinkOfCompanyCommand(companyLinkId, AccountInfo!.Id));
 
         return NoContent();
     }
 
     [HttpPut("{companyLinkId}")]
-    public async Task<IActionResult> UpdateCompanyLink(Guid companyLinkId, UpdateCompanyLinkCommand command)
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateCompanyLink(Guid companyLinkId, UpdateCompanyLinkView view)
     {
-        if (companyLinkId != command.CompanyLinkId)
+        if (companyLinkId != view.CompanyLinkId)
         {
             return BadRequest();
         }
 
-        if (!await Mediator.Send(new CompanyOwnsCompanyLinkQuery { CompanyLinkId = companyLinkId, CompanyId = AccountInfo!.Id }))
+        await Mediator.Send(new UpdateCompanyLinkOfCompanyCommand
         {
-            return Problem(title: "CompanyLink was not found.", statusCode: StatusCodes.Status404NotFound, detail: "Company don't own this company link.");
-        }
-
-        await Mediator.Send(command);
+            CompanyLinkId = view.CompanyLinkId,
+            Name = view.Name,
+            Uri = view.Uri,
+            CompanyId = AccountInfo!.Id
+        });
 
         return NoContent();
     }

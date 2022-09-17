@@ -69,14 +69,16 @@ public class CompaniesController : ApiControllerBase
         );
     }
 
-    [HttpGet("own/companyLinks")]
-    public async Task<IEnumerable<CompanyLinkDTO>> GetCompanyLinksOfOwnCompany()
+    [HttpGet("own/CompanyLinks")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompanyLinksOfOwnCompany()
     {
-        return await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
+        return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
-            IsCompanyVerified = true,
-        });
+            IsCompanyMustBeVerified = true,
+        }));
     }
 
     [HttpGet("own/amountSubscribers")]

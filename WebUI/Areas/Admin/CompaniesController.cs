@@ -52,13 +52,15 @@ public class CompaniesController : ApiControllerBase
         }));
     }
 
-    [HttpGet("{companyId}/companyLinks")]
-    public async Task<IEnumerable<CompanyLinkDTO>> GetCompanyLinksOfCompany(Guid companyId)
+    [HttpGet("{companyId}/CompanyLinks")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompanyLinksOfCompany(Guid companyId)
     {
-        return await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
+        return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
         {
             CompanyId = companyId
-        });
+        }));
     }
 
     [HttpGet("{companyId}/amountSubscribers")]

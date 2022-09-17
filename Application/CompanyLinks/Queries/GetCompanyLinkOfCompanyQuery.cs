@@ -7,31 +7,33 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.CompanyLinks.Queries;
 
-public record GetCompanyLinksOfCompanyWithFilterQuery : IRequest<IEnumerable<CompanyLinkDTO>>
+public record GetCompanyLinkOfCompanyQuery : IRequest<CompanyLinkDTO>
 {
+    public Guid CompanyLinkId { get; init; }
+
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
 }
 
-public class GetCompanyLinksOfCompanyWithFilterQueryHandler : IRequestHandler<GetCompanyLinksOfCompanyWithFilterQuery, IEnumerable<CompanyLinkDTO>>
+public class GetCompanyLinkOfCompanyQueryHandler : IRequestHandler<GetCompanyLinkOfCompanyQuery, CompanyLinkDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyLinksOfCompanyWithFilterQueryHandler(IApplicationDbContext context)
+    public GetCompanyLinkOfCompanyQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<CompanyLinkDTO>> Handle(GetCompanyLinksOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<CompanyLinkDTO> Handle(GetCompanyLinkOfCompanyQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Companies.Filter(isVerified: request.IsCompanyMustBeVerified).AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        return await _context.CompanyLinks
+        var companyLink = await _context.CompanyLinks
             .AsNoTracking()
-            .Where(x => x.CompanyId == request.CompanyId)
+            .Where(x => x.Id == request.CompanyLinkId)
             .Select(x => new CompanyLinkDTO
             {
                 Id = x.Id,
@@ -39,6 +41,13 @@ public class GetCompanyLinksOfCompanyWithFilterQueryHandler : IRequestHandler<Ge
                 Uri = x.Uri,
                 CompanyId = x.CompanyId
             })
-            .ToListAsync();
+            .FirstOrDefaultAsync();
+
+        if (companyLink == null)
+        {
+            throw new NotFoundException(nameof(CompanyLink), request.CompanyLinkId);
+        }
+
+        return companyLink;
     }
 }

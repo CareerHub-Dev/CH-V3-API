@@ -27,7 +27,6 @@ public class RevokeRefreshTokenOfAccountCommandHandler : IRequestHandler<RevokeR
     public async Task<Unit> Handle(RevokeRefreshTokenOfAccountCommand request, CancellationToken cancellationToken)
     {
         if (!await _context.Accounts
-            .Filter(isVerified: true)
             .AnyAsync(x => x.Id == request.AccountId))
         {
             throw new NotFoundException(nameof(Account), request.AccountId);
