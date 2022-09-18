@@ -27,6 +27,6 @@ public class CreateExperienceCommandValidator : AbstractValidator<CreateExperien
         RuleFor(x => x.ExperienceLevel)
             .IsInEnum();
 
-        RuleFor(x => x.StartDate).LessThan(x => x.EndDate);
+        RuleFor(x => x.StartDate).LessThan(x => x.EndDate).When(x => x.EndDate.HasValue);
     }
 }

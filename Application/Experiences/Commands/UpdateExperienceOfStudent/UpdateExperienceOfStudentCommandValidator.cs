@@ -27,6 +27,6 @@ public class UpdateExperienceOfStudentCommandValidator : AbstractValidator<Updat
         RuleFor(x => x.ExperienceLevel)
             .IsInEnum();
 
-        RuleFor(x => x.StartDate).LessThan(x => x.EndDate);
+        RuleFor(x => x.StartDate).LessThan(x => x.EndDate).When(x => x.EndDate.HasValue);
     }
 }

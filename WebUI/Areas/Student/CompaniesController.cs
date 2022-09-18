@@ -102,13 +102,11 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> IsStudentSubscribedToCompany(Guid companyId)
     {
-        await Mediator.Send(new IsVerifiedStudentSubscribedToVerifiedCompanyQuery
+        return Ok(await Mediator.Send(new IsVerifiedStudentSubscribedToVerifiedCompanyQuery
         {
             StudentId = AccountInfo!.Id,
             CompanyId = companyId
-        });
-
-        return NoContent();
+        }));
     }
 
     [HttpPost("{companyId}/subscribe")]
