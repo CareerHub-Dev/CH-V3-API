@@ -33,7 +33,7 @@ public class GetCompanyLinkOfCompanyQueryHandler : IRequestHandler<GetCompanyLin
 
         var companyLink = await _context.CompanyLinks
             .AsNoTracking()
-            .Where(x => x.Id == request.CompanyLinkId)
+            .Where(x => x.Id == request.CompanyLinkId && x.CompanyId == request.CompanyId)
             .Select(x => new CompanyLinkDTO
             {
                 Id = x.Id,

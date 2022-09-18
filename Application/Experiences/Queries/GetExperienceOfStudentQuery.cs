@@ -7,34 +7,33 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Experiences.Queries;
 
-public class GetExperiencesOfStudentWithPaginationWithFilterQuery : IRequest<IEnumerable<ExperienceDTO>>
+public record GetExperienceOfStudentQuery : IRequest<ExperienceDTO>
 {
+    public Guid ExperienceId { get; init; }
+
     public Guid StudentId { get; init; }
     public bool? IsStudentMustBeVerified { get; init; }
-
-    public int PageNumber { get; init; } = 1;
-    public int PageSize { get; init; } = 10;
 }
 
-public class GetExperiencesOfStudentWithPaginationWithFilterQueryHandler : IRequestHandler<GetExperiencesOfStudentWithPaginationWithFilterQuery, IEnumerable<ExperienceDTO>>
+public class GetCompanyLinkOfCompanyQueryHandler : IRequestHandler<GetExperienceOfStudentQuery, ExperienceDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetExperiencesOfStudentWithPaginationWithFilterQueryHandler(IApplicationDbContext context)
+    public GetCompanyLinkOfCompanyQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<ExperienceDTO>> Handle(GetExperiencesOfStudentWithPaginationWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<ExperienceDTO> Handle(GetExperienceOfStudentQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Students.Filter(isVerified: request.IsStudentMustBeVerified).AnyAsync(x => x.Id == request.StudentId))
         {
-            throw new NotFoundException(nameof(Student), request.StudentId);
+            throw new NotFoundException(nameof(Company), request.StudentId);
         }
 
-        return await _context.Experiences
+        var companyLink = await _context.Experiences
             .AsNoTracking()
-            .Where(x => x.StudentId == request.StudentId)
+            .Where(x => x.Id == request.ExperienceId && x.StudentId == request.StudentId)
             .Select(x => new ExperienceDTO
             {
                 Id = x.Id,
@@ -48,6 +47,13 @@ public class GetExperiencesOfStudentWithPaginationWithFilterQueryHandler : IRequ
                 EndDate = x.EndDate,
                 StudentId = x.StudentId
             })
-            .ToListAsync();
+            .FirstOrDefaultAsync();
+
+        if (companyLink == null)
+        {
+            throw new NotFoundException(nameof(CompanyLink), request.ExperienceId);
+        }
+
+        return companyLink;
     }
 }

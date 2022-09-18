@@ -6,10 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.CompanyLinks.Queries;
 
-public record GetCompanyLinkQuery : IRequest<CompanyLinkDTO>
-{
-    public Guid CompanyLinkId { get; init; }
-}
+public record GetCompanyLinkQuery(Guid CompanyLinkId) : IRequest<CompanyLinkDTO>;
 
 public class GetCompanyLinkQueryHandler : IRequestHandler<GetCompanyLinkQuery, CompanyLinkDTO>
 {

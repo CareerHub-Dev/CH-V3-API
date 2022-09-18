@@ -14,44 +14,44 @@ namespace WebUI.Areas.Auth;
 public class EnumsController : ApiControllerBase
 {
     [HttpGet("Degrees")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DegreeDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DegreeDTO>))]
     public async Task<IActionResult> GetDegrees()
     {
-        return Ok(await Mediator.Send(new GetDegreesQuery { }));
+        return Ok(await Mediator.Send(new GetDegreesQuery()));
     }
 
     [HttpGet("ExperienceLevels")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExperienceLevelDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExperienceLevelDTO>))]
     public async Task<IActionResult> GetExperienceLevels()
     {
-        return Ok(await Mediator.Send(new GetExperienceLevelsQuery { }));
+        return Ok(await Mediator.Send(new GetExperienceLevelsQuery()));
     }
 
     [HttpGet("JobTypes")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JobTypeDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<JobTypeDTO>))]
     public async Task<IActionResult> GetJobTypes()
     {
-        return Ok(await Mediator.Send(new GetJobTypesQuery { }));
+        return Ok(await Mediator.Send(new GetJobTypesQuery()));
     }
 
     [HttpGet("LanguageLevels")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JobTypeDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<JobTypeDTO>))]
     public async Task<IActionResult> GetLanguageLevels()
     {
-        return Ok(await Mediator.Send(new GetLanguageLevelsQuery { }));
+        return Ok(await Mediator.Send(new GetLanguageLevelsQuery()));
     }
 
     [HttpGet("TemplateLanguages")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TemplateLanguageDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TemplateLanguageDTO>))]
     public async Task<IActionResult> GetTemplateLanguages()
     {
-        return Ok(await Mediator.Send(new GetTemplateLanguagesQuery { }));
+        return Ok(await Mediator.Send(new GetTemplateLanguagesQuery()));
     }
 
     [HttpGet("WorkFormats")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WorkFormatDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<WorkFormatDTO>))]
     public async Task<IActionResult> GetWorkFormats()
     {
-        return Ok(await Mediator.Send(new GetWorkFormatsQuery { }));
+        return Ok(await Mediator.Send(new GetWorkFormatsQuery()));
     }
 }

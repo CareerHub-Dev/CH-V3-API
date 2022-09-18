@@ -16,10 +16,7 @@ public class CompanyLinksController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanyLink(Guid companyLinkId)
     {
-        return Ok(await Mediator.Send(new GetCompanyLinkQuery
-        {
-            CompanyLinkId = companyLinkId
-        }));
+        return Ok(await Mediator.Send(new GetCompanyLinkQuery(companyLinkId)));
     }
 
     [HttpPost]
