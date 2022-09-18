@@ -1,41 +1,42 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Commands.StudentOwnerSubscribeToStudentTarget;
+namespace Application.Students.Commands.VerifiedStudentOwnerSubscribeToVerifiedStudentTarget;
 
-public record StudentOwnerSubscribeToStudentTargetCommand : IRequest
+public record VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommand : IRequest
 {
     public Guid StudentOwnerId { get; init; }
     public Guid StudentTargetId { get; init; }
 }
 
-public class StudentOwnerSubscribeToStudentTargetCommandHandler : IRequestHandler<StudentOwnerSubscribeToStudentTargetCommand>
+public class VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommandHandler : IRequestHandler<VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public StudentOwnerSubscribeToStudentTargetCommandHandler(IApplicationDbContext context)
+    public VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(StudentOwnerSubscribeToStudentTargetCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommand request, CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)
         {
             throw new ArgumentException("StudentOwnerId and StudentTargetId are same.");
         }
 
-        if (!await _context.Students.AnyAsync(x => x.Id == request.StudentOwnerId))
+        if (!await _context.Students.Filter(isVerified: true).AnyAsync(x => x.Id == request.StudentOwnerId))
         {
-            throw new NotFoundException("StudentOwner", request.StudentOwnerId);
+            throw new NotFoundException(nameof(Student), request.StudentOwnerId);
         }
 
-        if (!await _context.Students.AnyAsync(x => x.Id == request.StudentTargetId))
+        if (!await _context.Students.Filter(isVerified: true).AnyAsync(x => x.Id == request.StudentTargetId))
         {
-            throw new NotFoundException("StudentTarget", request.StudentTargetId);
+            throw new NotFoundException(nameof(Student), request.StudentTargetId);
         }
 
         var isStudentSubscriptionExists = await _context.StudentSubscriptions.AnyAsync(x =>

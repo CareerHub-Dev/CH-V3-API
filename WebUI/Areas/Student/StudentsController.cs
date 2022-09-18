@@ -1,8 +1,10 @@
 ﻿using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
 using Application.Experiences.Queries;
+using Application.Students.Commands.StudentOwnerUnsubscribeFromStudentTarget;
 using Application.Students.Commands.UpdateStudent;
 using Application.Students.Commands.UpdateStudentPhoto;
+using Application.Students.Commands.VerifiedStudentOwnerSubscribeToVerifiedStudentTarget;
 using Application.Students.Queries;
 using Application.Students.Queries.GetAmount;
 using Application.Students.Queries.GetStudent;
@@ -20,7 +22,6 @@ namespace WebUI.Areas.Student;
 [Route("api/Student/[controller]")]
 public class StudentsController : ApiControllerBase
 {
-
     [HttpGet]
     public async Task<IEnumerable<FollowedStudentDetailedDTO>> GetStudents(
         [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForStudentView view)
@@ -184,15 +185,41 @@ public class StudentsController : ApiControllerBase
     [HttpGet("{studentTargetId}/subscribe")]
     public async Task<bool> IsStudentOwnerSubscribedToStudentTarget(Guid studentTargetId)
     {
-        var result = await Mediator.Send(new IsStudentOwnerSubscribedToStudentTargetWithFilterQuery
+        var result = await Mediator.Send(new IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetWithFilterQuery
         {
             StudentOwnerId = AccountInfo!.Id,
-            IsStudentOwnerVerified = true,
             StudentTargetId = studentTargetId,
-            IsStudentTargetVerified = true
         });
 
         return result;
+    }
+
+    [HttpPost("{studentId}/subscribe")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> SubscribeToStudent(Guid studentId)
+    {
+        await Mediator.Send(new VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommand
+        {
+            StudentOwnerId = AccountInfo!.Id,
+            StudentTargetId = studentId
+        });
+
+        return NoContent();
+    }
+
+    [HttpDelete("{studentId}/subscribe")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UnsubscribeFromStudent(Guid studentId)
+    {
+        await Mediator.Send(new VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand
+        {
+            StudentOwnerId = AccountInfo!.Id,
+            StudentTargetId = studentId
+        });
+
+        return NoContent();
     }
 
     [HttpPut("own")]
