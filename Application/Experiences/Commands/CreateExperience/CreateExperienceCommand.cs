@@ -1,5 +1,4 @@
-﻿using Application.Admins.Commands.InviteAdmin;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
@@ -33,7 +32,7 @@ public class CreateExperienceCommandHandler : IRequestHandler<CreateExperienceCo
 
     public async Task<Guid> Handle(CreateExperienceCommand request, CancellationToken cancellationToken)
     {
-        if(!await _context.Students.AnyAsync(x => x.Id == request.StudentId))
+        if (!await _context.Students.AnyAsync(x => x.Id == request.StudentId))
         {
             throw new NotFoundException(nameof(Student), request.StudentId);
         }

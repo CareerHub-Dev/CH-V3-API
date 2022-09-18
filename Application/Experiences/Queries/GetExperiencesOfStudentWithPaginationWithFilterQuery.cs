@@ -1,13 +1,14 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Models.Pagination;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Experiences.Queries;
 
-public class GetExperiencesOfStudentWithPaginationWithFilterQuery : IRequest<IEnumerable<ExperienceDTO>>
+public class GetExperiencesOfStudentWithPaginationWithFilterQuery : IRequest<PaginatedList<ExperienceDTO>>
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentMustBeVerified { get; init; }
@@ -16,7 +17,7 @@ public class GetExperiencesOfStudentWithPaginationWithFilterQuery : IRequest<IEn
     public int PageSize { get; init; } = 10;
 }
 
-public class GetExperiencesOfStudentWithPaginationWithFilterQueryHandler : IRequestHandler<GetExperiencesOfStudentWithPaginationWithFilterQuery, IEnumerable<ExperienceDTO>>
+public class GetExperiencesOfStudentWithPaginationWithFilterQueryHandler : IRequestHandler<GetExperiencesOfStudentWithPaginationWithFilterQuery, PaginatedList<ExperienceDTO>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -25,7 +26,7 @@ public class GetExperiencesOfStudentWithPaginationWithFilterQueryHandler : IRequ
         _context = context;
     }
 
-    public async Task<IEnumerable<ExperienceDTO>> Handle(GetExperiencesOfStudentWithPaginationWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<ExperienceDTO>> Handle(GetExperiencesOfStudentWithPaginationWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Students.Filter(isVerified: request.IsStudentMustBeVerified).AnyAsync(x => x.Id == request.StudentId))
         {
@@ -48,6 +49,6 @@ public class GetExperiencesOfStudentWithPaginationWithFilterQueryHandler : IRequ
                 EndDate = x.EndDate,
                 StudentId = x.StudentId
             })
-            .ToListAsync();
+            .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

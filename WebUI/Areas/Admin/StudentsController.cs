@@ -1,6 +1,7 @@
 ﻿using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
 using Application.Emails.Commands;
+using Application.Experiences.Queries;
 using Application.Students.Commands.DeleteStudent;
 using Application.Students.Commands.UpdateStudent;
 using Application.Students.Commands.UpdateStudentPhoto;
@@ -123,6 +124,26 @@ public class StudentsController : ApiControllerBase
             SearchTerm = searchTerm,
 
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{studentId}/Experiences")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExperienceDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetExperiencesOfStudent(
+        Guid studentId,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Mediator.Send(new GetExperiencesOfStudentWithPaginationWithFilterQuery
+        {
+            StudentId = studentId,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
