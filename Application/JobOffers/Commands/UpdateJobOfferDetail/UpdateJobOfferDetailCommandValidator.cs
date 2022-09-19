@@ -2,9 +2,9 @@
 
 namespace Application.JobOffers.Commands.UpdateJobOffer;
 
-public class UpdateJobOfferCommandValidator : AbstractValidator<UpdateJobOfferCommand>
+public class UpdateJobOfferDetailCommandValidator : AbstractValidator<UpdateJobOfferDetailCommand>
 {
-    public UpdateJobOfferCommandValidator()
+    public UpdateJobOfferDetailCommandValidator()
     {
         RuleFor(x => x.Title)
             .NotEmpty()
