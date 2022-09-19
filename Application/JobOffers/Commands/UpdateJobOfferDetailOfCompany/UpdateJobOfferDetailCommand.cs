@@ -5,7 +5,7 @@ using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.JobOffers.Commands.UpdateJobOfferDetail;
+namespace Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 
 public record UpdateJobOfferDetailCommand : IRequest
 {
@@ -27,6 +27,8 @@ public record UpdateJobOfferDetailCommand : IRequest
     public Guid JobPositionId { get; init; }
 
     public List<Guid> TagIds { get; init; } = new List<Guid>();
+
+    public Guid CompanyId { get; init; }
 }
 
 public class UpdateJobOfferDetailCommandHandler : IRequestHandler<UpdateJobOfferDetailCommand>
@@ -40,6 +42,12 @@ public class UpdateJobOfferDetailCommandHandler : IRequestHandler<UpdateJobOffer
 
     public async Task<Unit> Handle(UpdateJobOfferDetailCommand request, CancellationToken cancellationToken)
     {
+        if (!await _context.Companies
+            .AnyAsync(x => x.Id == request.CompanyId))
+        {
+            throw new NotFoundException(nameof(Company), request.CompanyId);
+        }
+
         if (!await _context.JobPositions.AnyAsync(x => x.Id == request.JobPositionId))
         {
             throw new NotFoundException(nameof(JobPosition), request.JobPositionId);
@@ -49,7 +57,7 @@ public class UpdateJobOfferDetailCommandHandler : IRequestHandler<UpdateJobOffer
 
         var jobOffer = await _context.JobOffers
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.JobOfferId);
+            .FirstOrDefaultAsync(x => x.Id == request.JobOfferId && x.CompanyId == request.CompanyId);
 
         if (jobOffer == null)
         {

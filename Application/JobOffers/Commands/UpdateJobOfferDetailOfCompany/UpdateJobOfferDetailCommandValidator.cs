@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.JobOffers.Commands.UpdateJobOfferDetail;
+namespace Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 
 public class UpdateJobOfferDetailCommandValidator : AbstractValidator<UpdateJobOfferDetailCommand>
 {
