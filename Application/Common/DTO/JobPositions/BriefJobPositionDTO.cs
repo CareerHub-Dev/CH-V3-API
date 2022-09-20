@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Models.JobPosition;
+﻿namespace Application.Common.DTO.JobPositions;
 
 public class BriefJobPositionDTO
 {

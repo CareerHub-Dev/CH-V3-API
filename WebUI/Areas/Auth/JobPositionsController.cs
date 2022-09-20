@@ -1,5 +1,6 @@
-﻿using Application.Common.Models.JobPosition;
-using Application.JobPositions.Queries;
+﻿using Application.Common.DTO.JobPositions;
+using Application.JobPositions.Queries.GetJobPositions;
+using Application.Tags.Queries.GetJobPosition;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
@@ -14,5 +15,13 @@ public class JobPositionsController : ApiControllerBase
     public async Task<IActionResult> GetJobPositions([FromQuery] GetBriefJobPositionsWithSearchQuery query)
     {
         return Ok(await Mediator.Send(query));
+    }
+
+    [HttpGet("{jobPositionId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BriefJobPositionDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetJobPosition(Guid jobPositionId)
+    {
+        return Ok(await Mediator.Send(new GetBriefJobPositionQuery(jobPositionId)));
     }
 }

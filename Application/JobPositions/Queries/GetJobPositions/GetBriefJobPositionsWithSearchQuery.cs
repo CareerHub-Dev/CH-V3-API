@@ -1,10 +1,10 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.JobPositions;
+using Application.Common.Entensions;
 using Application.Common.Interfaces;
-using Application.Common.Models.JobPosition;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.JobPositions.Queries;
+namespace Application.JobPositions.Queries.GetJobPositions;
 
 public record GetBriefJobPositionsWithSearchQuery : IRequest<IList<BriefJobPositionDTO>>
 {

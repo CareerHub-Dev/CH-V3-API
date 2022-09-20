@@ -1,6 +1,4 @@
-﻿using Application.Common.Models.JobPosition;
-
-namespace Application.JobPositions.Queries;
+﻿namespace Application.Common.DTO.JobPositions;
 
 public class JobPositionDTO : BriefJobPositionDTO
 {

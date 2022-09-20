@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.JobPositions.Queries;
+namespace Application.JobPositions.Queries.GetJobPositions;
 
 public class GetJobPositionsWithPaginationWithSearchQueryValidator : AbstractValidator<GetJobPositionsWithPaginationWithSearchQuery>
 {
