@@ -10,8 +10,9 @@ namespace WebUI.Areas.Auth;
 public class StudentGroupsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<StudentGroupBriefDTO>> GetStudentGroups([FromQuery] GetStudentGroupBriefsWithSearchQuery query)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BriefStudentGroupDTO>))]
+    public async Task<IActionResult> GetStudentGroups([FromQuery] GetBriefStudentGroupsWithSearchQuery query)
     {
-        return await Mediator.Send(query);
+        return Ok(await Mediator.Send(query));
     }
 }

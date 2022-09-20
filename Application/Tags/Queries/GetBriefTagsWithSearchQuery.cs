@@ -6,27 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Queries;
 
-public record GetTagBriefsWithSearchQuery : IRequest<IEnumerable<TagBriefDTO>>
+public record GetBriefTagsWithSearchQuery : IRequest<IList<BriefTagDTO>>
 {
     public string? SearchTerm { get; init; }
 }
 
-public class GetTagBriefsWithSearchQueryHandler : IRequestHandler<GetTagBriefsWithSearchQuery, IEnumerable<TagBriefDTO>>
+public class GetBriefTagsWithSearchQueryHandler : IRequestHandler<GetBriefTagsWithSearchQuery, IList<BriefTagDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetTagBriefsWithSearchQueryHandler(IApplicationDbContext context)
+    public GetBriefTagsWithSearchQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<TagBriefDTO>> Handle(GetTagBriefsWithSearchQuery request, CancellationToken cancellationToken)
+    public async Task<IList<BriefTagDTO>> Handle(GetBriefTagsWithSearchQuery request, CancellationToken cancellationToken)
     {
         return await _context.Tags
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
-            .Select(x => new TagBriefDTO
+            .Select(x => new BriefTagDTO
             {
                 Id = x.Id,
                 Name = x.Name,

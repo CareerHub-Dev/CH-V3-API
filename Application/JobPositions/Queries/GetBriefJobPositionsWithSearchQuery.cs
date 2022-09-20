@@ -6,27 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobPositions.Queries;
 
-public record GetJobPositionBriefsWithSearchQuery : IRequest<IEnumerable<JobPositionBriefDTO>>
+public record GetBriefJobPositionsWithSearchQuery : IRequest<IList<BriefJobPositionDTO>>
 {
     public string? SearchTerm { get; init; }
 }
 
-public class GetJobPositionBriefsWithSearchQueryHandler : IRequestHandler<GetJobPositionBriefsWithSearchQuery, IEnumerable<JobPositionBriefDTO>>
+public class GetBriefJobPositionsWithSearchQueryHandler : IRequestHandler<GetBriefJobPositionsWithSearchQuery, IList<BriefJobPositionDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetJobPositionBriefsWithSearchQueryHandler(IApplicationDbContext context)
+    public GetBriefJobPositionsWithSearchQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<JobPositionBriefDTO>> Handle(GetJobPositionBriefsWithSearchQuery request, CancellationToken cancellationToken)
+    public async Task<IList<BriefJobPositionDTO>> Handle(GetBriefJobPositionsWithSearchQuery request, CancellationToken cancellationToken)
     {
         return await _context.JobPositions
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
-            .Select(x => new JobPositionBriefDTO
+            .Select(x => new BriefJobPositionDTO
             {
                 Id = x.Id,
                 Name = x.Name,

@@ -1,8 +1,8 @@
 ﻿using Application.Common.Models.Tag;
 
-namespace Application.Tags.Queries.Models;
+namespace Application.Tags.Queries;
 
-public class TagDTO : TagBriefDTO
+public class TagDTO : BriefTagDTO
 {
     public bool IsAccepted { get; set; }
     public DateTime Created { get; set; }

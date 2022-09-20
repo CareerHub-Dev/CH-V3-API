@@ -14,42 +14,42 @@ namespace WebUI.Areas.Auth;
 public class EnumsController : ApiControllerBase
 {
     [HttpGet("Degrees")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DegreeDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<DegreeDTO>))]
     public async Task<IActionResult> GetDegrees()
     {
         return Ok(await Mediator.Send(new GetDegreesQuery()));
     }
 
     [HttpGet("ExperienceLevels")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExperienceLevelDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<ExperienceLevelDTO>))]
     public async Task<IActionResult> GetExperienceLevels()
     {
         return Ok(await Mediator.Send(new GetExperienceLevelsQuery()));
     }
 
     [HttpGet("JobTypes")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<JobTypeDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<JobTypeDTO>))]
     public async Task<IActionResult> GetJobTypes()
     {
         return Ok(await Mediator.Send(new GetJobTypesQuery()));
     }
 
     [HttpGet("LanguageLevels")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<JobTypeDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<JobTypeDTO>))]
     public async Task<IActionResult> GetLanguageLevels()
     {
         return Ok(await Mediator.Send(new GetLanguageLevelsQuery()));
     }
 
     [HttpGet("TemplateLanguages")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TemplateLanguageDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TemplateLanguageDTO>))]
     public async Task<IActionResult> GetTemplateLanguages()
     {
         return Ok(await Mediator.Send(new GetTemplateLanguagesQuery()));
     }
 
     [HttpGet("WorkFormats")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<WorkFormatDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<WorkFormatDTO>))]
     public async Task<IActionResult> GetWorkFormats()
     {
         return Ok(await Mediator.Send(new GetWorkFormatsQuery()));

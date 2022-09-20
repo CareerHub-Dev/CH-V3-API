@@ -44,7 +44,7 @@ public class GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler : IReq
                 LastModified = x.LastModified,
                 CreatedBy = x.CreatedBy,
                 LastModifiedBy = x.LastModifiedBy,
-                StudentGroup = new StudentGroupBriefDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name }
+                StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name }
             })
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

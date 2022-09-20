@@ -10,8 +10,9 @@ namespace WebUI.Areas.Auth;
 public class TagsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<TagBriefDTO>> GetTags([FromQuery] GetTagBriefsWithSearchQuery query)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BriefTagDTO>))]
+    public async Task<IActionResult> GetTags([FromQuery] GetBriefTagsWithSearchQuery query)
     {
-        return await Mediator.Send(query);
+        return Ok(await Mediator.Send(query));
     }
 }

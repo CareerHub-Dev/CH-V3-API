@@ -14,5 +14,5 @@ public class StudentLogDTO
     public DateTime? LastModified { get; set; }
     public Guid? LastModifiedBy { get; set; }
 
-    public StudentGroupBriefDTO? StudentGroup { get; set; }
+    public BriefStudentGroupDTO? StudentGroup { get; set; }
 }

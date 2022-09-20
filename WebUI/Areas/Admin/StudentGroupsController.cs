@@ -2,7 +2,6 @@
 using Application.StudentGroups.Commands.DeleteStudentGroup;
 using Application.StudentGroups.Commands.UpdateStudentGroup;
 using Application.StudentGroups.Queries;
-using Application.StudentGroups.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;

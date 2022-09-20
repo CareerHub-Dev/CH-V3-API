@@ -1,8 +1,8 @@
-﻿using Application.Common.Models.StudentGroup;
+﻿using Application.Common.Models.JobPosition;
 
-namespace Application.StudentGroups.Queries.Models;
+namespace Application.JobPositions.Queries;
 
-public class StudentGroupDTO : StudentGroupBriefDTO
+public class JobPositionDTO : BriefJobPositionDTO
 {
     public DateTime Created { get; set; }
     public Guid? CreatedBy { get; set; }

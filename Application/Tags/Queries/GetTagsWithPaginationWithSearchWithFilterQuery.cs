@@ -1,7 +1,6 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
-using Application.Tags.Queries.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

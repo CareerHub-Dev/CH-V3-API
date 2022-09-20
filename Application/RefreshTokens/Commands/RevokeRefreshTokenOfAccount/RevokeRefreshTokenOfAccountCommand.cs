@@ -1,5 +1,4 @@
-﻿using Application.Common.Entensions;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -17,7 +16,7 @@ public class RevokeRefreshTokenOfAccountCommandHandler : IRequestHandler<RevokeR
     private readonly IApplicationDbContext _context;
     private readonly IСurrentRemoteIpAddressService _сurrentRemoteIpAddressService;
     public RevokeRefreshTokenOfAccountCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IСurrentRemoteIpAddressService сurrentRemoteIpAddressService)
     {
         _context = context;

@@ -40,7 +40,7 @@ public class GetStudentDetailedWithQueryHandler
                 PhotoId = x.PhotoId,
                 Phone = x.Phone,
                 BirthDate = x.BirthDate,
-                StudentGroup = new StudentGroupBriefDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
+                StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
             })
             .FirstOrDefaultAsync();
 

@@ -11,5 +11,5 @@ public class StudentDetailedDTO
     public Guid? PhotoId { get; set; }
     public string? Phone { get; set; }
     public DateTime? BirthDate { get; set; }
-    public StudentGroupBriefDTO? StudentGroup { get; set; }
+    public BriefStudentGroupDTO? StudentGroup { get; set; }
 }

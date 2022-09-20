@@ -2,7 +2,6 @@
 using Application.JobPositions.Commands.DeleteJobPosition;
 using Application.JobPositions.Commands.UpdateJobPosition;
 using Application.JobPositions.Queries;
-using Application.JobPositions.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;

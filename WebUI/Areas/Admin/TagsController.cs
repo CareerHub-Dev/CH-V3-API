@@ -2,7 +2,6 @@
 using Application.Tags.Commands.DeleteTag;
 using Application.Tags.Commands.UpdateTag;
 using Application.Tags.Queries;
-using Application.Tags.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;

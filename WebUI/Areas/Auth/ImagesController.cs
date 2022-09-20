@@ -9,6 +9,7 @@ namespace WebUI.Areas.Auth;
 public class ImagesController : ApiControllerBase
 {
     [HttpGet("{imageId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(FileContentResult))]
     public async Task<IActionResult> GetImage(Guid imageId)
     {
         var image = await Mediator.Send(new GetImageQuery(imageId));

@@ -10,8 +10,9 @@ namespace WebUI.Areas.Auth;
 public class JobPositionsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<JobPositionBriefDTO>> GetJobPositions([FromQuery] GetJobPositionBriefsWithSearchQuery query)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BriefJobPositionDTO>))]
+    public async Task<IActionResult> GetJobPositions([FromQuery] GetBriefJobPositionsWithSearchQuery query)
     {
-        return await Mediator.Send(query);
+        return Ok(await Mediator.Send(query));
     }
 }
