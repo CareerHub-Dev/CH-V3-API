@@ -1,10 +1,11 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.DTO.Admins;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Admins.Queries;
+namespace Application.Admins.Queries.GetAdmin;
 
 public record GetAdminQuery(Guid AdminId) : IRequest<AdminDTO>;
 

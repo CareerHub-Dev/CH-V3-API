@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Admins.Queries;
+namespace Application.Admins.Queries.GetAdmins;
 
 public class GetAdminsWithPaginationWithSearchWithFilterQueryValidator : AbstractValidator<GetAdminsWithPaginationWithSearchWithFilterQuery>
 {

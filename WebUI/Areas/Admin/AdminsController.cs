@@ -1,7 +1,9 @@
 ﻿using Application.Admins.Commands.DeleteAdmin;
 using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Commands.UpdateAdmin;
-using Application.Admins.Queries;
+using Application.Admins.Queries.GetAdmin;
+using Application.Admins.Queries.GetAdmins;
+using Application.Common.DTO.Admins;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

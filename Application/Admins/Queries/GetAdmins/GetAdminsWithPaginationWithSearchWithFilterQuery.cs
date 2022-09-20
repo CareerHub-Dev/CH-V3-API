@@ -1,10 +1,11 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.Admins;
+using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Admins.Queries;
+namespace Application.Admins.Queries.GetAdmins;
 
 public record GetAdminsWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<AdminDTO>>
 {
@@ -33,7 +34,7 @@ public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestH
             .AsNoTracking()
             .Filter(
                 withoutAdminId: request.WithoutAdminId,
-                isVerified: request.IsAdminMustBeVerified, 
+                isVerified: request.IsAdminMustBeVerified,
                 isSuperAdmin: request.IsSuperAdmin
              )
             .Search(request.SearchTerm ?? "")
