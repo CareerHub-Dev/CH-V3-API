@@ -7,7 +7,7 @@ using Application.Accounts.Queries.Authenticate;
 using Application.Accounts.Queries.RefreshToken;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
-using WebUI.Common.Models.Account;
+using WebUI.ViewModels.RefreshTokens;
 
 namespace WebUI.Areas;
 

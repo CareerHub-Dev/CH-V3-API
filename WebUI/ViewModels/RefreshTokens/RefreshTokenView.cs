@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace WebUI.Common.Models.Account;
+namespace WebUI.ViewModels.RefreshTokens;
 
 public class RefreshTokenView
 {
