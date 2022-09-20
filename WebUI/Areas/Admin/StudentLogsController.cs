@@ -1,8 +1,9 @@
-﻿using Application.StudentLogs.Commands.CreateStudentLog;
+﻿using Application.Common.DTO.StudentLogs;
+using Application.StudentLogs.Commands.CreateStudentLog;
 using Application.StudentLogs.Commands.DeleteStudentLog;
 using Application.StudentLogs.Commands.UpdateStudentLog;
-using Application.StudentLogs.Queries;
-using Application.StudentLogs.Queries.Models;
+using Application.StudentLogs.Queries.GetStudentLogs;
+using Application.Tags.Queries.GetStudentLog;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
@@ -14,30 +15,38 @@ namespace WebUI.Areas.Admin;
 public class StudentLogsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<StudentLogDTO>> GetStudentLogs([FromQuery] GetStudentLogsWithPaginationWithSearchWithFilterQuery query)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<StudentLogDTO>))]
+    public async Task<IActionResult> GetStudentLogs([FromQuery] GetStudentLogsWithPaginationWithSearchWithFilterQuery query)
     {
         var result = await Mediator.Send(query);
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return result;
+        return Ok(result);
     }
 
-    [HttpDelete("{studentLogId}")]
-    public async Task<IActionResult> DeleteStudentLog(Guid studentLogId)
+    [HttpGet("{studentLogId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentLogDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetStudentLog(Guid studentLogId)
     {
-        await Mediator.Send(new DeleteStudentLogCommand(studentLogId));
-
-        return NoContent();
+        return Ok(await Mediator.Send(new GetStudentLogQuery(studentLogId)));
     }
 
     [HttpPost]
-    public async Task<Guid> CreateStudentLog(CreateStudentLogCommand command)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CreateStudentLog(CreateStudentLogCommand command)
     {
-        return await Mediator.Send(command);
+        var result = await Mediator.Send(command);
+
+        return CreatedAtAction(nameof(GetStudentLog), new { studentLogId = result }, result);
     }
 
     [HttpPut("{studentLogId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateStudentLog(Guid studentLogId, UpdateStudentLogCommand command)
     {
         if (studentLogId != command.StudentLogId)
@@ -46,6 +55,16 @@ public class StudentLogsController : ApiControllerBase
         }
 
         await Mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{studentLogId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteStudentLog(Guid studentLogId)
+    {
+        await Mediator.Send(new DeleteStudentLogCommand(studentLogId));
 
         return NoContent();
     }

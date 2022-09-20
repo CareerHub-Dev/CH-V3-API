@@ -1,6 +1,6 @@
 ﻿using Application.Common.DTO.StudentGroups;
 
-namespace Application.StudentLogs.Queries.Models;
+namespace Application.Common.DTO.StudentLogs;
 
 public class StudentLogDTO
 {

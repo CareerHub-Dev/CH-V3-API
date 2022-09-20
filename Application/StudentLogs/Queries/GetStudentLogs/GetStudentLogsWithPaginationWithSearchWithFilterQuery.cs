@@ -2,11 +2,11 @@
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Common.DTO.StudentGroups;
-using Application.StudentLogs.Queries.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.DTO.StudentLogs;
 
-namespace Application.StudentLogs.Queries;
+namespace Application.StudentLogs.Queries.GetStudentLogs;
 
 public record GetStudentLogsWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<StudentLogDTO>>
 {

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.StudentLogs.Queries;
+namespace Application.StudentLogs.Queries.GetStudentLogs;
 
 public class GetStudentLogsWithPaginationWithSearchWithFilterQueryValidator : AbstractValidator<GetStudentLogsWithPaginationWithSearchWithFilterQuery>
 {
