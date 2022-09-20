@@ -1,6 +1,4 @@
-﻿using Application.Common.Models.StudentGroup;
-
-namespace Application.StudentGroups.Queries;
+﻿namespace Application.Common.DTO.StudentGroups;
 
 public class StudentGroupDTO : BriefStudentGroupDTO
 {

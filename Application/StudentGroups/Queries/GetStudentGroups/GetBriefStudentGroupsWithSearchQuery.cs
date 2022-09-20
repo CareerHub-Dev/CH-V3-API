@@ -1,10 +1,10 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.StudentGroups;
+using Application.Common.Entensions;
 using Application.Common.Interfaces;
-using Application.Common.Models.StudentGroup;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.StudentGroups.Queries;
+namespace Application.StudentGroups.Queries.GetStudentGroups;
 
 public record GetBriefStudentGroupsWithSearchQuery : IRequest<IList<BriefStudentGroupDTO>>
 {

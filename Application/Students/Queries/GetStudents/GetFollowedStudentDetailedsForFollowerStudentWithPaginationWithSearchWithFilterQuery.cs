@@ -2,7 +2,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
-using Application.Common.Models.StudentGroup;
+using Application.Common.DTO.StudentGroups;
 using Application.Students.Queries.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

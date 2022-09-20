@@ -1,7 +1,7 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
-using Application.Common.Models.StudentGroup;
+using Application.Common.DTO.StudentGroups;
 using Application.StudentLogs.Queries.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

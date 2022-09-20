@@ -1,7 +1,7 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.StudentGroups;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Models.StudentGroup;
 using Application.Students.Queries.Models;
 using Domain.Entities;
 using MediatR;

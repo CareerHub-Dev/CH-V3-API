@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Models.StudentGroup;
+﻿namespace Application.Common.DTO.StudentGroups;
 
 public class BriefStudentGroupDTO
 {

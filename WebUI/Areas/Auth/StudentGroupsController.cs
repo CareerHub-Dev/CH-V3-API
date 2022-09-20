@@ -1,5 +1,6 @@
-﻿using Application.Common.Models.StudentGroup;
-using Application.StudentGroups.Queries;
+﻿using Application.Common.DTO.StudentGroups;
+using Application.StudentGroups.Queries.GetStudentGroups;
+using Application.Tags.Queries.GetStudentGroup;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
@@ -14,5 +15,13 @@ public class StudentGroupsController : ApiControllerBase
     public async Task<IActionResult> GetStudentGroups([FromQuery] GetBriefStudentGroupsWithSearchQuery query)
     {
         return Ok(await Mediator.Send(query));
+    }
+
+    [HttpGet("{studentGroupId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BriefStudentGroupDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetStudentGroup(Guid studentGroupId)
+    {
+        return Ok(await Mediator.Send(new GetBriefStudentGroupQuery(studentGroupId)));
     }
 }

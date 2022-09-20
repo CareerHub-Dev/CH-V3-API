@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.StudentGroups.Queries;
+namespace Application.StudentGroups.Queries.GetStudentGroups;
 
 public class GetStudentGroupsWithPaginationWithSearchQueryValidator : AbstractValidator<GetStudentGroupsWithPaginationWithSearchQuery>
 {

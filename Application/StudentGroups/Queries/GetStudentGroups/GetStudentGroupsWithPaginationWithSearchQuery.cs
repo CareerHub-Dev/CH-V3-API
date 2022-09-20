@@ -1,10 +1,11 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.StudentGroups;
+using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.StudentGroups.Queries;
+namespace Application.StudentGroups.Queries.GetStudentGroups;
 
 public record GetStudentGroupsWithPaginationWithSearchQuery : IRequest<PaginatedList<StudentGroupDTO>>
 {
