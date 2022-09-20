@@ -1,5 +1,5 @@
-﻿using Application.Common.Models.Tag;
-using Application.Tags.Queries;
+﻿using Application.Common.DTO.Tags;
+using Application.Tags.Queries.GetTags;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 

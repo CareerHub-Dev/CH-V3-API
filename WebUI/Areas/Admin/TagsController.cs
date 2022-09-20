@@ -1,7 +1,9 @@
-﻿using Application.Tags.Commands.CreateTag;
+﻿using Application.Common.DTO.Tags;
+using Application.Tags.Commands.CreateTag;
 using Application.Tags.Commands.DeleteTag;
 using Application.Tags.Commands.UpdateTag;
-using Application.Tags.Queries;
+using Application.Tags.Queries.GetTag;
+using Application.Tags.Queries.GetTags;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
@@ -13,30 +15,37 @@ namespace WebUI.Areas.Admin;
 public class TagsController : ApiControllerBase
 {
     [HttpGet]
-    public async Task<IEnumerable<TagDTO>> GetTags([FromQuery] GetTagsWithPaginationWithSearchWithFilterQuery query)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TagDTO>))]
+    public async Task<IActionResult> GetTags([FromQuery] GetTagsWithPaginationWithSearchWithFilterQuery query)
     {
         var result = await Mediator.Send(query);
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return result;
+        return Ok(result);
     }
 
-    [HttpDelete("{tagId}")]
-    public async Task<IActionResult> DeleteTag(Guid tagId)
+    [HttpGet("{tagId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TagDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetTag(Guid tagId)
     {
-        await Mediator.Send(new DeleteTagCommand(tagId));
-
-        return NoContent();
+        return Ok(await Mediator.Send(new GetTagQuery(tagId)));
     }
 
     [HttpPost]
-    public async Task<Guid> CreateTag(CreateTagCommand command)
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    public async Task<IActionResult> CreateTag(CreateTagCommand command)
     {
-        return await Mediator.Send(command);
+        var result = await Mediator.Send(command);
+
+        return CreatedAtAction(nameof(GetTag), new { tagId = result }, result);
     }
 
     [HttpPut("{tagId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateTag(Guid tagId, UpdateTagCommand command)
     {
         if (tagId != command.TagId)
@@ -45,6 +54,16 @@ public class TagsController : ApiControllerBase
         }
 
         await Mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpDelete("{tagId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteTag(Guid tagId)
+    {
+        await Mediator.Send(new DeleteTagCommand(tagId));
 
         return NoContent();
     }

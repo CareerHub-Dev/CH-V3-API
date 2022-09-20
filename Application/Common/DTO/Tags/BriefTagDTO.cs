@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Models.Tag;
+﻿namespace Application.Common.DTO.Tags;
 
 public class BriefTagDTO
 {

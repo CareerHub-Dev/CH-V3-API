@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Tags.Queries;
+namespace Application.Tags.Queries.GetTags;
 
 public class GetTagsWithPaginationWithSearchWithFilterQueryValidator : AbstractValidator<GetTagsWithPaginationWithSearchWithFilterQuery>
 {

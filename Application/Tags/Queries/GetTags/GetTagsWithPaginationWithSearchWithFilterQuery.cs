@@ -1,10 +1,11 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.Tags;
+using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Tags.Queries;
+namespace Application.Tags.Queries.GetTags;
 
 public record GetTagsWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<TagDTO>>
 {

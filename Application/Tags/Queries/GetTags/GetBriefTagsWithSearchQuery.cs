@@ -1,10 +1,10 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.Tags;
+using Application.Common.Entensions;
 using Application.Common.Interfaces;
-using Application.Common.Models.Tag;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Tags.Queries;
+namespace Application.Tags.Queries.GetTags;
 
 public record GetBriefTagsWithSearchQuery : IRequest<IList<BriefTagDTO>>
 {

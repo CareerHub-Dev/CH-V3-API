@@ -1,6 +1,4 @@
-﻿using Application.Common.Models.Tag;
-
-namespace Application.Tags.Queries;
+﻿namespace Application.Common.DTO.Tags;
 
 public class TagDTO : BriefTagDTO
 {
