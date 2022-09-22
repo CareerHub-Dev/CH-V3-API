@@ -11,7 +11,6 @@ using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Models.Company;
 using Application.Common.DTO.Companies;
 
 namespace WebUI.Areas.Admin;

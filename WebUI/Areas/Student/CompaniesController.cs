@@ -63,7 +63,7 @@ public class CompaniesController : ApiControllerBase
     [HttpGet("{companyId}/amount-subscribers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAmountSubscribersOfOwnCompany(Guid companyId)
+    public async Task<IActionResult> GetAmountSubscribersOfCompany(Guid companyId)
     {
         return Ok(await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
         {
@@ -88,7 +88,7 @@ public class CompaniesController : ApiControllerBase
     [HttpGet("{companyId}/amount-jobOffers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAmountJobOffersOfOwnCompany(Guid companyId)
+    public async Task<IActionResult> GetAmountJobOffersOfCompany(Guid companyId)
     {
         return Ok(await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
         {
