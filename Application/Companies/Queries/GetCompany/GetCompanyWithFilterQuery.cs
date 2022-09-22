@@ -1,7 +1,7 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.Companies;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Companies.Queries.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

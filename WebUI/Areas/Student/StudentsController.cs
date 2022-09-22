@@ -1,4 +1,5 @@
-﻿using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
+﻿using Application.Common.DTO.Companies;
+using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
 using Application.Experiences.Queries;
 using Application.Students.Commands.StudentOwnerUnsubscribeFromStudentTarget;

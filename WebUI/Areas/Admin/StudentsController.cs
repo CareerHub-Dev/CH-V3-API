@@ -1,5 +1,5 @@
-﻿using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
-using Application.Companies.Queries.Models;
+﻿using Application.Common.DTO.Companies;
+using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Emails.Commands;
 using Application.Experiences.Queries;
 using Application.Students.Commands.DeleteStudent;

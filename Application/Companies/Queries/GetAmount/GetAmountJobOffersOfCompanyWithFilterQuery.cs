@@ -34,6 +34,9 @@ public class GetAmountJobOffersOfCompanyWithFilterQueryHandler
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        return await _context.JobOffers.Filter(isActive: request.IsJobOfferMustBeActive).CountAsync();
+        return await _context.JobOffers
+            .Where(x => x.CompanyId == request.CompanyId)
+            .Filter(isActive: request.IsJobOfferMustBeActive)
+            .CountAsync();
     }
 }

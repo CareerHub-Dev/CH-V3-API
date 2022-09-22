@@ -1,4 +1,5 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.Companies;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;

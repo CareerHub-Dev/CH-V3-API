@@ -3,11 +3,11 @@ using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompany;
-using Application.Companies.Queries.Models;
 using Application.CompanyLinks.Queries;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.Common.Models.Company;
+using Application.Common.DTO.Companies;
 
 namespace WebUI.Areas.Company;
 

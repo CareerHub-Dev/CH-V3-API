@@ -1,4 +1,4 @@
-﻿namespace Application.Companies.Queries.Models;
+﻿namespace Application.Common.DTO.Companies;
 
 public class FollowedDetailedCompanyWithStatsDTO : DetailedCompanyWithStatsDTO
 {

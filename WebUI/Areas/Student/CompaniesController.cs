@@ -1,4 +1,5 @@
-﻿using Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
+﻿using Application.Common.DTO.Companies;
+using Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
 using Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
 using Application.Companies.Queries;
 using Application.Companies.Queries.GetAmount;
