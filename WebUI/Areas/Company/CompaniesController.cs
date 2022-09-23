@@ -6,8 +6,8 @@ using Application.Companies.Queries.GetCompany;
 using Application.CompanyLinks.Queries;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.Common.Models.Company;
 using Application.Common.DTO.Companies;
+using WebUI.ViewModels.Company;
 
 namespace WebUI.Areas.Company;
 
