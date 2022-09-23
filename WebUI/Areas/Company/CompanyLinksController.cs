@@ -1,10 +1,11 @@
-﻿using Application.CompanyLinks.Command.CreateCompanyLink;
+﻿using Application.Common.DTO.CompanyLinks;
+using Application.CompanyLinks.Command.CreateCompanyLink;
 using Application.CompanyLinks.Command.DeleteCompanyLinkOfCompany;
 using Application.CompanyLinks.Command.UpdateCompanyLinkOfCompany;
-using Application.CompanyLinks.Queries;
+using Application.CompanyLinks.Queries.GetCompanyLink;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.Common.Models.CompanyLink;
+using WebUI.ViewModels.CompanyLinks;
 
 namespace WebUI.Areas.Company;
 

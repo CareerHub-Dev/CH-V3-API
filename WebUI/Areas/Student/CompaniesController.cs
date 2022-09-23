@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTO.Companies;
+using Application.Common.DTO.CompanyLinks;
 using Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
 using Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
 using Application.Companies.Queries;
@@ -7,6 +8,8 @@ using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
 using Application.Companies.Queries.Models;
 using Application.CompanyLinks.Queries;
+using Application.CompanyLinks.Queries.GetCompanyLink;
+using Application.CompanyLinks.Queries.GetCompanyLinks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
@@ -80,6 +83,19 @@ public class CompaniesController : ApiControllerBase
     {
         return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
         {
+            CompanyId = companyId,
+            IsCompanyMustBeVerified = true,
+        }));
+    }
+
+    [HttpGet("{companyId}/CompanyLinks/{companyLinkId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompanyLinkOfCompany(Guid companyId, Guid companyLinkId)
+    {
+        return Ok(await Mediator.Send(new GetCompanyLinkOfCompanyQuery
+        {
+            CompanyLinkId = companyId,
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
         }));

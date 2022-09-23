@@ -1,4 +1,4 @@
-﻿namespace WebUI.ViewModels.Company;
+﻿namespace WebUI.ViewModels.Companies;
 
 public record UpdateOwnCompanyDetailView
 {

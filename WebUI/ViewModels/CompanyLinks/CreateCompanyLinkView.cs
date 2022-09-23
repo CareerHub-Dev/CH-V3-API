@@ -1,4 +1,4 @@
-﻿namespace WebUI.Common.Models.CompanyLink;
+﻿namespace WebUI.ViewModels.CompanyLinks;
 
 public record CreateCompanyLinkView
 {

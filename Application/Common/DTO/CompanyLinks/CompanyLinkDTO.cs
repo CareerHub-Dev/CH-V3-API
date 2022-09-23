@@ -1,4 +1,4 @@
-﻿namespace Application.CompanyLinks.Queries;
+﻿namespace Application.Common.DTO.CompanyLinks;
 
 public class CompanyLinkDTO
 {

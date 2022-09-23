@@ -1,39 +1,35 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.CompanyLinks;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.CompanyLinks.Queries;
+namespace Application.CompanyLinks.Queries.GetCompanyLink;
 
-public record GetCompanyLinkOfCompanyQuery : IRequest<CompanyLinkDTO>
+public record GetCompanyLinkQuery : IRequest<CompanyLinkDTO>
 {
     public Guid CompanyLinkId { get; init; }
 
-    public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
 }
 
-public class GetCompanyLinkOfCompanyQueryHandler : IRequestHandler<GetCompanyLinkOfCompanyQuery, CompanyLinkDTO>
+public class GetCompanyLinkQueryHandler : IRequestHandler<GetCompanyLinkQuery, CompanyLinkDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyLinkOfCompanyQueryHandler(IApplicationDbContext context)
+    public GetCompanyLinkQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<CompanyLinkDTO> Handle(GetCompanyLinkOfCompanyQuery request, CancellationToken cancellationToken)
+    public async Task<CompanyLinkDTO> Handle(GetCompanyLinkQuery request, CancellationToken cancellationToken)
     {
-        if (!await _context.Companies.Filter(isVerified: request.IsCompanyMustBeVerified).AnyAsync(x => x.Id == request.CompanyId))
-        {
-            throw new NotFoundException(nameof(Company), request.CompanyId);
-        }
-
         var companyLink = await _context.CompanyLinks
             .AsNoTracking()
-            .Where(x => x.Id == request.CompanyLinkId && x.CompanyId == request.CompanyId)
+            .Filter(isCompanyVerified: request.IsCompanyMustBeVerified)
+            .Where(x => x.Id == request.CompanyLinkId)
             .Select(x => new CompanyLinkDTO
             {
                 Id = x.Id,

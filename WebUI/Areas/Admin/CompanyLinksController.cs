@@ -1,7 +1,8 @@
-﻿using Application.CompanyLinks.Command.CreateCompanyLink;
+﻿using Application.Common.DTO.CompanyLinks;
+using Application.CompanyLinks.Command.CreateCompanyLink;
 using Application.CompanyLinks.Command.DeleteCompanyLink;
 using Application.CompanyLinks.Command.UpdateCompanyLink;
-using Application.CompanyLinks.Queries;
+using Application.CompanyLinks.Queries.GetCompanyLink;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
@@ -16,7 +17,7 @@ public class CompanyLinksController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanyLink(Guid companyLinkId)
     {
-        return Ok(await Mediator.Send(new GetCompanyLinkQuery(companyLinkId)));
+        return Ok(await Mediator.Send(new GetCompanyLinkQuery { CompanyLinkId = companyLinkId }));
     }
 
     [HttpPost]

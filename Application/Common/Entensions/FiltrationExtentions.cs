@@ -173,4 +173,19 @@ public static class FiltrationExtentions
 
         return companies;
     }
+
+    public static IQueryable<CompanyLink> Filter(this IQueryable<CompanyLink> companyLinks, bool? isCompanyVerified = null)
+    {
+
+        if (isCompanyVerified.HasValue && isCompanyVerified == true)
+        {
+            companyLinks = companyLinks.Where(x => x.Company!.Verified != null || x.Company!.PasswordReset != null);
+        }
+        else if (isCompanyVerified.HasValue && isCompanyVerified == false)
+        {
+            companyLinks = companyLinks.Where(x => x.Company!.Verified == null && x.Company!.PasswordReset == null);
+        }
+
+        return companyLinks;
+    }
 }

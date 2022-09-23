@@ -1,11 +1,12 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.CompanyLinks;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.CompanyLinks.Queries;
+namespace Application.CompanyLinks.Queries.GetCompanyLinks;
 
 public record GetCompanyLinksOfCompanyWithFilterQuery : IRequest<IEnumerable<CompanyLinkDTO>>
 {

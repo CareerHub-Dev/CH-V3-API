@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
 using Application.Common.DTO.Companies;
+using Application.Common.DTO.CompanyLinks;
+using Application.CompanyLinks.Queries.GetCompanyLinks;
 
 namespace WebUI.Areas.Admin;
 
