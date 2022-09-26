@@ -23,6 +23,8 @@ namespace WebUI.Areas.Student;
 [Route("api/Student/[controller]")]
 public class StudentsController : ApiControllerBase
 {
+    #region GetStudents 
+
     [HttpGet]
     public async Task<IEnumerable<FollowedStudentDetailedDTO>> GetStudents(
         [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForStudentView view)
@@ -56,6 +58,10 @@ public class StudentsController : ApiControllerBase
         });
     }
 
+    #endregion
+
+    #region GetStudentStatistic
+
     [HttpGet("{studentId}/amount-company-subscriptions")]
     public async Task<int> GetAmountCompanySubscriptionsOfStudent(Guid studentId)
     {
@@ -64,17 +70,6 @@ public class StudentsController : ApiControllerBase
             StudentId = studentId,
             IsVerified = true,
             IsCompanyVerified = true
-        });
-    }
-
-    [HttpGet("{studentId}/amount-cvs")]
-    public async Task<int> GetAmountCVsOfStudent(Guid studentId)
-    {
-        return await Mediator.Send(new GetAmountCVsOfStudentWithFilterQuery
-        {
-            StudentId = studentId,
-            IsVerified = true,
-
         });
     }
 
@@ -99,6 +94,10 @@ public class StudentsController : ApiControllerBase
             IsStudentTargetOfSubscriptionVerified = true
         });
     }
+
+    #endregion
+
+    #region GetStudentSubscriptions
 
     [HttpGet("{studentId}/student-subscriptions")]
     public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
@@ -162,6 +161,10 @@ public class StudentsController : ApiControllerBase
         return Ok(result);
     }
 
+    #endregion
+
+    #region GetExperiencesOfStudent
+
     [HttpGet("{studentId}/Experiences")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExperienceDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -182,6 +185,24 @@ public class StudentsController : ApiControllerBase
 
         return Ok(result);
     }
+
+    #endregion
+
+    #region GetSelfStudent
+
+    [HttpGet("{studentId}")]
+    public async Task<StudentDetailedDTO> GetSelfStudent(Guid studentId)
+    {
+        return await Mediator.Send(new GetStudentDetailedWithQuery
+        {
+            StudentId = studentId,
+            IsVerified = true
+        });
+    }
+
+    #endregion
+
+    #region SelfSubscribe
 
     [HttpGet("{studentTargetId}/subscribe")]
     public async Task<bool> IsStudentOwnerSubscribedToStudentTarget(Guid studentTargetId)
@@ -223,7 +244,11 @@ public class StudentsController : ApiControllerBase
         return NoContent();
     }
 
-    [HttpPut("own")]
+    #endregion
+
+    #region SelfUpdate
+
+    [HttpPut("self")]
     public async Task<IActionResult> UpdateOwnStudentAccount(UpdateOwnStudentAccountView view)
     {
         await Mediator.Send(new UpdateStudentCommand
@@ -239,9 +264,122 @@ public class StudentsController : ApiControllerBase
         return NoContent();
     }
 
-    [HttpPost("own/photo")]
+    [HttpPost("self/photo")]
     public async Task<ActionResult<Guid?>> UpdateOwnStudentPhoto(IFormFile? file)
     {
         return await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = AccountInfo!.Id, Photo = file });
     }
+
+    #endregion
+
+    #region GetSelfStatistic
+
+    [HttpGet("self/amount-company-subscriptions")]
+    public async Task<int> GetAmountCompanySubscriptionsOfSelfStudent()
+    {
+        return await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentWithFilterQuery
+        {
+            StudentId = AccountInfo!.Id,
+            IsVerified = true,
+            IsCompanyVerified = true
+        });
+    }
+
+    [HttpGet("self/amount-jobOffer-subscriptions")]
+    public async Task<int> GetAmountJobOfferSubscriptionsOfSelfStudent()
+    {
+        return await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery
+        {
+            StudentId = AccountInfo!.Id,
+            IsVerified = true,
+            IsJobOfferActive = true
+        });
+    }
+
+    [HttpGet("self/amount-student-subscriptions")]
+    public async Task<int> GetAmountStudentSubscriptionsOfSelfStudent()
+    {
+        return await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentWithFilterQuery
+        {
+            StudentId = AccountInfo!.Id,
+            IsVerified = true,
+            IsStudentTargetOfSubscriptionVerified = true
+        });
+    }
+
+    [HttpGet("self/amount-cvs")]
+    public async Task<int> GetAmountCVsOfSelfStudent()
+    {
+        return await Mediator.Send(new GetAmountCVsOfStudentWithFilterQuery
+        {
+            StudentId = AccountInfo!.Id,
+            IsVerified = true,
+        });
+    }
+
+    #endregion
+
+    #region GetSelfStudentSubscriptions
+
+    [HttpGet("self/student-subscriptions")]
+    public async Task<IActionResult> GetStudentSubscriptionsOfSelfStudent(
+        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
+    {
+        var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQuery
+        {
+            FollowerStudentId = AccountInfo!.Id,
+            IsFollowerStudentVerified = true,
+
+            StudentOwnerId = AccountInfo!.Id,
+            IsStudentOwnerVerified = true,
+
+            PageNumber = view.PageNumber,
+            PageSize = view.PageSize,
+            SearchTerm = view.SearchTerm,
+
+            IsVerified = view.IsVerified,
+            WithoutStudentId = AccountInfo!.Id,
+            StudentGroupIds = view.StudentGroupIds,
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("self/company-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedCompanyWithStatsDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompanySubscriptionsOfSelfStudent(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? searchTerm = null)
+    {
+        var result = await Mediator.Send(new GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterQuery
+        {
+            FollowerStudentId = AccountInfo!.Id,
+            IsFollowerStudentMustBeVerified = true,
+
+            StudentOwnerId = AccountInfo!.Id,
+            IsStudentOwnerMustBeVerified = true,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = searchTerm,
+
+            IsCompanyMustBeVerified = true,
+
+            StatsFilter = new StatsFilter
+            {
+                IsJobOfferMustBeActive = true,
+                IsSubscriberMustBeVerified = true,
+            }
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    #endregion
 }

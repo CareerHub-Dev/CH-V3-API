@@ -3,6 +3,7 @@ using Application.Experiences.Commands.DeleteExperienceOfStudent;
 using Application.Experiences.Commands.UpdateExperienceOfStudent;
 using Application.Experiences.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebUI.Authorize;
 using WebUI.Common.Models.Experience;
 
@@ -12,6 +13,27 @@ namespace WebUI.Areas.Student;
 [Route("api/Student/[controller]")]
 public class ExperiencesController : ApiControllerBase
 {
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExperienceDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetExperiencesOfStudent(
+        Guid studentId,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Mediator.Send(new GetExperiencesOfStudentWithPaginationWithFilterQuery
+        {
+            StudentId = AccountInfo!.Id,
+            IsStudentMustBeVerified = true,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
     [HttpGet("{experienceId}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExperienceDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -14,7 +14,7 @@ namespace WebUI.Areas.Company;
 [Route("api/Company/[controller]")]
 public class CompaniesController : ApiControllerBase
 {
-    #region Get 
+    #region SelfGet 
 
     [HttpGet("self")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedCompanyDTO))]
@@ -30,7 +30,7 @@ public class CompaniesController : ApiControllerBase
 
     #endregion
 
-    #region Update
+    #region SelfUpdate
 
     [HttpPut("self")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -70,7 +70,7 @@ public class CompaniesController : ApiControllerBase
 
     #endregion
 
-    #region Statistic
+    #region SelfStatistic
 
     [HttpGet("self/amount-subscribers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]

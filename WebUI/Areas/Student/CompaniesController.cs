@@ -87,19 +87,6 @@ public class CompaniesController : ApiControllerBase
         }));
     }
 
-    [HttpGet("{companyId}/CompanyLinks/{companyLinkId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCompanyLinkOfCompany(Guid companyId, Guid companyLinkId)
-    {
-        return Ok(await Mediator.Send(new GetCompanyLinkOfCompanyQuery
-        {
-            CompanyLinkId = companyId,
-            CompanyId = companyId,
-            IsCompanyMustBeVerified = true,
-        }));
-    }
-
     [HttpGet("{companyId}/amount-jobOffers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
