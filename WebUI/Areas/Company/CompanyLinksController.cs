@@ -3,6 +3,7 @@ using Application.CompanyLinks.Command.CreateCompanyLink;
 using Application.CompanyLinks.Command.DeleteCompanyLinkOfCompany;
 using Application.CompanyLinks.Command.UpdateCompanyLinkOfCompany;
 using Application.CompanyLinks.Queries.GetCompanyLink;
+using Application.CompanyLinks.Queries.GetCompanyLinks;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.ViewModels.CompanyLinks;
@@ -13,10 +14,22 @@ namespace WebUI.Areas.Company;
 [Route("api/Company/[controller]")]
 public class CompanyLinksController : ApiControllerBase
 {
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompanyLinksOfSelfCompany()
+    {
+        return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
+        {
+            CompanyId = AccountInfo!.Id,
+            IsCompanyMustBeVerified = true,
+        }));
+    }
+
     [HttpGet("{companyLinkId}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CompanyLinkDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCompanyLink(Guid companyLinkId)
+    public async Task<IActionResult> GetCompanyLinkOfSelfCompany(Guid companyLinkId)
     {
         return Ok(await Mediator.Send(new GetCompanyLinkOfCompanyQuery
         {
@@ -27,10 +40,10 @@ public class CompanyLinksController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateCompanyLink(CreateCompanyLinkView view)
+    public async Task<IActionResult> CreateCompanyLinkForSelfCompany(CreateCompanyLinkView view)
     {
         var result = await Mediator.Send(new CreateCompanyLinkCommand
         {
@@ -39,13 +52,13 @@ public class CompanyLinksController : ApiControllerBase
             CompanyId = AccountInfo!.Id
         });
 
-        return CreatedAtAction(nameof(GetCompanyLink), new { companyLinkId = result }, result);
+        return Ok(result);
     }
 
     [HttpDelete("{companyLinkId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteCompanyLink(Guid companyLinkId)
+    public async Task<IActionResult> DeleteCompanyLinkOfSelfCompany(Guid companyLinkId)
     {
         await Mediator.Send(new DeleteCompanyLinkOfCompanyCommand(companyLinkId, AccountInfo!.Id));
 
@@ -56,7 +69,7 @@ public class CompanyLinksController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateCompanyLink(Guid companyLinkId, UpdateCompanyLinkView view)
+    public async Task<IActionResult> UpdateCompanyLinkOfSelfCompany(Guid companyLinkId, UpdateCompanyLinkView view)
     {
         if (companyLinkId != view.CompanyLinkId)
         {

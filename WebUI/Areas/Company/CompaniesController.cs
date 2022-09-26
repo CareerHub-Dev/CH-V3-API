@@ -1,15 +1,12 @@
-﻿using Application.Companies.Commands.UpdateCompanyDetail;
+﻿using Application.Common.DTO.Companies;
 using Application.Companies.Commands.UpdateCompanyBanner;
+using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompany;
-using Application.CompanyLinks.Queries;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using Application.Common.DTO.Companies;
 using WebUI.ViewModels.Companies;
-using Application.Common.DTO.CompanyLinks;
-using Application.CompanyLinks.Queries.GetCompanyLinks;
 
 namespace WebUI.Areas.Company;
 
@@ -17,10 +14,12 @@ namespace WebUI.Areas.Company;
 [Route("api/Company/[controller]")]
 public class CompaniesController : ApiControllerBase
 {
-    [HttpGet("own")]
+    #region Get 
+
+    [HttpGet("self")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedCompanyDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCompany()
+    public async Task<IActionResult> GetSelfCompany()
     {
         return Ok(await Mediator.Send(new GetDetailedCompanyWithFilterQuery
         {
@@ -29,10 +28,14 @@ public class CompaniesController : ApiControllerBase
         }));
     }
 
-    [HttpPut("own")]
+    #endregion
+
+    #region Update
+
+    [HttpPut("self")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateOwnCompanyDetailAccount(UpdateOwnCompanyDetailView view)
+    public async Task<IActionResult> UpdateSelfCompanyDetailAccount(UpdateOwnCompanyDetailView view)
     {
         await Mediator.Send(new UpdateCompanyDetailCommand
         {
@@ -45,48 +48,34 @@ public class CompaniesController : ApiControllerBase
         return NoContent();
     }
 
-    [HttpPost("own/logo")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid?))]
+    [HttpPost("self/logo")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateOwnCompanyLogo(IFormFile? file)
+    public async Task<IActionResult> UpdateSelfCompanyLogo(IFormFile? file)
     {
         var result = await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file });
 
-        return Created(
-            Url.ActionLink("GetImage", "Images", new { imageId = result }) ?? "",
-            result
-        );
+        return Ok(result);
     }
 
-    [HttpPost("own/banner")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid?))]
+    [HttpPost("self/banner")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateOwnCompanyBanner(IFormFile? file)
+    public async Task<IActionResult> UpdateSelfCompanyBanner(IFormFile? file)
     {
         var result = await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = AccountInfo!.Id, Banner = file });
 
-        return Created(
-            Url.ActionLink("GetImage", "Images", new { imageId = result }) ?? "",
-            result
-        );
+        return Ok(result);
     }
 
-    [HttpGet("own/CompanyLinks")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCompanyLinksOfOwnCompany()
-    {
-        return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
-        {
-            CompanyId = AccountInfo!.Id,
-            IsCompanyMustBeVerified = true,
-        }));
-    }
+    #endregion
 
-    [HttpGet("own/amount-subscribers")]
+    #region Statistic
+
+    [HttpGet("self/amount-subscribers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAmountSubscribersOfOwnCompany()
+    public async Task<IActionResult> GetAmountSubscribersOfSelfCompany()
     {
         return Ok(await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
         {
@@ -96,10 +85,10 @@ public class CompaniesController : ApiControllerBase
         }));
     }
 
-    [HttpGet("own/amount-jobOffers")]
+    [HttpGet("self/amount-jobOffers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAmountJobOffersOfOwnCompany()
+    public async Task<IActionResult> GetAmountJobOffersOfSelfCompany()
     {
         return Ok(await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
         {
@@ -107,4 +96,6 @@ public class CompaniesController : ApiControllerBase
             IsCompanyMustBeVerified = true,
         }));
     }
+
+    #endregion
 }

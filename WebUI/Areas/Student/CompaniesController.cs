@@ -7,7 +7,6 @@ using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
 using Application.Companies.Queries.Models;
-using Application.CompanyLinks.Queries;
 using Application.CompanyLinks.Queries.GetCompanyLink;
 using Application.CompanyLinks.Queries.GetCompanyLinks;
 using Microsoft.AspNetCore.Mvc;
