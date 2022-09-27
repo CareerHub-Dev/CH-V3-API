@@ -3,6 +3,7 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,7 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
 
         if (studentLog == null)
         {
-            if (await _context.Students.AnyAsync(x => x.NormalizedEmail == request.Email.NormalizeName()))
+            if (await _context.Accounts.AnyAsync(x => x.NormalizedEmail == request.Email.NormalizeName()))
             {
                 throw new ArgumentException("This email address is already being used.");
             }
@@ -54,6 +55,7 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
             FirstName = studentLog.FirstName,
             LastName = studentLog.LastName,
             StudentGroupId = studentLog.StudentGroupId,
+            ActivationStatus = ActivationStatus.Active,
         };
 
         student.PasswordHash = _passwordHasher.HashPassword(student, request.Password);
