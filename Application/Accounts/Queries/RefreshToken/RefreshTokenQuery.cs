@@ -2,8 +2,10 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Authentication;
 using RefreshTokenEntity = Domain.Entities.RefreshToken;
 
 namespace Application.Accounts.Queries.RefreshToken;
@@ -45,6 +47,11 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
         if (account == null)
         {
             throw new NotFoundException(nameof(Account), request.Token);
+        }
+
+        if (account.ActivationStatus != ActivationStatus.Active)
+        {
+            throw new ForbiddenException($"This account has {account.ActivationStatus} status");
         }
 
         var refreshToken = account.RefreshTokens.Single(x => x.Token == request.Token);

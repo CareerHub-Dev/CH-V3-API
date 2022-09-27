@@ -1,6 +1,8 @@
 ﻿using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -59,6 +61,11 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
             case PasswordVerificationResult.SuccessRehashNeeded:
                 account.PasswordHash = _passwordHasher.HashPassword(account, request.Password);
                 break;
+        }
+
+        if(account.ActivationStatus != ActivationStatus.Active)
+        {
+            throw new ForbiddenException($"This account has {account.ActivationStatus} status");
         }
 
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);

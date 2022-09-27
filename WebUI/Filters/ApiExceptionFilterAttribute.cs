@@ -18,7 +18,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(AuthenticationException), HandleAuthenticationException },
                 { typeof(ArgumentException), HandleArgumentException },
-                { typeof(ArgumentOutOfRangeException), HandleArgumentOutOfRangeException }
+                { typeof(ArgumentOutOfRangeException), HandleArgumentOutOfRangeException },
+                { typeof(ForbiddenException), HandleForbiddenException },
             };
     }
 
@@ -121,6 +122,24 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 
         context.ExceptionHandled = true;
     }
+
+    private void HandleForbiddenException(ExceptionContext context)
+    {
+        var exception = (ForbiddenException)context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.3",
+            Title = "Forbidden.",
+            Detail = exception.Message,
+            Status = StatusCodes.Status403Forbidden
+        };
+
+        context.Result = new ObjectResult(details);
+
+        context.ExceptionHandled = true;
+    }
+
     private void HandleArgumentException(ExceptionContext context)
     {
         var exception = (ArgumentException)context.Exception;
