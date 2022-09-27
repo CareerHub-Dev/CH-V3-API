@@ -50,7 +50,7 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
 
         if (account.ActivationStatus != ActivationStatus.Active)
         {
-            throw new ForbiddenException($"This account has {account.ActivationStatus} status");
+            throw new ForbiddenException($"This account has '{account.ActivationStatus.ToString()}' status");
         }
 
         var refreshToken = account.RefreshTokens.Single(x => x.Token == request.Token);

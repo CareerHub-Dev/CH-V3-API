@@ -65,7 +65,7 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
 
         if(account.ActivationStatus != ActivationStatus.Active)
         {
-            throw new ForbiddenException($"This account has {account.ActivationStatus} status");
+            throw new ForbiddenException($"This account has '{account.ActivationStatus.ToString()}' status");
         }
 
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);
