@@ -16,10 +16,12 @@ public record ChangeActivationStatusCommand : IRequest
 public class ChangeActivationStatusCommandHandler : IRequestHandler<ChangeActivationStatusCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IAccountHelper _accountHelper;
 
-    public ChangeActivationStatusCommandHandler(IApplicationDbContext context)
+    public ChangeActivationStatusCommandHandler(IApplicationDbContext context, IAccountHelper accountHelper)
     {
         _context = context;
+        _accountHelper = accountHelper;
     }
 
     public async Task<Unit> Handle(ChangeActivationStatusCommand request, CancellationToken cancellationToken)
@@ -30,6 +32,11 @@ public class ChangeActivationStatusCommandHandler : IRequestHandler<ChangeActiva
         if (account == null)
         {
             throw new NotFoundException(nameof(Account), request.AccountId);
+        }
+
+        if(_accountHelper.GetRole(account) == "SuperAdmin")
+        {
+            throw new ArgumentException("It is forbidden to change the activation status of the super admin.");
         }
 
         account.ActivationStatus = request.ActivationStatus;

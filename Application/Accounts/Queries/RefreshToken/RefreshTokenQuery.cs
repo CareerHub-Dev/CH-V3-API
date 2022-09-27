@@ -5,7 +5,6 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Authentication;
 using RefreshTokenEntity = Domain.Entities.RefreshToken;
 
 namespace Application.Accounts.Queries.RefreshToken;
