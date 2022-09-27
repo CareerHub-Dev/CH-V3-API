@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 
-public record UpdateJobOfferDetailCommand : IRequest
+public record UpdateJobOfferDetailOfCompanyCommand : IRequest
 {
     public Guid JobOfferId { get; init; }
 
@@ -31,16 +31,16 @@ public record UpdateJobOfferDetailCommand : IRequest
     public Guid CompanyId { get; init; }
 }
 
-public class UpdateJobOfferDetailCommandHandler : IRequestHandler<UpdateJobOfferDetailCommand>
+public class UpdateJobOfferDetailOfCompanyCommandHandler : IRequestHandler<UpdateJobOfferDetailOfCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateJobOfferDetailCommandHandler(IApplicationDbContext context)
+    public UpdateJobOfferDetailOfCompanyCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateJobOfferDetailCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateJobOfferDetailOfCompanyCommand request, CancellationToken cancellationToken)
     {
         if (!await _context.Companies
             .AnyAsync(x => x.Id == request.CompanyId))
