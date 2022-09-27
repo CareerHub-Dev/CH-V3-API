@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.Common.Entensions;
 
@@ -17,7 +18,12 @@ public static class FiltrationExtentions
 
         return accounts;
     }
-    public static IQueryable<Admin> Filter(this IQueryable<Admin> admins, Guid? withoutAdminId = null, bool? isVerified = null, bool? isSuperAdmin = null)
+    public static IQueryable<Admin> Filter(
+        this IQueryable<Admin> admins, 
+        Guid? withoutAdminId = null, 
+        bool? isVerified = null, 
+        bool? isSuperAdmin = null,
+        ActivationStatus? activationStatus = null)
     {
         if (withoutAdminId.HasValue)
         {
@@ -36,6 +42,11 @@ public static class FiltrationExtentions
         if (isSuperAdmin.HasValue)
         {
             admins = admins.Where(x => x.IsSuperAdmin == isSuperAdmin);
+        }
+
+        if (activationStatus.HasValue)
+        {
+            admins = admins.Where(x => x.ActivationStatus == activationStatus);
         }
 
         return admins;

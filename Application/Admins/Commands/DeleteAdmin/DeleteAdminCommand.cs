@@ -11,10 +11,12 @@ public record DeleteAdminCommand(Guid AdminId) : IRequest;
 public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IAccountHelper _accountHelper;
 
-    public DeleteAdminCommandHandler(IApplicationDbContext context)
+    public DeleteAdminCommandHandler(IApplicationDbContext context, IAccountHelper accountHelper)
     {
         _context = context;
+        _accountHelper = accountHelper;
     }
 
     public async Task<Unit> Handle(DeleteAdminCommand request, CancellationToken cancellationToken)
@@ -26,6 +28,11 @@ public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
         if (admin == null)
         {
             throw new NotFoundException(nameof(Admin), request.AdminId);
+        }
+
+        if (_accountHelper.GetRole(admin) == "SuperAdmin")
+        {
+            throw new ArgumentException("It is forbidden to delete the super admin.");
         }
 
         _context.Admins.Remove(admin);

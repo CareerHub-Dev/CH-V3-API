@@ -2,6 +2,7 @@
 using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ public record GetAdminsWithPaginationWithSearchWithFilterQuery : IRequest<Pagina
     public bool? IsAdminMustBeVerified { get; init; }
     public Guid? WithoutAdminId { get; init; }
     public bool? IsSuperAdmin { get; init; }
+    public ActivationStatus? ActivationStatus { get; init; }
 }
 
 public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetAdminsWithPaginationWithSearchWithFilterQuery, PaginatedList<AdminDTO>>
@@ -35,7 +37,8 @@ public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestH
             .Filter(
                 withoutAdminId: request.WithoutAdminId,
                 isVerified: request.IsAdminMustBeVerified,
-                isSuperAdmin: request.IsSuperAdmin
+                isSuperAdmin: request.IsSuperAdmin,
+                activationStatus: request.ActivationStatus
              )
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Email)
@@ -45,7 +48,8 @@ public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestH
                 Email = x.Email,
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
-                IsSuperAdmin = x.IsSuperAdmin
+                IsSuperAdmin = x.IsSuperAdmin,
+                ActivationStatus = x.ActivationStatus,
             })
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

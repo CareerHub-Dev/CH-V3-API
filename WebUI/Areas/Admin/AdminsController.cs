@@ -1,10 +1,10 @@
 ﻿using Application.Admins.Commands.DeleteAdmin;
 using Application.Admins.Commands.InviteAdmin;
-using Application.Admins.Commands.UpdateAdmin;
 using Application.Admins.Queries.GetAdmin;
 using Application.Admins.Queries.GetAdmins;
 using Application.Common.DTO.Admins;
 using Application.Emails.Commands;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
@@ -22,7 +22,8 @@ public class AdminsController : ApiControllerBase
         [FromQuery] int pageSize = 10,
         [FromQuery] string? searchTerm = null,
         [FromQuery] bool? isAdminMustBeVerified = null,
-        [FromQuery] bool? isSuperAdmin = null)
+        [FromQuery] bool? isSuperAdmin = null,
+        [FromQuery] ActivationStatus? activationStatus = null)
     {
         var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterQuery
         {
@@ -34,6 +35,7 @@ public class AdminsController : ApiControllerBase
             WithoutAdminId = AccountInfo!.Id,
             IsAdminMustBeVerified = isAdminMustBeVerified,
             IsSuperAdmin = isSuperAdmin,
+            ActivationStatus = activationStatus
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -62,22 +64,6 @@ public class AdminsController : ApiControllerBase
         var result = await Mediator.Send(command);
 
         return CreatedAtAction(nameof(GetAdmin), new { adminId = result }, result);
-    }
-
-    [HttpPut("{adminId}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateAdmin(Guid adminId, UpdateAdminCommand command)
-    {
-        if (adminId != command.AdminId)
-        {
-            return BadRequest();
-        }
-
-        await Mediator.Send(command);
-
-        return NoContent();
     }
 
     /// <remarks>

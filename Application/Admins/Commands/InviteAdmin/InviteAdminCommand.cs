@@ -1,6 +1,7 @@
 ﻿using Application.Admins.Events;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 
 namespace Application.Admins.Commands.InviteAdmin;
@@ -8,7 +9,6 @@ namespace Application.Admins.Commands.InviteAdmin;
 public record InviteAdminCommand : IRequest<Guid>
 {
     public string Email { get; init; } = string.Empty;
-    public bool IsSuperAdmin { get; init; }
 }
 
 public class InviteAdminCommandHandler : IRequestHandler<InviteAdminCommand, Guid>
@@ -27,7 +27,8 @@ public class InviteAdminCommandHandler : IRequestHandler<InviteAdminCommand, Gui
         var admin = new Admin
         {
             Email = request.Email,
-            IsSuperAdmin = request.IsSuperAdmin,
+            IsSuperAdmin = false,
+            ActivationStatus = ActivationStatus.Active
         };
 
         await _context.Admins.AddAsync(admin);

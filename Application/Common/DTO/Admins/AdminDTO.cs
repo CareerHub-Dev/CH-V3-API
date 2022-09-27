@@ -1,4 +1,6 @@
-﻿namespace Application.Common.DTO.Admins;
+﻿using Domain.Enums;
+
+namespace Application.Common.DTO.Admins;
 
 public class AdminDTO
 {
@@ -7,4 +9,5 @@ public class AdminDTO
     public DateTime? Verified { get; set; }
     public DateTime? PasswordReset { get; set; }
     public bool IsSuperAdmin { get; set; }
+    public ActivationStatus ActivationStatus { get; set; }
 }
