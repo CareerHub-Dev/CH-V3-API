@@ -1,4 +1,5 @@
 ﻿using Domain.Common;
+using Domain.Enums;
 
 namespace Domain.Entities;
 
@@ -13,6 +14,8 @@ public class Account : BaseEntity
     public string? ResetToken { get; set; }
     public DateTime? ResetTokenExpires { get; set; }
     public DateTime? PasswordReset { get; set; }
+
+    public ActivationStatus ActivationStatus { get; set; } = ActivationStatus.Active;
 
     public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 
