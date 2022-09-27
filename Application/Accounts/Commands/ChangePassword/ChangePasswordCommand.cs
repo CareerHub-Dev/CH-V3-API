@@ -9,7 +9,7 @@ namespace Application.Accounts.Commands.ChangePassword;
 
 public record ChangePasswordCommand : IRequest
 {
-    public Guid AccountId { get; set; }
+    public Guid AccountId { get; init; }
     public string OldPassword { get; init; } = string.Empty;
     public string NewPassword { get; init; } = string.Empty;
 }
