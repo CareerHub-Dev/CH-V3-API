@@ -36,7 +36,8 @@ public class GetBriefAccountQueryHandler : IRequestHandler<GetBriefAccountQuery,
             Email = account.Email,
             Verified = account.Verified,
             PasswordReset = account.PasswordReset,
-            Role = _accountHelper.GetRole(account)
+            Role = _accountHelper.GetRole(account),
+            ActivationStatus = account.ActivationStatus
         };
     }
 }
