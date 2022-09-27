@@ -190,12 +190,12 @@ public class StudentsController : ApiControllerBase
 
     #region GetSelfStudent
 
-    [HttpGet("{studentId}")]
-    public async Task<StudentDetailedDTO> GetSelfStudent(Guid studentId)
+    [HttpGet("self")]
+    public async Task<StudentDetailedDTO> GetSelfStudent()
     {
         return await Mediator.Send(new GetStudentDetailedWithQuery
         {
-            StudentId = studentId,
+            StudentId = AccountInfo!.Id,
             IsVerified = true
         });
     }
