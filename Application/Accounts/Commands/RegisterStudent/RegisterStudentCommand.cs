@@ -50,7 +50,6 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
         var student = new Student
         {
             Email = studentLog.Email,
-            NormalizedEmail = studentLog.NormalizedEmail,
             Verified = null,
             FirstName = studentLog.FirstName,
             LastName = studentLog.LastName,
