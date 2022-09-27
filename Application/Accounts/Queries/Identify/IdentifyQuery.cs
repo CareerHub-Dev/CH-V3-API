@@ -32,6 +32,12 @@ public class IdentifyQueryHandler : IRequestHandler<IdentifyQuery, IdentifyResul
 
         if (account == null) return null;
 
-        return new IdentifyResult { Id = account.Id, Role = _accountHelper.GetRole(account), IsVerified = account.IsVerified };
+        return new IdentifyResult 
+        { 
+            Id = account.Id, 
+            Role = _accountHelper.GetRole(account), 
+            IsVerified = account.IsVerified,
+            ActivationStatus = account.ActivationStatus,
+        };
     }
 }

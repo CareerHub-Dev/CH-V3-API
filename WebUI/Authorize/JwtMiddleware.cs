@@ -20,7 +20,10 @@ public class JwtMiddleware
         {
             var result = await mediator.Send(new IdentifyQuery { JwtToken = token });
 
-            context.Items["Account"] = result != null && result.IsVerified ? new AccountInfo { Id = result.Id, Role = result.Role } : null;
+            context.Items["Account"] = 
+                result != null && result.IsVerified ? 
+                    new AccountInfo { Id = result.Id, Role = result.Role, ActivationStatus = result.ActivationStatus } : 
+                    null;
         }
 
         await _next(context);
