@@ -3,6 +3,7 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,7 @@ public record GetCompanyWithFilterQuery : IRequest<CompanyDTO>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
+    public ActivationStatus? ActivationStatus { get; init; }
 }
 
 public class GetCompanyWithFilterQueryHandler
@@ -31,7 +33,10 @@ public class GetCompanyWithFilterQueryHandler
         var company = await _context.Companies
             .AsNoTracking()
             .Where(x => x.Id == request.CompanyId)
-            .Filter(isVerified: request.IsCompanyMustBeVerified)
+            .Filter(
+                isVerified: request.IsCompanyMustBeVerified,
+                activationStatus: request.ActivationStatus
+            )
             .Select(x => new CompanyDTO
             {
                 Id = x.Id,

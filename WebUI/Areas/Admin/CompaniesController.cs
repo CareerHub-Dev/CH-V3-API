@@ -38,7 +38,7 @@ public class CompaniesController : ApiControllerBase
             SearchTerm = searchTerm,
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
             ActivationStatus = activationStatus,
-            OrderByExpression = orderByExpression,
+            OrderByExpression = orderByExpression
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -52,17 +52,6 @@ public class CompaniesController : ApiControllerBase
     public async Task<IActionResult> GetCompany(Guid companyId)
     {
         return Ok(await Mediator.Send(new GetCompanyWithFilterQuery
-        {
-            CompanyId = companyId
-        }));
-    }
-
-    [HttpGet("{companyId}/CompanyLinks")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCompanyLinksOfCompany(Guid companyId)
-    {
-        return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
         {
             CompanyId = companyId
         }));
@@ -172,5 +161,16 @@ public class CompaniesController : ApiControllerBase
              Url.ActionLink("GetImage", "Images", new { imageId = result }) ?? "",
              result
          );
+    }
+
+    [HttpGet("{companyId}/CompanyLinks")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompanyLinksOfCompany(Guid companyId)
+    {
+        return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
+        {
+            CompanyId = companyId
+        }));
     }
 }
