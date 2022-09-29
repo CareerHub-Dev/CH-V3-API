@@ -1,13 +1,12 @@
 ﻿using Application.Common.DTO.Companies;
 using Application.Common.DTO.CompanyLinks;
-using Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
-using Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
+using Application.Companies.Commands.VerifiedActiveStudentSubscribeToVerifiedActiveCompany;
+using Application.Companies.Commands.VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompany;
 using Application.Companies.Queries;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
 using Application.Companies.Queries.Models;
-using Application.CompanyLinks.Queries.GetCompanyLink;
 using Application.CompanyLinks.Queries.GetCompanyLinks;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
