@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTO.Companies;
+using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyLogo;
@@ -84,4 +85,11 @@ public class CompaniesController : ApiControllerBase
         }));
     }
 
+    [HttpDelete("self")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteSelfCompany()
+    {
+        return Ok(await Mediator.Send(new DeleteCompanyCommand(AccountInfo!.Id)));
+    }
 }
