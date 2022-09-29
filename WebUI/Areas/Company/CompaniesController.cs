@@ -5,6 +5,7 @@ using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompany;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 using WebUI.ViewModels.Companies;
@@ -70,7 +71,8 @@ public class CompaniesController : ApiControllerBase
         return Ok(await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
-            IsSubscriberMustBeVerified = true
+            IsSubscriberMustBeVerified = true,
+            ActivationStatusOfSubscriber = ActivationStatus.Active
         }));
     }
 

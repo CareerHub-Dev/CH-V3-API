@@ -12,9 +12,10 @@ public record GetAmountSubscribersOfCompanyWithFilterQuery : IRequest<int>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
+    public ActivationStatus? ActivationStatusOfCompany { get; init; }
 
     public bool? IsSubscriberMustBeVerified { get; init; }
-    public ActivationStatus? ActivationStatus { get; init; }
+    public ActivationStatus? ActivationStatusOfSubscriber { get; init; }
 }
 
 public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
@@ -32,7 +33,7 @@ public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
         if (!await _context.Companies
             .Filter(
                 isVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.ActivationStatus
+                activationStatus: request.ActivationStatusOfCompany
             )
             .AnyAsync(x => x.Id == request.CompanyId))
         {
@@ -42,7 +43,10 @@ public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
         return await _context.Companies
             .Where(x => x.Id == request.CompanyId)
             .SelectMany(x => x.SubscribedStudents)
-            .Filter(isVerified: request.IsSubscriberMustBeVerified)
+            .Filter(
+                isVerified: request.IsSubscriberMustBeVerified, 
+                activationStatus: request.ActivationStatusOfSubscriber
+            )
             .CountAsync();
     }
 }
