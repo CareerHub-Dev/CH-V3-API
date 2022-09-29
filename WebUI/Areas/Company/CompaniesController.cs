@@ -14,8 +14,6 @@ namespace WebUI.Areas.Company;
 [Route("api/Company/[controller]")]
 public class CompaniesController : ApiControllerBase
 {
-    #region SelfGet 
-
     [HttpGet("self")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedCompanyDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -23,16 +21,11 @@ public class CompaniesController : ApiControllerBase
     {
         return Ok(await Mediator.Send(new GetDetailedCompanyWithFilterQuery
         {
-            CompanyId = AccountInfo!.Id,
-            IsCompanyMustBeVerified = true
+            CompanyId = AccountInfo!.Id
         }));
     }
 
-    #endregion
-
-    #region SelfUpdate
-
-    [HttpPut("self")]
+    [HttpPut("self/detail")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateSelfCompanyDetailAccount(UpdateOwnCompanyDetailView view)
@@ -68,10 +61,6 @@ public class CompaniesController : ApiControllerBase
         return Ok(result);
     }
 
-    #endregion
-
-    #region SelfStatistic
-
     [HttpGet("self/amount-subscribers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -80,7 +69,6 @@ public class CompaniesController : ApiControllerBase
         return Ok(await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
-            IsCompanyMustBeVerified = true,
             IsSubscriberMustBeVerified = true
         }));
     }
@@ -92,10 +80,8 @@ public class CompaniesController : ApiControllerBase
     {
         return Ok(await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
         {
-            CompanyId = AccountInfo!.Id,
-            IsCompanyMustBeVerified = true,
+            CompanyId = AccountInfo!.Id
         }));
     }
 
-    #endregion
 }
