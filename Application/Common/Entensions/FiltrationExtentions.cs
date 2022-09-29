@@ -166,7 +166,11 @@ public static class FiltrationExtentions
         return students;
     }
 
-    public static IQueryable<Company> Filter(this IQueryable<Company> companies, Guid? withoutCompanyId = null, bool? isVerified = null)
+    public static IQueryable<Company> Filter(
+        this IQueryable<Company> companies, 
+        Guid? withoutCompanyId = null, 
+        bool? isVerified = null,
+         ActivationStatus? activationStatus = null)
     {
         if (withoutCompanyId.HasValue)
         {
@@ -180,6 +184,11 @@ public static class FiltrationExtentions
         else if (isVerified.HasValue && isVerified == false)
         {
             companies = companies.Where(x => x.Verified == null && x.PasswordReset == null);
+        }
+
+        if (activationStatus.HasValue)
+        {
+            companies = companies.Where(x => x.ActivationStatus == activationStatus);
         }
 
         return companies;

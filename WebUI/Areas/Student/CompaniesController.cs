@@ -53,10 +53,8 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new GetFollowedDetailedCompanyForFollowerStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetDetailedCompanyWithFilterQuery
         {
-            FollowerStudentId = AccountInfo!.Id,
-            IsFollowerStudentMustBeVerified = true,
             CompanyId = companyId,
             IsCompanyMustBeVerified = true
         }));

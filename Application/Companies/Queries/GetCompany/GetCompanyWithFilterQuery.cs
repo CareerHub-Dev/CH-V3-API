@@ -43,6 +43,7 @@ public class GetCompanyWithFilterQueryHandler
                 Description = x.Description,
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
+                ActivationStatus = x.ActivationStatus,
             })
             .FirstOrDefaultAsync();
 

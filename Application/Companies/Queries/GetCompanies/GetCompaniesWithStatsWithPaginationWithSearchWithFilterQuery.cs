@@ -3,6 +3,7 @@ using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Companies.Queries.Models;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,7 @@ public record GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery
 
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
+    public ActivationStatus? ActivationStatus { get; init; }
 
     public StatsFilter StatsFilter { get; init; } = new StatsFilter();
 }
@@ -40,7 +42,8 @@ public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryHandler
             .AsNoTracking()
             .Filter(
                 withoutCompanyId: request.WithoutCompanyId,
-                isVerified: request.IsCompanyMustBeVerified
+                isVerified: request.IsCompanyMustBeVerified,
+                activationStatus: request.ActivationStatus
             )
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
@@ -57,6 +60,7 @@ public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryHandler
                 AmountSubscribers = x.SubscribedStudents.Filter(null, request.StatsFilter.IsSubscriberMustBeVerified, null).Count(),
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
+                ActivationStatus = x.ActivationStatus,
             })
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
