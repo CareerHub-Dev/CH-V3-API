@@ -86,12 +86,12 @@ public class CompaniesController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("invite")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> InviteCompany(InviteCompanyCommand command)
     {
         var result = await Mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetCompany), new { companyId = result }, result);
+        return Ok(result);
     }
 
     /// <remarks>
@@ -121,7 +121,7 @@ public class CompaniesController : ApiControllerBase
         return NoContent();
     }
 
-    [HttpPut("{companyId}")]
+    [HttpPut("{companyId}/detail")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -138,29 +138,23 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPost("{companyId}/logo")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCompanyLogo(Guid companyId, IFormFile? file)
     {
         var result = await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = companyId, Logo = file });
 
-        return Created(
-            Url.ActionLink("GetImage", "Images", new { imageId = result }) ?? "",
-            result
-        );
+        return Ok(result);
     }
 
     [HttpPost("{companyId}/banner")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCompanyBanner(Guid companyId, IFormFile? file)
     {
         var result = await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file });
 
-        return Created(
-             Url.ActionLink("GetImage", "Images", new { imageId = result }) ?? "",
-             result
-         );
+        return Ok(result);
     }
 
     [HttpGet("{companyId}/CompanyLinks")]
