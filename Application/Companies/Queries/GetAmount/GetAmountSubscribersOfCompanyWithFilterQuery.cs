@@ -2,6 +2,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ public record GetAmountSubscribersOfCompanyWithFilterQuery : IRequest<int>
     public bool? IsCompanyMustBeVerified { get; init; }
 
     public bool? IsSubscriberMustBeVerified { get; init; }
+    public ActivationStatus? ActivationStatus { get; init; }
 }
 
 public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
@@ -28,7 +30,10 @@ public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
     public async Task<int> Handle(GetAmountSubscribersOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Companies
-            .Filter(isVerified: request.IsCompanyMustBeVerified)
+            .Filter(
+                isVerified: request.IsCompanyMustBeVerified,
+                activationStatus: request.ActivationStatus
+            )
             .AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
