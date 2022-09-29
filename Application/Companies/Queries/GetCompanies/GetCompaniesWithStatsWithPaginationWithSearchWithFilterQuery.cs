@@ -15,13 +15,15 @@ public record GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 
-    public string? SearchTerm { get; init; }
+    public string SearchTerm { get; init; } = string.Empty;
 
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
     public ActivationStatus? ActivationStatus { get; init; }
 
     public StatsFilter StatsFilter { get; init; } = new StatsFilter();
+
+    public string OrderByExpression { get; init; } = string.Empty;
 }
 
 public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryHandler
@@ -45,8 +47,7 @@ public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryHandler
                 isVerified: request.IsCompanyMustBeVerified,
                 activationStatus: request.ActivationStatus
             )
-            .Search(request.SearchTerm ?? "")
-            .OrderBy(x => x.Name)
+            .Search(request.SearchTerm)
             .Select(x => new CompanyWithStatsDTO
             {
                 Id = x.Id,
@@ -56,12 +57,25 @@ public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryHandler
                 BannerId = x.BannerId,
                 Motto = x.Motto,
                 Description = x.Description,
-                AmountJobOffers = x.JobOffers.Filter(request.StatsFilter.IsJobOfferMustBeActive, null).Count(),
-                AmountSubscribers = x.SubscribedStudents.Filter(null, request.StatsFilter.IsSubscriberMustBeVerified, null).Count(),
+                AmountJobOffers = x.JobOffers.Count(x =>
+                    !request.StatsFilter.IsJobOfferMustBeActive.HasValue || (request.StatsFilter.IsJobOfferMustBeActive.Value ?
+                            x.EndDate >= DateTime.UtcNow && x.StartDate <= DateTime.UtcNow :
+                            x.StartDate > DateTime.UtcNow
+                        )
+                ),
+                AmountSubscribers = x.SubscribedStudents.Count(x =>
+                    (!request.StatsFilter.IsSubscriberMustBeVerified.HasValue || (request.StatsFilter.IsSubscriberMustBeVerified.Value ?
+                            x.Verified != null || x.PasswordReset != null :
+                            x.Verified == null && x.PasswordReset == null
+                       ))
+                    &&
+                    (!request.StatsFilter.ActivationStatusOfSubscriber.HasValue || (x.ActivationStatus == request.StatsFilter.ActivationStatusOfSubscriber))
+                ),
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
                 ActivationStatus = x.ActivationStatus,
             })
+            .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

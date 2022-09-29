@@ -6,7 +6,6 @@ using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
-using Application.CompanyLinks.Queries;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,6 +13,7 @@ using WebUI.Authorize;
 using Application.Common.DTO.Companies;
 using Application.Common.DTO.CompanyLinks;
 using Application.CompanyLinks.Queries.GetCompanyLinks;
+using Domain.Enums;
 
 namespace WebUI.Areas.Admin;
 
@@ -24,10 +24,12 @@ public class CompaniesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
+        [FromQuery] ActivationStatus? activationStatus,
+        [FromQuery] bool? isCompanyMustBeVerified,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
-        [FromQuery] string? searchTerm = null,
-        [FromQuery] bool? isCompanyMustBeVerified = null)
+        [FromQuery] string orderByExpression = "Name",
+        [FromQuery] string searchTerm = "")
     {
         var result = await Mediator.Send(new GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery
         {
@@ -35,6 +37,8 @@ public class CompaniesController : ApiControllerBase
             PageSize = pageSize,
             SearchTerm = searchTerm,
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
+            ActivationStatus = activationStatus,
+            OrderByExpression = orderByExpression,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
