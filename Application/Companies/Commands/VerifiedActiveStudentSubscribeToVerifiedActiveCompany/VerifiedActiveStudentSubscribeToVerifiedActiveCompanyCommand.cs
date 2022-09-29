@@ -2,30 +2,31 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
+namespace Application.Companies.Commands.VerifiedActiveStudentSubscribeToVerifiedActiveCompany;
 
-public record VerifiedStudentSubscribeToVerifiedCompanyCommand : IRequest
+public record VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommand : IRequest
 {
     public Guid StudentId { get; init; }
     public Guid CompanyId { get; init; }
 }
 
-public class VerifiedStudentSubscribeToVerifiedCompanyCommandHandler : IRequestHandler<VerifiedStudentSubscribeToVerifiedCompanyCommand>
+public class VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommandHandler : IRequestHandler<VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public VerifiedStudentSubscribeToVerifiedCompanyCommandHandler(IApplicationDbContext context)
+    public VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(VerifiedStudentSubscribeToVerifiedCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommand request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Filter(isVerified: true)
+            .Filter(isVerified: true, activationStatus: ActivationStatus.Active)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
@@ -35,7 +36,7 @@ public class VerifiedStudentSubscribeToVerifiedCompanyCommandHandler : IRequestH
 
         var company = await _context.Companies
             .Include(x => x.SubscribedStudents)
-            .Filter(isVerified: true)
+            .Filter(isVerified: true, activationStatus: ActivationStatus.Active)
             .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (company == null)

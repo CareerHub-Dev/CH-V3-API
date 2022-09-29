@@ -115,7 +115,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SubscribeToCompany(Guid companyId)
     {
-        await Mediator.Send(new VerifiedStudentSubscribeToVerifiedCompanyCommand
+        await Mediator.Send(new VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommand
         {
             StudentId = AccountInfo!.Id,
             CompanyId = companyId
@@ -129,7 +129,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UnsubscribeFromCompany(Guid companyId)
     {
-        await Mediator.Send(new VerifiedStudentUnsubscribeFromVerifiedCompanyCommand
+        await Mediator.Send(new VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommand
         {
             StudentId = AccountInfo!.Id,
             CompanyId = companyId

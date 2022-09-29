@@ -118,7 +118,12 @@ public static class FiltrationExtentions
         return jobOffers;
     }
 
-    public static IQueryable<Student> Filter(this IQueryable<Student> students, Guid? withoutStudentId = null, bool? isVerified = null, List<Guid>? studentGroupIds = null)
+    public static IQueryable<Student> Filter(
+        this IQueryable<Student> students, 
+        Guid? withoutStudentId = null, 
+        bool? isVerified = null, 
+        List<Guid>? studentGroupIds = null,
+        ActivationStatus? activationStatus = null)
     {
         if (withoutStudentId.HasValue)
         {
@@ -137,6 +142,11 @@ public static class FiltrationExtentions
         else if (isVerified.HasValue && isVerified == false)
         {
             students = students.Where(x => x.Verified == null && x.PasswordReset == null);
+        }
+
+        if (activationStatus.HasValue)
+        {
+            students = students.Where(x => x.ActivationStatus == activationStatus);
         }
 
         return students;
@@ -170,7 +180,7 @@ public static class FiltrationExtentions
         this IQueryable<Company> companies, 
         Guid? withoutCompanyId = null, 
         bool? isVerified = null,
-         ActivationStatus? activationStatus = null)
+        ActivationStatus? activationStatus = null)
     {
         if (withoutCompanyId.HasValue)
         {

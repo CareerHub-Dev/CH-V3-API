@@ -2,30 +2,31 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
+namespace Application.Companies.Commands.VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompany;
 
-public record VerifiedStudentUnsubscribeFromVerifiedCompanyCommand : IRequest
+public record VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommand : IRequest
 {
     public Guid StudentId { get; init; }
     public Guid CompanyId { get; init; }
 }
 
-public class VerifiedStudentUnsubscribeFromVerifiedCompanyCommandHandler : IRequestHandler<VerifiedStudentUnsubscribeFromVerifiedCompanyCommand>
+public class VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommandHandler : IRequestHandler<VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public VerifiedStudentUnsubscribeFromVerifiedCompanyCommandHandler(IApplicationDbContext context)
+    public VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(VerifiedStudentUnsubscribeFromVerifiedCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommand request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Filter(isVerified: true)
+            .Filter(isVerified: true, activationStatus: ActivationStatus.Active)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
@@ -35,7 +36,7 @@ public class VerifiedStudentUnsubscribeFromVerifiedCompanyCommandHandler : IRequ
 
         var company = await _context.Companies
             .Include(x => x.SubscribedStudents)
-            .Filter(isVerified: true)
+            .Filter(isVerified: true, activationStatus: ActivationStatus.Active)
             .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (company == null)
