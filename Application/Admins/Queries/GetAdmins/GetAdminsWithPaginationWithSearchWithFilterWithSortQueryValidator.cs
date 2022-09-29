@@ -2,9 +2,9 @@
 
 namespace Application.Admins.Queries.GetAdmins;
 
-public class GetAdminsWithPaginationWithSearchWithFilterQueryValidator : AbstractValidator<GetAdminsWithPaginationWithSearchWithFilterQuery>
+public class GetAdminsWithPaginationWithSearchWithFilterWithSortQueryValidator : AbstractValidator<GetAdminsWithPaginationWithSearchWithFilterWithSortQuery>
 {
-    public GetAdminsWithPaginationWithSearchWithFilterQueryValidator()
+    public GetAdminsWithPaginationWithSearchWithFilterWithSortQueryValidator()
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);

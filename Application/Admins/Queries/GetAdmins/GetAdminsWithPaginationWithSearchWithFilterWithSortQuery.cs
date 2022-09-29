@@ -8,29 +8,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Admins.Queries.GetAdmins;
 
-public record GetAdminsWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<AdminDTO>>
+public record GetAdminsWithPaginationWithSearchWithFilterWithSortQuery : IRequest<PaginatedList<AdminDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 
-    public string? SearchTerm { get; init; }
+    public string SearchTerm { get; init; } = string.Empty;
 
     public bool? IsAdminMustBeVerified { get; init; }
     public Guid? WithoutAdminId { get; init; }
     public bool? IsSuperAdmin { get; init; }
     public ActivationStatus? ActivationStatus { get; init; }
+
+    public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetAdminsWithPaginationWithSearchWithFilterQuery, PaginatedList<AdminDTO>>
+public class GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler : IRequestHandler<GetAdminsWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<AdminDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetAdminsWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<AdminDTO>> Handle(GetAdminsWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<AdminDTO>> Handle(GetAdminsWithPaginationWithSearchWithFilterWithSortQuery request, CancellationToken cancellationToken)
     {
         return await _context.Admins
             .AsNoTracking()
@@ -40,8 +42,7 @@ public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestH
                 isSuperAdmin: request.IsSuperAdmin,
                 activationStatus: request.ActivationStatus
              )
-            .Search(request.SearchTerm ?? "")
-            .OrderBy(x => x.Email)
+            .Search(request.SearchTerm)
             .Select(x => new AdminDTO
             {
                 Id = x.Id,
@@ -51,6 +52,7 @@ public class GetAdminsWithPaginationWithSearchWithFilterQueryHandler : IRequestH
                 IsSuperAdmin = x.IsSuperAdmin,
                 ActivationStatus = x.ActivationStatus,
             })
+            .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

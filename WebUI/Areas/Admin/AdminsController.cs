@@ -18,14 +18,15 @@ public class AdminsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AdminDTO>))]
     public async Task<IActionResult> GetAdmins(
+        [FromQuery] bool? isAdminMustBeVerified,
+        [FromQuery] bool? isSuperAdmin,
+        [FromQuery] ActivationStatus? activationStatus,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
-        [FromQuery] string? searchTerm = null,
-        [FromQuery] bool? isAdminMustBeVerified = null,
-        [FromQuery] bool? isSuperAdmin = null,
-        [FromQuery] ActivationStatus? activationStatus = null)
+        [FromQuery] string orderByExpression = "Email",
+        [FromQuery] string searchTerm = "")
     {
-        var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterQuery
+        var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterWithSortQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -35,7 +36,9 @@ public class AdminsController : ApiControllerBase
             WithoutAdminId = AccountInfo!.Id,
             IsAdminMustBeVerified = isAdminMustBeVerified,
             IsSuperAdmin = isSuperAdmin,
-            ActivationStatus = activationStatus
+            ActivationStatus = activationStatus,
+
+            OrderByExpression = orderByExpression
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -58,12 +61,12 @@ public class AdminsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("invite")]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> InviteAdmin(InviteAdminCommand command)
     {
         var result = await Mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetAdmin), new { adminId = result }, result);
+        return Ok(result);
     }
 
     /// <remarks>
