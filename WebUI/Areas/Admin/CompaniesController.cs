@@ -24,7 +24,7 @@ public class CompaniesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
-        [FromQuery] ActivationStatus? activationStatus,
+        [FromQuery] ActivationStatus? companyMustHaveActivationStatus,
         [FromQuery] bool? isCompanyMustBeVerified,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
@@ -37,7 +37,7 @@ public class CompaniesController : ApiControllerBase
             PageSize = pageSize,
             SearchTerm = searchTerm,
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
-            CompanyMustHaveActivationStatus = activationStatus,
+            CompanyMustHaveActivationStatus = companyMustHaveActivationStatus,
             OrderByExpression = orderByExpression
         });
 

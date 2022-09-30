@@ -10,6 +10,7 @@ using Application.Students.Queries.GetStudent;
 using Application.Students.Queries.GetStudents;
 using Application.Students.Queries.GetStudentSubscriptions;
 using Application.Students.Queries.Models;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
@@ -109,21 +110,24 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanySubscriptionsOfStudent(
         Guid studentId,
+        [FromQuery] ActivationStatus? companyMustHaveActivationStatus,
+        [FromQuery] bool? isCompanyMustBeVerified,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
-        [FromQuery] string? searchTerm = null,
-        [FromQuery] bool? isCompanyMustBeVerified = null)
+        [FromQuery] string orderByExpression = "Name",
+        [FromQuery] string searchTerm = "")
     {
         var result = await Mediator.Send(new GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             StudentOwnerId = studentId,
-            IsStudentOwnerMustBeVerified = true,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
             SearchTerm = searchTerm,
 
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
+            CompanyMustHaveActivationStatus = companyMustHaveActivationStatus,
+            OrderByExpression = orderByExpression,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
