@@ -86,7 +86,7 @@ public class GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWi
                             x.Verified == null && x.PasswordReset == null
                        ))
                     &&
-                    (!request.StatsFilter.ActivationStatusOfSubscriber.HasValue || (x.ActivationStatus == request.StatsFilter.ActivationStatusOfSubscriber))
+                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || (x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus))
                 ),
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,

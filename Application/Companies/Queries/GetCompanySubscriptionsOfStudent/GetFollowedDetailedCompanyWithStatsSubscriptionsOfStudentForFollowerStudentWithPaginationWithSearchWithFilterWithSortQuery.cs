@@ -99,7 +99,7 @@ public class GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowe
                             x.Verified == null && x.PasswordReset == null
                        ))
                     &&
-                    (!request.StatsFilter.ActivationStatusOfSubscriber.HasValue || (x.ActivationStatus == request.StatsFilter.ActivationStatusOfSubscriber))
+                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || (x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus))
                 ),
                 IsFollowed = x.SubscribedStudents.Any(x => x.Id == request.FollowerStudentId),
             })

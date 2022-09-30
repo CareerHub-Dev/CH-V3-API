@@ -45,7 +45,7 @@ public class CompaniesController : ApiControllerBase
                 IsJobOfferMustBeActive = true,
 
                 IsSubscriberMustBeVerified = true,
-                ActivationStatusOfSubscriber = ActivationStatus.Active
+                SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
             OrderByExpression = orderByExpression,
