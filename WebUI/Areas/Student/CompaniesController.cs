@@ -64,7 +64,8 @@ public class CompaniesController : ApiControllerBase
         return Ok(await Mediator.Send(new GetDetailedCompanyWithFilterQuery
         {
             CompanyId = companyId,
-            IsCompanyMustBeVerified = true
+            IsCompanyMustBeVerified = true,
+            CompanyMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -77,19 +78,10 @@ public class CompaniesController : ApiControllerBase
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
-            IsSubscriberMustBeVerified = true
-        }));
-    }
+            CompanyMustHaveActivationStatus = ActivationStatus.Active,
 
-    [HttpGet("{companyId}/CompanyLinks")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCompanyLinksOfCompany(Guid companyId)
-    {
-        return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
-        {
-            CompanyId = companyId,
-            IsCompanyMustBeVerified = true,
+            IsSubscriberMustBeVerified = true,
+            SubscriberMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -102,6 +94,8 @@ public class CompaniesController : ApiControllerBase
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
+            CompanyMustHaveActivationStatus = ActivationStatus.Active,
+
             IsJobOfferMustBeActive = true
         }));
     }
@@ -144,5 +138,17 @@ public class CompaniesController : ApiControllerBase
         });
 
         return NoContent();
+    }
+
+    [HttpGet("{companyId}/CompanyLinks")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompanyLinksOfCompany(Guid companyId)
+    {
+        return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
+        {
+            CompanyId = companyId,
+            IsCompanyMustBeVerified = true,
+        }));
     }
 }

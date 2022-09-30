@@ -35,7 +35,7 @@ public class IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQueryHandle
         }
 
         var company = await _context.Companies
-            .Filter(isVerified: true)
+            .Filter(isVerified: true, activationStatus: ActivationStatus.Active)
             .Include(x => x.SubscribedStudents.Where(x => x.Id == request.StudentId))
             .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
