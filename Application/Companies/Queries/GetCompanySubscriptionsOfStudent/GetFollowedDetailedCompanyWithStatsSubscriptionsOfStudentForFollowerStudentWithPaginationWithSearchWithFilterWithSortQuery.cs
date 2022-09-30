@@ -76,7 +76,7 @@ public class GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowe
                 withoutCompanyId: request.WithoutCompanyId,
                 isVerified: request.IsCompanyMustBeVerified
             )
-            .Search(request.SearchTerm ?? "")
+            .Search(request.SearchTerm)
             .Where(x => x.SubscribedStudents.Any(x => x.Id == request.StudentOwnerId))
             .Select(x => new FollowedDetailedCompanyWithStatsDTO
             {
