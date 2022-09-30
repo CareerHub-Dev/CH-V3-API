@@ -5,6 +5,7 @@ using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Companies.Queries.Models;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ public record GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginat
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
+    public ActivationStatus? FollowerStudentMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -23,8 +25,11 @@ public record GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginat
 
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
+    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 
     public StatsFilter StatsFilter { get; init; } = new StatsFilter();
+
+    public string OrderByExpression { get; init; } = string.Empty;
 }
 
 public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler
@@ -42,7 +47,9 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
         CancellationToken cancellationToken)
     {
         if (!await _context.Students
-            .Filter(isVerified: request.IsFollowerStudentMustBeVerified)
+            .Filter(
+                isVerified: request.IsFollowerStudentMustBeVerified,
+                activationStatus: request.FollowerStudentMustHaveActivationStatus)
             .AnyAsync(x => x.Id == request.FollowerStudentId))
         {
             throw new NotFoundException(nameof(Student), request.FollowerStudentId);
@@ -52,7 +59,8 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
             .AsNoTracking()
             .Filter(
                 withoutCompanyId: request.WithoutCompanyId,
-                isVerified: request.IsCompanyMustBeVerified
+                isVerified: request.IsCompanyMustBeVerified,
+                activationStatus: request.CompanyMustHaveActivationStatus
             )
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
@@ -65,10 +73,23 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
                 BannerId = x.BannerId,
                 Motto = x.Motto,
                 Description = x.Description,
-                AmountJobOffers = x.JobOffers.Filter(request.StatsFilter.IsJobOfferMustBeActive, null).Count(),
-                AmountSubscribers = x.SubscribedStudents.Filter(null, request.StatsFilter.IsSubscriberMustBeVerified, null).Count(),
+                AmountJobOffers = x.JobOffers.Count(x =>
+                    !request.StatsFilter.IsJobOfferMustBeActive.HasValue || (request.StatsFilter.IsJobOfferMustBeActive.Value ?
+                            x.EndDate >= DateTime.UtcNow && x.StartDate <= DateTime.UtcNow :
+                            x.StartDate > DateTime.UtcNow
+                        )
+                ),
+                AmountSubscribers = x.SubscribedStudents.Count(x =>
+                    (!request.StatsFilter.IsSubscriberMustBeVerified.HasValue || (request.StatsFilter.IsSubscriberMustBeVerified.Value ?
+                            x.Verified != null || x.PasswordReset != null :
+                            x.Verified == null && x.PasswordReset == null
+                       ))
+                    &&
+                    (!request.StatsFilter.ActivationStatusOfSubscriber.HasValue || (x.ActivationStatus == request.StatsFilter.ActivationStatusOfSubscriber))
+                ),
                 IsFollowed = x.SubscribedStudents.Any(x => x.Id == request.FollowerStudentId),
             })
+            .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }
