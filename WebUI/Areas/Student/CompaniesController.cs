@@ -8,6 +8,7 @@ using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
 using Application.Companies.Queries.Models;
 using Application.CompanyLinks.Queries.GetCompanyLinks;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
@@ -24,22 +25,30 @@ public class CompaniesController : ApiControllerBase
     public async Task<IActionResult> GetCompanies(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
-        [FromQuery] string? searchTerm = null,
-        [FromQuery] bool? isCompanyMustBeVerified = null)
+        [FromQuery] string orderByExpression = "Name",
+        [FromQuery] string searchTerm = "")
     {
         var result = await Mediator.Send(new GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
-            IsFollowerStudentMustBeVerified = true,
+
             PageNumber = pageNumber,
             PageSize = pageSize,
+
             SearchTerm = searchTerm,
-            IsCompanyMustBeVerified = isCompanyMustBeVerified,
+
+            IsCompanyMustBeVerified = true,
+            CompanyMustHaveActivationStatus = ActivationStatus.Active,
+
             StatsFilter = new StatsFilter
             {
                 IsJobOfferMustBeActive = true,
-                IsSubscriberMustBeVerified = true
-            }
+
+                IsSubscriberMustBeVerified = true,
+                ActivationStatusOfSubscriber = ActivationStatus.Active
+            },
+
+            OrderByExpression = orderByExpression,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

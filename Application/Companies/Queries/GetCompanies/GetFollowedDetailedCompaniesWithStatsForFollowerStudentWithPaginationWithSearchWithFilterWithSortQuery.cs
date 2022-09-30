@@ -21,7 +21,7 @@ public record GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginat
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 
-    public string? SearchTerm { get; init; }
+    public string SearchTerm { get; init; } = string.Empty;
 
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
@@ -62,7 +62,7 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
                 isVerified: request.IsCompanyMustBeVerified,
                 activationStatus: request.CompanyMustHaveActivationStatus
             )
-            .Search(request.SearchTerm ?? "")
+            .Search(request.SearchTerm)
             .Select(x => new FollowedDetailedCompanyWithStatsDTO
             {
                 Id = x.Id,
