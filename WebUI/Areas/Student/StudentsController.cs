@@ -12,6 +12,7 @@ using Application.Students.Queries.GetStudent;
 using Application.Students.Queries.GetStudents;
 using Application.Students.Queries.GetStudentSubscriptions;
 using Application.Students.Queries.Models;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
@@ -97,8 +98,6 @@ public class StudentsController : ApiControllerBase
 
     #endregion
 
-    #region GetStudentSubscriptions
-
     [HttpGet("{studentId}/student-subscriptions")]
     public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
         Guid studentId,
@@ -133,35 +132,41 @@ public class StudentsController : ApiControllerBase
         Guid studentId,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
-        [FromQuery] string? searchTerm = null)
+        [FromQuery] string orderByExpression = "Name",
+        [FromQuery] string searchTerm = "")
     {
         var result = await Mediator.Send(new GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
             IsFollowerStudentMustBeVerified = true,
+            FollowerStudentMustHaveActivationStatus = ActivationStatus.Active,
 
             StudentOwnerId = studentId,
             IsStudentOwnerMustBeVerified = true,
+            StudentOwnerMustHaveActivationStatus = ActivationStatus.Active,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
             SearchTerm = searchTerm,
 
             IsCompanyMustBeVerified = true,
+            CompanyMustHaveActivationStatus = ActivationStatus.Active,
 
             StatsFilter = new StatsFilter
             {
                 IsJobOfferMustBeActive = true,
+
                 IsSubscriberMustBeVerified = true,
-            }
+                SubscriberMustHaveActivationStatus = ActivationStatus.Active
+            },
+
+            OrderByExpression = orderByExpression,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
         return Ok(result);
     }
-
-    #endregion
 
     #region GetExperiencesOfStudent
 
@@ -319,8 +324,6 @@ public class StudentsController : ApiControllerBase
 
     #endregion
 
-    #region GetSelfStudentSubscriptions
-
     [HttpGet("self/student-subscriptions")]
     public async Task<IActionResult> GetStudentSubscriptionsOfSelfStudent(
         [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
@@ -353,33 +356,34 @@ public class StudentsController : ApiControllerBase
     public async Task<IActionResult> GetCompanySubscriptionsOfSelfStudent(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
-        [FromQuery] string? searchTerm = null)
+        [FromQuery] string orderByExpression = "Name",
+        [FromQuery] string searchTerm = "")
     {
         var result = await Mediator.Send(new GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
-            IsFollowerStudentMustBeVerified = true,
 
             StudentOwnerId = AccountInfo!.Id,
-            IsStudentOwnerMustBeVerified = true,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
             SearchTerm = searchTerm,
 
             IsCompanyMustBeVerified = true,
+            CompanyMustHaveActivationStatus = ActivationStatus.Active,
 
             StatsFilter = new StatsFilter
             {
                 IsJobOfferMustBeActive = true,
                 IsSubscriberMustBeVerified = true,
-            }
+                SubscriberMustHaveActivationStatus = ActivationStatus.Active
+            },
+
+            OrderByExpression = orderByExpression,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
         return Ok(result);
     }
-
-    #endregion
 }
