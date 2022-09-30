@@ -31,13 +31,13 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] string orderByExpression = "Name",
         [FromQuery] string searchTerm = "")
     {
-        var result = await Mediator.Send(new GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery
+        var result = await Mediator.Send(new GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
             SearchTerm = searchTerm,
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
-            ActivationStatus = activationStatus,
+            CompanyMustHaveActivationStatus = activationStatus,
             OrderByExpression = orderByExpression
         });
 

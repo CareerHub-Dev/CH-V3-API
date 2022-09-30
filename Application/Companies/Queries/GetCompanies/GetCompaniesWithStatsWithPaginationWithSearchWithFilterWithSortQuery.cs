@@ -1,27 +1,21 @@
 ﻿using Application.Common.DTO.Companies;
 using Application.Common.Entensions;
-using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Companies.Queries.Models;
-using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetCompanies;
 
-public record GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery
-    : IRequest<PaginatedList<FollowedDetailedCompanyWithStatsDTO>>
+public record GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuery
+    : IRequest<PaginatedList<CompanyWithStatsDTO>>
 {
-    public Guid FollowerStudentId { get; init; }
-    public bool? IsFollowerStudentMustBeVerified { get; init; }
-    public ActivationStatus? FollowerStudentMustHaveActivationStatus { get; init; }
-
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 
-    public string? SearchTerm { get; init; }
+    public string SearchTerm { get; init; } = string.Empty;
 
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
@@ -32,29 +26,20 @@ public record GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginat
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler
-    : IRequestHandler<GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery, PaginatedList<FollowedDetailedCompanyWithStatsDTO>>
+public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQueryHandler
+    : IRequestHandler<GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<CompanyWithStatsDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<FollowedDetailedCompanyWithStatsDTO>> Handle(
-        GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery request, 
+    public async Task<PaginatedList<CompanyWithStatsDTO>> Handle(
+        GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuery request, 
         CancellationToken cancellationToken)
     {
-        if (!await _context.Students
-            .Filter(
-                isVerified: request.IsFollowerStudentMustBeVerified,
-                activationStatus: request.FollowerStudentMustHaveActivationStatus)
-            .AnyAsync(x => x.Id == request.FollowerStudentId))
-        {
-            throw new NotFoundException(nameof(Student), request.FollowerStudentId);
-        }
-
         return await _context.Companies
             .AsNoTracking()
             .Filter(
@@ -62,9 +47,8 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
                 isVerified: request.IsCompanyMustBeVerified,
                 activationStatus: request.CompanyMustHaveActivationStatus
             )
-            .Search(request.SearchTerm ?? "")
-            .OrderBy(x => x.Name)
-            .Select(x => new FollowedDetailedCompanyWithStatsDTO
+            .Search(request.SearchTerm)
+            .Select(x => new CompanyWithStatsDTO
             {
                 Id = x.Id,
                 Email = x.Email,
@@ -87,7 +71,9 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
                     &&
                     (!request.StatsFilter.ActivationStatusOfSubscriber.HasValue || (x.ActivationStatus == request.StatsFilter.ActivationStatusOfSubscriber))
                 ),
-                IsFollowed = x.SubscribedStudents.Any(x => x.Id == request.FollowerStudentId),
+                Verified = x.Verified,
+                PasswordReset = x.PasswordReset,
+                ActivationStatus = x.ActivationStatus,
             })
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);

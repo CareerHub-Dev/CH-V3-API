@@ -11,11 +11,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 
-public record GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery
+public record GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery
     : IRequest<PaginatedList<CompanyWithStatsDTO>>
 {
     public Guid StudentOwnerId { get; init; }
     public bool? IsStudentOwnerMustBeVerified { get; init; }
+    public ActivationStatus? StudentOwnerMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -24,27 +25,32 @@ public record GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchW
 
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
-    public ActivationStatus? ActivationStatus { get; init; }
+    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 
     public StatsFilter StatsFilter { get; init; } = new StatsFilter();
+
+    public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterQueryHandler
-    : IRequestHandler<GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery, PaginatedList<CompanyWithStatsDTO>>
+public class GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQueryHandler
+    : IRequestHandler<GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<CompanyWithStatsDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<PaginatedList<CompanyWithStatsDTO>> Handle(
-        GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery request, 
+        GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery request, 
         CancellationToken cancellationToken)
     {
         if (!await _context.Students
-            .Filter(isVerified: request.IsStudentOwnerMustBeVerified)
+            .Filter(
+                isVerified: request.IsStudentOwnerMustBeVerified,
+                activationStatus: request.StudentOwnerMustHaveActivationStatus
+            )
             .AnyAsync(x => x.Id == request.StudentOwnerId))
         {
             throw new NotFoundException(nameof(Student), request.StudentOwnerId);
@@ -55,10 +61,9 @@ public class GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWi
             .Filter(
                 withoutCompanyId: request.WithoutCompanyId,
                 isVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.ActivationStatus
+                activationStatus: request.CompanyMustHaveActivationStatus
             )
             .Search(request.SearchTerm ?? "")
-            .OrderBy(x => x.Name)
             .Where(x => x.SubscribedStudents.Any(x => x.Id == request.StudentOwnerId))
             .Select(x => new CompanyWithStatsDTO
             {
@@ -69,12 +74,25 @@ public class GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWi
                 BannerId = x.BannerId,
                 Motto = x.Motto,
                 Description = x.Description,
-                AmountJobOffers = x.JobOffers.Filter(request.StatsFilter.IsJobOfferMustBeActive, null).Count(),
-                AmountSubscribers = x.SubscribedStudents.Filter(null, request.StatsFilter.IsSubscriberMustBeVerified, null).Count(),
+                AmountJobOffers = x.JobOffers.Count(x =>
+                    !request.StatsFilter.IsJobOfferMustBeActive.HasValue || (request.StatsFilter.IsJobOfferMustBeActive.Value ?
+                            x.EndDate >= DateTime.UtcNow && x.StartDate <= DateTime.UtcNow :
+                            x.StartDate > DateTime.UtcNow
+                        )
+                ),
+                AmountSubscribers = x.SubscribedStudents.Count(x =>
+                    (!request.StatsFilter.IsSubscriberMustBeVerified.HasValue || (request.StatsFilter.IsSubscriberMustBeVerified.Value ?
+                            x.Verified != null || x.PasswordReset != null :
+                            x.Verified == null && x.PasswordReset == null
+                       ))
+                    &&
+                    (!request.StatsFilter.ActivationStatusOfSubscriber.HasValue || (x.ActivationStatus == request.StatsFilter.ActivationStatusOfSubscriber))
+                ),
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
                 ActivationStatus = x.ActivationStatus
             })
+            .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

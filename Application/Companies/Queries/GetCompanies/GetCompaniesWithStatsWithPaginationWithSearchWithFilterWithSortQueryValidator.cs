@@ -2,10 +2,10 @@
 
 namespace Application.Companies.Queries.GetCompanies;
 
-public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryValidator
-    : AbstractValidator<GetCompaniesWithStatsWithPaginationWithSearchWithFilterQuery>
+public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQueryValidator
+    : AbstractValidator<GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuery>
 {
-    public GetCompaniesWithStatsWithPaginationWithSearchWithFilterQueryValidator()
+    public GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQueryValidator()
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);

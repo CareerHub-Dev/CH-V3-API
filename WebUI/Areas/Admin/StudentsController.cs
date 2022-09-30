@@ -114,7 +114,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] string? searchTerm = null,
         [FromQuery] bool? isCompanyMustBeVerified = null)
     {
-        var result = await Mediator.Send(new GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterQuery
+        var result = await Mediator.Send(new GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             StudentOwnerId = studentId,
             IsStudentOwnerMustBeVerified = true,

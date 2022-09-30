@@ -72,7 +72,7 @@ public class CompaniesController : ApiControllerBase
         {
             CompanyId = AccountInfo!.Id,
             IsSubscriberMustBeVerified = true,
-            ActivationStatusOfSubscriber = ActivationStatus.Active
+            SubscriberMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 

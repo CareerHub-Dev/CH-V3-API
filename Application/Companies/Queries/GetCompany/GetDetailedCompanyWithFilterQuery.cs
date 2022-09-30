@@ -13,7 +13,7 @@ public record GetDetailedCompanyWithFilterQuery : IRequest<DetailedCompanyDTO>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
-    public ActivationStatus? ActivationStatus { get; init; }
+    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 }
 
 public class GetDetailedCompanyWithFilterQueryHandler
@@ -35,7 +35,7 @@ public class GetDetailedCompanyWithFilterQueryHandler
             .Where(x => x.Id == request.CompanyId)
             .Filter(
                 isVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.ActivationStatus
+                activationStatus: request.CompanyMustHaveActivationStatus
             )
             .Select(x => new DetailedCompanyDTO
             {

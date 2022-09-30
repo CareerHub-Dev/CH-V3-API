@@ -27,7 +27,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] string? searchTerm = null,
         [FromQuery] bool? isCompanyMustBeVerified = null)
     {
-        var result = await Mediator.Send(new GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterQuery
+        var result = await Mediator.Send(new GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
             IsFollowerStudentMustBeVerified = true,
@@ -102,7 +102,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> IsStudentSubscribedToCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new IsVerifiedStudentSubscribedToVerifiedCompanyQuery
+        return Ok(await Mediator.Send(new IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQuery
         {
             StudentId = AccountInfo!.Id,
             CompanyId = companyId

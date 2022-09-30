@@ -12,7 +12,7 @@ public record GetAmountJobOffersOfCompanyWithFilterQuery : IRequest<int>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
-    public ActivationStatus? ActivationStatusOfCompany { get; init; }
+    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 
     public bool? IsJobOfferMustBeActive { get; init; }
 }
@@ -32,7 +32,7 @@ public class GetAmountJobOffersOfCompanyWithFilterQueryHandler
         if (!await _context.Companies
             .Filter(
                 isVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.ActivationStatusOfCompany
+                activationStatus: request.CompanyMustHaveActivationStatus
             )
             .AnyAsync(x => x.Id == request.CompanyId))
         {

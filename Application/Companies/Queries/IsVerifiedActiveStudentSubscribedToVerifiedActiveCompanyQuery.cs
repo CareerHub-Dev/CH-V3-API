@@ -2,30 +2,31 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries;
 
-public class IsVerifiedStudentSubscribedToVerifiedCompanyQuery : IRequest<bool>
+public class IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQuery : IRequest<bool>
 {
     public Guid StudentId { get; init; }
     public Guid CompanyId { get; init; }
 }
 
-public class IsVerifiedStudentSubscribedToVerifiedCompanyQueryHandler : IRequestHandler<IsVerifiedStudentSubscribedToVerifiedCompanyQuery, bool>
+public class IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQueryHandler : IRequestHandler<IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQuery, bool>
 {
     private readonly IApplicationDbContext _context;
 
-    public IsVerifiedStudentSubscribedToVerifiedCompanyQueryHandler(IApplicationDbContext context)
+    public IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<bool> Handle(IsVerifiedStudentSubscribedToVerifiedCompanyQuery request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQuery request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Filter(isVerified: true)
+            .Filter(isVerified: true, activationStatus: ActivationStatus.Active)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
