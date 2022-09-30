@@ -8,8 +8,6 @@ public record GetWorkFormatsQuery : IRequest<IList<EnumDTO>>;
 
 public class GetWorkFormatsQueryHandler : IRequestHandler<GetWorkFormatsQuery, IList<EnumDTO>>
 {
-    public GetWorkFormatsQueryHandler() { }
-
     public Task<IList<EnumDTO>> Handle(GetWorkFormatsQuery request, CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<WorkFormat>()

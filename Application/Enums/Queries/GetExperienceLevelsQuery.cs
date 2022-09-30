@@ -8,8 +8,6 @@ public record GetExperienceLevelsQuery : IRequest<IList<EnumDTO>>;
 
 public class GetExperienceLevelsQueryHandler : IRequestHandler<GetExperienceLevelsQuery, IList<EnumDTO>>
 {
-    public GetExperienceLevelsQueryHandler() { }
-
     public Task<IList<EnumDTO>> Handle(GetExperienceLevelsQuery request, CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<ExperienceLevel>()

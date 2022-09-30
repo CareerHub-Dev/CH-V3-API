@@ -8,8 +8,6 @@ public record GetTemplateLanguagesQuery : IRequest<IList<EnumDTO>>;
 
 public class GetTemplateLanguagesQueryHandler : IRequestHandler<GetTemplateLanguagesQuery, IList<EnumDTO>>
 {
-    public GetTemplateLanguagesQueryHandler() { }
-
     public Task<IList<EnumDTO>> Handle(GetTemplateLanguagesQuery request, CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<TemplateLanguage>()
