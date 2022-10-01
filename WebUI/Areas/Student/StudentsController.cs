@@ -54,10 +54,10 @@ public class StudentsController : ApiControllerBase
     [HttpGet("{studentId}")]
     public async Task<StudentDetailedDTO> GetStudent(Guid studentId)
     {
-        return await Mediator.Send(new GetStudentDetailedWithQuery
+        return await Mediator.Send(new GetStudentDetailedWithFilterQuery
         {
             StudentId = studentId,
-            IsVerified = true
+            IsStudentMustBeVerified = true
         });
     }
 
@@ -200,10 +200,10 @@ public class StudentsController : ApiControllerBase
     [HttpGet("self")]
     public async Task<StudentDetailedDTO> GetSelfStudent()
     {
-        return await Mediator.Send(new GetStudentDetailedWithQuery
+        return await Mediator.Send(new GetStudentDetailedWithFilterQuery
         {
             StudentId = AccountInfo!.Id,
-            IsVerified = true
+            IsStudentMustBeVerified = true
         });
     }
 

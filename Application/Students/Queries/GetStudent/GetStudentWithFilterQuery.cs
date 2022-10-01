@@ -4,6 +4,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Students.Queries.Models;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,8 @@ namespace Application.Students.Queries.GetStudent;
 public record GetStudentWithFilterQuery : IRequest<StudentDTO>
 {
     public Guid StudentId { get; init; }
-    public bool? IsVerified { get; init; }
+    public bool? IsStudentMustBeVerified { get; init; }
+    public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 }
 
 public class GetStudentWithFilterQueryHandler
@@ -30,7 +32,10 @@ public class GetStudentWithFilterQueryHandler
         var student = await _context.Students
             .AsNoTracking()
             .Where(x => x.Id == request.StudentId)
-            .Filter(isVerified: request.IsVerified)
+            .Filter(
+                isVerified: request.IsStudentMustBeVerified,
+                activationStatus: request.StudentMustHaveActivationStatus
+            )
             .Select(x => new StudentDTO
             {
                 Id = x.Id,

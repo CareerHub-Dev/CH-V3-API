@@ -4,33 +4,38 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Students.Queries.Models;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Queries.GetStudent;
 
-public record GetStudentDetailedWithQuery : IRequest<StudentDetailedDTO>
+public record GetStudentDetailedWithFilterQuery : IRequest<StudentDetailedDTO>
 {
     public Guid StudentId { get; init; }
-    public bool? IsVerified { get; init; }
+    public bool? IsStudentMustBeVerified { get; init; }
+    public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 }
 
-public class GetStudentDetailedWithQueryHandler
-    : IRequestHandler<GetStudentDetailedWithQuery, StudentDetailedDTO>
+public class GetStudentDetailedWithFilterQueryHandler
+    : IRequestHandler<GetStudentDetailedWithFilterQuery, StudentDetailedDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetStudentDetailedWithQueryHandler(IApplicationDbContext context)
+    public GetStudentDetailedWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<StudentDetailedDTO> Handle(GetStudentDetailedWithQuery request, CancellationToken cancellationToken)
+    public async Task<StudentDetailedDTO> Handle(GetStudentDetailedWithFilterQuery request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .AsNoTracking()
             .Where(x => x.Id == request.StudentId)
-            .Filter(isVerified: request.IsVerified)
+            .Filter(
+                isVerified: request.IsStudentMustBeVerified,
+                activationStatus: request.StudentMustHaveActivationStatus
+            )
             .Select(x => new StudentDetailedDTO
             {
                 Id = x.Id,
