@@ -9,7 +9,7 @@ using Application.Common.DTO.Students;
 
 namespace Application.Students.Queries.GetStudents;
 
-public record GetStudentsWithPaginationWithSearthWithFilterWithSortQuery : IRequest<PaginatedList<StudentDTO>>
+public record GetStudentsWithPaginationWithSearchWithFilterWithSortQuery : IRequest<PaginatedList<StudentDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -24,16 +24,16 @@ public record GetStudentsWithPaginationWithSearthWithFilterWithSortQuery : IRequ
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetStudentsWithPaginationWithSearthWithFilterWithSortQueryHandler : IRequestHandler<GetStudentsWithPaginationWithSearthWithFilterWithSortQuery, PaginatedList<StudentDTO>>
+public class GetStudentsWithPaginationWithSearchWithFilterWithSortQueryHandler : IRequestHandler<GetStudentsWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<StudentDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetStudentsWithPaginationWithSearthWithFilterWithSortQueryHandler(IApplicationDbContext context)
+    public GetStudentsWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<StudentDTO>> Handle(GetStudentsWithPaginationWithSearthWithFilterWithSortQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<StudentDTO>> Handle(GetStudentsWithPaginationWithSearchWithFilterWithSortQuery request, CancellationToken cancellationToken)
     {
         return await _context.Students
             .AsNoTracking()

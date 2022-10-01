@@ -12,7 +12,7 @@ using Application.Students.Queries;
 using Application.Students.Queries.GetAmount;
 using Application.Students.Queries.GetStudent;
 using Application.Students.Queries.GetStudents;
-using Application.Students.Queries.GetStudentSubscriptions;
+using Application.Students.Queries.GetStudentSubscriptionsOfStudent;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -100,32 +100,32 @@ public class StudentsController : ApiControllerBase
 
     #endregion
 
-    [HttpGet("{studentId}/student-subscriptions")]
-    public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
-        Guid studentId,
-        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
-    {
-        var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQuery
-        {
-            FollowerStudentId = AccountInfo!.Id,
-            IsFollowerStudentVerified = true,
+    //[HttpGet("{studentId}/student-subscriptions")]
+    //public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
+    //    Guid studentId,
+    //    [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
+    //{
+    //    var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+    //    {
+    //        FollowerStudentId = AccountInfo!.Id,
+    //        IsFollowerStudentVerified = true,
 
-            StudentOwnerId = studentId,
-            IsStudentOwnerVerified = true,
+    //        StudentOwnerId = studentId,
+    //        IsStudentOwnerVerified = true,
 
-            PageNumber = view.PageNumber,
-            PageSize = view.PageSize,
-            SearchTerm = view.SearchTerm,
+    //        PageNumber = view.PageNumber,
+    //        PageSize = view.PageSize,
+    //        SearchTerm = view.SearchTerm,
 
-            IsVerified = view.IsVerified,
-            WithoutStudentId = AccountInfo!.Id,
-            StudentGroupIds = view.StudentGroupIds,
-        });
+    //        IsVerified = view.IsVerified,
+    //        WithoutStudentId = AccountInfo!.Id,
+    //        StudentGroupIds = view.StudentGroupIds,
+    //    });
 
-        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+    //    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return Ok(result);
-    }
+    //    return Ok(result);
+    //}
 
     [HttpGet("{studentId}/company-subscriptions")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedCompanyWithStatsDTO>))]
@@ -272,31 +272,31 @@ public class StudentsController : ApiControllerBase
 
     #endregion
 
-    [HttpGet("self/student-subscriptions")]
-    public async Task<IActionResult> GetStudentSubscriptionsOfSelfStudent(
-        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
-    {
-        var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterQuery
-        {
-            FollowerStudentId = AccountInfo!.Id,
-            IsFollowerStudentVerified = true,
+    //[HttpGet("self/student-subscriptions")]
+    //public async Task<IActionResult> GetStudentSubscriptionsOfSelfStudent(
+    //    [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
+    //{
+    //    var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+    //    {
+    //        FollowerStudentId = AccountInfo!.Id,
+    //        IsFollowerStudentVerified = true,
 
-            StudentOwnerId = AccountInfo!.Id,
-            IsStudentOwnerVerified = true,
+    //        StudentOwnerId = AccountInfo!.Id,
+    //        IsStudentOwnerVerified = true,
 
-            PageNumber = view.PageNumber,
-            PageSize = view.PageSize,
-            SearchTerm = view.SearchTerm,
+    //        PageNumber = view.PageNumber,
+    //        PageSize = view.PageSize,
+    //        SearchTerm = view.SearchTerm,
 
-            IsVerified = view.IsVerified,
-            WithoutStudentId = AccountInfo!.Id,
-            StudentGroupIds = view.StudentGroupIds,
-        });
+    //        IsVerified = view.IsVerified,
+    //        WithoutStudentId = AccountInfo!.Id,
+    //        StudentGroupIds = view.StudentGroupIds,
+    //    });
 
-        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+    //    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return Ok(result);
-    }
+    //    return Ok(result);
+    //}
 
     [HttpGet("self/company-subscriptions")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedCompanyWithStatsDTO>))]
