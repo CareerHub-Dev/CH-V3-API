@@ -1,11 +1,10 @@
 ﻿using Application.Common.DTO.Companies;
 using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
-using Application.Experiences.Queries;
-using Application.Students.Commands.StudentOwnerUnsubscribeFromStudentTarget;
 using Application.Students.Commands.UpdateStudent;
 using Application.Students.Commands.UpdateStudentPhoto;
-using Application.Students.Commands.VerifiedStudentOwnerSubscribeToVerifiedStudentTarget;
+using Application.Students.Commands.VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTarget;
+using Application.Students.Commands.VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTarget;
 using Application.Students.Queries;
 using Application.Students.Queries.GetAmount;
 using Application.Students.Queries.GetStudent;
@@ -226,7 +225,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SubscribeToStudent(Guid studentId)
     {
-        await Mediator.Send(new VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommand
+        await Mediator.Send(new VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTargetCommand
         {
             StudentOwnerId = AccountInfo!.Id,
             StudentTargetId = studentId
@@ -240,7 +239,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UnsubscribeFromStudent(Guid studentId)
     {
-        await Mediator.Send(new VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand
+        await Mediator.Send(new VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTargetCommand
         {
             StudentOwnerId = AccountInfo!.Id,
             StudentTargetId = studentId
