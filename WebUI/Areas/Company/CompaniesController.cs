@@ -18,7 +18,6 @@ public class CompaniesController : ApiControllerBase
 {
     [HttpGet("self")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedCompanyDTO))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetSelfCompany()
     {
         return Ok(await Mediator.Send(new GetDetailedCompanyWithFilterQuery
@@ -29,7 +28,6 @@ public class CompaniesController : ApiControllerBase
 
     [HttpPut("self/detail")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateSelfCompanyDetailAccount(UpdateOwnCompanyDetailView view)
     {
         await Mediator.Send(new UpdateCompanyDetailCommand
@@ -45,7 +43,6 @@ public class CompaniesController : ApiControllerBase
 
     [HttpPost("self/logo")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateSelfCompanyLogo(IFormFile? file)
     {
         var result = await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file });
@@ -55,7 +52,6 @@ public class CompaniesController : ApiControllerBase
 
     [HttpPost("self/banner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateSelfCompanyBanner(IFormFile? file)
     {
         var result = await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = AccountInfo!.Id, Banner = file });
@@ -65,7 +61,6 @@ public class CompaniesController : ApiControllerBase
 
     [HttpGet("self/amount-subscribers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountSubscribersOfSelfCompany()
     {
         return Ok(await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
@@ -78,7 +73,6 @@ public class CompaniesController : ApiControllerBase
 
     [HttpGet("self/amount-jobOffers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOffersOfSelfCompany()
     {
         return Ok(await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
@@ -89,7 +83,6 @@ public class CompaniesController : ApiControllerBase
 
     [HttpDelete("self")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteSelfCompany()
     {
         return Ok(await Mediator.Send(new DeleteCompanyCommand(AccountInfo!.Id)));
