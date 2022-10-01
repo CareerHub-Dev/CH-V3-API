@@ -21,7 +21,6 @@ public class CompaniesController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanies(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10,
