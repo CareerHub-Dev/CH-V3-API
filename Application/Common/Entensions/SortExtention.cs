@@ -19,10 +19,16 @@ public static class SortExtention
             orderByMethod = strs[1].Equals("DESC", StringComparison.OrdinalIgnoreCase) ? "OrderByDescending" : "OrderBy";
 
         ParameterExpression pe = Expression.Parameter(query.ElementType);
-        MemberExpression me = Expression.Property(pe, propertyName);
+        //MemberExpression me = Expression.Property(pe, propertyName);
 
-        MethodCallExpression orderByCall = Expression.Call(typeof(Queryable), orderByMethod, new Type[] { query.ElementType, me.Type }, query.Expression
-            , Expression.Quote(Expression.Lambda(me, pe)));
+        Expression ex = pe;
+        foreach (var member in propertyName.Split('.'))
+        {
+            ex = Expression.PropertyOrField(ex, member);
+        }
+
+        MethodCallExpression orderByCall = Expression.Call(typeof(Queryable), orderByMethod, new Type[] { query.ElementType, ex.Type }, query.Expression
+            , Expression.Quote(Expression.Lambda(ex, pe)));
 
         return (IQueryable<T>)query.Provider.CreateQuery(orderByCall);
     }
