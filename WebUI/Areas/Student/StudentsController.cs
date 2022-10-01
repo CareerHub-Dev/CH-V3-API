@@ -214,7 +214,7 @@ public class StudentsController : ApiControllerBase
     [HttpGet("{studentTargetId}/subscribe")]
     public async Task<bool> IsStudentOwnerSubscribedToStudentTarget(Guid studentTargetId)
     {
-        var result = await Mediator.Send(new IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetWithFilterQuery
+        var result = await Mediator.Send(new IsVerifiedActiveStudentOwnerSubscribedToVerifiedActiveStudentTargetQuery
         {
             StudentOwnerId = AccountInfo!.Id,
             StudentTargetId = studentTargetId,
