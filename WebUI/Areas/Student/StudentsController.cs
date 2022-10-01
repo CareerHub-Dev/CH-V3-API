@@ -2,6 +2,7 @@
 using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
 using Application.Experiences.Queries;
+using Application.Students.Commands.DeleteStudent;
 using Application.Students.Commands.UpdateStudentDetail;
 using Application.Students.Commands.UpdateStudentPhoto;
 using Application.Students.Commands.VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTarget;
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
 using WebUI.Common.Models.Student;
+using WebUI.ViewModels.Students;
 
 namespace WebUI.Areas.Student;
 
@@ -221,60 +223,6 @@ public class StudentsController : ApiControllerBase
         return result;
     }
 
-    [HttpPost("{studentId}/subscribe")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> SubscribeToStudent(Guid studentId)
-    {
-        await Mediator.Send(new VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTargetCommand
-        {
-            StudentOwnerId = AccountInfo!.Id,
-            StudentTargetId = studentId
-        });
-
-        return NoContent();
-    }
-
-    [HttpDelete("{studentId}/subscribe")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UnsubscribeFromStudent(Guid studentId)
-    {
-        await Mediator.Send(new VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTargetCommand
-        {
-            StudentOwnerId = AccountInfo!.Id,
-            StudentTargetId = studentId
-        });
-
-        return NoContent();
-    }
-
-    #endregion
-
-    #region SelfUpdate
-
-    [HttpPut("self")]
-    public async Task<IActionResult> UpdateOwnStudentAccount(UpdateOwnStudentAccountView view)
-    {
-        await Mediator.Send(new UpdateStudentDetailCommand
-        {
-            StudentId = AccountInfo!.Id,
-            FirstName = view.FirstName,
-            LastName = view.LastName,
-            Phone = view.Phone,
-            BirthDate = view.BirthDate,
-            StudentGroupId = view.StudentGroupId,
-        });
-
-        return NoContent();
-    }
-
-    [HttpPost("self/photo")]
-    public async Task<ActionResult<Guid?>> UpdateOwnStudentPhoto(IFormFile? file)
-    {
-        return await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = AccountInfo!.Id, Photo = file });
-    }
-
     #endregion
 
     #region GetSelfStatistic
@@ -386,4 +334,69 @@ public class StudentsController : ApiControllerBase
 
         return Ok(result);
     }
+
+    #region Selft
+
+    [HttpPut("self/detail")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> UpdateSelfStudentDetail(UpdateOwnStudentDetailView view)
+    {
+        await Mediator.Send(new UpdateStudentDetailCommand
+        {
+            StudentId = AccountInfo!.Id,
+            FirstName = view.FirstName,
+            LastName = view.LastName,
+            Phone = view.Phone,
+            BirthDate = view.BirthDate,
+            StudentGroupId = view.StudentGroupId,
+        });
+
+        return NoContent();
+    }
+
+    [HttpPost("self/photo")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    public async Task<IActionResult> UpdateSelfStudentPhoto(IFormFile? file)
+    {
+        return Ok(await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = AccountInfo!.Id, Photo = file }));
+    }
+
+    [HttpDelete("self")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> DeleteSelfStudent()
+    {
+        await Mediator.Send(new DeleteStudentCommand(AccountInfo!.Id));
+
+        return NoContent();
+    }
+
+    [HttpPost("{studentId}/subscribe")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> SubscribeToStudent(Guid studentId)
+    {
+        await Mediator.Send(new VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTargetCommand
+        {
+            StudentOwnerId = AccountInfo!.Id,
+            StudentTargetId = studentId
+        });
+
+        return NoContent();
+    }
+
+    [HttpDelete("{studentId}/subscribe")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UnsubscribeFromStudent(Guid studentId)
+    {
+        await Mediator.Send(new VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTargetCommand
+        {
+            StudentOwnerId = AccountInfo!.Id,
+            StudentTargetId = studentId
+        });
+
+        return NoContent();
+    }
+
+    #endregion
 }

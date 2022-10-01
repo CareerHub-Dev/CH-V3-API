@@ -1,6 +1,6 @@
-﻿namespace WebUI.Common.Models.Student;
+﻿namespace WebUI.ViewModels.Students;
 
-public record UpdateOwnStudentAccountView
+public record UpdateOwnStudentDetailView
 {
     public string FirstName { get; init; } = string.Empty;
     public string LastName { get; init; } = string.Empty;

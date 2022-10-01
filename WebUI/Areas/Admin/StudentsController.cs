@@ -162,22 +162,20 @@ public class StudentsController : ApiControllerBase
     ///
     /// </remarks>
     [HttpPost("send-verification-email")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SendVerifyStudentEmail(SendVerifyStudentEmailCommand command)
     {
         await Mediator.Send(command);
         return Ok();
     }
 
-    [HttpDelete("{studentId}")]
-    public async Task<IActionResult> DeleteStudent(Guid studentId)
-    {
-        await Mediator.Send(new DeleteStudentCommand(studentId));
-
-        return NoContent();
-    }
-
-    [HttpPut("{studentId}")]
-    public async Task<IActionResult> UpdateStudent(Guid studentId, UpdateStudentDetailCommand command)
+    [HttpPut("{studentId}/detail")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateStudentDetail(Guid studentId, UpdateStudentDetailCommand command)
     {
         if (studentId != command.StudentId)
         {
@@ -190,8 +188,20 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpPost("{studentId}/photo")]
-    public async Task<Guid?> UpdateStudentPhoto(Guid studentId, IFormFile? file)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateStudentPhoto(Guid studentId, IFormFile? file)
     {
-        return await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = studentId, Photo = file });
+        return Ok(await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = studentId, Photo = file }));
+    }
+
+    [HttpDelete("{studentId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteStudent(Guid studentId)
+    {
+        await Mediator.Send(new DeleteStudentCommand(studentId));
+
+        return NoContent();
     }
 }
