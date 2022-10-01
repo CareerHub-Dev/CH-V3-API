@@ -15,6 +15,8 @@ public class GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery : IRequest<i
     public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 
     public bool? IsJobOfferMustBeActive { get; init; }
+    public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
+    public ActivationStatus? CompanyOfJobOfferMustHaveActivationStatus { get; init; }
 }
 
 public class GetAmountJobOfferSubscriptionsOfStudentWithFilterQueryHandler
@@ -42,7 +44,11 @@ public class GetAmountJobOfferSubscriptionsOfStudentWithFilterQueryHandler
         return await _context.Students
             .Where(x => x.Id == request.StudentId)
             .SelectMany(x => x.JobOfferSubscriptions)
-            .Filter(isActive: request.IsJobOfferMustBeActive)
+            .Filter(
+                isActive: request.IsJobOfferMustBeActive,
+                isCompanyVerified: request.IsCompanyOfJobOfferMustBeVerified,
+                activationStatus: request.CompanyOfJobOfferMustHaveActivationStatus
+            )
             .CountAsync();
 
     }

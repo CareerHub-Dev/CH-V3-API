@@ -72,7 +72,11 @@ public static class FiltrationExtentions
         return tags;
     }
 
-    public static IQueryable<JobOffer> Filter(this IQueryable<JobOffer> jobOffers, bool? isActive = null, bool? isCompanyVerified = null)
+    public static IQueryable<JobOffer> Filter(
+        this IQueryable<JobOffer> jobOffers, 
+        bool? isActive = null,
+        bool? isCompanyVerified = null,
+        ActivationStatus? activationStatus = null)
     {
         if (isActive.HasValue && isActive == true)
         {
@@ -92,27 +96,9 @@ public static class FiltrationExtentions
             jobOffers = jobOffers.Where(x => x.Company!.Verified == null && x.Company!.PasswordReset == null);
         }
 
-        return jobOffers;
-    }
-
-    public static IEnumerable<JobOffer> Filter(this IEnumerable<JobOffer> jobOffers, bool? isActive = null, bool? isCompanyVerified = null)
-    {
-        if (isActive.HasValue && isActive == true)
+        if (activationStatus.HasValue)
         {
-            jobOffers = jobOffers.Where(x => x.EndDate >= DateTime.UtcNow && x.StartDate <= DateTime.UtcNow);
-        }
-        else if (isActive.HasValue && isActive == false)
-        {
-            jobOffers = jobOffers.Where(x => x.StartDate > DateTime.UtcNow);
-        }
-
-        if (isCompanyVerified.HasValue && isCompanyVerified == true)
-        {
-            jobOffers = jobOffers.Where(x => x.Company!.Verified != null || x.Company!.PasswordReset != null);
-        }
-        else if (isCompanyVerified.HasValue && isCompanyVerified == false)
-        {
-            jobOffers = jobOffers.Where(x => x.Company!.Verified == null && x.Company!.PasswordReset == null);
+            jobOffers = jobOffers.Where(x => x.Company!.ActivationStatus == activationStatus);
         }
 
         return jobOffers;
@@ -147,30 +133,6 @@ public static class FiltrationExtentions
         if (activationStatus.HasValue)
         {
             students = students.Where(x => x.ActivationStatus == activationStatus);
-        }
-
-        return students;
-    }
-
-    public static IEnumerable<Student> Filter(this IEnumerable<Student> students, Guid? withoutStudentId = null, bool? isVerified = null, List<Guid>? studentGroupIds = null)
-    {
-        if (withoutStudentId.HasValue)
-        {
-            students = students.Where(x => x.Id != withoutStudentId);
-        }
-
-        if (studentGroupIds != null && studentGroupIds.Count != 0)
-        {
-            students = students.Where(x => studentGroupIds.Contains(x.StudentGroupId));
-        }
-
-        if (isVerified.HasValue && isVerified == true)
-        {
-            students = students.Where(x => x.Verified != null || x.PasswordReset != null);
-        }
-        else if (isVerified.HasValue && isVerified == false)
-        {
-            students = students.Where(x => x.Verified == null && x.PasswordReset == null);
         }
 
         return students;

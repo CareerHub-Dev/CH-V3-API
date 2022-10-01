@@ -17,7 +17,6 @@ using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Models.Student;
 using WebUI.ViewModels.Students;
 
 namespace WebUI.Areas.Student;
@@ -26,106 +25,134 @@ namespace WebUI.Areas.Student;
 [Route("api/Student/[controller]")]
 public class StudentsController : ApiControllerBase
 {
-    #region GetStudents 
-
     [HttpGet]
-    public async Task<IEnumerable<FollowedStudentDetailedDTO>> GetStudents(
-        [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForStudentView view)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedStudentDetailedDTO>))]
+    public async Task<IActionResult> GetStudents(
+        [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
+        [FromQuery] List<Guid>? studentGroupIds,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string orderByExpression = "LastName",
+        [FromQuery] string searchTerm = "")
     {
         var result = await Mediator.Send(new GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
-            IsFollowerStudentMustBeVerified = true,
 
-            PageNumber = view.PageNumber,
-            PageSize = view.PageSize,
-            SearchTerm = view.SearchTerm,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = searchTerm,
 
             IsStudentMustBeVerified = true,
             WithoutStudentId = AccountInfo!.Id,
-            StudentGroupIds = view.StudentGroupIds,
+            StudentGroupIds = studentGroupIds,
+            StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
+
+            OrderByExpression = orderByExpression,
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-        return result;
+        return Ok(result);
     }
 
     [HttpGet("{studentId}")]
-    public async Task<StudentDetailedDTO> GetStudent(Guid studentId)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetStudent(Guid studentId)
     {
-        return await Mediator.Send(new GetStudentDetailedWithFilterQuery
-        {
-            StudentId = studentId,
-            IsStudentMustBeVerified = true
-        });
-    }
-
-    #endregion
-
-    #region GetStudentStatistic
-
-    [HttpGet("{studentId}/amount-company-subscriptions")]
-    public async Task<int> GetAmountCompanySubscriptionsOfStudent(Guid studentId)
-    {
-        return await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetStudentDetailedWithFilterQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
-            IsCompanyMustBeVerified = true
-        });
+            StudentMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
+    [HttpGet("{studentId}/amount-company-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountCompanySubscriptionsOfStudent(Guid studentId)
+    {
+        return Ok(await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentWithFilterQuery
+        {
+            StudentId = studentId,
+            IsStudentMustBeVerified = true,
+            StudentMustHaveActivationStatus = ActivationStatus.Active,
+
+            IsCompanyMustBeVerified = true,
+            CompanyMustHaveActivationStatus = ActivationStatus.Active
+        }));
     }
 
     [HttpGet("{studentId}/amount-jobOffer-subscriptions")]
-    public async Task<int> GetAmountJobOfferSubscriptionsOfStudent(Guid studentId)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountJobOfferSubscriptionsOfStudent(Guid studentId)
     {
-        return await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
-            IsJobOfferMustBeActive = true
-        });
+            StudentMustHaveActivationStatus = ActivationStatus.Active,
+
+            IsJobOfferMustBeActive = true,
+            IsCompanyOfJobOfferMustBeVerified = true,
+            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active
+        }));
     }
 
     [HttpGet("{studentId}/amount-student-subscriptions")]
-    public async Task<int> GetAmountStudentSubscriptionsOfStudent(Guid studentId)
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountStudentSubscriptionsOfStudent(Guid studentId)
     {
-        return await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentWithFilterQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
-            IsStudentTargetOfSubscriptionMustBeVerified = true
-        });
+            StudentMustHaveActivationStatus = ActivationStatus.Active,
+
+            IsStudentTargetOfSubscriptionMustBeVerified = true,
+            StudentTargetOfSubscriptionMustHaveActivationStatus = ActivationStatus.Active
+        }));
     }
 
-    #endregion
+    [HttpGet("{studentId}/student-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedStudentDetailedDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
+        Guid studentId,
+        [FromQuery] List<Guid>? studentGroupIds,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string orderByExpression = "LastName",
+        [FromQuery] string searchTerm = "")
+    {
+        var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            FollowerStudentId = AccountInfo!.Id,
 
-    //[HttpGet("{studentId}/student-subscriptions")]
-    //public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
-    //    Guid studentId,
-    //    [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
-    //{
-    //    var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
-    //    {
-    //        FollowerStudentId = AccountInfo!.Id,
-    //        IsFollowerStudentVerified = true,
+            StudentOwnerId = studentId,
+            IsStudentOwnerMustBeVerified = true,
+            StudentOwnerMustHaveActivationStatus = ActivationStatus.Active,
 
-    //        StudentOwnerId = studentId,
-    //        IsStudentOwnerVerified = true,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = searchTerm,
 
-    //        PageNumber = view.PageNumber,
-    //        PageSize = view.PageSize,
-    //        SearchTerm = view.SearchTerm,
+            IsStudentMustBeVerified = true,
+            WithoutStudentId = AccountInfo!.Id,
+            StudentGroupIds = studentGroupIds,
+            StudentMustHaveActivationStatus = ActivationStatus.Active,
 
-    //        IsVerified = view.IsVerified,
-    //        WithoutStudentId = AccountInfo!.Id,
-    //        StudentGroupIds = view.StudentGroupIds,
-    //    });
+            OrderByExpression = orderByExpression
+        });
 
-    //    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
-    //    return Ok(result);
-    //}
+        return Ok(result);
+    }
 
     [HttpGet("{studentId}/company-subscriptions")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedCompanyWithStatsDTO>))]
@@ -170,8 +197,6 @@ public class StudentsController : ApiControllerBase
         return Ok(result);
     }
 
-    #region GetExperiencesOfStudent
-
     [HttpGet("{studentId}/Experiences")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExperienceDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -193,149 +218,16 @@ public class StudentsController : ApiControllerBase
         return Ok(result);
     }
 
-    #endregion
-
-    #region GetSelfStudent
+    #region Selft
 
     [HttpGet("self")]
     public async Task<StudentDetailedDTO> GetSelfStudent()
     {
         return await Mediator.Send(new GetStudentDetailedWithFilterQuery
         {
-            StudentId = AccountInfo!.Id,
-            IsStudentMustBeVerified = true
+            StudentId = AccountInfo!.Id
         });
     }
-
-    #endregion
-
-    #region SelfSubscribe
-
-    [HttpGet("{studentTargetId}/subscribe")]
-    public async Task<bool> IsStudentOwnerSubscribedToStudentTarget(Guid studentTargetId)
-    {
-        var result = await Mediator.Send(new IsVerifiedActiveStudentOwnerSubscribedToVerifiedActiveStudentTargetQuery
-        {
-            StudentOwnerId = AccountInfo!.Id,
-            StudentTargetId = studentTargetId,
-        });
-
-        return result;
-    }
-
-    #endregion
-
-    #region GetSelfStatistic
-
-    [HttpGet("self/amount-company-subscriptions")]
-    public async Task<int> GetAmountCompanySubscriptionsOfSelfStudent()
-    {
-        return await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentWithFilterQuery
-        {
-            StudentId = AccountInfo!.Id,
-            IsStudentMustBeVerified = true,
-            IsCompanyMustBeVerified = true
-        });
-    }
-
-    [HttpGet("self/amount-jobOffer-subscriptions")]
-    public async Task<int> GetAmountJobOfferSubscriptionsOfSelfStudent()
-    {
-        return await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery
-        {
-            StudentId = AccountInfo!.Id,
-            IsStudentMustBeVerified = true,
-            IsJobOfferMustBeActive = true
-        });
-    }
-
-    [HttpGet("self/amount-student-subscriptions")]
-    public async Task<int> GetAmountStudentSubscriptionsOfSelfStudent()
-    {
-        return await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentWithFilterQuery
-        {
-            StudentId = AccountInfo!.Id,
-            IsStudentMustBeVerified = true,
-            IsStudentTargetOfSubscriptionMustBeVerified = true
-        });
-    }
-
-    [HttpGet("self/amount-cvs")]
-    public async Task<int> GetAmountCVsOfSelfStudent()
-    {
-        return await Mediator.Send(new GetAmountCVsOfStudentWithFilterQuery
-        {
-            StudentId = AccountInfo!.Id,
-            IsStudentMustBeVerified = true,
-        });
-    }
-
-    #endregion
-
-    //[HttpGet("self/student-subscriptions")]
-    //public async Task<IActionResult> GetStudentSubscriptionsOfSelfStudent(
-    //    [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForAdminView view)
-    //{
-    //    var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
-    //    {
-    //        FollowerStudentId = AccountInfo!.Id,
-    //        IsFollowerStudentVerified = true,
-
-    //        StudentOwnerId = AccountInfo!.Id,
-    //        IsStudentOwnerVerified = true,
-
-    //        PageNumber = view.PageNumber,
-    //        PageSize = view.PageSize,
-    //        SearchTerm = view.SearchTerm,
-
-    //        IsVerified = view.IsVerified,
-    //        WithoutStudentId = AccountInfo!.Id,
-    //        StudentGroupIds = view.StudentGroupIds,
-    //    });
-
-    //    Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
-
-    //    return Ok(result);
-    //}
-
-    [HttpGet("self/company-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedCompanyWithStatsDTO>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCompanySubscriptionsOfSelfStudent(
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string orderByExpression = "Name",
-        [FromQuery] string searchTerm = "")
-    {
-        var result = await Mediator.Send(new GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
-        {
-            FollowerStudentId = AccountInfo!.Id,
-
-            StudentOwnerId = AccountInfo!.Id,
-
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            SearchTerm = searchTerm,
-
-            IsCompanyMustBeVerified = true,
-            CompanyMustHaveActivationStatus = ActivationStatus.Active,
-
-            StatsFilter = new StatsFilter
-            {
-                IsJobOfferMustBeActive = true,
-                IsSubscriberMustBeVerified = true,
-                SubscriberMustHaveActivationStatus = ActivationStatus.Active
-            },
-
-            OrderByExpression = orderByExpression,
-        });
-
-        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
-
-        return Ok(result);
-    }
-
-    #region Selft
 
     [HttpPut("self/detail")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -396,6 +288,142 @@ public class StudentsController : ApiControllerBase
         });
 
         return NoContent();
+    }
+
+    [HttpGet("{studentId}/subscribe")]
+    public async Task<bool> IsStudentOwnerSubscribedToStudentTarget(Guid studentId)
+    {
+        var result = await Mediator.Send(new IsVerifiedActiveStudentOwnerSubscribedToVerifiedActiveStudentTargetQuery
+        {
+            StudentOwnerId = AccountInfo!.Id,
+            StudentTargetId = studentId,
+        });
+
+        return result;
+    }
+
+    [HttpGet("self/student-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedStudentDetailedDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetStudentSubscriptionsOfSelfStudent(
+        [FromQuery] List<Guid>? studentGroupIds,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string orderByExpression = "LastName",
+        [FromQuery] string searchTerm = "")
+    {
+        var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            FollowerStudentId = AccountInfo!.Id,
+
+            StudentOwnerId = AccountInfo!.Id,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = searchTerm,
+
+            IsStudentMustBeVerified = true,
+            StudentGroupIds = studentGroupIds,
+            StudentMustHaveActivationStatus = ActivationStatus.Active,
+            WithoutStudentId = AccountInfo!.Id,
+
+            OrderByExpression = orderByExpression,
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("self/company-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedCompanyWithStatsDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCompanySubscriptionsOfSelfStudent(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string orderByExpression = "Name",
+        [FromQuery] string searchTerm = "")
+    {
+        var result = await Mediator.Send(new GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            FollowerStudentId = AccountInfo!.Id,
+
+            StudentOwnerId = AccountInfo!.Id,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = searchTerm,
+
+            IsCompanyMustBeVerified = true,
+            CompanyMustHaveActivationStatus = ActivationStatus.Active,
+
+            StatsFilter = new StatsFilter
+            {
+                IsJobOfferMustBeActive = true,
+                IsSubscriberMustBeVerified = true,
+                SubscriberMustHaveActivationStatus = ActivationStatus.Active
+            },
+
+            OrderByExpression = orderByExpression,
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("self/amount-company-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountCompanySubscriptionsOfSelfStudent()
+    {
+        return Ok(await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentWithFilterQuery
+        {
+            StudentId = AccountInfo!.Id,
+
+            IsCompanyMustBeVerified = true,
+            CompanyMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
+    [HttpGet("self/amount-jobOffer-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountJobOfferSubscriptionsOfSelfStudent()
+    {
+        return Ok(await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery
+        {
+            StudentId = AccountInfo!.Id,
+
+            IsJobOfferMustBeActive = true,
+            IsCompanyOfJobOfferMustBeVerified = true,
+            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
+    [HttpGet("self/amount-student-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountStudentSubscriptionsOfSelfStudent()
+    {
+        return Ok(await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentWithFilterQuery
+        {
+            StudentId = AccountInfo!.Id,
+
+            IsStudentTargetOfSubscriptionMustBeVerified = true,
+            StudentTargetOfSubscriptionMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
+    [HttpGet("self/amount-cvs")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountCVsOfSelfStudent()
+    {
+        return Ok(await Mediator.Send(new GetAmountCVsOfStudentWithFilterQuery
+        {
+            StudentId = AccountInfo!.Id,
+        }));
     }
 
     #endregion
