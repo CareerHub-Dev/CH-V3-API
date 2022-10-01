@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetAmount;
 
-public record GetAmountSubscribersOfCompanyWithFilterQuery : IRequest<int>
+public record GetAmountStudentSubscribersOfCompanyWithFilterQuery : IRequest<int>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
@@ -19,7 +19,7 @@ public record GetAmountSubscribersOfCompanyWithFilterQuery : IRequest<int>
 }
 
 public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
-    : IRequestHandler<GetAmountSubscribersOfCompanyWithFilterQuery, int>
+    : IRequestHandler<GetAmountStudentSubscribersOfCompanyWithFilterQuery, int>
 {
     private readonly IApplicationDbContext _context;
 
@@ -28,7 +28,7 @@ public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
         _context = context;
     }
 
-    public async Task<int> Handle(GetAmountSubscribersOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<int> Handle(GetAmountStudentSubscribersOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Companies
             .Filter(

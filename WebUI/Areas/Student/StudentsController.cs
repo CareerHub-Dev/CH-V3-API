@@ -71,8 +71,8 @@ public class StudentsController : ApiControllerBase
         return await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentWithFilterQuery
         {
             StudentId = studentId,
-            IsVerified = true,
-            IsCompanyVerified = true
+            IsStudentMustBeVerified = true,
+            IsCompanyMustBeVerified = true
         });
     }
 
@@ -82,8 +82,8 @@ public class StudentsController : ApiControllerBase
         return await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery
         {
             StudentId = studentId,
-            IsVerified = true,
-            IsJobOfferActive = true
+            IsStudentMustBeVerified = true,
+            IsJobOfferMustBeActive = true
         });
     }
 
@@ -93,8 +93,8 @@ public class StudentsController : ApiControllerBase
         return await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentWithFilterQuery
         {
             StudentId = studentId,
-            IsVerified = true,
-            IsStudentTargetOfSubscriptionVerified = true
+            IsStudentMustBeVerified = true,
+            IsStudentTargetOfSubscriptionMustBeVerified = true
         });
     }
 
@@ -233,8 +233,8 @@ public class StudentsController : ApiControllerBase
         return await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentWithFilterQuery
         {
             StudentId = AccountInfo!.Id,
-            IsVerified = true,
-            IsCompanyVerified = true
+            IsStudentMustBeVerified = true,
+            IsCompanyMustBeVerified = true
         });
     }
 
@@ -244,8 +244,8 @@ public class StudentsController : ApiControllerBase
         return await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery
         {
             StudentId = AccountInfo!.Id,
-            IsVerified = true,
-            IsJobOfferActive = true
+            IsStudentMustBeVerified = true,
+            IsJobOfferMustBeActive = true
         });
     }
 
@@ -255,8 +255,8 @@ public class StudentsController : ApiControllerBase
         return await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentWithFilterQuery
         {
             StudentId = AccountInfo!.Id,
-            IsVerified = true,
-            IsStudentTargetOfSubscriptionVerified = true
+            IsStudentMustBeVerified = true,
+            IsStudentTargetOfSubscriptionMustBeVerified = true
         });
     }
 
@@ -266,7 +266,7 @@ public class StudentsController : ApiControllerBase
         return await Mediator.Send(new GetAmountCVsOfStudentWithFilterQuery
         {
             StudentId = AccountInfo!.Id,
-            IsVerified = true,
+            IsStudentMustBeVerified = true,
         });
     }
 

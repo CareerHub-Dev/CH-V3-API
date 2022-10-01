@@ -2,6 +2,7 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,11 @@ namespace Application.Students.Queries.GetAmount;
 public record GetAmountCompanySubscriptionsOfStudentWithFilterQuery : IRequest<int>
 {
     public Guid StudentId { get; init; }
-    public bool? IsVerified { get; init; }
+    public bool? IsStudentMustBeVerified { get; init; }
+    public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 
-    public bool? IsCompanyVerified { get; init; }
+    public bool? IsCompanyMustBeVerified { get; init; }
+    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 }
 
 public class GetAmountCompanySubscriptionsOfStudentWithFilterQueryHandler
@@ -28,7 +31,10 @@ public class GetAmountCompanySubscriptionsOfStudentWithFilterQueryHandler
     public async Task<int> Handle(GetAmountCompanySubscriptionsOfStudentWithFilterQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Students
-            .Filter(isVerified: request.IsVerified)
+            .Filter(
+                isVerified: request.IsStudentMustBeVerified, 
+                activationStatus: request.StudentMustHaveActivationStatus
+            )
             .AnyAsync(x => x.Id == request.StudentId))
         {
             throw new NotFoundException(nameof(Student), request.StudentId);
@@ -37,7 +43,10 @@ public class GetAmountCompanySubscriptionsOfStudentWithFilterQueryHandler
         return await _context.Students
             .Where(x => x.Id == request.StudentId)
             .SelectMany(x => x.CompanySubscriptions)!
-            .Filter(isVerified: request.IsCompanyVerified)
+            .Filter(
+                isVerified: request.IsCompanyMustBeVerified,
+                activationStatus: request.CompanyMustHaveActivationStatus
+            )
             .CountAsync();
     }
 }

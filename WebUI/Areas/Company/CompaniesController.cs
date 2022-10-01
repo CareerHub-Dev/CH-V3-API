@@ -61,9 +61,9 @@ public class CompaniesController : ApiControllerBase
 
     [HttpGet("self/amount-subscribers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
-    public async Task<IActionResult> GetAmountSubscribersOfSelfCompany()
+    public async Task<IActionResult> GetAmountStudentSubscribersOfSelfCompany()
     {
-        return Ok(await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
             IsSubscriberMustBeVerified = true,

@@ -71,9 +71,9 @@ public class CompaniesController : ApiControllerBase
     [HttpGet("{companyId}/amount-subscribers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAmountSubscribersOfCompany(Guid companyId)
+    public async Task<IActionResult> GetAmountStudentSubscribersOfCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new GetAmountSubscribersOfCompanyWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
