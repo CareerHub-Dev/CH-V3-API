@@ -3,7 +3,7 @@ using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Emails.Commands;
 using Application.Experiences.Queries;
 using Application.Students.Commands.DeleteStudent;
-using Application.Students.Commands.UpdateStudent;
+using Application.Students.Commands.UpdateStudentDetail;
 using Application.Students.Commands.UpdateStudentPhoto;
 using Application.Students.Queries.GetAmount;
 using Application.Students.Queries.GetStudent;
@@ -177,7 +177,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpPut("{studentId}")]
-    public async Task<IActionResult> UpdateStudent(Guid studentId, UpdateStudentCommand command)
+    public async Task<IActionResult> UpdateStudent(Guid studentId, UpdateStudentDetailCommand command)
     {
         if (studentId != command.StudentId)
         {

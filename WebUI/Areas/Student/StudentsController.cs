@@ -2,7 +2,7 @@
 using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
 using Application.Experiences.Queries;
-using Application.Students.Commands.UpdateStudent;
+using Application.Students.Commands.UpdateStudentDetail;
 using Application.Students.Commands.UpdateStudentPhoto;
 using Application.Students.Commands.VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTarget;
 using Application.Students.Commands.VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTarget;
@@ -256,7 +256,7 @@ public class StudentsController : ApiControllerBase
     [HttpPut("self")]
     public async Task<IActionResult> UpdateOwnStudentAccount(UpdateOwnStudentAccountView view)
     {
-        await Mediator.Send(new UpdateStudentCommand
+        await Mediator.Send(new UpdateStudentDetailCommand
         {
             StudentId = AccountInfo!.Id,
             FirstName = view.FirstName,

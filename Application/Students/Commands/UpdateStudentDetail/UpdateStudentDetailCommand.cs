@@ -4,9 +4,9 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Commands.UpdateStudent;
+namespace Application.Students.Commands.UpdateStudentDetail;
 
-public record UpdateStudentCommand : IRequest
+public record UpdateStudentDetailCommand : IRequest
 {
     public Guid StudentId { get; set; }
     public string FirstName { get; init; } = string.Empty;
@@ -16,16 +16,16 @@ public record UpdateStudentCommand : IRequest
     public Guid StudentGroupId { get; init; }
 }
 
-public class UpdateStudentCommandHandler : IRequestHandler<UpdateStudentCommand>
+public class UpdateStudentDetailCommandHandler : IRequestHandler<UpdateStudentDetailCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateStudentCommandHandler(IApplicationDbContext context)
+    public UpdateStudentDetailCommandHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateStudentDetailCommand request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);

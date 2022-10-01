@@ -1,11 +1,11 @@
 ﻿using Application.Common.Entensions;
 using FluentValidation;
 
-namespace Application.Students.Commands.UpdateStudent;
+namespace Application.Students.Commands.UpdateStudentDetail;
 
-public class UpdateStudentCommandValidator : AbstractValidator<UpdateStudentCommand>
+public class UpdateStudentDetailCommandValidator : AbstractValidator<UpdateStudentDetailCommand>
 {
-    public UpdateStudentCommandValidator()
+    public UpdateStudentDetailCommandValidator()
     {
         RuleFor(x => x.LastName)
             .NotEmpty()
