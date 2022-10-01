@@ -1,4 +1,4 @@
-﻿namespace Application.Students.Queries.Models;
+﻿namespace Application.Common.DTO.Students;
 
 public class StudentDTO : StudentDetailedDTO
 {

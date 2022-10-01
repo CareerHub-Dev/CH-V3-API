@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTO.Companies;
+using Application.Common.DTO.Students;
 using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
 using Application.Experiences.Queries;
@@ -12,7 +13,6 @@ using Application.Students.Queries.GetAmount;
 using Application.Students.Queries.GetStudent;
 using Application.Students.Queries.GetStudents;
 using Application.Students.Queries.GetStudentSubscriptions;
-using Application.Students.Queries.Models;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -32,16 +32,16 @@ public class StudentsController : ApiControllerBase
     public async Task<IEnumerable<FollowedStudentDetailedDTO>> GetStudents(
         [FromQuery] GetStudentsWithPaginationWithSearthWithFilterForStudentView view)
     {
-        var result = await Mediator.Send(new GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterQuery
+        var result = await Mediator.Send(new GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
-            IsFollowerStudentVerified = true,
+            IsFollowerStudentMustBeVerified = true,
 
             PageNumber = view.PageNumber,
             PageSize = view.PageSize,
             SearchTerm = view.SearchTerm,
 
-            IsVerified = true,
+            IsStudentMustBeVerified = true,
             WithoutStudentId = AccountInfo!.Id,
             StudentGroupIds = view.StudentGroupIds,
         });

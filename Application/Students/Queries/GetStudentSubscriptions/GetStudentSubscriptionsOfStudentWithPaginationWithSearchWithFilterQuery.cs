@@ -3,10 +3,10 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Common.DTO.StudentGroups;
-using Application.Students.Queries.Models;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.DTO.Students;
 
 namespace Application.Students.Queries.GetStudentSubscriptions;
 

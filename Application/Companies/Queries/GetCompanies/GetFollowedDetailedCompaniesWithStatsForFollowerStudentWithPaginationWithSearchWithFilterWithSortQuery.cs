@@ -49,7 +49,8 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
         if (!await _context.Students
             .Filter(
                 isVerified: request.IsFollowerStudentMustBeVerified,
-                activationStatus: request.FollowerStudentMustHaveActivationStatus)
+                activationStatus: request.FollowerStudentMustHaveActivationStatus
+            )
             .AnyAsync(x => x.Id == request.FollowerStudentId))
         {
             throw new NotFoundException(nameof(Student), request.FollowerStudentId);

@@ -1,6 +1,6 @@
 ﻿using Application.Common.DTO.StudentGroups;
 
-namespace Application.Students.Queries.Models;
+namespace Application.Common.DTO.Students;
 
 public class StudentDetailedDTO
 {
