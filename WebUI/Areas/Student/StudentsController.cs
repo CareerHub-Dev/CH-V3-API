@@ -35,7 +35,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] string orderByExpression = "LastName",
         [FromQuery] string searchTerm = "")
     {
-        var result = await Mediator.Send(new GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetFollowedDetailedStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -61,7 +61,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetStudentDetailedWithFilterQuery
+        return Ok(await Mediator.Send(new GetDetailedStudentWithFilterQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
@@ -129,7 +129,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] string orderByExpression = "LastName",
         [FromQuery] string searchTerm = "")
     {
-        var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetFollowedDetailedStudentSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -224,7 +224,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
     public async Task<DetailedStudentDTO> GetSelfStudent()
     {
-        return await Mediator.Send(new GetStudentDetailedWithFilterQuery
+        return await Mediator.Send(new GetDetailedStudentWithFilterQuery
         {
             StudentId = AccountInfo!.Id
         });
@@ -314,7 +314,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] string orderByExpression = "LastName",
         [FromQuery] string searchTerm = "")
     {
-        var result = await Mediator.Send(new GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetFollowedDetailedStudentSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 

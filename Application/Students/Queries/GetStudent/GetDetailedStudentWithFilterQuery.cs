@@ -10,24 +10,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Queries.GetStudent;
 
-public record GetStudentDetailedWithFilterQuery : IRequest<DetailedStudentDTO>
+public record GetDetailedStudentWithFilterQuery : IRequest<DetailedStudentDTO>
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentMustBeVerified { get; init; }
     public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 }
 
-public class GetStudentDetailedWithFilterQueryHandler
-    : IRequestHandler<GetStudentDetailedWithFilterQuery, DetailedStudentDTO>
+public class GetDetailedStudentWithFilterQueryHandler
+    : IRequestHandler<GetDetailedStudentWithFilterQuery, DetailedStudentDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetStudentDetailedWithFilterQueryHandler(IApplicationDbContext context)
+    public GetDetailedStudentWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<DetailedStudentDTO> Handle(GetStudentDetailedWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<DetailedStudentDTO> Handle(GetDetailedStudentWithFilterQuery request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .AsNoTracking()
