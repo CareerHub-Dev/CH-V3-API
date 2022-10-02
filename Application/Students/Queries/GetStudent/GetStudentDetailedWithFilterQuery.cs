@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Queries.GetStudent;
 
-public record GetStudentDetailedWithFilterQuery : IRequest<StudentDetailedDTO>
+public record GetStudentDetailedWithFilterQuery : IRequest<DetailedStudentDTO>
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentMustBeVerified { get; init; }
@@ -18,7 +18,7 @@ public record GetStudentDetailedWithFilterQuery : IRequest<StudentDetailedDTO>
 }
 
 public class GetStudentDetailedWithFilterQueryHandler
-    : IRequestHandler<GetStudentDetailedWithFilterQuery, StudentDetailedDTO>
+    : IRequestHandler<GetStudentDetailedWithFilterQuery, DetailedStudentDTO>
 {
     private readonly IApplicationDbContext _context;
 
@@ -27,7 +27,7 @@ public class GetStudentDetailedWithFilterQueryHandler
         _context = context;
     }
 
-    public async Task<StudentDetailedDTO> Handle(GetStudentDetailedWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<DetailedStudentDTO> Handle(GetStudentDetailedWithFilterQuery request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .AsNoTracking()
@@ -36,7 +36,7 @@ public class GetStudentDetailedWithFilterQueryHandler
                 isVerified: request.IsStudentMustBeVerified,
                 activationStatus: request.StudentMustHaveActivationStatus
             )
-            .Select(x => new StudentDetailedDTO
+            .Select(x => new DetailedStudentDTO
             {
                 Id = x.Id,
                 Email = x.Email,

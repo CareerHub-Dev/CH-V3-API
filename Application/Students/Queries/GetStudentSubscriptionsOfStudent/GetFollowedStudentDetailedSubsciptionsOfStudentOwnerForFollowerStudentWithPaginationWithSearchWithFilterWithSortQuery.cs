@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Students.Queries.GetStudentSubscriptionsOfStudent;
 
 public record GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
-    : IRequest<PaginatedList<FollowedStudentDetailedDTO>>
+    : IRequest<PaginatedList<FollowedDetailedStudentDTO>>
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
@@ -36,7 +36,7 @@ public record GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStu
 }
 
 public class GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler
-    : IRequestHandler<GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<FollowedStudentDetailedDTO>>
+    : IRequestHandler<GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<FollowedDetailedStudentDTO>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -45,7 +45,7 @@ public class GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStud
         _context = context;
     }
 
-    public async Task<PaginatedList<FollowedStudentDetailedDTO>> Handle(GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<FollowedDetailedStudentDTO>> Handle(GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(
@@ -77,7 +77,7 @@ public class GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStud
             )
             .Where(x => x.StudentsSubscribed.Any(x => x.SubscriptionOwnerId == request.StudentOwnerId))
             .Search(request.SearchTerm)
-            .Select(x => new FollowedStudentDetailedDTO
+            .Select(x => new FollowedDetailedStudentDTO
             {
                 Id = x.Id,
                 Email = x.Email,

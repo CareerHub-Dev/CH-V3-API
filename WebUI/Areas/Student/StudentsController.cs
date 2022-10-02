@@ -26,7 +26,7 @@ namespace WebUI.Areas.Student;
 public class StudentsController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedStudentDetailedDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedStudentDTO>))]
     public async Task<IActionResult> GetStudents(
         [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
         [FromQuery] List<Guid>? studentGroupIds,
@@ -57,7 +57,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("{studentId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudent(Guid studentId)
     {
@@ -70,7 +70,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("{studentId}/amount-company-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountCompanySubscriptionsOfStudent(Guid studentId)
     {
@@ -86,7 +86,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("{studentId}/amount-jobOffer-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOfferSubscriptionsOfStudent(Guid studentId)
     {
@@ -103,7 +103,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("{studentId}/amount-student-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentDetailedDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscriptionsOfStudent(Guid studentId)
     {
@@ -119,7 +119,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("{studentId}/student-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedStudentDetailedDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedStudentDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
         Guid studentId,
@@ -221,7 +221,8 @@ public class StudentsController : ApiControllerBase
     #region Selft
 
     [HttpGet("self")]
-    public async Task<StudentDetailedDTO> GetSelfStudent()
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
+    public async Task<DetailedStudentDTO> GetSelfStudent()
     {
         return await Mediator.Send(new GetStudentDetailedWithFilterQuery
         {
@@ -231,6 +232,7 @@ public class StudentsController : ApiControllerBase
 
     [HttpPut("self/detail")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateSelfStudentDetail(UpdateOwnStudentDetailView view)
     {
         await Mediator.Send(new UpdateStudentDetailCommand
@@ -303,7 +305,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("self/student-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedStudentDetailedDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedStudentDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentSubscriptionsOfSelfStudent(
         [FromQuery] List<Guid>? studentGroupIds,

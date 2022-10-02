@@ -1,6 +1,6 @@
 ﻿namespace Application.Common.DTO.Students;
 
-public class FollowedStudentDetailedDTO : StudentDetailedDTO
+public class FollowedDetailedStudentDTO : DetailedStudentDTO
 {
     public bool IsFollowed { get; set; }
 }

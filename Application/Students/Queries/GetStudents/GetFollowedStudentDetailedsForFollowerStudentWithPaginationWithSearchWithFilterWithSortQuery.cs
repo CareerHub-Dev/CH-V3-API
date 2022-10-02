@@ -12,7 +12,7 @@ using Application.Common.DTO.Students;
 namespace Application.Students.Queries.GetStudents;
 
 public record GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
-    : IRequest<PaginatedList<FollowedStudentDetailedDTO>>
+    : IRequest<PaginatedList<FollowedDetailedStudentDTO>>
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
@@ -32,7 +32,7 @@ public record GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSea
 }
 
 public class GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler
-    : IRequestHandler<GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<FollowedStudentDetailedDTO>>
+    : IRequestHandler<GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<FollowedDetailedStudentDTO>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -41,7 +41,7 @@ public class GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSear
         _context = context;
     }
 
-    public async Task<PaginatedList<FollowedStudentDetailedDTO>> Handle(GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<FollowedDetailedStudentDTO>> Handle(GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request, CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(
@@ -62,7 +62,7 @@ public class GetFollowedStudentDetailedsForFollowerStudentWithPaginationWithSear
                 activationStatus: request.StudentMustHaveActivationStatus
             )
             .Search(request.SearchTerm)
-            .Select(x => new FollowedStudentDetailedDTO
+            .Select(x => new FollowedDetailedStudentDTO
             {
                 Id = x.Id,
                 Email = x.Email,

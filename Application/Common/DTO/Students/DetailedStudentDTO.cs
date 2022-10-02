@@ -2,7 +2,7 @@
 
 namespace Application.Common.DTO.Students;
 
-public class StudentDetailedDTO
+public class DetailedStudentDTO
 {
     public Guid Id { get; set; }
     public string FirstName { get; set; } = string.Empty;
