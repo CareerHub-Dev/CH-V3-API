@@ -12,13 +12,16 @@ public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifySt
 {
     private readonly IApplicationDbContext _context;
     private readonly IEmailService _emailService;
-    private readonly IProcedureService _procedureService;
+    private readonly IAccountHelper _accountHelper;
 
-    public SendVerifyStudentEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, IProcedureService procedureService)
+    public SendVerifyStudentEmailCommandHandler(
+        IApplicationDbContext context, 
+        IEmailService emailService, 
+        IAccountHelper accountHelper)
     {
         _context = context;
         _emailService = emailService;
-        _procedureService = procedureService;
+        _accountHelper = accountHelper;
     }
 
     public async Task<Unit> Handle(SendVerifyStudentEmailCommand request, CancellationToken cancellationToken)
@@ -35,7 +38,7 @@ public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifySt
             throw new ArgumentException("Student is verified");
         }
 
-        student.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync();
+        student.VerificationToken = await _accountHelper.GenerateUniqueVerificationTokenAsync();
         await _context.SaveChangesAsync();
 
         await _emailService.SendVerifyStudentEmailAsync(student);

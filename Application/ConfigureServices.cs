@@ -5,7 +5,6 @@ using Application.Common.Models.Email;
 using Application.Helpers;
 using Application.Services;
 using Application.Services.Jwt;
-using Application.Services.Procedure;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
@@ -27,7 +26,6 @@ public static class ConfigureServices
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
 
         services.AddScoped<IJwtService, JwtService>();
-        services.AddScoped<IProcedureService, ProcedureService>();
         services.AddScoped<IEmailTemplateParserService, EmailTemplateParserService>();
         services.AddScoped<IEmailTemplatesService, EmailTemplatesService>();
         services.AddScoped<IEmailService, EmailService>();

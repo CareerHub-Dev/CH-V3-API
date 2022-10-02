@@ -16,13 +16,16 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
 {
     private readonly IApplicationDbContext _context;
     private readonly IEmailService _emailService;
-    private readonly IProcedureService _procedureService;
+    private readonly IAccountHelper _accountHelper;
 
-    public SendPasswordResetEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, IProcedureService procedureService)
+    public SendPasswordResetEmailCommandHandler(
+        IApplicationDbContext context, 
+        IEmailService emailService, 
+        IAccountHelper accountHelper)
     {
         _context = context;
         _emailService = emailService;
-        _procedureService = procedureService;
+        _accountHelper = accountHelper;
     }
 
     public async Task<Unit> Handle(SendPasswordResetEmailCommand request, CancellationToken cancellationToken)
@@ -34,7 +37,7 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
             throw new NotFoundException(nameof(Account), request.Email);
         }
 
-        account.ResetToken = await _procedureService.GenerateAccountResetTokenAsync();
+        account.ResetToken = await _accountHelper.GenerateUniqueResetTokenAsync();
         account.ResetTokenExpires = DateTime.UtcNow.AddDays(1);
 
         await _context.SaveChangesAsync();

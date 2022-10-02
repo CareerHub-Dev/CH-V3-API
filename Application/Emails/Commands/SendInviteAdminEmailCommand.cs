@@ -12,13 +12,15 @@ public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdmi
 {
     private readonly IApplicationDbContext _context;
     private readonly IEmailService _emailService;
-    private readonly IProcedureService _procedureService;
-
-    public SendInviteAdminEmailCommandHandler(IApplicationDbContext context, IEmailService emailService, IProcedureService procedureService)
+    private readonly IAccountHelper _accountHelper;
+    public SendInviteAdminEmailCommandHandler(
+        IApplicationDbContext context, 
+        IEmailService emailService, 
+        IAccountHelper accountHelper)
     {
         _context = context;
         _emailService = emailService;
-        _procedureService = procedureService;
+        _accountHelper = accountHelper;
     }
 
     public async Task<Unit> Handle(SendInviteAdminEmailCommand request, CancellationToken cancellationToken)
@@ -35,7 +37,7 @@ public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdmi
             throw new ArgumentException("Admin is verified");
         }
 
-        admin.VerificationToken = await _procedureService.GenerateAccountVerificationTokenAsync();
+        admin.VerificationToken = await _accountHelper.GenerateUniqueVerificationTokenAsync();
         await _context.SaveChangesAsync();
 
         await _emailService.SendInviteAdminEmailAsync(admin);
