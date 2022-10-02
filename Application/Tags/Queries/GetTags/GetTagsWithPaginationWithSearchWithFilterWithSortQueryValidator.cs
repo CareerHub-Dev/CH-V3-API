@@ -2,9 +2,9 @@
 
 namespace Application.Tags.Queries.GetTags;
 
-public class GetTagsWithPaginationWithSearchWithFilterQueryValidator : AbstractValidator<GetTagsWithPaginationWithSearchWithFilterQuery>
+public class GetTagsWithPaginationWithSearchWithFilterWithSortQueryValidator : AbstractValidator<GetTagsWithPaginationWithSearchWithFilterWithSortQuery>
 {
-    public GetTagsWithPaginationWithSearchWithFilterQueryValidator()
+    public GetTagsWithPaginationWithSearchWithFilterWithSortQueryValidator()
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);

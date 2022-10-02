@@ -7,17 +7,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Queries.GetTags;
 
-public record GetTagsWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<TagDTO>>
+public record GetTagsWithPaginationWithSearchWithFilterWithSortQuery : IRequest<PaginatedList<TagDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 
     public bool? IsAccepted { get; init; }
 
-    public string? SearchTerm { get; init; }
+    public string SearchTerm { get; init; } = string.Empty;
+
+    public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetTagsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetTagsWithPaginationWithSearchWithFilterQuery, PaginatedList<TagDTO>>
+public class GetTagsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetTagsWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<TagDTO>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -26,13 +28,12 @@ public class GetTagsWithPaginationWithSearchWithFilterQueryHandler : IRequestHan
         _context = context;
     }
 
-    public async Task<PaginatedList<TagDTO>> Handle(GetTagsWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<TagDTO>> Handle(GetTagsWithPaginationWithSearchWithFilterWithSortQuery request, CancellationToken cancellationToken)
     {
         return await _context.Tags
             .AsNoTracking()
-            .Search(request.SearchTerm ?? "")
+            .Search(request.SearchTerm)
             .Filter(isAccepted: request.IsAccepted)
-            .OrderBy(x => x.Name)
             .Select(x => new TagDTO
             {
                 Id = x.Id,
@@ -43,6 +44,7 @@ public class GetTagsWithPaginationWithSearchWithFilterQueryHandler : IRequestHan
                 LastModified = x.LastModified,
                 LastModifiedBy = x.LastModifiedBy,
             })
+            .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

@@ -16,9 +16,21 @@ public class TagsController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TagDTO>))]
-    public async Task<IActionResult> GetTags([FromQuery] GetTagsWithPaginationWithSearchWithFilterQuery query)
+    public async Task<IActionResult> GetTags(
+        [FromQuery] bool? isAccepted,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(query);
+        var result = await Mediator.Send(new GetTagsWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            OrderByExpression = orderByExpression ?? "Name",
+            SearchTerm = searchTerm ?? "",
+            IsAccepted = isAccepted
+        });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
@@ -34,12 +46,12 @@ public class TagsController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> CreateTag(CreateTagCommand command)
     {
         var result = await Mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetTag), new { tagId = result }, result);
+        return Ok(result);
     }
 
     [HttpPut("{tagId}")]

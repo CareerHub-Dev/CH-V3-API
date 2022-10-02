@@ -12,9 +12,13 @@ public class TagsController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BriefTagDTO>))]
-    public async Task<IActionResult> GetTags([FromQuery] GetBriefTagsWithSearchQuery query)
+    public async Task<IActionResult> GetTags(
+        [FromQuery] string? searchTerm)
     {
-        return Ok(await Mediator.Send(query));
+        return Ok(await Mediator.Send(new GetBriefTagsWithSearchQuery
+        {
+            SearchTerm = searchTerm ?? "",
+        }));
     }
 
     [HttpGet("{tagId}")]
