@@ -41,7 +41,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
 
             IsStudentMustBeVerified = true,
             WithoutStudentId = AccountInfo!.Id,
@@ -139,7 +139,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
 
             IsStudentMustBeVerified = true,
             WithoutStudentId = AccountInfo!.Id,
@@ -176,7 +176,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
 
             IsCompanyMustBeVerified = true,
             CompanyMustHaveActivationStatus = ActivationStatus.Active,
@@ -322,7 +322,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
 
             IsStudentMustBeVerified = true,
             StudentGroupIds = studentGroupIds,
@@ -354,7 +354,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
 
             IsCompanyMustBeVerified = true,
             CompanyMustHaveActivationStatus = ActivationStatus.Active,

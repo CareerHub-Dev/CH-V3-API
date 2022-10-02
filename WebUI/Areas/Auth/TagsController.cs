@@ -17,7 +17,7 @@ public class TagsController : ApiControllerBase
     {
         return Ok(await Mediator.Send(new GetBriefTagsWithSearchQuery
         {
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
         }));
     }
 

@@ -27,7 +27,7 @@ public class StudentGroupsController : ApiControllerBase
             PageSize = pageSize,
             PageNumber = pageNumber,
 
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
 
             OrderByExpression = orderByExpression ?? "Name"
         });

@@ -27,7 +27,7 @@ public class StudentLogsController : ApiControllerBase
         {
             StudentGroupIds = studentGroupIds,
             OrderByExpression = orderByExpression ?? "LastName",
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
             PageNumber = pageNumber,
             PageSize = pageSize
         });

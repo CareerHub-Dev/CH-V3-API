@@ -17,7 +17,7 @@ public class JobPositionsController : ApiControllerBase
     {
         return Ok(await Mediator.Send(new GetBriefJobPositionsWithSearchQuery
         {
-            SearchTerm = searchTerm ?? ""
+            SearchTerm = searchTerm ?? string.Empty
         }));
     }
 

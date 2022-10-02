@@ -35,7 +35,7 @@ public class CompaniesController : ApiControllerBase
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
             CompanyMustHaveActivationStatus = companyMustHaveActivationStatus,
             OrderByExpression = orderByExpression ?? "Name"

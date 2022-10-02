@@ -27,7 +27,7 @@ public class JobPositionsController : ApiControllerBase
             PageSize = pageSize,
             PageNumber = pageNumber,
 
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
 
             OrderByExpression = orderByExpression ?? "Name"
         });

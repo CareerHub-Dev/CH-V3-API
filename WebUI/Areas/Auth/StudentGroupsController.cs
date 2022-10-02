@@ -17,7 +17,7 @@ public class StudentGroupsController : ApiControllerBase
     {
         return Ok(await Mediator.Send(new GetBriefStudentGroupsWithSearchQuery
         {
-            SearchTerm = searchTerm ?? ""
+            SearchTerm = searchTerm ?? string.Empty
         }));
     }
 

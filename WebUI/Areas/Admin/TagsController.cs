@@ -28,7 +28,7 @@ public class TagsController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
             OrderByExpression = orderByExpression ?? "Name",
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
             IsAccepted = isAccepted
         });
 

@@ -21,24 +21,24 @@ public class AdminsController : ApiControllerBase
         [FromQuery] bool? isAdminMustBeVerified,
         [FromQuery] bool? isSuperAdmin,
         [FromQuery] ActivationStatus? activationStatus,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string orderByExpression = "Email",
-        [FromQuery] string searchTerm = "")
+        [FromQuery] int pageSize = 10)
     {
         var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterWithSortQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            SearchTerm = searchTerm,
+            SearchTerm = searchTerm ?? string.Empty,
 
             WithoutAdminId = AccountInfo!.Id,
             IsAdminMustBeVerified = isAdminMustBeVerified,
             IsSuperAdmin = isSuperAdmin,
             ActivationStatus = activationStatus,
 
-            OrderByExpression = orderByExpression
+            OrderByExpression = orderByExpression ?? "Email"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

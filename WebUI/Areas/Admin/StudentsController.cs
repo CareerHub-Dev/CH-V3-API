@@ -27,8 +27,8 @@ public class StudentsController : ApiControllerBase
         [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
-        [FromQuery] string orderByExpression,
-        [FromQuery] string searchTerm,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -36,7 +36,7 @@ public class StudentsController : ApiControllerBase
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
             IsStudentMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
             StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
@@ -122,7 +122,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
 
             IsStudentMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
@@ -154,7 +154,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? "",
+            SearchTerm = searchTerm ?? string.Empty,
 
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
             CompanyMustHaveActivationStatus = companyMustHaveActivationStatus,
