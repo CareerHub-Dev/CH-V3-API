@@ -8,7 +8,7 @@ namespace Application.JobPositions.Queries.GetJobPositions;
 
 public record GetBriefJobPositionsWithSearchQuery : IRequest<IList<BriefJobPositionDTO>>
 {
-    public string? SearchTerm { get; init; }
+    public string SearchTerm { get; init; } = string.Empty;
 }
 
 public class GetBriefJobPositionsWithSearchQueryHandler : IRequestHandler<GetBriefJobPositionsWithSearchQuery, IList<BriefJobPositionDTO>>
@@ -24,7 +24,7 @@ public class GetBriefJobPositionsWithSearchQueryHandler : IRequestHandler<GetBri
     {
         return await _context.JobPositions
             .AsNoTracking()
-            .Search(request.SearchTerm ?? "")
+            .Search(request.SearchTerm)
             .OrderBy(x => x.Name)
             .Select(x => new BriefJobPositionDTO
             {

@@ -16,9 +16,21 @@ public class JobPositionsController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<JobPositionDTO>))]
-    public async Task<IActionResult> GetJobPositions([FromQuery] GetJobPositionsWithPaginationWithSearchQuery query)
+    public async Task<IActionResult> GetJobPositions(
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(query);
+        var result = await Mediator.Send(new GetJobPositionsWithPaginationWithSearchWithSortQuery
+        {
+            PageSize = pageSize,
+            PageNumber = pageNumber,
+
+            SearchTerm = searchTerm ?? "",
+
+            OrderByExpression = orderByExpression ?? "Name"
+        });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
@@ -39,7 +51,7 @@ public class JobPositionsController : ApiControllerBase
     {
         var result = await Mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetJobPosition), new { jobPositionId = result }, result);
+        return Ok(result);
     }
 
     [HttpPut("{jobPositionId}")]

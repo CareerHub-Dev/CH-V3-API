@@ -2,9 +2,9 @@
 
 namespace Application.JobPositions.Queries.GetJobPositions;
 
-public class GetJobPositionsWithPaginationWithSearchQueryValidator : AbstractValidator<GetJobPositionsWithPaginationWithSearchQuery>
+public class GetJobPositionsWithPaginationWithSearchWithSortQueryValidator : AbstractValidator<GetJobPositionsWithPaginationWithSearchWithSortQuery>
 {
-    public GetJobPositionsWithPaginationWithSearchQueryValidator()
+    public GetJobPositionsWithPaginationWithSearchWithSortQueryValidator()
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);

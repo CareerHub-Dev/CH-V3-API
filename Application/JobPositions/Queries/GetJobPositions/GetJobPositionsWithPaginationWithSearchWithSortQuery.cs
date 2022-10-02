@@ -7,29 +7,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobPositions.Queries.GetJobPositions;
 
-public record GetJobPositionsWithPaginationWithSearchQuery : IRequest<PaginatedList<JobPositionDTO>>
+public record GetJobPositionsWithPaginationWithSearchWithSortQuery : IRequest<PaginatedList<JobPositionDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 
-    public string? SearchTerm { get; init; }
+    public string SearchTerm { get; init; } = string.Empty;
+
+    public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetJobPositionsWithPaginationWithSearchQueryHandler : IRequestHandler<GetJobPositionsWithPaginationWithSearchQuery, PaginatedList<JobPositionDTO>>
+public class GetJobPositionsWithPaginationWithSearchWithSortQueryHandler : IRequestHandler<GetJobPositionsWithPaginationWithSearchWithSortQuery, PaginatedList<JobPositionDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetJobPositionsWithPaginationWithSearchQueryHandler(IApplicationDbContext context)
+    public GetJobPositionsWithPaginationWithSearchWithSortQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<JobPositionDTO>> Handle(GetJobPositionsWithPaginationWithSearchQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<JobPositionDTO>> Handle(GetJobPositionsWithPaginationWithSearchWithSortQuery request, CancellationToken cancellationToken)
     {
         return await _context.JobPositions
             .AsNoTracking()
-            .Search(request.SearchTerm ?? "")
-            .OrderBy(x => x.Name)
+            .Search(request.SearchTerm)
             .Select(x => new JobPositionDTO
             {
                 Id = x.Id,
@@ -39,6 +40,7 @@ public class GetJobPositionsWithPaginationWithSearchQueryHandler : IRequestHandl
                 LastModified = x.LastModified,
                 LastModifiedBy = x.LastModifiedBy,
             })
+            .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

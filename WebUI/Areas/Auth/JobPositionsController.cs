@@ -12,9 +12,13 @@ public class JobPositionsController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BriefJobPositionDTO>))]
-    public async Task<IActionResult> GetJobPositions([FromQuery] GetBriefJobPositionsWithSearchQuery query)
+    public async Task<IActionResult> GetJobPositions(
+        [FromQuery] string? searchTerm)
     {
-        return Ok(await Mediator.Send(query));
+        return Ok(await Mediator.Send(new GetBriefJobPositionsWithSearchQuery
+        {
+            SearchTerm = searchTerm ?? ""
+        }));
     }
 
     [HttpGet("{jobPositionId}")]
