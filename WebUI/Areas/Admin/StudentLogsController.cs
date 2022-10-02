@@ -16,9 +16,21 @@ public class StudentLogsController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<StudentLogDTO>))]
-    public async Task<IActionResult> GetStudentLogs([FromQuery] GetStudentLogsWithPaginationWithSearchWithFilterQuery query)
+    public async Task<IActionResult> GetStudentLogs(
+        [FromQuery] List<Guid>? studentGroupIds,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(query);
+        var result = await Mediator.Send(new GetStudentLogsWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            StudentGroupIds = studentGroupIds,
+            OrderByExpression = orderByExpression ?? "LastName",
+            SearchTerm = searchTerm ?? "",
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
@@ -34,13 +46,13 @@ public class StudentLogsController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateStudentLog(CreateStudentLogCommand command)
     {
         var result = await Mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetStudentLog), new { studentLogId = result }, result);
+        return Ok(result);
     }
 
     [HttpPut("{studentLogId}")]

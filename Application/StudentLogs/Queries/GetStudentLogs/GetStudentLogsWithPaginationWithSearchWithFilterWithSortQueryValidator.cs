@@ -2,9 +2,9 @@
 
 namespace Application.StudentLogs.Queries.GetStudentLogs;
 
-public class GetStudentLogsWithPaginationWithSearchWithFilterQueryValidator : AbstractValidator<GetStudentLogsWithPaginationWithSearchWithFilterQuery>
+public class GetStudentLogsWithPaginationWithSearchWithFilterWithSortQueryValidator : AbstractValidator<GetStudentLogsWithPaginationWithSearchWithFilterWithSortQuery>
 {
-    public GetStudentLogsWithPaginationWithSearchWithFilterQueryValidator()
+    public GetStudentLogsWithPaginationWithSearchWithFilterWithSortQueryValidator()
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);

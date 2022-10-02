@@ -8,32 +8,33 @@ using Application.Common.DTO.StudentLogs;
 
 namespace Application.StudentLogs.Queries.GetStudentLogs;
 
-public record GetStudentLogsWithPaginationWithSearchWithFilterQuery : IRequest<PaginatedList<StudentLogDTO>>
+public record GetStudentLogsWithPaginationWithSearchWithFilterWithSortQuery : IRequest<PaginatedList<StudentLogDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 
-    public string? SearchTerm { get; init; }
+    public string SearchTerm { get; init; } = string.Empty;
 
     public List<Guid>? StudentGroupIds { get; init; }
+
+    public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetStudentLogsWithPaginationWithSearchWithFilterQuery, PaginatedList<StudentLogDTO>>
+public class GetStudentLogsWithPaginationWithSearchWithFilterWithSortQueryHandler : IRequestHandler<GetStudentLogsWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<StudentLogDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetStudentLogsWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<StudentLogDTO>> Handle(GetStudentLogsWithPaginationWithSearchWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<StudentLogDTO>> Handle(GetStudentLogsWithPaginationWithSearchWithFilterWithSortQuery request, CancellationToken cancellationToken)
     {
         return await _context.StudentLogs
             .AsNoTracking()
-            .Search(request.SearchTerm ?? "")
+            .Search(request.SearchTerm)
             .Filter(studentGroupIds: request.StudentGroupIds)
-            .OrderBy(x => x.FirstName).ThenBy(x => x.LastName)
             .Select(x => new StudentLogDTO
             {
                 Id = x.Id,
@@ -46,6 +47,7 @@ public class GetStudentLogsWithPaginationWithSearchWithFilterQueryHandler : IReq
                 LastModifiedBy = x.LastModifiedBy,
                 StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name }
             })
+            .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

@@ -19,11 +19,11 @@ public record GetTagsWithPaginationWithSearchWithFilterWithSortQuery : IRequest<
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetTagsWithPaginationWithSearchWithFilterQueryHandler : IRequestHandler<GetTagsWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<TagDTO>>
+public class GetTagsWithPaginationWithSearchWithFilterWithSortQueryHandler : IRequestHandler<GetTagsWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<TagDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetTagsWithPaginationWithSearchWithFilterQueryHandler(IApplicationDbContext context)
+    public GetTagsWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
