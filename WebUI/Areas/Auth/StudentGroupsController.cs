@@ -12,9 +12,13 @@ public class StudentGroupsController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BriefStudentGroupDTO>))]
-    public async Task<IActionResult> GetStudentGroups([FromQuery] GetBriefStudentGroupsWithSearchQuery query)
+    public async Task<IActionResult> GetStudentGroups(
+        [FromQuery] string? searchTerm)
     {
-        return Ok(await Mediator.Send(query));
+        return Ok(await Mediator.Send(new GetBriefStudentGroupsWithSearchQuery
+        {
+            SearchTerm = searchTerm ?? ""
+        }));
     }
 
     [HttpGet("{studentGroupId}")]

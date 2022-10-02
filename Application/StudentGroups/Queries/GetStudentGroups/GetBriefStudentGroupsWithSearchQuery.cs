@@ -8,7 +8,7 @@ namespace Application.StudentGroups.Queries.GetStudentGroups;
 
 public record GetBriefStudentGroupsWithSearchQuery : IRequest<IList<BriefStudentGroupDTO>>
 {
-    public string? SearchTerm { get; init; }
+    public string SearchTerm { get; init; } = string.Empty;
 }
 
 public class GetBriefStudentGroupsWithSearchQueryHandler : IRequestHandler<GetBriefStudentGroupsWithSearchQuery, IList<BriefStudentGroupDTO>>
@@ -24,7 +24,7 @@ public class GetBriefStudentGroupsWithSearchQueryHandler : IRequestHandler<GetBr
     {
         return await _context.StudentGroups
             .AsNoTracking()
-            .Search(request.SearchTerm ?? "")
+            .Search(request.SearchTerm)
             .OrderBy(x => x.Name)
             .Select(x => new BriefStudentGroupDTO
             {

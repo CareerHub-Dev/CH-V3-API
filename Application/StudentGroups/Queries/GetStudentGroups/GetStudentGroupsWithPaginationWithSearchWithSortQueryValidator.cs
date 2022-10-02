@@ -2,9 +2,9 @@
 
 namespace Application.StudentGroups.Queries.GetStudentGroups;
 
-public class GetStudentGroupsWithPaginationWithSearchQueryValidator : AbstractValidator<GetStudentGroupsWithPaginationWithSearchQuery>
+public class GetStudentGroupsWithPaginationWithSearchWithSortQueryValidator : AbstractValidator<GetStudentGroupsWithPaginationWithSearchWithSortQuery>
 {
-    public GetStudentGroupsWithPaginationWithSearchQueryValidator()
+    public GetStudentGroupsWithPaginationWithSearchWithSortQueryValidator()
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);

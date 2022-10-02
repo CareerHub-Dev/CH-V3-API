@@ -16,9 +16,21 @@ public class StudentGroupsController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<StudentGroupDTO>))]
-    public async Task<IActionResult> GetStudentGroups([FromQuery] GetStudentGroupsWithPaginationWithSearchQuery query)
+    public async Task<IActionResult> GetStudentGroups(
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(query);
+        var result = await Mediator.Send(new GetStudentGroupsWithPaginationWithSearchWithSortQuery
+        {
+            PageSize = pageSize,
+            PageNumber = pageNumber,
+
+            SearchTerm = searchTerm ?? "",
+
+            OrderByExpression = orderByExpression ?? "Name"
+        });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
@@ -39,7 +51,7 @@ public class StudentGroupsController : ApiControllerBase
     {
         var result = await Mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetStudentGroup), new { studentGroupId = result }, result);
+        return Ok(result);
     }
 
     [HttpPut("{studentGroupId}")]
