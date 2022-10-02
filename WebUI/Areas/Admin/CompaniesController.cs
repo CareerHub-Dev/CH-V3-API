@@ -26,19 +26,19 @@ public class CompaniesController : ApiControllerBase
     public async Task<IActionResult> GetCompanies(
         [FromQuery] ActivationStatus? companyMustHaveActivationStatus,
         [FromQuery] bool? isCompanyMustBeVerified,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string orderByExpression = "Name",
-        [FromQuery] string searchTerm = "")
+        [FromQuery] int pageSize = 10)
     {
         var result = await Mediator.Send(new GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm,
+            SearchTerm = searchTerm ?? "",
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
             CompanyMustHaveActivationStatus = companyMustHaveActivationStatus,
-            OrderByExpression = orderByExpression
+            OrderByExpression = orderByExpression ?? "Name"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

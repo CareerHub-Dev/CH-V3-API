@@ -27,20 +27,20 @@ public class StudentsController : ApiControllerBase
         [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
+        [FromQuery] string orderByExpression,
+        [FromQuery] string searchTerm,
         [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string orderByExpression = "LastName",
-        [FromQuery] string searchTerm = "")
+        [FromQuery] int pageSize = 10)
     {
         var result = await Mediator.Send(new GetStudentsWithPaginationWithSearchWithFilterWithSortQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm,
+            SearchTerm = searchTerm ?? "",
             IsStudentMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
             StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
-            OrderByExpression = orderByExpression,
+            OrderByExpression = orderByExpression ?? "LastName",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -111,10 +111,10 @@ public class StudentsController : ApiControllerBase
         [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string orderByExpression = "LastName",
-        [FromQuery] string searchTerm = "")
+        [FromQuery] int pageSize = 10)
     {
         var result = await Mediator.Send(new GetStudentSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
@@ -122,13 +122,13 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm,
+            SearchTerm = searchTerm ?? "",
 
             IsStudentMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
             StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
 
-            OrderByExpression = orderByExpression,
+            OrderByExpression = orderByExpression ?? "LastName",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -143,10 +143,10 @@ public class StudentsController : ApiControllerBase
         Guid studentId,
         [FromQuery] ActivationStatus? companyMustHaveActivationStatus,
         [FromQuery] bool? isCompanyMustBeVerified,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string orderByExpression = "Name",
-        [FromQuery] string searchTerm = "")
+        [FromQuery] int pageSize = 10)
     {
         var result = await Mediator.Send(new GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
@@ -154,11 +154,11 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm,
+            SearchTerm = searchTerm ?? "",
 
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
             CompanyMustHaveActivationStatus = companyMustHaveActivationStatus,
-            OrderByExpression = orderByExpression,
+            OrderByExpression = orderByExpression ?? "Name",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

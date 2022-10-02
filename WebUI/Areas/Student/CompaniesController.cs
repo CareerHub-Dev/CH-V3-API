@@ -22,10 +22,10 @@ public class CompaniesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10,
-        [FromQuery] string orderByExpression = "Name",
-        [FromQuery] string searchTerm = "")
+        [FromQuery] int pageSize = 10)
     {
         var result = await Mediator.Send(new GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
@@ -34,7 +34,7 @@ public class CompaniesController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            SearchTerm = searchTerm,
+            SearchTerm = searchTerm ?? "",
 
             IsCompanyMustBeVerified = true,
             CompanyMustHaveActivationStatus = ActivationStatus.Active,
@@ -47,7 +47,7 @@ public class CompaniesController : ApiControllerBase
                 SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
-            OrderByExpression = orderByExpression,
+            OrderByExpression = orderByExpression ?? "Name",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
