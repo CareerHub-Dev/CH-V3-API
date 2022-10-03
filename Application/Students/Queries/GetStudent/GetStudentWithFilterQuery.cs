@@ -47,7 +47,8 @@ public class GetStudentWithFilterQueryHandler
                 BirthDate = x.BirthDate,
                 StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
                 Verified = x.Verified,
-                PasswordReset = x.PasswordReset
+                PasswordReset = x.PasswordReset,
+                ActivationStatus = x.ActivationStatus
             })
             .FirstOrDefaultAsync();
 

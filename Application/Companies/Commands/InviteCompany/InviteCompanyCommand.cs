@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Companies.Events;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 
 namespace Application.Companies.Commands.InviteCompany;
@@ -25,7 +26,8 @@ public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand,
     {
         var company = new Company
         {
-            Email = request.Email
+            Email = request.Email,
+            ActivationStatus = ActivationStatus.Active
         };
 
         await _context.Companies.AddAsync(company);

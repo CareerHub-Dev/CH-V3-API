@@ -55,7 +55,8 @@ public class GetStudentsWithPaginationWithSearchWithFilterWithSortQueryHandler :
                 BirthDate = x.BirthDate,
                 StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
                 Verified = x.Verified,
-                PasswordReset = x.PasswordReset
+                PasswordReset = x.PasswordReset,
+                ActivationStatus = x.ActivationStatus
             })
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
