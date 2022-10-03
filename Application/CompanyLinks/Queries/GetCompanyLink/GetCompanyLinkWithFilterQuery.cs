@@ -3,37 +3,42 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.CompanyLinks.Queries.GetCompanyLink;
 
-public record GetCompanyLinkQuery : IRequest<CompanyLinkDTO>
+public record GetCompanyLinkWithFilterQuery : IRequest<CompanyLinkDTO>
 {
     public Guid CompanyLinkId { get; init; }
 
     public bool? IsCompanyMustBeVerified { get; init; }
+    public ActivationStatus CompanyMustHaveActivationStatus { get; init; }
 }
 
-public class GetCompanyLinkQueryHandler : IRequestHandler<GetCompanyLinkQuery, CompanyLinkDTO>
+public class GetCompanyLinkWithFilterQueryHandler : IRequestHandler<GetCompanyLinkWithFilterQuery, CompanyLinkDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyLinkQueryHandler(IApplicationDbContext context)
+    public GetCompanyLinkWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<CompanyLinkDTO> Handle(GetCompanyLinkQuery request, CancellationToken cancellationToken)
+    public async Task<CompanyLinkDTO> Handle(GetCompanyLinkWithFilterQuery request, CancellationToken cancellationToken)
     {
         var companyLink = await _context.CompanyLinks
             .AsNoTracking()
-            .Filter(isCompanyVerified: request.IsCompanyMustBeVerified)
+            .Filter(
+                isCompanyVerified: request.IsCompanyMustBeVerified,
+                activationStatus: request.CompanyMustHaveActivationStatus
+            )
             .Where(x => x.Id == request.CompanyLinkId)
             .Select(x => new CompanyLinkDTO
             {
                 Id = x.Id,
-                Name = x.Title,
+                Title = x.Title,
                 Uri = x.Uri,
                 CompanyId = x.CompanyId
             })

@@ -166,7 +166,10 @@ public static class FiltrationExtentions
         return companies;
     }
 
-    public static IQueryable<CompanyLink> Filter(this IQueryable<CompanyLink> companyLinks, bool? isCompanyVerified = null)
+    public static IQueryable<CompanyLink> Filter(
+        this IQueryable<CompanyLink> companyLinks, 
+        bool? isCompanyVerified = null,
+         ActivationStatus? activationStatus = null)
     {
 
         if (isCompanyVerified.HasValue && isCompanyVerified == true)
@@ -176,6 +179,11 @@ public static class FiltrationExtentions
         else if (isCompanyVerified.HasValue && isCompanyVerified == false)
         {
             companyLinks = companyLinks.Where(x => x.Company!.Verified == null && x.Company!.PasswordReset == null);
+        }
+
+        if (activationStatus.HasValue)
+        {
+            companyLinks = companyLinks.Where(x => x.Company!.ActivationStatus == activationStatus);
         }
 
         return companyLinks;

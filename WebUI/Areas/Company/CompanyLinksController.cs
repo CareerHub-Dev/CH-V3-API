@@ -11,18 +11,16 @@ using WebUI.ViewModels.CompanyLinks;
 namespace WebUI.Areas.Company;
 
 [Authorize("Company")]
-[Route("api/Company/[controller]")]
+[Route("api/Company/self/[controller]")]
 public class CompanyLinksController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanyLinksOfSelfCompany()
     {
         return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
-            IsCompanyMustBeVerified = true,
         }));
     }
 
@@ -31,23 +29,21 @@ public class CompanyLinksController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanyLinkOfSelfCompany(Guid companyLinkId)
     {
-        return Ok(await Mediator.Send(new GetCompanyLinkOfCompanyQuery
+        return Ok(await Mediator.Send(new GetCompanyLinkOfCompanyWithFilterQuery
         {
             CompanyLinkId = companyLinkId,
             CompanyId = AccountInfo!.Id,
-            IsCompanyMustBeVerified = true
         }));
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateCompanyLinkForSelfCompany(CreateCompanyLinkView view)
     {
         var result = await Mediator.Send(new CreateCompanyLinkCommand
         {
-            Name = view.Name,
+            Title = view.Title,
             Uri = view.Uri,
             CompanyId = AccountInfo!.Id
         });
@@ -79,7 +75,7 @@ public class CompanyLinksController : ApiControllerBase
         await Mediator.Send(new UpdateCompanyLinkOfCompanyCommand
         {
             CompanyLinkId = view.CompanyLinkId,
-            Name = view.Name,
+            Title = view.Title,
             Uri = view.Uri,
             CompanyId = AccountInfo!.Id
         });

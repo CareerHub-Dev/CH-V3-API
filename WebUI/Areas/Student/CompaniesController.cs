@@ -148,6 +148,7 @@ public class CompaniesController : ApiControllerBase
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
+            CompanyMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 }

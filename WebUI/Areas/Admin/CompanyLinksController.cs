@@ -17,18 +17,18 @@ public class CompanyLinksController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanyLink(Guid companyLinkId)
     {
-        return Ok(await Mediator.Send(new GetCompanyLinkQuery { CompanyLinkId = companyLinkId }));
+        return Ok(await Mediator.Send(new GetCompanyLinkWithFilterQuery { CompanyLinkId = companyLinkId }));
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateCompanyLink(CreateCompanyLinkCommand command)
     {
         var result = await Mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetCompanyLink), new { companyLinkId = result }, result);
+        return Ok(result);
     }
 
     [HttpDelete("{companyLinkId}")]

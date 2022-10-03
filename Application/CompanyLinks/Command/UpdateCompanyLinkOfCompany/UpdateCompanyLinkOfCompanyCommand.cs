@@ -9,7 +9,7 @@ namespace Application.CompanyLinks.Command.UpdateCompanyLinkOfCompany;
 public record UpdateCompanyLinkOfCompanyCommand : IRequest
 {
     public Guid CompanyLinkId { get; init; }
-    public string Name { get; init; } = string.Empty;
+    public string Title { get; init; } = string.Empty;
     public string Uri { get; init; } = string.Empty;
 
     public Guid CompanyId { get; init; }
@@ -40,7 +40,7 @@ public class UpdateCompanyLinkCommandHandler : IRequestHandler<UpdateCompanyLink
             throw new NotFoundException(nameof(CompanyLink), request.CompanyLinkId);
         }
 
-        companyLink.Title = request.Name;
+        companyLink.Title = request.Title;
         companyLink.Uri = request.Uri;
 
         await _context.SaveChangesAsync();

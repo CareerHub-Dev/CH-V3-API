@@ -7,9 +7,9 @@ public class UpdateCompanyLinkCommandValidator : AbstractValidator<UpdateCompany
 {
     public UpdateCompanyLinkCommandValidator()
     {
-        RuleFor(c => c.Name)
+        RuleFor(c => c.Title)
            .NotEmpty()
-           .MaximumLength(32);
+           .MaximumLength(64);
 
         RuleFor(x => x.Uri)
             .NotEmpty()

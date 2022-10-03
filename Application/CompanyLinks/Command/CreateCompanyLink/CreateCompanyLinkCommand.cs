@@ -8,7 +8,7 @@ namespace Application.CompanyLinks.Command.CreateCompanyLink;
 
 public record CreateCompanyLinkCommand : IRequest<Guid>
 {
-    public string Name { get; init; } = string.Empty;
+    public string Title { get; init; } = string.Empty;
     public string Uri { get; init; } = string.Empty;
 
     public Guid CompanyId { get; init; }
@@ -41,7 +41,7 @@ public class CreateCompanyLinkCommandHandler : IRequestHandler<CreateCompanyLink
 
         var companyLink = new CompanyLink
         {
-            Title = request.Name,
+            Title = request.Title,
             Uri = request.Uri,
         };
 
