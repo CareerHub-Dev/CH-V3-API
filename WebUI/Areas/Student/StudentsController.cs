@@ -203,6 +203,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExperiencesOfStudent(
         Guid studentId,
+        [FromQuery] string? orderByExpression,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -210,8 +211,12 @@ public class StudentsController : ApiControllerBase
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
+            StudentMustHaveActivationStatus = ActivationStatus.Active,
+
             PageNumber = pageNumber,
             PageSize = pageSize,
+
+            OrderByExpression = orderByExpression ?? "Title"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

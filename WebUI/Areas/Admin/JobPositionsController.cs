@@ -46,7 +46,7 @@ public class JobPositionsController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> CreateJobPosition(CreateJobPositionCommand command)
     {
         var result = await Mediator.Send(command);

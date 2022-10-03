@@ -12,23 +12,25 @@ using WebUI.ViewModels.Experiences;
 namespace WebUI.Areas.Student;
 
 [Authorize("Student")]
-[Route("api/Student/[controller]")]
+[Route("api/Student/self/[controller]")]
 public class ExperiencesController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExperienceDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetExperiencesOfStudent(
-        Guid studentId,
+    public async Task<IActionResult> GetExperiencesOfSelfStudent(
+        [FromQuery] string? orderByExpression,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
         var result = await Mediator.Send(new GetExperiencesOfStudentWithPaginationWithFilterWithSortQuery
         {
             StudentId = AccountInfo!.Id,
-            IsStudentMustBeVerified = true,
+
             PageNumber = pageNumber,
             PageSize = pageSize,
+
+            OrderByExpression = orderByExpression ?? "Title"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -39,21 +41,19 @@ public class ExperiencesController : ApiControllerBase
     [HttpGet("{experienceId}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ExperienceDTO))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetExperience(Guid experienceId)
+    public async Task<IActionResult> GetExperienceOfSelfStudent(Guid experienceId)
     {
         return Ok(await Mediator.Send(new GetExperienceOfStudentWithFilterQuery
         {
             ExperienceId = experienceId,
-            StudentId = AccountInfo!.Id,
-            IsStudentMustBeVerified = true
+            StudentId = AccountInfo!.Id
         }));
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateExperience(CreateExperienceView view)
+    public async Task<IActionResult> CreateExperienceForSelfStudent(CreateExperienceView view)
     {
         var result = await Mediator.Send(new CreateExperienceCommand
         {
@@ -68,13 +68,13 @@ public class ExperiencesController : ApiControllerBase
             StudentId = AccountInfo!.Id
         });
 
-        return CreatedAtAction(nameof(GetExperience), new { experienceId = result }, result);
+        return Ok(result);
     }
 
     [HttpDelete("{experienceId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteExperience(Guid experienceId)
+    public async Task<IActionResult> DeleteExperienceOfSelfStudent(Guid experienceId)
     {
         await Mediator.Send(new DeleteExperienceOfStudentCommand(experienceId, AccountInfo!.Id));
 
@@ -85,7 +85,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateExperience(Guid experienceId, UpdateExperienceView view)
+    public async Task<IActionResult> UpdateExperienceOfSelfStudent(Guid experienceId, UpdateExperienceView view)
     {
         if (experienceId != view.ExperienceId)
         {

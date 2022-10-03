@@ -46,7 +46,7 @@ public class StudentGroupsController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> CreateStudentGroup(CreateStudentGroupCommand command)
     {
         var result = await Mediator.Send(command);

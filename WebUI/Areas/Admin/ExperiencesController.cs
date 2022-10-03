@@ -21,14 +21,14 @@ public class ExperiencesController : ApiControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Guid))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateExperience(CreateExperienceCommand command)
     {
         var result = await Mediator.Send(command);
 
-        return CreatedAtAction(nameof(GetExperience), new { experienceId = result }, result);
+        return Ok(result);
     }
 
     [HttpDelete("{experienceId}")]

@@ -172,14 +172,18 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExperiencesOfStudent(
         Guid studentId,
+        [FromQuery] string? orderByExpression,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
         var result = await Mediator.Send(new GetExperiencesOfStudentWithPaginationWithFilterWithSortQuery
         {
             StudentId = studentId,
+
             PageNumber = pageNumber,
             PageSize = pageSize,
+
+            OrderByExpression = orderByExpression ?? "Title"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
