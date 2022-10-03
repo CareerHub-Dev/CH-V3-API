@@ -2,7 +2,7 @@
 using Application.Experiences.Commands.CreateExperience;
 using Application.Experiences.Commands.DeleteExperience;
 using Application.Experiences.Commands.UpdateExperience;
-using Application.Experiences.Queries;
+using Application.Experiences.Queries.GetExperience;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
@@ -17,7 +17,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExperience(Guid experienceId)
     {
-        return Ok(await Mediator.Send(new GetExperienceQuery(experienceId)));
+        return Ok(await Mediator.Send(new GetExperienceWithFilterQuery { ExperienceId = experienceId }));
     }
 
     [HttpPost]

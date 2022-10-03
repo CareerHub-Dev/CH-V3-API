@@ -1,6 +1,6 @@
 ﻿using Domain.Enums;
 
-namespace WebUI.Common.Models.Experience;
+namespace WebUI.ViewModels.Experiences;
 
 public record CreateExperienceView
 {

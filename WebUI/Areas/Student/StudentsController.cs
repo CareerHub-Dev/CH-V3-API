@@ -3,7 +3,7 @@ using Application.Common.DTO.Experiences;
 using Application.Common.DTO.Students;
 using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
-using Application.Experiences.Queries;
+using Application.Experiences.Queries.GetExperiences;
 using Application.Students.Commands.DeleteStudent;
 using Application.Students.Commands.UpdateStudentDetail;
 using Application.Students.Commands.UpdateStudentPhoto;
@@ -206,7 +206,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetExperiencesOfStudentWithPaginationWithFilterQuery
+        var result = await Mediator.Send(new GetExperiencesOfStudentWithPaginationWithFilterWithSortQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,

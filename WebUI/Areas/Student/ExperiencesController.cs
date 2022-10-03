@@ -2,11 +2,12 @@
 using Application.Experiences.Commands.CreateExperience;
 using Application.Experiences.Commands.DeleteExperienceOfStudent;
 using Application.Experiences.Commands.UpdateExperienceOfStudent;
-using Application.Experiences.Queries;
+using Application.Experiences.Queries.GetExperience;
+using Application.Experiences.Queries.GetExperiences;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.Common.Models.Experience;
+using WebUI.ViewModels.Experiences;
 
 namespace WebUI.Areas.Student;
 
@@ -22,7 +23,7 @@ public class ExperiencesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetExperiencesOfStudentWithPaginationWithFilterQuery
+        var result = await Mediator.Send(new GetExperiencesOfStudentWithPaginationWithFilterWithSortQuery
         {
             StudentId = AccountInfo!.Id,
             IsStudentMustBeVerified = true,
@@ -40,7 +41,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExperience(Guid experienceId)
     {
-        return Ok(await Mediator.Send(new GetExperienceOfStudentQuery
+        return Ok(await Mediator.Send(new GetExperienceOfStudentWithFilterQuery
         {
             ExperienceId = experienceId,
             StudentId = AccountInfo!.Id,
