@@ -9,13 +9,12 @@ using WebUI.ViewModels.JobOffers;
 namespace WebUI.Areas.Company;
 
 [Authorize("Company")]
-[Route("api/Company/[controller]")]
+[Route("api/Company/self/[controller]")]
 public class JobOffersController : ApiControllerBase
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateJobOfferForSelfCompany(CreateJobOfferView view)
     {
         var result = await Mediator.Send(new CreateJobOfferCommand
@@ -33,6 +32,7 @@ public class JobOffersController : ApiControllerBase
             EndDate = view.EndDate,
             JobPositionId = view.JobPositionId,
             TagIds = view.TagIds,
+
             CompanyId = AccountInfo!.Id
         });
 
@@ -49,7 +49,7 @@ public class JobOffersController : ApiControllerBase
         return NoContent();
     }
 
-    [HttpPut("{jobOfferId}")]
+    [HttpPut("{jobOfferId}/detail")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -75,6 +75,7 @@ public class JobOffersController : ApiControllerBase
             EndDate = view.EndDate,
             JobPositionId = view.JobPositionId,
             TagIds = view.TagIds,
+
             CompanyId = AccountInfo!.Id
         });
 
@@ -89,6 +90,7 @@ public class JobOffersController : ApiControllerBase
         var result = await Mediator.Send(new UpdateJobOfferImageOfCompanyCommand 
         { 
             CompanyId = AccountInfo!.Id, 
+
             JobofferId = jobOfferId,
             Image = file 
         });
