@@ -47,7 +47,7 @@ public class GetAmountJobOfferSubscriptionsOfStudentWithFilterQueryHandler
             .Filter(
                 isActive: request.IsJobOfferMustBeActive,
                 isCompanyVerified: request.IsCompanyOfJobOfferMustBeVerified,
-                activationStatus: request.CompanyOfJobOfferMustHaveActivationStatus
+                companyActivationStatus: request.CompanyOfJobOfferMustHaveActivationStatus
             )
             .CountAsync();
 

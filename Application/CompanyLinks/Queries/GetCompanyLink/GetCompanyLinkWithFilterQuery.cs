@@ -32,7 +32,7 @@ public class GetCompanyLinkWithFilterQueryHandler : IRequestHandler<GetCompanyLi
             .AsNoTracking()
             .Filter(
                 isCompanyVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.CompanyMustHaveActivationStatus
+                companyActivationStatus: request.CompanyMustHaveActivationStatus
             )
             .Where(x => x.Id == request.CompanyLinkId)
             .Select(x => new CompanyLinkDTO

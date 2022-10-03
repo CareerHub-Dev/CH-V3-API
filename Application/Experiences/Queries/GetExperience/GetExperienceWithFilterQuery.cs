@@ -33,7 +33,7 @@ public class GetExperienceWithFilterQueryHandler : IRequestHandler<GetExperience
             .Where(x => x.Id == request.ExperienceId)
             .Filter(
                 isStudentVerified: request.IsStudentMustBeVerified,
-                studentMustHaveActivationStatus: request.StudentMustHaveActivationStatus
+                studentActivationStatus: request.StudentMustHaveActivationStatus
             )
             .Select(x => new ExperienceDTO
             {
