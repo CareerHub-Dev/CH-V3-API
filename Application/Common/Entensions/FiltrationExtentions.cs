@@ -169,7 +169,7 @@ public static class FiltrationExtentions
     public static IQueryable<CompanyLink> Filter(
         this IQueryable<CompanyLink> companyLinks, 
         bool? isCompanyVerified = null,
-         ActivationStatus? activationStatus = null)
+        ActivationStatus? activationStatus = null)
     {
 
         if (isCompanyVerified.HasValue && isCompanyVerified == true)
@@ -187,5 +187,28 @@ public static class FiltrationExtentions
         }
 
         return companyLinks;
+    }
+
+    public static IQueryable<Experience> Filter(
+        this IQueryable<Experience> experiences,
+        bool? isStudentVerified = null,
+        ActivationStatus? studentMustHaveActivationStatus = null)
+    {
+
+        if (isStudentVerified.HasValue && isStudentVerified == true)
+        {
+            experiences = experiences.Where(x => x.Student!.Verified != null || x.Student!.PasswordReset != null);
+        }
+        else if (isStudentVerified.HasValue && isStudentVerified == false)
+        {
+            experiences = experiences.Where(x => x.Student!.Verified == null && x.Student!.PasswordReset == null);
+        }
+
+        if (studentMustHaveActivationStatus.HasValue)
+        {
+            experiences = experiences.Where(x => x.Student!.ActivationStatus == studentMustHaveActivationStatus);
+        }
+
+        return experiences;
     }
 }

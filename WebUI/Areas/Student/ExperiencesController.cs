@@ -1,4 +1,5 @@
-﻿using Application.Experiences.Commands.CreateExperience;
+﻿using Application.Common.DTO.Experiences;
+using Application.Experiences.Commands.CreateExperience;
 using Application.Experiences.Commands.DeleteExperienceOfStudent;
 using Application.Experiences.Commands.UpdateExperienceOfStudent;
 using Application.Experiences.Queries;

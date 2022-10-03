@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTO.Companies;
+using Application.Common.DTO.Experiences;
 using Application.Common.DTO.Students;
 using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Emails.Commands;

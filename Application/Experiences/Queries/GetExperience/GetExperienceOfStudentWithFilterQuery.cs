@@ -1,32 +1,40 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.Experiences;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Experiences.Queries;
+namespace Application.Experiences.Queries.GetExperience;
 
-public record GetExperienceOfStudentQuery : IRequest<ExperienceDTO>
+public record GetExperienceOfStudentWithFilterQuery : IRequest<ExperienceDTO>
 {
     public Guid ExperienceId { get; init; }
 
     public Guid StudentId { get; init; }
     public bool? IsStudentMustBeVerified { get; init; }
+    public ActivationStatus StudentMustHaveActivationStatus { get; init; }
 }
 
-public class GetCompanyLinkOfCompanyQueryHandler : IRequestHandler<GetExperienceOfStudentQuery, ExperienceDTO>
+public class GetExperienceOfStudentWithFilterQueryHandler : IRequestHandler<GetExperienceOfStudentWithFilterQuery, ExperienceDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyLinkOfCompanyQueryHandler(IApplicationDbContext context)
+    public GetExperienceOfStudentWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<ExperienceDTO> Handle(GetExperienceOfStudentQuery request, CancellationToken cancellationToken)
+    public async Task<ExperienceDTO> Handle(GetExperienceOfStudentWithFilterQuery request, CancellationToken cancellationToken)
     {
-        if (!await _context.Students.Filter(isVerified: request.IsStudentMustBeVerified).AnyAsync(x => x.Id == request.StudentId))
+        if (!await _context.Students
+            .Filter(
+                isVerified: request.IsStudentMustBeVerified,
+                activationStatus: request.StudentMustHaveActivationStatus
+            )
+            .AnyAsync(x => x.Id == request.StudentId))
         {
             throw new NotFoundException(nameof(Company), request.StudentId);
         }

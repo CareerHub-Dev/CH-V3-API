@@ -1,6 +1,6 @@
 ﻿using Domain.Enums;
 
-namespace Application.Experiences.Queries;
+namespace Application.Common.DTO.Experiences;
 
 public class ExperienceDTO
 {

@@ -1,27 +1,40 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.DTO.Experiences;
+using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Experiences.Queries;
+namespace Application.Experiences.Queries.GetExperience;
 
-public record GetExperienceQuery(Guid ExperienceId) : IRequest<ExperienceDTO>;
+public record GetExperienceWithFilterQuery : IRequest<ExperienceDTO>
+{
+    public Guid ExperienceId { get; init; }
 
-public class GetExperienceQueryHandler : IRequestHandler<GetExperienceQuery, ExperienceDTO>
+    public bool? IsStudentMustBeVerified { get; init; }
+    public ActivationStatus StudentMustHaveActivationStatus { get; init; }
+}
+
+public class GetExperienceWithFilterQueryHandler : IRequestHandler<GetExperienceWithFilterQuery, ExperienceDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetExperienceQueryHandler(IApplicationDbContext context)
+    public GetExperienceWithFilterQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<ExperienceDTO> Handle(GetExperienceQuery request, CancellationToken cancellationToken)
+    public async Task<ExperienceDTO> Handle(GetExperienceWithFilterQuery request, CancellationToken cancellationToken)
     {
         var experience = await _context.Experiences
             .AsNoTracking()
             .Where(x => x.Id == request.ExperienceId)
+            .Filter(
+                isStudentVerified: request.IsStudentMustBeVerified,
+                studentMustHaveActivationStatus: request.StudentMustHaveActivationStatus
+            )
             .Select(x => new ExperienceDTO
             {
                 Id = x.Id,
