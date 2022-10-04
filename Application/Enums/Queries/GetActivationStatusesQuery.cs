@@ -4,16 +4,16 @@ using MediatR;
 
 namespace Application.Enums.Queries;
 
-public record GetActivationStatusesQuery : IRequest<IList<EnumDTO>>;
+public record GetActivationStatusesQuery : IRequest<IEnumerable<EnumDTO>>;
 
-public class GetActivationStatusesQueryHandler : IRequestHandler<GetActivationStatusesQuery, IList<EnumDTO>>
+public class GetActivationStatusesQueryHandler : IRequestHandler<GetActivationStatusesQuery, IEnumerable<EnumDTO>>
 {
-    public Task<IList<EnumDTO>> Handle(GetActivationStatusesQuery request, CancellationToken cancellationToken)
+    public Task<IEnumerable<EnumDTO>> Handle(GetActivationStatusesQuery request, CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<ActivationStatus>()
             .Select(p => new EnumDTO { Value = (int)p, Name = p.ToString() })
             .ToList();
 
-        return Task.FromResult<IList<EnumDTO>>(result);
+        return Task.FromResult<IEnumerable<EnumDTO>>(result);
     }
 }

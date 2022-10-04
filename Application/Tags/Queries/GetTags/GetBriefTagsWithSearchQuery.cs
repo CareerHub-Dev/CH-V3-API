@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Queries.GetTags;
 
-public record GetBriefTagsWithSearchQuery : IRequest<IList<BriefTagDTO>>
+public record GetBriefTagsWithSearchQuery : IRequest<IEnumerable<BriefTagDTO>>
 {
     public string? SearchTerm { get; init; }
 }
 
-public class GetBriefTagsWithSearchQueryHandler : IRequestHandler<GetBriefTagsWithSearchQuery, IList<BriefTagDTO>>
+public class GetBriefTagsWithSearchQueryHandler : IRequestHandler<GetBriefTagsWithSearchQuery, IEnumerable<BriefTagDTO>>
 {
     private readonly IApplicationDbContext _context;
 
@@ -20,7 +20,7 @@ public class GetBriefTagsWithSearchQueryHandler : IRequestHandler<GetBriefTagsWi
         _context = context;
     }
 
-    public async Task<IList<BriefTagDTO>> Handle(GetBriefTagsWithSearchQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<BriefTagDTO>> Handle(GetBriefTagsWithSearchQuery request, CancellationToken cancellationToken)
     {
         return await _context.Tags
             .AsNoTracking()

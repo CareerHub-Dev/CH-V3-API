@@ -4,16 +4,16 @@ using MediatR;
 
 namespace Application.Enums.Queries;
 
-public record GetLanguageLevelsQuery : IRequest<IList<EnumDTO>>;
+public record GetLanguageLevelsQuery : IRequest<IEnumerable<EnumDTO>>;
 
-public class GetLanguageLevelsQueryHandler : IRequestHandler<GetLanguageLevelsQuery, IList<EnumDTO>>
+public class GetLanguageLevelsQueryHandler : IRequestHandler<GetLanguageLevelsQuery, IEnumerable<EnumDTO>>
 {
-    public Task<IList<EnumDTO>> Handle(GetLanguageLevelsQuery request, CancellationToken cancellationToken)
+    public Task<IEnumerable<EnumDTO>> Handle(GetLanguageLevelsQuery request, CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<LanguageLevel>()
             .Select(p => new EnumDTO { Value = (int)p, Name = p.ToString() })
             .ToList();
 
-        return Task.FromResult<IList<EnumDTO>>(result);
+        return Task.FromResult<IEnumerable<EnumDTO>>(result);
     }
 }

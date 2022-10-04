@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="CompanyLinks\Command\CreateCompanyLink\" />
+    <Folder Include="JobOffers\Queries\GetJobOffer\" />
   </ItemGroup>
 
 </Project>
