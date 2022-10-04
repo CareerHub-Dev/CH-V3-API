@@ -1,9 +1,7 @@
 ﻿namespace Application.Common.DTO.Companies;
 
-public class DetailedCompanyDTO
+public class DetailedCompanyDTO : BriefCompanyDTO
 {
-    public Guid Id { get; set; }
-    public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public Guid? LogoId { get; set; }
     public Guid? BannerId { get; set; }
