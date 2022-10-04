@@ -1,4 +1,4 @@
-﻿namespace WebUI.Common.Models.Account;
+﻿namespace WebUI.ViewModels.Accounts;
 
 public class ChangePasswordView
 {

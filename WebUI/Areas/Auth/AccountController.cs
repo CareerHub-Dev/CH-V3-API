@@ -1,7 +1,7 @@
 ﻿using Application.Accounts.Commands.ChangePassword;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.Common.Models.Account;
+using WebUI.ViewModels.Accounts;
 
 namespace WebUI.Areas.Auth;
 
