@@ -15,7 +15,7 @@ namespace WebUI.Areas.Admin;
 public class StudentLogsController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<StudentLogDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentLogDTO>))]
     public async Task<IActionResult> GetStudentLogs(
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? orderByExpression,

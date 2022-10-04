@@ -11,7 +11,7 @@ namespace WebUI.Areas.Auth;
 public class StudentGroupsController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BriefStudentGroupDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefStudentGroupDTO>))]
     public async Task<IActionResult> GetStudentGroups(
         [FromQuery] string? searchTerm)
     {

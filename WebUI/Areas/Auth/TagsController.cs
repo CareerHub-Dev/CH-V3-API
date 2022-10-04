@@ -11,7 +11,7 @@ namespace WebUI.Areas.Auth;
 public class TagsController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BriefTagDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefTagDTO>))]
     public async Task<IActionResult> GetTags(
         [FromQuery] string? searchTerm)
     {

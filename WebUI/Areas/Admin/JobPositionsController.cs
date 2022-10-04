@@ -15,7 +15,7 @@ namespace WebUI.Areas.Admin;
 public class JobPositionsController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<JobPositionDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<JobPositionDTO>))]
     public async Task<IActionResult> GetJobPositions(
         [FromQuery] string? orderByExpression,
         [FromQuery] string? searchTerm,

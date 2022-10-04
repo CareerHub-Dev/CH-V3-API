@@ -15,7 +15,7 @@ namespace WebUI.Areas.Admin;
 public class StudentGroupsController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<StudentGroupDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentGroupDTO>))]
     public async Task<IActionResult> GetStudentGroups(
         [FromQuery] string? orderByExpression,
         [FromQuery] string? searchTerm,

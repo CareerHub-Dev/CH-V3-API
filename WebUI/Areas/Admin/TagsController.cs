@@ -15,7 +15,7 @@ namespace WebUI.Areas.Admin;
 public class TagsController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<TagDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TagDTO>))]
     public async Task<IActionResult> GetTags(
         [FromQuery] bool? isAccepted,
         [FromQuery] string? orderByExpression,

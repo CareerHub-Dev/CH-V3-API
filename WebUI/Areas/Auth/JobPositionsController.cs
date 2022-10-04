@@ -11,7 +11,7 @@ namespace WebUI.Areas.Auth;
 public class JobPositionsController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IList<BriefJobPositionDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefJobPositionDTO>))]
     public async Task<IActionResult> GetJobPositions(
         [FromQuery] string? searchTerm)
     {
