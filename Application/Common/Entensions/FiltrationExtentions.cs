@@ -217,4 +217,27 @@ public static class FiltrationExtentions
 
         return experiences;
     }
+
+    public static IQueryable<CV> Filter(
+        this IQueryable<CV> cvs,
+        bool? isStudentVerified = null,
+        ActivationStatus? studentActivationStatus = null)
+    {
+
+        if (isStudentVerified.HasValue && isStudentVerified == true)
+        {
+            cvs = cvs.Where(x => x.Student!.Verified != null || x.Student!.PasswordReset != null);
+        }
+        else if (isStudentVerified.HasValue && isStudentVerified == false)
+        {
+            cvs = cvs.Where(x => x.Student!.Verified == null && x.Student!.PasswordReset == null);
+        }
+
+        if (studentActivationStatus.HasValue)
+        {
+            cvs = cvs.Where(x => x.Student!.ActivationStatus == studentActivationStatus);
+        }
+
+        return cvs;
+    }
 }

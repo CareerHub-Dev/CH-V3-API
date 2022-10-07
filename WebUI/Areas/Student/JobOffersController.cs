@@ -1,6 +1,8 @@
 ﻿using Application.JobOffers.Commands.VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompany;
 using Application.JobOffers.Commands.VerifiedStudentUnubscribeFromActiveJobOffer;
 using Application.JobOffers.Queries;
+using Application.JobOffers.Queries.GetAmount;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
@@ -10,6 +12,40 @@ namespace WebUI.Areas.Student;
 [Route("api/Student/[controller]")]
 public class JobOffersController : ApiControllerBase
 {
+    [HttpGet("{jobOfferId}/amount-student-subscribers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountStudentSubscribersOfJobOffer(Guid jobOfferId)
+    {
+        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfJobOfferWithFilterQuery
+        {
+            JobOfferId = jobOfferId,
+            IsJobOfferMustBeActive = true,
+            IsCompanyOfJobOfferMustBeVerified = true,
+            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active,
+
+            IsSubscriberMustBeVerified = true,
+            SubscriberMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
+    [HttpGet("{jobOfferId}/amount-applied-cvs")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountAppliedCVsOfJobOffer(Guid jobOfferId)
+    {
+        return Ok(await Mediator.Send(new GetAmountAppliedCVsOfJobOfferWithFilterQuery
+        {
+            JobOfferId = jobOfferId,
+            IsJobOfferMustBeActive = true,
+            IsCompanyOfJobOfferMustBeVerified = true,
+            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active,
+
+            IsStudentOfAppliedCVMustBeVerified = true,
+            StudentOfCVMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
     [HttpGet("{jobOfferId}/subscribe")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

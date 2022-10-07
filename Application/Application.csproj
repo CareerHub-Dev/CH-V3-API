@@ -26,9 +26,7 @@
     <Folder Include="CompanyLinks\Command\CreateCompanyLink\" />
     <Folder Include="JobOffers\Queries\GetJobOffer\" />
     <Folder Include="JobOffers\Queries\GetJobOffers\" />
-    <Folder Include="JobOffers\Queries\GetAmount\" />
     <Folder Include="JobOffers\Queries\GetJobOfferSubscriptionsOfStudent\" />
-    <Folder Include="JobOffers\Queries\Models\" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,8 @@
 using Application.JobOffers.Commands.DeleteJobOffer;
 using Application.JobOffers.Commands.UpdateJobOfferDetail;
 using Application.JobOffers.Commands.UpdateJobOfferImage;
+using Application.JobOffers.Queries.GetAmount;
+using Application.Students.Queries.GetAmount;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
 
@@ -11,6 +13,28 @@ namespace WebUI.Areas.Admin;
 [Route("api/Admin/[controller]")]
 public class JobOffersController : ApiControllerBase
 {
+    [HttpGet("{jobOfferId}/amount-student-subscribers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountStudentSubscribersOfJobOffer(Guid jobOfferId)
+    {
+        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfJobOfferWithFilterQuery
+        {
+            JobOfferId = jobOfferId
+        }));
+    }
+
+    [HttpGet("{jobOfferId}/amount-applied-cvs")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountAppliedCVsOfJobOffer(Guid jobOfferId)
+    {
+        return Ok(await Mediator.Send(new GetAmountAppliedCVsOfJobOfferWithFilterQuery
+        {
+            JobOfferId = jobOfferId
+        }));
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

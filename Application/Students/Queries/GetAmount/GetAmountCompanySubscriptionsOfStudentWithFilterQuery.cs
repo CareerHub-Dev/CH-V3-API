@@ -42,7 +42,7 @@ public class GetAmountCompanySubscriptionsOfStudentWithFilterQueryHandler
 
         return await _context.Students
             .Where(x => x.Id == request.StudentId)
-            .SelectMany(x => x.CompanySubscriptions)!
+            .SelectMany(x => x.CompanySubscriptions)
             .Filter(
                 isVerified: request.IsCompanyMustBeVerified,
                 activationStatus: request.CompanyMustHaveActivationStatus
