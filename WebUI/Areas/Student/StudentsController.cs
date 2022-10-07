@@ -18,7 +18,7 @@ using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.ViewModels.Students;
+using WebUI.DTO.Requests.Students;
 
 namespace WebUI.Areas.Student;
 
@@ -239,7 +239,7 @@ public class StudentsController : ApiControllerBase
     [HttpPut("self/detail")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateSelfStudentDetail(UpdateOwnStudentDetailView view)
+    public async Task<IActionResult> UpdateSelfStudentDetail(UpdateOwnStudentDetailRequest view)
     {
         await Mediator.Send(new UpdateStudentDetailCommand
         {

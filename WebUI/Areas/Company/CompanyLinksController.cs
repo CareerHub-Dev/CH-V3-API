@@ -6,7 +6,7 @@ using Application.CompanyLinks.Queries.GetCompanyLink;
 using Application.CompanyLinks.Queries.GetCompanyLinks;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.ViewModels.CompanyLinks;
+using WebUI.DTO.Requests.CompanyLinks;
 
 namespace WebUI.Areas.Company;
 
@@ -39,7 +39,7 @@ public class CompanyLinksController : ApiControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateCompanyLinkForSelfCompany(CreateCompanyLinkView view)
+    public async Task<IActionResult> CreateCompanyLinkForSelfCompany(CreateCompanyLinkRequest view)
     {
         var result = await Mediator.Send(new CreateCompanyLinkCommand
         {
@@ -65,7 +65,7 @@ public class CompanyLinksController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateCompanyLinkOfSelfCompany(Guid companyLinkId, UpdateCompanyLinkView view)
+    public async Task<IActionResult> UpdateCompanyLinkOfSelfCompany(Guid companyLinkId, UpdateCompanyLinkRequest view)
     {
         if (companyLinkId != view.CompanyLinkId)
         {

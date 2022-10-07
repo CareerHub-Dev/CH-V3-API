@@ -1,6 +1,6 @@
-﻿namespace WebUI.ViewModels.Companies;
+﻿namespace WebUI.DTO.Requests.Companies;
 
-public record UpdateOwnCompanyDetailView
+public record UpdateOwnCompanyDetailRequest
 {
     public string Name { get; init; } = string.Empty;
     public string Motto { get; init; } = string.Empty;

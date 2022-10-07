@@ -1,9 +1,10 @@
 ﻿using Domain.Enums;
 
-namespace WebUI.ViewModels.Experiences;
+namespace WebUI.DTO.Requests.Experiences;
 
-public record CreateExperienceView
+public record UpdateExperienceRequest
 {
+    public Guid ExperienceId { get; init; }
     public string Title { get; init; } = string.Empty;
     public string CompanyName { get; init; } = string.Empty;
     public JobType JobType { get; init; }

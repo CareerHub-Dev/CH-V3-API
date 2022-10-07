@@ -1,6 +1,6 @@
-﻿namespace WebUI.ViewModels.CompanyLinks;
+﻿namespace WebUI.DTO.Requests.CompanyLinks;
 
-public record UpdateCompanyLinkView
+public record UpdateCompanyLinkRequest
 {
     public Guid CompanyLinkId { get; init; }
     public string Title { get; init; } = string.Empty;

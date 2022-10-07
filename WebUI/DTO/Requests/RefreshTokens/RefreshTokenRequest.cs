@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace WebUI.ViewModels.RefreshTokens;
+namespace WebUI.DTO.Requests.RefreshTokens;
 
-public class RefreshTokenView
+public class RefreshTokenRequest
 {
     [DefaultValue("")]
     public string? Token { get; set; }

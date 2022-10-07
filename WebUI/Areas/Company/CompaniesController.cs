@@ -8,7 +8,7 @@ using Application.Companies.Queries.GetCompany;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.ViewModels.Companies;
+using WebUI.DTO.Requests.Companies;
 
 namespace WebUI.Areas.Company;
 
@@ -28,7 +28,7 @@ public class CompaniesController : ApiControllerBase
 
     [HttpPut("self/detail")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> UpdateSelfCompanyDetailAccount(UpdateOwnCompanyDetailView view)
+    public async Task<IActionResult> UpdateSelfCompanyDetailAccount(UpdateOwnCompanyDetailRequest view)
     {
         await Mediator.Send(new UpdateCompanyDetailCommand
         {

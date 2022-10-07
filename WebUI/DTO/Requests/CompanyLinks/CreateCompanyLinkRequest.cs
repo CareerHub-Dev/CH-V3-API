@@ -1,6 +1,6 @@
-﻿namespace WebUI.ViewModels.CompanyLinks;
+﻿namespace WebUI.DTO.Requests.CompanyLinks;
 
-public record CreateCompanyLinkView
+public record CreateCompanyLinkRequest
 {
     public string Title { get; init; } = string.Empty;
     public string Uri { get; init; } = string.Empty;

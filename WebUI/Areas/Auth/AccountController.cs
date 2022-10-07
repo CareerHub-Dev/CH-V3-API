@@ -1,7 +1,7 @@
 ﻿using Application.Accounts.Commands.ChangePassword;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.ViewModels.Accounts;
+using WebUI.DTO.Requests.Accounts;
 
 namespace WebUI.Areas.Auth;
 
@@ -12,7 +12,7 @@ public class AccountController : ApiControllerBase
     [HttpPost("change-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ChangePassword(ChangePasswordView view)
+    public async Task<IActionResult> ChangePassword(ChangePasswordRequest view)
     {
         await Mediator.Send(new ChangePasswordCommand
         {

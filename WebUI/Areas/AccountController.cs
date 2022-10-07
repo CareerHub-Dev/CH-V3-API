@@ -7,7 +7,7 @@ using Application.Accounts.Queries.Authenticate;
 using Application.Accounts.Queries.RefreshToken;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
-using WebUI.ViewModels.RefreshTokens;
+using WebUI.DTO.Requests.RefreshTokens;
 
 namespace WebUI.Areas;
 
@@ -29,7 +29,7 @@ public class AccountController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResult))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RefreshToken(RefreshTokenView view)
+    public async Task<IActionResult> RefreshToken(RefreshTokenRequest view)
     {
         if (string.IsNullOrWhiteSpace(view.Token))
         {

@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace WebUI.ViewModels.RefreshTokens;
+namespace WebUI.DTO.Requests.RefreshTokens;
 
-public class RevokeRefreshTokenView
+public class RevokeRefreshTokenRequest
 {
     [DefaultValue("")]
     public string? Token { get; set; } = string.Empty;

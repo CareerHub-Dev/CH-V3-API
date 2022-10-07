@@ -4,7 +4,7 @@ using Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 using Application.JobOffers.Commands.UpdateJobOfferImageOfCompany;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.Authorize;
-using WebUI.ViewModels.JobOffers;
+using WebUI.DTO.Requests.JobOffers;
 
 namespace WebUI.Areas.Company;
 
@@ -15,7 +15,7 @@ public class JobOffersController : ApiControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateJobOfferForSelfCompany(CreateJobOfferView view)
+    public async Task<IActionResult> CreateJobOfferForSelfCompany(CreateJobOfferRequest view)
     {
         var result = await Mediator.Send(new CreateJobOfferCommand
         {
@@ -53,7 +53,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateJobOfferDetailOfSelfCompany(Guid jobOfferId, UpdateJobOfferDetailView view)
+    public async Task<IActionResult> UpdateJobOfferDetailOfSelfCompany(Guid jobOfferId, UpdateJobOfferDetailRequest view)
     {
         if (jobOfferId != view.JobOfferId)
         {

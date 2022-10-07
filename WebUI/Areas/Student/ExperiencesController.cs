@@ -7,7 +7,7 @@ using Application.Experiences.Queries.GetExperiences;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebUI.Authorize;
-using WebUI.ViewModels.Experiences;
+using WebUI.DTO.Requests.Experiences;
 
 namespace WebUI.Areas.Student;
 
@@ -53,7 +53,7 @@ public class ExperiencesController : ApiControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateExperienceForSelfStudent(CreateExperienceView view)
+    public async Task<IActionResult> CreateExperienceForSelfStudent(CreateExperienceRequest view)
     {
         var result = await Mediator.Send(new CreateExperienceCommand
         {
@@ -85,7 +85,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateExperienceOfSelfStudent(Guid experienceId, UpdateExperienceView view)
+    public async Task<IActionResult> UpdateExperienceOfSelfStudent(Guid experienceId, UpdateExperienceRequest view)
     {
         if (experienceId != view.ExperienceId)
         {
