@@ -1,10 +1,12 @@
 ﻿using Domain.Enums;
 
-namespace Application.Companies.Queries.Models;
+namespace Application.JobOffers.Queries.Models;
 
 public record StatsFilter
 {
-    public bool? IsJobOfferMustBeActive { get; init; }
+    public bool? IsStudentOfCVMustBeVerified { get; init; }
+    public ActivationStatus? StudentOfCVMustHaveActivationStatus { get; init; }
+
     public bool? IsSubscriberMustBeVerified { get; init; }
     public ActivationStatus? SubscriberMustHaveActivationStatus { get; init; }
 }
