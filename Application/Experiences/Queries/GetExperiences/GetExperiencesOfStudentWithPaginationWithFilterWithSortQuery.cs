@@ -56,8 +56,7 @@ public class GetExperiencesOfStudentWithPaginationWithFilterWithSortQueryHandler
                 ExperienceLevel = x.ExperienceLevel,
                 JobLocation = x.JobLocation,
                 StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                StudentId = x.StudentId
+                EndDate = x.EndDate
             })
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);

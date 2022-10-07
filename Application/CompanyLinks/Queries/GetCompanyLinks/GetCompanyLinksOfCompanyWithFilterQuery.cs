@@ -45,8 +45,7 @@ public class GetCompanyLinksOfCompanyWithFilterQueryHandler : IRequestHandler<Ge
             {
                 Id = x.Id,
                 Title = x.Title,
-                Uri = x.Uri,
-                CompanyId = x.CompanyId
+                Uri = x.Uri
             })
             .ToListAsync();
     }

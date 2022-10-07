@@ -39,8 +39,7 @@ public class GetCompanyLinkWithFilterQueryHandler : IRequestHandler<GetCompanyLi
             {
                 Id = x.Id,
                 Title = x.Title,
-                Uri = x.Uri,
-                CompanyId = x.CompanyId
+                Uri = x.Uri
             })
             .FirstOrDefaultAsync();
 

@@ -45,8 +45,7 @@ public class GetExperienceWithFilterQueryHandler : IRequestHandler<GetExperience
                 ExperienceLevel = x.ExperienceLevel,
                 JobLocation = x.JobLocation,
                 StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                StudentId = x.StudentId
+                EndDate = x.EndDate
             })
             .FirstOrDefaultAsync();
 
