@@ -44,11 +44,6 @@ public class IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQueryHandle
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        if (company.SubscribedStudents.Any())
-        {
-            return true;
-        }
-
-        return false;
+        return company.SubscribedStudents.Any();
     }
 }

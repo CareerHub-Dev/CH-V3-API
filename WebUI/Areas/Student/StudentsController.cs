@@ -224,7 +224,7 @@ public class StudentsController : ApiControllerBase
         return Ok(result);
     }
 
-    #region Selft
+    #region Self
 
     [HttpGet("self")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
