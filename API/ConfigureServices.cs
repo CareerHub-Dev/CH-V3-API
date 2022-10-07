@@ -8,6 +8,20 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using API.Filters;
 using API.Services;
+using Infrastructure.Persistence.Interceptors;
+using Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
+using Application.Common.Behaviours;
+using Application.Common.Models.Email;
+using Application.Common.Models;
+using Application.Helpers;
+using Application.Services.Jwt;
+using Application.Services;
+using Domain.Entities;
+using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Npgsql.Internal.TypeHandlers.DateTimeHandlers;
+using Application.Accounts.Queries.Authenticate;
 
 namespace API;
 
@@ -70,6 +84,50 @@ public static class ConfigureServices
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
+
+        return services;
+    }
+
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
+        services.AddScoped<ApplicationDbContextInitialiser>();
+
+        services.AddScoped<IMailKitService, MailKitService>();
+        services.AddScoped<IFileIOService, FileIOService>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddValidatorsFromAssembly(typeof(AuthenticateQuery).Assembly);
+        services.AddMediatR(typeof(AuthenticateQuery).Assembly);
+
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
+
+        services.AddScoped<IJwtService, JwtService>();
+        services.AddScoped<IEmailTemplateParserService, EmailTemplateParserService>();
+        services.AddScoped<IEmailTemplatesService, EmailTemplatesService>();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IPasswordHasher<Account>, BCryptPasswordHasher<Account>>();
+
+        services.AddScoped<IAccountHelper, AccountHelper>();
+        services.AddScoped<IRefreshTokenHelper, RefreshTokenHelper>();
+
+        services.Configure<EmailTemplateSettings>(configuration.GetSection(nameof(EmailTemplateSettings)));
+        services.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
+        services.Configure<ClientSettings>(configuration.GetSection(nameof(ClientSettings)));
+        services.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
 
         return services;
     }
