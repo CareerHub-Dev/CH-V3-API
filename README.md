@@ -2,14 +2,14 @@
 
 ## Introduction
 
-This API project is a closed system for KhNURE students and Companies. The main goal of the project is to help students to find a job.
+This API project is a closed system for [KhNURE](https://nure.ua/) students and Companies. The main goal of the project is to help students to find a job.
 Omit the general functionality and talk about the main features:
 * Student:
   * Create a CV file and apply it to a job offer.
 * Company: 
   * Create job offer
 * Admin:
-  * General entities and User management
+  * Managing users and common subjects
 
 The project is still under development so it will get new functions like statistics, notifications, and chat.
 
