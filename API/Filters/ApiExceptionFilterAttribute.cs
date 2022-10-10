@@ -20,6 +20,7 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
                 { typeof(ArgumentException), HandleArgumentException },
                 { typeof(ArgumentOutOfRangeException), HandleArgumentOutOfRangeException },
                 { typeof(ForbiddenException), HandleForbiddenException },
+                { typeof(FileNotFoundException), HandleFileNotFoundException },
             };
     }
 
@@ -171,4 +172,21 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 
         context.ExceptionHandled = true;
     }
+
+    private void HandleFileNotFoundException(ExceptionContext context)
+    {
+        var exception = (FileNotFoundException)context.Exception;
+
+        var details = new ProblemDetails()
+        {
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+            Title = "The specified resource was not found.",
+            Detail = exception.Message
+        };
+
+        context.Result = new NotFoundObjectResult(details);
+
+        context.ExceptionHandled = true;
+    }
+
 }
