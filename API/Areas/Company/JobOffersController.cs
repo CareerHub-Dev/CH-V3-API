@@ -5,6 +5,8 @@ using Application.JobOffers.Commands.UpdateJobOfferImageOfCompany;
 using Microsoft.AspNetCore.Mvc;
 using API.Authorize;
 using API.DTO.Requests.JobOffers;
+using Application.JobOffers.Queries.GetAmount;
+using Domain.Enums;
 
 namespace API.Areas.Company;
 
@@ -12,6 +14,36 @@ namespace API.Areas.Company;
 [Route("api/Company/self/[controller]")]
 public class JobOffersController : ApiControllerBase
 {
+    [HttpGet("{jobOfferId}/amount-student-subscribers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountStudentSubscribersOfSelfJobOffer(Guid jobOfferId)
+    {
+        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfCompanyJobOfferWithFilterQuery
+        {
+            JobOfferId = jobOfferId,
+            CompanyId = AccountInfo!.Id,
+
+            IsSubscriberMustBeVerified = true,
+            SubscriberMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
+    [HttpGet("{jobOfferId}/amount-applied-cvs")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountAppliedCVsOfSelfJobOffer(Guid jobOfferId)
+    {
+        return Ok(await Mediator.Send(new GetAmountAppliedCVsOfCompanyJobOfferWithFilterQuery
+        {
+            JobOfferId = jobOfferId,
+            CompanyId = AccountInfo!.Id,
+
+            IsStudentOfAppliedCVMustBeVerified = true,
+            StudentOfCVMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
