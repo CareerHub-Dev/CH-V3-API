@@ -91,6 +91,22 @@ public class GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginatio
                 Company = new BriefCompanyDTO { Id = x.Company!.Id, Name = x.Company.Name },
                 Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
                 IsFollowed = x.SubscribedStudents.Any(x => x.Id == request.FollowerStudentId),
+                AmountSubscribers = x.SubscribedStudents.Count(x =>
+                    (!request.StatsFilter.IsSubscriberMustBeVerified.HasValue || (request.StatsFilter.IsSubscriberMustBeVerified.Value ?
+                            x.Verified != null || x.PasswordReset != null :
+                            x.Verified == null && x.PasswordReset == null
+                       ))
+                    &&
+                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || (x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus))
+                ),
+                AmountAppliedCVs = x.AppliedCVs.Count(x =>
+                    (!request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.HasValue || (request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.Value ?
+                            x.Student!.Verified != null || x.Student.PasswordReset != null :
+                            x.Student!.Verified == null && x.Student.PasswordReset == null
+                       ))
+                    &&
+                    (!request.StatsFilter.StudentOfCVMustHaveActivationStatus.HasValue || (x.Student!.ActivationStatus == request.StatsFilter.StudentOfCVMustHaveActivationStatus))
+                )
             })
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
