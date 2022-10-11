@@ -1,12 +1,10 @@
 ﻿using Application.Common.DTO.Companies;
-using Application.Common.DTO.CompanyLinks;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.Tags;
 using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.CompanyLinks.Queries.GetCompanyLink;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
@@ -53,7 +51,7 @@ public class GetJobOfferWithFilterQueryHandler : IRequestHandler<GetJobOfferWith
                 WorkFormat = x.WorkFormat,
                 ExperienceLevel = x.ExperienceLevel,
                 JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
-                Company = new BriefCompanyDTO { Id = x.Company!.Id, Name = x.Company.Name},
+                Company = new BriefCompanyDTO { Id = x.Company!.Id, Name = x.Company.Name },
                 Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
                 Overview = x.Overview,
                 Requirements = x.Requirements,

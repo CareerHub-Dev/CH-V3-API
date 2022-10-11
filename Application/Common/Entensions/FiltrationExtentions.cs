@@ -82,7 +82,12 @@ public static class FiltrationExtentions
         this IQueryable<JobOffer> jobOffers, 
         bool? isActive = null,
         bool? isCompanyVerified = null,
-        ActivationStatus? companyActivationStatus = null)
+        ActivationStatus? companyActivationStatus = null,
+        JobType? jobType = null,
+        WorkFormat? workFormat = null,
+        ExperienceLevel? experienceLevel = null,
+        Guid? jobPositionId = null,
+        List<Guid>? tagIds = null)
     {
         if (isActive.HasValue && isActive == true)
         {
@@ -105,6 +110,31 @@ public static class FiltrationExtentions
         if (companyActivationStatus.HasValue)
         {
             jobOffers = jobOffers.Where(x => x.Company!.ActivationStatus == companyActivationStatus);
+        }
+
+        if (jobType.HasValue)
+        {
+            jobOffers = jobOffers.Where(x => x.JobType == jobType);
+        }
+
+        if (workFormat.HasValue)
+        {
+            jobOffers = jobOffers.Where(x => x.WorkFormat == workFormat);
+        }
+
+        if (experienceLevel.HasValue)
+        {
+            jobOffers = jobOffers.Where(x => x.ExperienceLevel == experienceLevel);
+        }
+
+        if (jobPositionId.HasValue)
+        {
+            jobOffers = jobOffers.Where(x => x.JobPositionId == jobPositionId);
+        }
+
+        if (tagIds != null && tagIds.Count > 0)
+        {
+            jobOffers = jobOffers.Where(x => x.Tags.Select(x => x.Id).Intersect(tagIds).Any());
         }
 
         return jobOffers;

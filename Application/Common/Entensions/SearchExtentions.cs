@@ -89,4 +89,14 @@ public static class SearchExtentions
 
         return companies.Where(x => x.Name.Trim().ToLower().Contains(lowerCaseTerm));
     }
+
+    public static IQueryable<JobOffer> Search(this IQueryable<JobOffer> jobOffers, string searchTerm)
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+            return jobOffers;
+
+        var lowerCaseTerm = searchTerm.NormalizeName();
+
+        return jobOffers.Where(x => x.Title.ToLower().ToLower().Contains(lowerCaseTerm));
+    }
 }
