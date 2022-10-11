@@ -7,6 +7,8 @@ using API.Authorize;
 using API.DTO.Requests.JobOffers;
 using Application.JobOffers.Queries.GetAmount;
 using Domain.Enums;
+using Application.Common.DTO.JobOffers;
+using Application.JobOffers.Queries.GetJobOffer;
 
 namespace API.Areas.Company;
 
@@ -41,6 +43,18 @@ public class JobOffersController : ApiControllerBase
 
             IsStudentOfAppliedCVMustBeVerified = true,
             StudentOfCVMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
+    [HttpGet("{jobOfferId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JobOfferDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetJobOffer(Guid jobOfferId)
+    {
+        return Ok(await Mediator.Send(new GetJobOfferOfCompanyWithFilterQuery
+        {
+            JobOfferId = jobOfferId,
+            CompanyId = AccountInfo!.Id
         }));
     }
 

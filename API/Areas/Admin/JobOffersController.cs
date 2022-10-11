@@ -6,6 +6,11 @@ using Application.JobOffers.Queries.GetAmount;
 using Application.Students.Queries.GetAmount;
 using Microsoft.AspNetCore.Mvc;
 using API.Authorize;
+using Application.Common.DTO.StudentGroups;
+using Application.Tags.Queries.GetStudentGroup;
+using Application.JobOffers.Queries.GetJobOffer;
+using Application.Common.DTO.JobOffers;
+using Domain.Entities;
 
 namespace API.Areas.Admin;
 
@@ -30,6 +35,17 @@ public class JobOffersController : ApiControllerBase
     public async Task<IActionResult> GetAmountAppliedCVsOfJobOffer(Guid jobOfferId)
     {
         return Ok(await Mediator.Send(new GetAmountAppliedCVsOfJobOfferWithFilterQuery
+        {
+            JobOfferId = jobOfferId
+        }));
+    }
+
+    [HttpGet("{jobOfferId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JobOfferDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetJobOffer(Guid jobOfferId)
+    {
+        return Ok(await Mediator.Send(new GetJobOfferWithFilterQuery
         {
             JobOfferId = jobOfferId
         }));
