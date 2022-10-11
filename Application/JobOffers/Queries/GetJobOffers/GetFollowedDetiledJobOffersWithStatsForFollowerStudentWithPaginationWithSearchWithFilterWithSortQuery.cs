@@ -6,7 +6,6 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
-using Application.Companies.Queries.GetCompanies;
 using Application.JobOffers.Queries.Models;
 using Domain.Entities;
 using Domain.Enums;
