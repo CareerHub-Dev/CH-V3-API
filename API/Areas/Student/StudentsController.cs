@@ -19,6 +19,10 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using API.Authorize;
 using API.DTO.Requests.Students;
+using Application.Common.DTO.JobOffers;
+using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
+
+using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 
 namespace API.Areas.Student;
 
@@ -191,6 +195,57 @@ public class StudentsController : ApiControllerBase
             },
 
             OrderByExpression = orderByExpression ?? "Name",
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{studentId}/jobOffer-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetiledJobOfferWithStatsDTO>))]
+    public async Task<IActionResult> GetJobOfferSubscriptionsOfStudent(
+        Guid studentId,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
+        [FromQuery] JobType? mustHaveJobType,
+        [FromQuery] WorkFormat? mustHaveWorkFormat,
+        [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
+        [FromQuery] Guid? mustHavejobPositionId,
+        [FromQuery] List<Guid>? mustHaveTagIds,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Mediator.Send(new GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            FollowerStudentId = AccountInfo!.Id,
+
+            StudentOwnerId = studentId,
+            IsStudentOwnerMustBeVerified = true,
+            StudentOwnerMustHaveActivationStatus = ActivationStatus.Active,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+
+            SearchTerm = searchTerm ?? string.Empty,
+
+            IsJobOfferMustBeActive = true,
+            MustHaveWorkFormat = mustHaveWorkFormat,
+            MustHaveJobType = mustHaveJobType,
+            MustHaveExperienceLevel = mustHaveExperienceLevel,
+            MustHaveJobPositionId = mustHavejobPositionId,
+            MustHaveTagIds = mustHaveTagIds,
+
+            StatsFilter = new JobOfferStatsFilter
+            {
+                IsStudentOfAppliedCVMustBeVerified = true,
+                StudentOfCVMustHaveActivationStatus = ActivationStatus.Active,
+
+                IsSubscriberMustBeVerified = true,
+                SubscriberMustHaveActivationStatus = ActivationStatus.Active
+            },
+
+            OrderByExpression = orderByExpression ?? "StartDate",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -373,6 +428,54 @@ public class StudentsController : ApiControllerBase
             },
 
             OrderByExpression = orderByExpression ?? "Name",
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("self/jobOffer-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetiledJobOfferWithStatsDTO>))]
+    public async Task<IActionResult> GetJobOfferSubscriptionsOfSelfStudent(
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
+        [FromQuery] JobType? mustHaveJobType,
+        [FromQuery] WorkFormat? mustHaveWorkFormat,
+        [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
+        [FromQuery] Guid? mustHavejobPositionId,
+        [FromQuery] List<Guid>? mustHaveTagIds,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Mediator.Send(new GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            FollowerStudentId = AccountInfo!.Id,
+
+            StudentOwnerId = AccountInfo.Id,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+
+            SearchTerm = searchTerm ?? string.Empty,
+
+            IsJobOfferMustBeActive = true,
+            MustHaveWorkFormat = mustHaveWorkFormat,
+            MustHaveJobType = mustHaveJobType,
+            MustHaveExperienceLevel = mustHaveExperienceLevel,
+            MustHaveJobPositionId = mustHavejobPositionId,
+            MustHaveTagIds = mustHaveTagIds,
+
+            StatsFilter = new JobOfferStatsFilter
+            {
+                IsStudentOfAppliedCVMustBeVerified = true,
+                StudentOfCVMustHaveActivationStatus = ActivationStatus.Active,
+
+                IsSubscriberMustBeVerified = true,
+                SubscriberMustHaveActivationStatus = ActivationStatus.Active
+            },
+
+            OrderByExpression = orderByExpression ?? "StartDate",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

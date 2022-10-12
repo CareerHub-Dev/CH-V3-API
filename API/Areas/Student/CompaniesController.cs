@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using API.Authorize;
 using Application.Common.DTO.JobOffers;
-using Application.JobOffers.Queries.GetJobOffers;
+using Application.JobOffers.Queries.GetJobOffersOfCompany;
 
 using CompanyStatsFilter = Application.Companies.Queries.Models.StatsFilter;
 using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;

@@ -13,6 +13,7 @@ using Application.JobOffers.Queries.GetJobOffers;
 using Newtonsoft.Json;
 
 using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
+using Application.JobOffers.Queries.GetJobOffersOfCompany;
 
 namespace API.Areas.Company;
 

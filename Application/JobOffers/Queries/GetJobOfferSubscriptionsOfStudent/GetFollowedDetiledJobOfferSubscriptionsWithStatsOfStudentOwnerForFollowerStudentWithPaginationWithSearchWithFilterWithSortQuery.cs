@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 
-public record GetFollowedDetiledJobOffersWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+public record GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
     : IRequest<PaginatedList<FollowedDetiledJobOfferWithStatsDTO>>
 {
     public Guid FollowerStudentId { get; init; }
@@ -44,18 +44,18 @@ public record GetFollowedDetiledJobOffersWithStatsOfStudentOwnerForFollowerStude
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetFollowedDetiledJobOffersWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler
-    : IRequestHandler<GetFollowedDetiledJobOffersWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<FollowedDetiledJobOfferWithStatsDTO>>
+public class GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler
+    : IRequestHandler<GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<FollowedDetiledJobOfferWithStatsDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetFollowedDetiledJobOffersWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
+    public GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<PaginatedList<FollowedDetiledJobOfferWithStatsDTO>> Handle(
-        GetFollowedDetiledJobOffersWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request,
+        GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Students

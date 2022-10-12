@@ -16,6 +16,7 @@ using Application.CompanyLinks.Queries.GetCompanyLinks;
 using Domain.Enums;
 using Application.Common.DTO.JobOffers;
 using Application.JobOffers.Queries.GetJobOffers;
+using Application.JobOffers.Queries.GetJobOffersOfCompany;
 
 namespace API.Areas.Admin;
 
