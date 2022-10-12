@@ -1,6 +1,5 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.JobOffers;
-using Application.Companies.Queries.GetCompanies;
 using Application.JobOffers.Commands.VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompany;
 using Application.JobOffers.Commands.VerifiedStudentUnubscribeFromActiveJobOffer;
 using Application.JobOffers.Queries;
