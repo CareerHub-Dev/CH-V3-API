@@ -12,7 +12,7 @@ using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.JobOffers.Queries.GetJobOffers;
+namespace Application.JobOffers.Queries.GetJobOffersOfCompany;
 
 public record GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
     : IRequest<PaginatedList<DetiledJobOfferWithStatsDTO>>
@@ -94,7 +94,7 @@ public class GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFi
                             x.Verified == null && x.PasswordReset == null
                        ))
                     &&
-                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || (x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus))
+                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus)
                 ),
                 AmountAppliedCVs = x.AppliedCVs.Count(x =>
                     (!request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.HasValue || (request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.Value ?
@@ -102,7 +102,7 @@ public class GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFi
                             x.Student!.Verified == null && x.Student.PasswordReset == null
                        ))
                     &&
-                    (!request.StatsFilter.StudentOfCVMustHaveActivationStatus.HasValue || (x.Student!.ActivationStatus == request.StatsFilter.StudentOfCVMustHaveActivationStatus))
+                    (!request.StatsFilter.StudentOfCVMustHaveActivationStatus.HasValue || x.Student!.ActivationStatus == request.StatsFilter.StudentOfCVMustHaveActivationStatus)
                 )
             })
             .OrderByExpression(request.OrderByExpression)

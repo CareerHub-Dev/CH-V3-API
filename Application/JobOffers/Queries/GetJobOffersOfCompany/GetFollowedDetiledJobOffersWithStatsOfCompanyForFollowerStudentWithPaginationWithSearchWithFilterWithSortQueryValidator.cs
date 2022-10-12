@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
 
-namespace Application.JobOffers.Queries.GetJobOffers;
+namespace Application.JobOffers.Queries.GetJobOffersOfCompany;
 
 public class GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryValidator
     : AbstractValidator<GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery>
 {
-	public GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryValidator()
-	{
+    public GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryValidator()
+    {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);
 
