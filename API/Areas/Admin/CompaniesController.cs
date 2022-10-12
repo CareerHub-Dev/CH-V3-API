@@ -14,6 +14,8 @@ using Application.Common.DTO.Companies;
 using Application.Common.DTO.CompanyLinks;
 using Application.CompanyLinks.Queries.GetCompanyLinks;
 using Domain.Enums;
+using Application.Common.DTO.JobOffers;
+using Application.JobOffers.Queries.GetJobOffers;
 
 namespace API.Areas.Admin;
 
@@ -166,5 +168,44 @@ public class CompaniesController : ApiControllerBase
         {
             CompanyId = companyId
         }));
+    }
+
+    [HttpGet("{companyId}/JobOffers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DetiledJobOfferWithStatsDTO>))]
+    public async Task<IActionResult> GetJobOffersOfCompany(
+        Guid companyId,
+        [FromQuery] bool? isJobOfferMustBeActive,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
+        [FromQuery] JobType? mustHaveJobType,
+        [FromQuery] WorkFormat? mustHaveWorkFormat,
+        [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
+        [FromQuery] Guid? mustHavejobPositionId,
+        [FromQuery] List<Guid>? mustHaveTagIds,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Mediator.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            CompanyId = companyId,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+
+            SearchTerm = searchTerm ?? string.Empty,
+
+            IsJobOfferMustBeActive = isJobOfferMustBeActive,
+            MustHaveWorkFormat = mustHaveWorkFormat,
+            MustHaveJobType = mustHaveJobType,
+            MustHaveExperienceLevel = mustHaveExperienceLevel,
+            MustHaveJobPositionId = mustHavejobPositionId,
+            MustHaveTagIds = mustHaveTagIds,
+
+            OrderByExpression = orderByExpression ?? "StartDate",
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
     }
 }

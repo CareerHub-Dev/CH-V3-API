@@ -14,13 +14,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Queries.GetJobOffers;
 
-public record GetDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+public record GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
     : IRequest<PaginatedList<DetiledJobOfferWithStatsDTO>>
 {
-    public Guid FollowerStudentId { get; init; }
-    public bool? IsFollowerStudentMustBeVerified { get; init; }
-    public ActivationStatus? FollowerStudentMustHaveActivationStatus { get; init; }
-
     public Guid CompanyId { get; init; }
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
     public ActivationStatus? CompanyOfJobOfferMustHaveActivationStatus { get; init; }
@@ -42,29 +38,20 @@ public record GetDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginat
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler
-    : IRequestHandler<GetDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<DetiledJobOfferWithStatsDTO>>
+public class GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQueryHandler
+    : IRequestHandler<GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<DetiledJobOfferWithStatsDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
+    public GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<PaginatedList<DetiledJobOfferWithStatsDTO>> Handle(
-        GetDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request,
+        GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery request,
         CancellationToken cancellationToken)
     {
-        if (!await _context.Students
-            .Filter(
-                isVerified: request.IsFollowerStudentMustBeVerified,
-                activationStatus: request.FollowerStudentMustHaveActivationStatus
-            )
-            .AnyAsync(x => x.Id == request.FollowerStudentId))
-        {
-            throw new NotFoundException(nameof(Student), request.FollowerStudentId);
-        }
 
         if (!await _context.Companies
             .Filter(
