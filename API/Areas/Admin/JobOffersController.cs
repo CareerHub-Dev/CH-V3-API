@@ -14,7 +14,7 @@ using Domain.Entities;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin")]
+[Authorize("Admin", "SuperAdmin")]
 [Route("api/Admin/[controller]")]
 public class JobOffersController : ApiControllerBase
 {
@@ -55,7 +55,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateJobOffer(CreateJobOfferCommand command)
+    public async Task<IActionResult> CreateJobOffer([FromForm] CreateJobOfferCommand command)
     {
         var result = await Mediator.Send(command);
 

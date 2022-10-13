@@ -134,7 +134,7 @@ public static class FiltrationExtentions
 
         if (tagIds != null && tagIds.Count > 0)
         {
-            jobOffers = jobOffers.Where(x => x.Tags.Select(x => x.Id).Intersect(tagIds).Any());
+            jobOffers = jobOffers.Where(x => tagIds.All(y => x.Tags.Any(z => z.Id == y)));
         }
 
         return jobOffers;
