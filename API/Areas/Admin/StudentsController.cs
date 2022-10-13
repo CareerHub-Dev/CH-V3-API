@@ -15,6 +15,10 @@ using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using API.Authorize;
+using Application.Common.DTO.JobOffers;
+using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
+
+using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 
 namespace API.Areas.Admin;
 
@@ -160,6 +164,45 @@ public class StudentsController : ApiControllerBase
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
             CompanyMustHaveActivationStatus = companyMustHaveActivationStatus,
             OrderByExpression = orderByExpression ?? "Name",
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{studentId}/jobOffer-subscriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DetiledJobOfferWithStatsDTO>))]
+    public async Task<IActionResult> GetJobOfferSubscriptionsOfStudent(
+        Guid studentId,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
+        [FromQuery] bool? isJobOfferMustBeActive,
+        [FromQuery] JobType? mustHaveJobType,
+        [FromQuery] WorkFormat? mustHaveWorkFormat,
+        [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
+        [FromQuery] Guid? mustHavejobPositionId,
+        [FromQuery] List<Guid>? mustHaveTagIds,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Mediator.Send(new GetDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            StudentOwnerId = studentId,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+
+            SearchTerm = searchTerm ?? string.Empty,
+
+            IsJobOfferMustBeActive = isJobOfferMustBeActive,
+            MustHaveWorkFormat = mustHaveWorkFormat,
+            MustHaveJobType = mustHaveJobType,
+            MustHaveExperienceLevel = mustHaveExperienceLevel,
+            MustHaveJobPositionId = mustHavejobPositionId,
+            MustHaveTagIds = mustHaveTagIds,
+
+            OrderByExpression = orderByExpression ?? "StartDate",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
