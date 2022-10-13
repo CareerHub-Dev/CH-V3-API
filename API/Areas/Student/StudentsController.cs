@@ -23,6 +23,7 @@ using Application.Common.DTO.JobOffers;
 using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 
 using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
+using CompanyStatsFilter = Application.Companies.Queries.Models.StatsFilter;
 
 namespace API.Areas.Student;
 
@@ -186,7 +187,7 @@ public class StudentsController : ApiControllerBase
             IsCompanyMustBeVerified = true,
             CompanyMustHaveActivationStatus = ActivationStatus.Active,
 
-            StatsFilter = new StatsFilter
+            StatsFilter = new CompanyStatsFilter
             {
                 IsJobOfferMustBeActive = true,
 
@@ -235,6 +236,8 @@ public class StudentsController : ApiControllerBase
             MustHaveExperienceLevel = mustHaveExperienceLevel,
             MustHaveJobPositionId = mustHavejobPositionId,
             MustHaveTagIds = mustHaveTagIds,
+            IsCompanyOfJobOfferMustBeVerified = true,
+            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active,
 
             StatsFilter = new JobOfferStatsFilter
             {

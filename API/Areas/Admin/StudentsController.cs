@@ -183,6 +183,8 @@ public class StudentsController : ApiControllerBase
         [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
         [FromQuery] Guid? mustHavejobPositionId,
         [FromQuery] List<Guid>? mustHaveTagIds,
+        [FromQuery] bool? isCompanyOfJobOfferMustBeVerified,
+        [FromQuery] ActivationStatus companyOfJobOfferMustHaveActivationStatus,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -201,6 +203,8 @@ public class StudentsController : ApiControllerBase
             MustHaveExperienceLevel = mustHaveExperienceLevel,
             MustHaveJobPositionId = mustHavejobPositionId,
             MustHaveTagIds = mustHaveTagIds,
+            IsCompanyOfJobOfferMustBeVerified = isCompanyOfJobOfferMustBeVerified,
+            CompanyOfJobOfferMustHaveActivationStatus = companyOfJobOfferMustHaveActivationStatus,
 
             OrderByExpression = orderByExpression ?? "StartDate",
         });
