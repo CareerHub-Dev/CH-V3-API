@@ -101,7 +101,7 @@ public static class ConfigureServices
         services.AddScoped<ApplicationDbContextInitialiser>();
 
         services.AddScoped<IMailKitService, MailKitService>();
-        services.AddScoped<IFileIOService, FileIOService>();
+        services.AddScoped<IFileService, FileService>();
 
         return services;
     }
