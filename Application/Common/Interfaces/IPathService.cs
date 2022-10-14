@@ -2,6 +2,8 @@
 
 public interface IPathService
 {
+    string GetPhysicalPath();
     string GetEmailTemplatePath(string templateName);
-    string GetPhysicalPath(string path);
+    string GetImagesPath();
+    string GetImagePath(string imageName);
 }
