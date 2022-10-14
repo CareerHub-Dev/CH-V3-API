@@ -49,6 +49,8 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .AllowCredentials());
 
+app.UseStaticFiles();
+
 // custom jwt auth middleware
 app.UseMiddleware<JwtMiddleware>();
 
