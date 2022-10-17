@@ -2,8 +2,11 @@
 
 public interface IPathService
 {
-    string GetPhysicalPath();
-    string GetEmailTemplatePath(string templateName);
-    string GetImagesPath();
-    string GetImagePath(string imageName);
+    public string GetContentRootPath { get; }
+    public string GetWebRootPath { get; }
+
+    public string GetEmailTemplatesRoute { get; }
+    string GetEmailTemplateRoute(string templateName);
+    public string GetImagesRoute { get; }
+    string GetImageRoute(string imageName);
 }

@@ -119,6 +119,7 @@ public static class ConfigureServices
         services.AddScoped<IEmailTemplateParserService, EmailTemplateParserService>();
         services.AddScoped<IEmailTemplatesService, EmailTemplatesService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IImagesService, ImagesService>();
         services.AddScoped<IPasswordHasher<Account>, BCryptPasswordHasher<Account>>();
 
         services.AddScoped<IAccountHelper, AccountHelper>();

@@ -14,7 +14,7 @@ public class EmailTemplatesService : IEmailTemplatesService
 
     public async Task<string> ReadTemplateAsync(string templateName, CancellationToken cancellationToken = default)
     {
-        var templatePath = _pathService.GetEmailTemplatePath(templateName);
+        var templatePath = Path.Combine(_pathService.GetWebRootPath, _pathService.GetEmailTemplateRoute(templateName));
 
         if (!_fileService.Exists(templatePath))
         {

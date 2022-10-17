@@ -11,8 +11,12 @@ public class PathService : IPathService
         _webHostEnvironment = webHostEnvironment;
     }
 
-    public string GetPhysicalPath() => _webHostEnvironment.ContentRootPath;
-    public string GetEmailTemplatePath(string templateName) => Path.Combine(_webHostEnvironment.WebRootPath, "EmailTemplates", templateName);
-    public string GetImagesPath() => Path.Combine(_webHostEnvironment.WebRootPath, "Images");
-    public string GetImagePath(string imageName) => Path.Combine(_webHostEnvironment.WebRootPath, "Images", imageName);
+    public string GetContentRootPath => _webHostEnvironment.ContentRootPath;
+    public string GetWebRootPath => _webHostEnvironment.WebRootPath;
+
+    public string GetEmailTemplatesRoute => "EmailTemplates";
+    public string GetEmailTemplateRoute(string templateName) => Path.Combine("EmailTemplates", templateName);
+
+    public string GetImagesRoute => "Images";
+    public string GetImageRoute(string imageName) => Path.Combine("Images", imageName);
 }

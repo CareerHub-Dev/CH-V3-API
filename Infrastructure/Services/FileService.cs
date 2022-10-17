@@ -31,7 +31,7 @@ public class FileService : IFileService
         using var stream = new FileStream(imagePath, FileMode.Create);
         await file.CopyToAsync(stream, cancellationToken);
 
-        return imagePath;
+        return uniqueFileName;
     }
 
     public void RemoveFile(string path) => File.Delete(path);
