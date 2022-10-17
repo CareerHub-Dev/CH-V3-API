@@ -1,22 +1,23 @@
-﻿using Application.Companies.Commands.DeleteCompany;
+﻿using API.Authorize;
+using Application.Common.DTO.Companies;
+using Application.Common.DTO.CompanyLinks;
+using Application.Common.DTO.JobOffers;
+using Application.Common.DTO.Students;
+using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.InviteCompany;
-using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyBanner;
+using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
+using Application.CompanyLinks.Queries.GetCompanyLinks;
 using Application.Emails.Commands;
+using Application.JobOffers.Queries.GetJobOffersOfCompany;
+using Application.Students.Queries.GetStudentSubscribersOfCompany;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
-using Application.Common.DTO.Companies;
-using Application.Common.DTO.CompanyLinks;
-using Application.CompanyLinks.Queries.GetCompanyLinks;
-using Domain.Enums;
-using Application.Common.DTO.JobOffers;
-using Application.JobOffers.Queries.GetJobOffers;
-using Application.JobOffers.Queries.GetJobOffersOfCompany;
 
 namespace API.Areas.Admin;
 
@@ -203,6 +204,39 @@ public class CompaniesController : ApiControllerBase
             MustHaveTagIds = mustHaveTagIds,
 
             OrderByExpression = orderByExpression ?? "StartDate",
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{companyId}/student-subscribers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetStudentSubscribersOfCompany(
+        Guid companyId,
+        [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
+        [FromQuery] bool? isStudentMustBeVerified,
+        [FromQuery] List<Guid>? studentGroupIds,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Mediator.Send(new GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            CompanyId = companyId,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = searchTerm ?? string.Empty,
+
+            IsStudentMustBeVerified = isStudentMustBeVerified,
+            StudentGroupIds = studentGroupIds,
+            StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
+
+            OrderByExpression = orderByExpression ?? "LastName",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
