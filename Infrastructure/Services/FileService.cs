@@ -17,39 +17,21 @@ public class FileService : IFileService
 		await File.WriteAllTextAsync(path, text, cancellationToken);
 	}
 
-    public async Task MoveFileAsync(IFormFile file, string directoryPath, string uniqueFileName, CancellationToken cancellationToken = default)
+    public async Task<string> MoveFileAsync(IFormFile file, string directoryPath, CancellationToken cancellationToken = default)
     {
         if (!Directory.Exists(directoryPath))
         {
             Directory.CreateDirectory(directoryPath);
         }
+
+        var uniqueFileName = Path.GetRandomFileName() + Path.GetExtension(file.FileName);
 
         var imagePath = Path.Combine(directoryPath, uniqueFileName);
 
         using var stream = new FileStream(imagePath, FileMode.Create);
         await file.CopyToAsync(stream, cancellationToken);
-    }
 
-    public async Task ReplaceFileIfExistAsync(
-        IFormFile file, 
-        string directoryPath, 
-        string uniqueNewFileName, 
-        string previousFileName, 
-        CancellationToken cancellationToken = default)
-    {
-        if (!Directory.Exists(directoryPath))
-        {
-            Directory.CreateDirectory(directoryPath);
-        }
-
-        var previousImagePath = Path.Combine(directoryPath, previousFileName);
-
-        if (Exists(previousImagePath))
-        {
-            RemoveFile(previousImagePath);
-        }
-
-        await MoveFileAsync(file, directoryPath, uniqueNewFileName, cancellationToken);
+        return imagePath;
     }
 
     public void RemoveFile(string path) => File.Delete(path);

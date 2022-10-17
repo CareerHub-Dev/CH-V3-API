@@ -29,8 +29,6 @@ public class ImagesTestController : ApiControllerBase
     {
         FileService fileService = new FileService();
 
-        await fileService.MoveFileAsync(file, _pathService.GetImagesPath(), file.FileName);
-
-        return Ok();
+        return Ok(await fileService.MoveFileAsync(file, _pathService.GetImagesPath()));
     }
 }
