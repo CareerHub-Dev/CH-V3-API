@@ -83,7 +83,7 @@ public class GetFollowedStudentDetailedSubsciptionsOfStudentOwnerForFollowerStud
                 Email = x.Email,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                PhotoId = x.PhotoId,
+                Photo = x.Photo,
                 Phone = x.Phone,
                 BirthDate = x.BirthDate,
                 StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },

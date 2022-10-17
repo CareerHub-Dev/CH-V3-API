@@ -271,7 +271,8 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpPost("{studentId}/photo")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateStudentPhoto(Guid studentId, IFormFile? file)
     {

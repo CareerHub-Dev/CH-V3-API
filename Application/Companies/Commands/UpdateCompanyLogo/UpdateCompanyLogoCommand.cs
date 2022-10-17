@@ -1,5 +1,4 @@
-﻿using Application.Common.Entensions;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -8,22 +7,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Commands.UpdateCompanyLogo;
 
-public record UpdateCompanyLogoCommand : IRequest<Guid?>
+public record UpdateCompanyLogoCommand : IRequest<string?>
 {
     public Guid CompanyId { get; init; }
     public IFormFile? Logo { get; init; }
 }
 
-public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogoCommand, Guid?>
+public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogoCommand, string?>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IImagesService _imagesService;
 
-    public UpdateCompanyLogoCommandHandler(IApplicationDbContext context)
+    public UpdateCompanyLogoCommandHandler(IApplicationDbContext context, IImagesService imagesService)
     {
         _context = context;
+        _imagesService = imagesService;
     }
 
-    public async Task<Guid?> Handle(UpdateCompanyLogoCommand request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(UpdateCompanyLogoCommand request, CancellationToken cancellationToken)
     {
         var company = await _context.Companies
             .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
@@ -33,29 +34,20 @@ public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogo
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        if (company.BannerId != null)
+        if (!string.IsNullOrWhiteSpace(company.Logo))
         {
-            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == company.LogoId);
+            _imagesService.DeleteImageIfExists(Path.GetFileName(company.Logo));
 
-            if (image != null)
-            {
-                _context.Images.Remove(image);
-            }
+            company.Logo = null;
         }
 
         if (request.Logo != null)
         {
-            var imageLogo = await request.Logo.ToImageWithGeneratedIdAsync();
-            await _context.Images.AddAsync(imageLogo);
-            company.LogoId = imageLogo.Id;
-        }
-        else
-        {
-            company.LogoId = null;
+            company.Logo = await _imagesService.SaveImageAsync(request.Logo);
         }
 
         await _context.SaveChangesAsync();
 
-        return company.LogoId;
+        return company.Logo;
     }
 }

@@ -1,5 +1,4 @@
-﻿using Application.Common.Entensions;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -8,22 +7,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Commands.UpdateCompanyBanner;
 
-public record UpdateCompanyBannerCommand : IRequest<Guid?>
+public record UpdateCompanyBannerCommand : IRequest<string?>
 {
     public Guid CompanyId { get; init; }
     public IFormFile? Banner { get; init; }
 }
 
-public class UpdateCompanyBannerCommandHandler : IRequestHandler<UpdateCompanyBannerCommand, Guid?>
+public class UpdateCompanyBannerCommandHandler : IRequestHandler<UpdateCompanyBannerCommand, string?>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IImagesService _imagesService;
 
-    public UpdateCompanyBannerCommandHandler(IApplicationDbContext context)
+    public UpdateCompanyBannerCommandHandler(IApplicationDbContext context, IImagesService imagesService)
     {
         _context = context;
+        _imagesService = imagesService;
     }
 
-    public async Task<Guid?> Handle(UpdateCompanyBannerCommand request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(UpdateCompanyBannerCommand request, CancellationToken cancellationToken)
     {
         var company = await _context.Companies
             .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
@@ -33,29 +34,20 @@ public class UpdateCompanyBannerCommandHandler : IRequestHandler<UpdateCompanyBa
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        if (company.BannerId != null)
+        if (!string.IsNullOrWhiteSpace(company.Banner))
         {
-            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == company.BannerId);
+            _imagesService.DeleteImageIfExists(Path.GetFileName(company.Banner));
 
-            if (image != null)
-            {
-                _context.Images.Remove(image);
-            }
+            company.Banner = null;
         }
 
         if (request.Banner != null)
         {
-            var imageBanner = await request.Banner.ToImageWithGeneratedIdAsync();
-            await _context.Images.AddAsync(imageBanner);
-            company.BannerId = imageBanner.Id;
-        }
-        else
-        {
-            company.BannerId = null;
+            company.Banner = await _imagesService.SaveImageAsync(request.Banner);
         }
 
         await _context.SaveChangesAsync();
 
-        return company.BannerId;
+        return company.Banner;
     }
 }

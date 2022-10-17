@@ -83,8 +83,8 @@ public class GetFollowedDetailedCompanyWithStatsSubscriptionsOfStudentForFollowe
                 Id = x.Id,
                 Email = x.Email,
                 Name = x.Name,
-                LogoId = x.LogoId,
-                BannerId = x.BannerId,
+                Logo = x.Logo,
+                Banner = x.Banner,
                 Motto = x.Motto,
                 Description = x.Description,
                 AmountJobOffers = x.JobOffers.Count(x =>

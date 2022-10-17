@@ -33,10 +33,4 @@ public class ImagesService : IImagesService
             _fileService.RemoveFile(imagePath);
         }
     }
-
-    public async Task<string> ReplaceImageAsync(string oldImageFileName, IFormFile newImage, CancellationToken cancellationToken = default)
-    {
-        DeleteImageIfExists(oldImageFileName);
-        return await SaveImageAsync(newImage, cancellationToken);
-    }
 }

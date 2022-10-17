@@ -8,22 +8,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Commands.UpdateStudentPhoto;
 
-public record UpdateStudentPhotoCommand : IRequest<Guid?>
+public record UpdateStudentPhotoCommand : IRequest<string?>
 {
     public Guid StudentId { get; init; }
     public IFormFile? Photo { get; init; }
 }
 
-public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPhotoCommand, Guid?>
+public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPhotoCommand, string?>
 {
     private readonly IApplicationDbContext _context;
-
-    public UpdateStudentPhotoCommandHandler(IApplicationDbContext context)
+    private readonly IImagesService _imagesService;
+    public UpdateStudentPhotoCommandHandler(IApplicationDbContext context, IImagesService imagesService)
     {
         _context = context;
+        _imagesService = imagesService;
     }
 
-    public async Task<Guid?> Handle(UpdateStudentPhotoCommand request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(UpdateStudentPhotoCommand request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
@@ -33,29 +34,20 @@ public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPho
             throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
-        if(student.PhotoId != null)
+        if (!string.IsNullOrWhiteSpace(student.Photo))
         {
-            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == student.PhotoId);
+            _imagesService.DeleteImageIfExists(Path.GetFileName(student.Photo));
 
-            if (image != null)
-            {
-                _context.Images.Remove(image);
-            }
+            student.Photo = null;
         }
 
-        if (request.Photo != null)
+        if(request.Photo != null)
         {
-            var imagePhoto = await request.Photo.ToImageWithGeneratedIdAsync();
-            await _context.Images.AddAsync(imagePhoto);
-            student.PhotoId = imagePhoto.Id;
-        }
-        else
-        {
-            student.PhotoId = null;
+            student.Photo = await _imagesService.SaveImageAsync(request.Photo);
         }
 
         await _context.SaveChangesAsync();
 
-        return student.PhotoId;
+        return student.Photo;
     }
 }
