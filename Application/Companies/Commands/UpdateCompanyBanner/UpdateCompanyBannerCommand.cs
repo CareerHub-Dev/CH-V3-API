@@ -37,7 +37,6 @@ public class UpdateCompanyBannerCommandHandler : IRequestHandler<UpdateCompanyBa
         if (!string.IsNullOrWhiteSpace(company.Banner))
         {
             _imagesService.DeleteImageIfExists(Path.GetFileName(company.Banner));
-
             company.Banner = null;
         }
 

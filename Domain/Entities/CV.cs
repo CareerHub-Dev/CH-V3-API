@@ -13,7 +13,7 @@ public class CV : BaseEntity
     public TemplateLanguage TemplateLanguage { get; set; }
     public string LastName { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
-    public Guid? PhotoId { get; set; }
+    public string? Photo { get; set; }
     public string Goals { get; set; } = string.Empty;
     public string SkillsAndTechnologies { get; set; } = string.Empty;
     public string ExperienceHighlights { get; set; } = string.Empty;

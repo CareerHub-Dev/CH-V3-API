@@ -17,7 +17,6 @@ public interface IApplicationDbContext
     public DbSet<StudentGroup> StudentGroups { get; }
     public DbSet<JobPosition> JobPositions { get; }
     public DbSet<Experience> Experiences { get; }
-    public DbSet<Image> Images { get; }
     public DbSet<ForeignLanguage> ForeignLanguages { get; }
     public DbSet<CVProjectLink> CVProjectLinks { get; }
     public DbSet<Education> Educations { get; }

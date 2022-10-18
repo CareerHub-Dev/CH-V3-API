@@ -53,7 +53,7 @@ public class GetJobOfferOfCompanyWithFilterQueryHandler : IRequestHandler<GetJob
             {
                 Id = x.Id,
                 Title = x.Title,
-                ImageId = x.ImageId,
+                Image = x.Image,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
                 JobType = x.JobType,

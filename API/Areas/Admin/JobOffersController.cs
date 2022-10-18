@@ -89,7 +89,8 @@ public class JobOffersController : ApiControllerBase
     }
 
     [HttpPost("{jobOfferId}/image")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateJobOfferImage(Guid jobOfferId, IFormFile? file)
     {

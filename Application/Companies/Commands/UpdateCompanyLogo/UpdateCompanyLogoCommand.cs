@@ -37,7 +37,6 @@ public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogo
         if (!string.IsNullOrWhiteSpace(company.Logo))
         {
             _imagesService.DeleteImageIfExists(Path.GetFileName(company.Logo));
-
             company.Logo = null;
         }
 
