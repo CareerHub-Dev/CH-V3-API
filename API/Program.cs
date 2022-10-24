@@ -47,7 +47,8 @@ app.UseCors(x => x
     .SetIsOriginAllowed(origin => true)
     .AllowAnyMethod()
     .AllowAnyHeader()
-    .AllowCredentials());
+    .AllowCredentials()
+    .WithExposedHeaders("X-Pagination"));
 
 // custom jwt auth middleware
 app.UseMiddleware<JwtMiddleware>();
