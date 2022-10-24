@@ -38,7 +38,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<StudentGroup> StudentGroups => Set<StudentGroup>();
     public DbSet<JobPosition> JobPositions => Set<JobPosition>();
     public DbSet<Experience> Experiences => Set<Experience>();
-    public DbSet<Image> Images => Set<Image>();
     public DbSet<ForeignLanguage> ForeignLanguages => Set<ForeignLanguage>();
     public DbSet<CVProjectLink> CVProjectLinks => Set<CVProjectLink>();
     public DbSet<Education> Educations => Set<Education>();

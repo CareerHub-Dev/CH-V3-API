@@ -9,7 +9,6 @@ using Application.JobOffers.Queries.GetAmount;
 using Domain.Enums;
 using Application.Common.DTO.JobOffers;
 using Application.JobOffers.Queries.GetJobOffer;
-using Application.JobOffers.Queries.GetJobOffers;
 using Newtonsoft.Json;
 
 using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
@@ -181,7 +180,8 @@ public class JobOffersController : ApiControllerBase
     }
 
     [HttpPost("{jobOfferId}/image")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateJobOfferImageOfSelfCompany(Guid jobOfferId, IFormFile? file)
     {

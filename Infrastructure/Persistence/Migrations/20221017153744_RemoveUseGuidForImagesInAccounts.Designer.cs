@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221017153744_RemoveUseGuidForImagesInAccounts")]
+    partial class RemoveUseGuidForImagesInAccounts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,8 +159,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("Modified")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Photo")
-                        .HasColumnType("text");
+                    b.Property<Guid?>("PhotoId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("SkillsAndTechnologies")
                         .IsRequired()
@@ -325,6 +327,37 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("ForeignLanguages");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Image", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("LastModifiedBy")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("Domain.Entities.JobOffer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -340,8 +373,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("ExperienceLevel")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("text");
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("JobPositionId")
                         .HasColumnType("uuid");

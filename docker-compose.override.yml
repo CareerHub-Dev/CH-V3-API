@@ -11,6 +11,7 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - images:/app/wwwroot/Images
 
   db:
     restart: always
@@ -21,4 +22,10 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - /CareerHubManager/postgres/db/data:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
+
+volumes:
+  images:
+    external: true
+  database:
+    external: true

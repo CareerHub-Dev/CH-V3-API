@@ -1,11 +1,13 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Services;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Application.JobOffers.Commands.CreateJobOffer;
 
@@ -34,10 +36,12 @@ public record CreateJobOfferCommand : IRequest<Guid>
 public class CreateJobOfferCommandHandler : IRequestHandler<CreateJobOfferCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IImagesService _imagesService;
 
-    public CreateJobOfferCommandHandler(IApplicationDbContext context)
+    public CreateJobOfferCommandHandler(IApplicationDbContext context, IImagesService imagesService)
     {
         _context = context;
+        _imagesService = imagesService;
     }
 
     public async Task<Guid> Handle(CreateJobOfferCommand request, CancellationToken cancellationToken)
@@ -73,9 +77,7 @@ public class CreateJobOfferCommandHandler : IRequestHandler<CreateJobOfferComman
 
         if (request.Image != null)
         {
-            var image = await request.Image.ToImageWithGeneratedIdAsync();
-            await _context.Images.AddAsync(image);
-            jobOffer.ImageId = image?.Id;
+            jobOffer.Image = await _imagesService.SaveImageAsync(request.Image);
         }
 
         await _context.JobOffers.AddAsync(jobOffer);

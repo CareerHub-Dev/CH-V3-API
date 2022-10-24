@@ -1,14 +1,16 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Services;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Application.JobOffers.Commands.UpdateJobOfferImageOfCompany;
 
-public record UpdateJobOfferImageOfCompanyCommand : IRequest<Guid?>
+public record UpdateJobOfferImageOfCompanyCommand : IRequest<string?>
 {
     public Guid JobofferId { get; init; }
     public IFormFile? Image { get; init; }
@@ -16,16 +18,18 @@ public record UpdateJobOfferImageOfCompanyCommand : IRequest<Guid?>
     public Guid CompanyId { get; init; }
 }
 
-public class UpdateJobOfferImageOfCompanyCommandHandler : IRequestHandler<UpdateJobOfferImageOfCompanyCommand, Guid?>
+public class UpdateJobOfferImageOfCompanyCommandHandler : IRequestHandler<UpdateJobOfferImageOfCompanyCommand, string?>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IImagesService _imagesService;
 
-    public UpdateJobOfferImageOfCompanyCommandHandler(IApplicationDbContext context)
+    public UpdateJobOfferImageOfCompanyCommandHandler(IApplicationDbContext context, IImagesService imagesService)
     {
         _context = context;
+        _imagesService = imagesService;
     }
 
-    public async Task<Guid?> Handle(UpdateJobOfferImageOfCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(UpdateJobOfferImageOfCompanyCommand request, CancellationToken cancellationToken)
     {
         if (!await _context.Companies
             .AnyAsync(x => x.Id == request.CompanyId))
@@ -41,29 +45,19 @@ public class UpdateJobOfferImageOfCompanyCommandHandler : IRequestHandler<Update
             throw new NotFoundException(nameof(JobOffer), request.JobofferId);
         }
 
-        if (jobOffer.ImageId != null)
+        if (!string.IsNullOrWhiteSpace(jobOffer.Image))
         {
-            var image = await _context.Images.AsNoTracking().FirstOrDefaultAsync(x => x.Id == jobOffer.ImageId);
-
-            if (image != null)
-            {
-                _context.Images.Remove(image);
-            }
+            _imagesService.DeleteImageIfExists(Path.GetFileName(jobOffer.Image));
+            jobOffer.Image = null;
         }
 
         if (request.Image != null)
         {
-            var image = await request.Image.ToImageWithGeneratedIdAsync();
-            await _context.Images.AddAsync(image);
-            jobOffer.ImageId = image.Id;
-        }
-        else
-        {
-            jobOffer.ImageId = null;
+            jobOffer.Image = await _imagesService.SaveImageAsync(request.Image);
         }
 
         await _context.SaveChangesAsync();
 
-        return jobOffer.ImageId;
+        return jobOffer.Image;
     }
 }

@@ -313,7 +313,8 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpPost("self/photo")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateSelfStudentPhoto(IFormFile? file)
     {
         return Ok(await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = AccountInfo!.Id, Photo = file }));

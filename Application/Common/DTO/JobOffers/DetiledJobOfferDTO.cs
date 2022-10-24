@@ -9,7 +9,7 @@ public class DetiledJobOfferDTO
 {
     public Guid Id { get; set; }
     public string Title { set; get; } = string.Empty;
-    public Guid? ImageId { set; get; }
+    public string? Image { set; get; }
 
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }

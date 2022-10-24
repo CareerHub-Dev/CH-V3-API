@@ -42,7 +42,8 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPost("self/logo")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateSelfCompanyLogo(IFormFile? file)
     {
         var result = await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file });
@@ -51,7 +52,8 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPost("self/banner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid?))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateSelfCompanyBanner(IFormFile? file)
     {
         var result = await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = AccountInfo!.Id, Banner = file });

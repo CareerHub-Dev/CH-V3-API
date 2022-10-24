@@ -10,7 +10,7 @@ public class JobOffer : BaseEntity
     public string Requirements { set; get; } = string.Empty;
     public string Responsibilities { set; get; } = string.Empty;
     public string Preferences { set; get; } = string.Empty;
-    public Guid? ImageId { set; get; }
+    public string? Image { set; get; }
 
     public JobType JobType { get; set; }
     public WorkFormat WorkFormat { get; set; }

@@ -1,6 +1,7 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Services;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -26,11 +27,16 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
 {
     private readonly IApplicationDbContext _context;
     private readonly IPasswordHasher<Account> _passwordHasher;
+    private readonly IImagesService _imagesService;
 
-    public VerifyCompanyWithContinuedRegistrationCommandHandler(IApplicationDbContext context, IPasswordHasher<Account> passwordHasher)
+    public VerifyCompanyWithContinuedRegistrationCommandHandler(
+        IApplicationDbContext context, 
+        IPasswordHasher<Account> passwordHasher,
+        IImagesService imagesService)
     {
         _context = context;
         _passwordHasher = passwordHasher;
+        _imagesService = imagesService;
     }
 
     public async Task<Unit> Handle(VerifyCompanyWithContinuedRegistrationCommand request, CancellationToken cancellationToken)
@@ -52,16 +58,12 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
 
         if (request.Logo != null)
         {
-            var imageLogo = await request.Logo.ToImageWithGeneratedIdAsync();
-            await _context.Images.AddAsync(imageLogo);
-            company.LogoId = imageLogo?.Id;
+            company.Logo = await _imagesService.SaveImageAsync(request.Logo);
         }
 
         if (request.Banner != null)
         {
-            var imageBanner = await request.Banner.ToImageWithGeneratedIdAsync();
-            await _context.Images.AddAsync(imageBanner);
-            company.BannerId = imageBanner?.Id;
+            company.Banner = await _imagesService.SaveImageAsync(request.Banner);
         }
 
         await _context.SaveChangesAsync();

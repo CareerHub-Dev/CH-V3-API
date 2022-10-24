@@ -11,14 +11,12 @@ public class PathService : IPathService
         _webHostEnvironment = webHostEnvironment;
     }
 
-    public string GetPhysicalPath(string path)
-    {
-        return Path.Combine(_webHostEnvironment.ContentRootPath, path);
-    }
+    public string GetContentRootPath => _webHostEnvironment.ContentRootPath;
+    public string GetWebRootPath => _webHostEnvironment.WebRootPath;
 
-    public string GetEmailTemplatePath(string templateName)
-    {
-        var path = Path.Combine(_webHostEnvironment.WebRootPath, "EmailTemplates", templateName);
-        return path;
-    }
+    public string GetEmailTemplatesRoute => "EmailTemplates";
+    public string GetEmailTemplateRoute(string templateName) => Path.Combine("EmailTemplates", templateName);
+
+    public string GetImagesRoute => "Images";
+    public string GetImageRoute(string imageName) => Path.Combine("Images", imageName);
 }

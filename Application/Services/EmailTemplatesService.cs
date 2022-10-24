@@ -5,23 +5,23 @@ namespace Application.Services;
 public class EmailTemplatesService : IEmailTemplatesService
 {
     private readonly IPathService _pathService;
-    private readonly IFileIOService _fileIOService;
-    public EmailTemplatesService(IPathService pathService, IFileIOService fileIOService)
+    private readonly IFileService _fileService;
+    public EmailTemplatesService(IPathService pathService, IFileService fileIOService)
     {
         _pathService = pathService;
-        _fileIOService = fileIOService;
+        _fileService = fileIOService;
     }
 
     public async Task<string> ReadTemplateAsync(string templateName, CancellationToken cancellationToken = default)
     {
-        var templatePath = _pathService.GetEmailTemplatePath(templateName);
+        var templatePath = Path.Combine(_pathService.GetWebRootPath, _pathService.GetEmailTemplateRoute(templateName));
 
-        if (!_fileIOService.Exists(templatePath))
+        if (!_fileService.Exists(templatePath))
         {
             throw new FileNotFoundException($"Could not find file '{templatePath}'.");
         }
 
-        var emailTemplate = await _fileIOService.ReadAllTextAsync(templatePath, cancellationToken);
+        var emailTemplate = await _fileService.ReadAllTextAsync(templatePath, cancellationToken);
 
         if (string.IsNullOrEmpty(emailTemplate))
         {

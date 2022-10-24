@@ -50,6 +50,8 @@ app.UseCors(x => x
     .AllowCredentials()
     .WithExposedHeaders("X-Pagination"));
 
+app.UseStaticFiles();
+
 // custom jwt auth middleware
 app.UseMiddleware<JwtMiddleware>();
 
