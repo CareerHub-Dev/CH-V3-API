@@ -82,6 +82,7 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
             JwtToken = jwtToken.Token,
             JwtTokenExpires = jwtToken.Expires,
             RefreshToken = refreshToken.Token,
+            RefreshTokenExpires = refreshToken.Expires,
             AccountId = account.Id,
             Role = _accountHelper.GetRole(account)
         };

@@ -83,6 +83,7 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
             JwtToken = jwtToken.Token,
             JwtTokenExpires = jwtToken.Expires,
             RefreshToken = newRefreshToken.Token,
+            RefreshTokenExpires = newRefreshToken.Expires,
             AccountId = account.Id,
             Role = _accountHelper.GetRole(account)
         };
