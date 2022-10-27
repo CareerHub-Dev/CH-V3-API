@@ -109,6 +109,17 @@ public class StudentsController : ApiControllerBase
         }));
     }
 
+    [HttpGet("{studentId}/amount-student-subscribers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountStudentSubscribersOfStudent(Guid studentId)
+    {
+        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfStudentWithFilterQuery
+        {
+            StudentId = studentId
+        }));
+    }
+
     [HttpGet("{studentId}/student-subscriptions")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

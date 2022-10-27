@@ -77,7 +77,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("{studentId}/amount-company-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountCompanySubscriptionsOfStudent(Guid studentId)
     {
@@ -93,7 +93,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("{studentId}/amount-jobOffer-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOfferSubscriptionsOfStudent(Guid studentId)
     {
@@ -110,7 +110,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("{studentId}/amount-student-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscriptionsOfStudent(Guid studentId)
     {
@@ -122,6 +122,22 @@ public class StudentsController : ApiControllerBase
 
             IsStudentTargetOfSubscriptionMustBeVerified = true,
             StudentTargetOfSubscriptionMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
+    [HttpGet("{studentId}/amount-student-subscribers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountStudentSubscribersOfStudent(Guid studentId)
+    {
+        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfStudentWithFilterQuery
+        {
+            StudentId = studentId,
+            IsStudentMustBeVerified = true,
+            StudentMustHaveActivationStatus = ActivationStatus.Active,
+
+            IsStudentOwnerOfSubscriptionMustBeVerified = true,
+            StudentOwnerOfSubscriptionMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -597,6 +613,20 @@ public class StudentsController : ApiControllerBase
 
             IsStudentTargetOfSubscriptionMustBeVerified = true,
             StudentTargetOfSubscriptionMustHaveActivationStatus = ActivationStatus.Active
+        }));
+    }
+
+    [HttpGet("self/amount-student-subscribers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAmountStudentSubscribersOfStudent()
+    {
+        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfStudentWithFilterQuery
+        {
+            StudentId = AccountInfo!.Id,
+
+            IsStudentOwnerOfSubscriptionMustBeVerified = true,
+            StudentOwnerOfSubscriptionMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
