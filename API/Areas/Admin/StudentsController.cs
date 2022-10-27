@@ -19,6 +19,7 @@ using Application.Common.DTO.JobOffers;
 using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 
 using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
+using Application.Students.Queries.GetStudentSubscribersOfStudent;
 
 namespace API.Areas.Admin;
 
@@ -122,6 +123,39 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageSize = 10)
     {
         var result = await Mediator.Send(new GetStudentSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery
+        {
+            StudentOwnerId = studentId,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = searchTerm ?? string.Empty,
+
+            IsStudentMustBeVerified = isStudentMustBeVerified,
+            StudentGroupIds = studentGroupIds,
+            StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
+
+            OrderByExpression = orderByExpression ?? "LastName",
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{studentId}/student-subscribers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetStudentSubscribersOfStudent(
+        Guid studentId,
+        [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
+        [FromQuery] bool? isStudentMustBeVerified,
+        [FromQuery] List<Guid>? studentGroupIds,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] string? searchTerm,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Mediator.Send(new GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             StudentOwnerId = studentId,
 
