@@ -1,5 +1,6 @@
 ﻿using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.StudentGroups;
+using Application.Common.DTO.StudentLogs;
 using Application.Common.DTO.Tags;
 using Domain.Entities;
 
@@ -81,6 +82,26 @@ public static class MapExtention
             LastModified = x.LastModified,
             CreatedBy = x.CreatedBy,
             LastModifiedBy = x.LastModifiedBy,
+        });
+    }
+
+    #endregion
+
+    #region StudentLog
+
+    public static IQueryable<StudentLogDTO> MapToStudentLogDTO(this IQueryable<StudentLog> studentLogs)
+    {
+        return studentLogs.Select(x => new StudentLogDTO
+        {
+            Id = x.Id,
+            FirstName = x.FirstName,
+            LastName = x.LastName,
+            Email = x.Email,
+            Created = x.Created,
+            LastModified = x.LastModified,
+            CreatedBy = x.CreatedBy,
+            LastModifiedBy = x.LastModifiedBy,
+            StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name }
         });
     }
 

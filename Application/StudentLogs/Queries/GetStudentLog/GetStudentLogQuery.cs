@@ -1,5 +1,6 @@
 ﻿using Application.Common.DTO.StudentGroups;
 using Application.Common.DTO.StudentLogs;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
@@ -24,18 +25,7 @@ public class GetStudentLogQueryHandler : IRequestHandler<GetStudentLogQuery, Stu
         var studentGroup = await _context.StudentLogs
             .AsNoTracking()
             .Where(x => x.Id == request.StudentLogId)
-            .Select(x => new StudentLogDTO
-            {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Email = x.Email,
-                Created = x.Created,
-                LastModified = x.LastModified,
-                CreatedBy = x.CreatedBy,
-                LastModifiedBy = x.LastModifiedBy,
-                StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name }
-            })
+            .MapToStudentLogDTO()
             .FirstOrDefaultAsync();
 
         if (studentGroup == null)

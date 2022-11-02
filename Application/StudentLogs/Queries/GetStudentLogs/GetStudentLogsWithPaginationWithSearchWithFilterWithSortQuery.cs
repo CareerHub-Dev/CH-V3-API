@@ -35,18 +35,7 @@ public class GetStudentLogsWithPaginationWithSearchWithFilterWithSortQueryHandle
             .AsNoTracking()
             .Search(request.SearchTerm)
             .Filter(studentGroupIds: request.StudentGroupIds)
-            .Select(x => new StudentLogDTO
-            {
-                Id = x.Id,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Email = x.Email,
-                Created = x.Created,
-                LastModified = x.LastModified,
-                CreatedBy = x.CreatedBy,
-                LastModifiedBy = x.LastModifiedBy,
-                StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name }
-            })
+            .MapToStudentLogDTO()
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
