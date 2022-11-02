@@ -1,4 +1,5 @@
-﻿using Application.Common.DTO.Tags;
+﻿using Application.Common.DTO.StudentGroups;
+using Application.Common.DTO.Tags;
 using Domain.Entities;
 
 namespace Application.Common.Entensions;
@@ -23,6 +24,32 @@ public static class MapExtention
             Id = x.Id,
             Name = x.Name,
             IsAccepted = x.IsAccepted,
+            Created = x.Created,
+            LastModified = x.LastModified,
+            CreatedBy = x.CreatedBy,
+            LastModifiedBy = x.LastModifiedBy,
+        });
+    }
+
+    #endregion
+
+    #region StudentGroup
+
+    public static IQueryable<BriefStudentGroupDTO> MapToBriefStudentGroupDTO(this IQueryable<StudentGroup> studentGroups)
+    {
+        return studentGroups.Select(x => new BriefStudentGroupDTO
+        {
+            Id = x.Id,
+            Name = x.Name,
+        });
+    }
+
+    public static IQueryable<StudentGroupDTO> MapToStudentGroupDTO(this IQueryable<StudentGroup> studentGroups)
+    {
+        return studentGroups.Select(x => new StudentGroupDTO
+        {
+            Id = x.Id,
+            Name = x.Name,
             Created = x.Created,
             LastModified = x.LastModified,
             CreatedBy = x.CreatedBy,

@@ -31,15 +31,7 @@ public class GetStudentGroupsWithPaginationWithSearchWithSortQueryHandler : IReq
         return await _context.StudentGroups
             .AsNoTracking()
             .Search(request.SearchTerm)
-            .Select(x => new StudentGroupDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Created = x.Created,
-                CreatedBy = x.CreatedBy,
-                LastModified = x.LastModified,
-                LastModifiedBy = x.LastModifiedBy,
-            })
+            .MapToStudentGroupDTO()
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

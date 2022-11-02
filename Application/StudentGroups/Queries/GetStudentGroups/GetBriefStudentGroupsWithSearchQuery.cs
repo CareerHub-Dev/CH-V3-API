@@ -26,11 +26,7 @@ public class GetBriefStudentGroupsWithSearchQueryHandler : IRequestHandler<GetBr
             .AsNoTracking()
             .Search(request.SearchTerm)
             .OrderBy(x => x.Name)
-            .Select(x => new BriefStudentGroupDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-            })
+            .MapToBriefStudentGroupDTO()
             .ToListAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTO.StudentGroups;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
@@ -20,21 +21,17 @@ public class GetBriefStudentGroupQueryHandler : IRequestHandler<GetBriefStudentG
 
     public async Task<BriefStudentGroupDTO> Handle(GetBriefStudentGroupQuery request, CancellationToken cancellationToken)
     {
-        var tag = await _context.StudentGroups
+        var studentGroup = await _context.StudentGroups
             .AsNoTracking()
             .Where(x => x.Id == request.StudentGroupId)
-            .Select(x => new BriefStudentGroupDTO
-            {
-                Id = x.Id,
-                Name = x.Name
-            })
+            .MapToBriefStudentGroupDTO()
             .FirstOrDefaultAsync();
 
-        if (tag == null)
+        if (studentGroup == null)
         {
             throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
         }
 
-        return tag;
+        return studentGroup;
     }
 }

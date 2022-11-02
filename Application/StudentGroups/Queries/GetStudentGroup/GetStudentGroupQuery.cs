@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTO.StudentGroups;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
@@ -23,15 +24,7 @@ public class GetStudentGroupQueryHandler : IRequestHandler<GetStudentGroupQuery,
         var studentGroup = await _context.StudentGroups
             .AsNoTracking()
             .Where(x => x.Id == request.StudentGroupId)
-            .Select(x => new StudentGroupDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Created = x.Created,
-                LastModified = x.LastModified,
-                CreatedBy = x.CreatedBy,
-                LastModifiedBy = x.LastModifiedBy,
-            })
+            .MapToStudentGroupDTO()
             .FirstOrDefaultAsync();
 
         if (studentGroup == null)
