@@ -31,15 +31,7 @@ public class GetJobPositionsWithPaginationWithSearchWithSortQueryHandler : IRequ
         return await _context.JobPositions
             .AsNoTracking()
             .Search(request.SearchTerm)
-            .Select(x => new JobPositionDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Created = x.Created,
-                CreatedBy = x.CreatedBy,
-                LastModified = x.LastModified,
-                LastModifiedBy = x.LastModifiedBy,
-            })
+            .MapToJobPositionDTO()
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

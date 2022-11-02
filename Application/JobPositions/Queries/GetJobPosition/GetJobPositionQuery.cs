@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTO.JobPositions;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
@@ -23,15 +24,7 @@ public class GetJobPositionQueryHandler : IRequestHandler<GetJobPositionQuery, J
         var tag = await _context.JobPositions
             .AsNoTracking()
             .Where(x => x.Id == request.JobPositionId)
-            .Select(x => new JobPositionDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Created = x.Created,
-                LastModified = x.LastModified,
-                CreatedBy = x.CreatedBy,
-                LastModifiedBy = x.LastModifiedBy,
-            })
+            .MapToJobPositionDTO()
             .FirstOrDefaultAsync();
 
         if (tag == null)

@@ -26,11 +26,7 @@ public class GetBriefJobPositionsWithSearchQueryHandler : IRequestHandler<GetBri
             .AsNoTracking()
             .Search(request.SearchTerm)
             .OrderBy(x => x.Name)
-            .Select(x => new BriefJobPositionDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-            })
+            .MapToBriefJobPositionDTO()
             .ToListAsync();
     }
 }
