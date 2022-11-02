@@ -34,16 +34,7 @@ public class GetTagsWithPaginationWithSearchWithFilterWithSortQueryHandler : IRe
             .AsNoTracking()
             .Search(request.SearchTerm)
             .Filter(isAccepted: request.IsAccepted)
-            .Select(x => new TagDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-                IsAccepted = x.IsAccepted,
-                Created = x.Created,
-                CreatedBy = x.CreatedBy,
-                LastModified = x.LastModified,
-                LastModifiedBy = x.LastModifiedBy,
-            })
+            .MapToTagDTO()
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

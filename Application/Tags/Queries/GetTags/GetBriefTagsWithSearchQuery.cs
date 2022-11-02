@@ -26,11 +26,7 @@ public class GetBriefTagsWithSearchQueryHandler : IRequestHandler<GetBriefTagsWi
             .AsNoTracking()
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
-            .Select(x => new BriefTagDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-            })
+            .MapToBriefTagDTO()
             .ToListAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTO.Tags;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
@@ -23,16 +24,7 @@ public class GetTagQueryHandler : IRequestHandler<GetTagQuery, TagDTO>
         var tag = await _context.Tags
             .AsNoTracking()
             .Where(x => x.Id == request.TagId)
-            .Select(x => new TagDTO
-            {
-                Id = x.Id,
-                Name = x.Name,
-                IsAccepted = x.IsAccepted,
-                Created = x.Created,
-                LastModified = x.LastModified,
-                CreatedBy = x.CreatedBy,
-                LastModifiedBy = x.LastModifiedBy,
-            })
+            .MapToTagDTO()
             .FirstOrDefaultAsync();
 
         if (tag == null)

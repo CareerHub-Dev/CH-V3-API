@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTO.Tags;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
@@ -23,11 +24,7 @@ public class GetBriefTagQueryHandler : IRequestHandler<GetBriefTagQuery, BriefTa
         var tag = await _context.Tags
             .AsNoTracking()
             .Where(x => x.Id == request.TagId)
-            .Select(x => new BriefTagDTO
-            {
-                Id = x.Id,
-                Name = x.Name
-            })
+            .MapToBriefTagDTO()
             .FirstOrDefaultAsync();
 
         if (tag == null)
