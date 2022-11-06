@@ -28,6 +28,11 @@ public class FileService : IFileService
 
         var imagePath = Path.Combine(directoryPath, uniqueFileName);
 
+        if (Exists(imagePath))
+        {
+            return await MoveFileAsync(file, directoryPath, cancellationToken);
+        }
+
         using var stream = new FileStream(imagePath, FileMode.Create);
         await file.CopyToAsync(stream, cancellationToken);
 
