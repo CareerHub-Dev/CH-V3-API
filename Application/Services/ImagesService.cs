@@ -14,7 +14,7 @@ public class ImagesService : IImagesService
         _fileSystem = fileSystem;
     }
 
-    public List<string> GetImageNames()
+    public List<string> GetImageFileNames()
     {
         var imagesRoute = _pathService.GetImagesRoute;
         var imagesDirectoryPath = _fileSystem.Path.Combine(_pathService.GetWebRootPath, imagesRoute);
@@ -59,6 +59,22 @@ public class ImagesService : IImagesService
         if (_fileSystem.File.Exists(imagePath))
         {
             _fileSystem.File.Delete(imagePath);
+        }
+    }
+
+    public void DeleteImagesIfExists(IEnumerable<string> imageFileNames)
+    {
+        var imagesRoute = _pathService.GetImagesRoute;
+        var imagesDirectoryPath = _fileSystem.Path.Combine(_pathService.GetWebRootPath, imagesRoute);
+
+        foreach (var imageFileName in imageFileNames)
+        {
+            var imagePath = _fileSystem.Path.Combine(imagesDirectoryPath, imageFileName);
+
+            if (_fileSystem.File.Exists(imagePath))
+            {
+                _fileSystem.File.Delete(imagePath);
+            }
         }
     }
 }
