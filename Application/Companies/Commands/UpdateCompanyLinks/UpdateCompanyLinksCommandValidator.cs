@@ -17,5 +17,9 @@ public class UpdateCompanyLinksCommandValidator : AbstractValidator<UpdateCompan
                 .NotEmpty()
                 .Uri();
         });
+
+        RuleFor(x => x.Links.Count)
+            .LessThanOrEqualTo(5)
+            .OverridePropertyName("Links");
     }
 }

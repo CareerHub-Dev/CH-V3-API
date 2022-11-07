@@ -49,5 +49,9 @@ public class VerifyCompanyWithContinuedRegistrationCommandValidator : AbstractVa
                 .NotEmpty()
                 .Uri();
         });
+
+        RuleFor(x => x.Links.Count)
+            .LessThanOrEqualTo(5)
+            .OverridePropertyName("Links");
     }
 }
