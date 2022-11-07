@@ -1,17 +1,16 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.Companies;
-using Application.Common.DTO.CompanyLinks;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
 using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.InviteCompany;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyDetail;
+using Application.Companies.Commands.UpdateCompanyLinks;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
-using Application.CompanyLinks.Queries.GetCompanyLinks;
 using Application.Emails.Commands;
 using Application.JobOffers.Queries.GetJobOffersOfCompany;
 using Application.Students.Queries.GetStudentSubscribersOfCompany;
@@ -141,6 +140,22 @@ public class CompaniesController : ApiControllerBase
         return NoContent();
     }
 
+    [HttpPut("{companyId}/Links")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateCompanyLinks(Guid companyId, UpdateCompanyLinksCommand command)
+    {
+        if (companyId != command.CompanyId)
+        {
+            return BadRequest();
+        }
+
+        await Mediator.Send(command);
+
+        return NoContent();
+    }
+
     [HttpPost("{companyId}/logo")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -161,17 +176,6 @@ public class CompaniesController : ApiControllerBase
         var result = await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file });
 
         return Ok(result);
-    }
-
-    [HttpGet("{companyId}/CompanyLinks")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyLinkDTO>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCompanyLinksOfCompany(Guid companyId)
-    {
-        return Ok(await Mediator.Send(new GetCompanyLinksOfCompanyWithFilterQuery
-        {
-            CompanyId = companyId
-        }));
     }
 
     [HttpGet("{companyId}/JobOffers")]

@@ -10,7 +10,6 @@ public interface IApplicationDbContext
     public DbSet<Student> Students { get; }
     public DbSet<Company> Companies { get; }
     public DbSet<Admin> Admins { get; }
-    public DbSet<CompanyLink> CompanyLinks { get; }
     public DbSet<JobOffer> JobOffers { get; }
     public DbSet<Tag> Tags { get; }
     public DbSet<StudentSubscription> StudentSubscriptions { get; }

@@ -31,7 +31,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Student> Students => Set<Student>();
     public DbSet<Company> Companies => Set<Company>();
     public DbSet<Admin> Admins => Set<Admin>();
-    public DbSet<CompanyLink> CompanyLinks => Set<CompanyLink>();
     public DbSet<JobOffer> JobOffers => Set<JobOffer>();
     public DbSet<Tag> Tags => Set<Tag>();
     public DbSet<StudentSubscription> StudentSubscriptions => Set<StudentSubscription>();

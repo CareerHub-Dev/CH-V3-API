@@ -9,6 +9,7 @@ using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using API.Authorize;
 using API.DTO.Requests.Companies;
+using Application.Companies.Commands.UpdateCompanyLinks;
 
 namespace API.Areas.Company;
 
@@ -36,6 +37,19 @@ public class CompaniesController : ApiControllerBase
             Motto = view.Motto,
             Description = view.Description,
             Name = view.Name,
+        });
+
+        return NoContent();
+    }
+
+    [HttpPut("self/Links")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> UpdateCompanyLinks(UpdateOwnCompanyLinksRequest command)
+    {
+        await Mediator.Send(new UpdateCompanyLinksCommand
+        {
+            CompanyId = AccountInfo!.Id,
+            Links = command.Links
         });
 
         return NoContent();

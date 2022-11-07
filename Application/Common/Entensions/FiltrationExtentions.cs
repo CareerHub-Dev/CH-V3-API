@@ -202,29 +202,6 @@ public static class FiltrationExtentions
         return companies;
     }
 
-    public static IQueryable<CompanyLink> Filter(
-        this IQueryable<CompanyLink> companyLinks, 
-        bool? isCompanyVerified = null,
-        ActivationStatus? companyActivationStatus = null)
-    {
-
-        if (isCompanyVerified.HasValue && isCompanyVerified == true)
-        {
-            companyLinks = companyLinks.Where(x => x.Company!.Verified != null || x.Company!.PasswordReset != null);
-        }
-        else if (isCompanyVerified.HasValue && isCompanyVerified == false)
-        {
-            companyLinks = companyLinks.Where(x => x.Company!.Verified == null && x.Company!.PasswordReset == null);
-        }
-
-        if (companyActivationStatus.HasValue)
-        {
-            companyLinks = companyLinks.Where(x => x.Company!.ActivationStatus == companyActivationStatus);
-        }
-
-        return companyLinks;
-    }
-
     public static IQueryable<Experience> Filter(
         this IQueryable<Experience> experiences,
         bool? isStudentVerified = null,

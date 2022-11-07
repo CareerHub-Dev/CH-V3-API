@@ -1,4 +1,5 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.CompanyLinks;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Services;
@@ -20,6 +21,9 @@ public record VerifyCompanyWithContinuedRegistrationCommand : IRequest
     public string Name { get; init; } = string.Empty;
     public string Motto { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;
+
+    public List<CompanyLinkDTO> Links { get; init; } = new List<CompanyLinkDTO>();
+
     public string Password { get; init; } = string.Empty;
 }
 
@@ -52,19 +56,16 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
         company.PasswordHash = _passwordHasher.HashPassword(company, request.Password);
         company.VerificationToken = null;
         company.Verified = DateTime.UtcNow;
+
         company.Name = request.Name;
         company.Motto = request.Motto;
         company.Description = request.Description;
+        company.Logo = request.Logo != null ? await _imagesService.SaveImageAsync(request.Logo) : null;
+        company.Banner = request.Banner != null ? await _imagesService.SaveImageAsync(request.Banner) : null;
 
-        if (request.Logo != null)
-        {
-            company.Logo = await _imagesService.SaveImageAsync(request.Logo);
-        }
-
-        if (request.Banner != null)
-        {
-            company.Banner = await _imagesService.SaveImageAsync(request.Banner);
-        }
+        company.Links = request.Links
+            .Select(x => new CompanyLink { Title = x.Title, Uri = x.Uri })
+            .ToList();
 
         await _context.SaveChangesAsync();
 
