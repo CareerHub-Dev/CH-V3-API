@@ -1,12 +1,7 @@
-﻿using Domain.Common;
+﻿namespace Domain.Entities;
 
-namespace Domain.Entities;
-
-public class CompanyLink : BaseEntity
+public class CompanyLink
 {
     public string Title { get; set; } = string.Empty;
     public string Uri { get; set; } = string.Empty;
-
-    public Guid CompanyId { get; set; }
-    public Company? Company { get; set; }
 }

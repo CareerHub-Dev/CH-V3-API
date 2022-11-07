@@ -21,5 +21,8 @@ public class CompanyConfigurations : IEntityTypeConfiguration<Company>
         builder.Property(x => x.Description)
             .HasMaxLength(1024)
             .IsRequired();
+
+        builder.Property(x => x.Links)
+            .HasColumnType("jsonb");
     }
 }
