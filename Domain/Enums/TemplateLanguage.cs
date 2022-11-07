@@ -2,6 +2,6 @@
 
 public enum TemplateLanguage
 {
-    UA = 0,
-    EN = 1,
+    UA,
+    EN,
 }

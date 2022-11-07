@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -22,6 +23,13 @@ namespace Infrastructure.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "activation_status", new[] { "active", "inactive", "ban" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "degree", new[] { "bachelor", "master", "doctorate" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "experience_level", new[] { "intern", "trainee", "junior", "middle", "senior" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "job_type", new[] { "full_time", "part_time", "contract" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "language_level", new[] { "a1", "a2", "b1", "b2", "c1", "c2" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "template_language", new[] { "ua", "en" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "work_format", new[] { "remote", "on_site", "hybrid" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("CompanyStudent", b =>
@@ -60,8 +68,8 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("ActivationStatus")
-                        .HasColumnType("integer");
+                    b.Property<ActivationStatus>("ActivationStatus")
+                        .HasColumnType("activation_status");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -145,8 +153,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<Guid>("StudentId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("TemplateLanguage")
-                        .HasColumnType("integer");
+                    b.Property<TemplateLanguage>("TemplateLanguage")
+                        .HasColumnType("template_language");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -206,8 +214,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<int>("Degree")
-                        .HasColumnType("integer");
+                    b.Property<Degree>("Degree")
+                        .HasColumnType("degree");
 
                     b.Property<DateTime?>("End")
                         .HasColumnType("timestamp with time zone");
@@ -246,16 +254,16 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("ExperienceLevel")
-                        .HasColumnType("integer");
+                    b.Property<ExperienceLevel>("ExperienceLevel")
+                        .HasColumnType("experience_level");
 
                     b.Property<string>("JobLocation")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<int>("JobType")
-                        .HasColumnType("integer");
+                    b.Property<JobType>("JobType")
+                        .HasColumnType("job_type");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
@@ -268,8 +276,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<int>("WorkFormat")
-                        .HasColumnType("integer");
+                    b.Property<WorkFormat>("WorkFormat")
+                        .HasColumnType("work_format");
 
                     b.HasKey("Id");
 
@@ -287,8 +295,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<Guid>("CVId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("LanguageLevel")
-                        .HasColumnType("integer");
+                    b.Property<LanguageLevel>("LanguageLevel")
+                        .HasColumnType("language_level");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -314,8 +322,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("ExperienceLevel")
-                        .HasColumnType("integer");
+                    b.Property<ExperienceLevel>("ExperienceLevel")
+                        .HasColumnType("experience_level");
 
                     b.Property<string>("Image")
                         .HasColumnType("text");
@@ -323,8 +331,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<Guid>("JobPositionId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("JobType")
-                        .HasColumnType("integer");
+                    b.Property<JobType>("JobType")
+                        .HasColumnType("job_type");
 
                     b.Property<string>("Overview")
                         .IsRequired()
@@ -354,8 +362,8 @@ namespace Infrastructure.Persistence.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)");
 
-                    b.Property<int>("WorkFormat")
-                        .HasColumnType("integer");
+                    b.Property<WorkFormat>("WorkFormat")
+                        .HasColumnType("work_format");
 
                     b.HasKey("Id");
 

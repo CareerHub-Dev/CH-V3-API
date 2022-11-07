@@ -1,10 +1,12 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Common;
 using Infrastructure.Persistence.Interceptors;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using System.Reflection;
 
 namespace Infrastructure.Persistence;
@@ -24,6 +26,17 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _mediator = mediator;
         _auditableEntitySaveChangesInterceptor = auditableEntitySaveChangesInterceptor;
         _loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
+    }
+
+    static ApplicationDbContext()
+    {
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<WorkFormat>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<ActivationStatus>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<Degree>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<ExperienceLevel>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<JobType>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<LanguageLevel>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<TemplateLanguage>();
     }
 
     public DbSet<Account> Accounts => Set<Account>();
@@ -46,6 +59,14 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        builder.HasPostgresEnum<WorkFormat>();
+        builder.HasPostgresEnum<ActivationStatus>();
+        builder.HasPostgresEnum<Degree>();
+        builder.HasPostgresEnum<ExperienceLevel>();
+        builder.HasPostgresEnum<JobType>();
+        builder.HasPostgresEnum<LanguageLevel>();
+        builder.HasPostgresEnum<TemplateLanguage>(); 
 
         base.OnModelCreating(builder);
     }

@@ -1,14 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
+using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Infrastructure.Persistence.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("Npgsql:Enum:activation_status", "active,inactive,ban")
+                .Annotation("Npgsql:Enum:degree", "bachelor,master,doctorate")
+                .Annotation("Npgsql:Enum:experience_level", "intern,trainee,junior,middle,senior")
+                .Annotation("Npgsql:Enum:job_type", "full_time,part_time,contract")
+                .Annotation("Npgsql:Enum:language_level", "a1,a2,b1,b2,c1,c2")
+                .Annotation("Npgsql:Enum:template_language", "ua,en")
+                .Annotation("Npgsql:Enum:work_format", "remote,on_site,hybrid");
+
             migrationBuilder.CreateTable(
                 name: "Accounts",
                 columns: table => new
@@ -21,28 +33,12 @@ namespace Infrastructure.Persistence.Migrations
                     Verified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ResetToken = table.Column<string>(type: "text", nullable: true),
                     ResetTokenExpires = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    PasswordReset = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    PasswordReset = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ActivationStatus = table.Column<ActivationStatus>(type: "activation_status", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Accounts", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    ContentType = table.Column<string>(type: "text", nullable: false),
-                    Content = table.Column<byte[]>(type: "bytea", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastModifiedBy = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,7 +94,8 @@ namespace Infrastructure.Persistence.Migrations
                 name: "Admins",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsSuperAdmin = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,10 +114,11 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    LogoId = table.Column<Guid>(type: "uuid", nullable: true),
-                    BannerId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Logo = table.Column<string>(type: "text", nullable: true),
+                    Banner = table.Column<string>(type: "text", nullable: true),
                     Motto = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
-                    Description = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false)
+                    Description = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
+                    Links = table.Column<List<CompanyLink>>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -192,7 +190,7 @@ namespace Infrastructure.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FirstName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
                     LastName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    PhotoId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Photo = table.Column<string>(type: "text", nullable: true),
                     Phone = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
                     BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     StudentGroupId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -215,26 +213,6 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CompanyLinks",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    Uri = table.Column<string>(type: "text", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CompanyLinks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CompanyLinks_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "JobOffers",
                 columns: table => new
                 {
@@ -244,10 +222,10 @@ namespace Infrastructure.Persistence.Migrations
                     Requirements = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
                     Responsibilities = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
                     Preferences = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
-                    ImageId = table.Column<Guid>(type: "uuid", nullable: true),
-                    JobType = table.Column<int>(type: "integer", nullable: false),
-                    WorkFormat = table.Column<int>(type: "integer", nullable: false),
-                    ExperienceLevel = table.Column<int>(type: "integer", nullable: false),
+                    Image = table.Column<string>(type: "text", nullable: true),
+                    JobType = table.Column<JobType>(type: "job_type", nullable: false),
+                    WorkFormat = table.Column<WorkFormat>(type: "work_format", nullable: false),
+                    ExperienceLevel = table.Column<ExperienceLevel>(type: "experience_level", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -301,13 +279,13 @@ namespace Infrastructure.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     JobPositionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TemplateLanguage = table.Column<int>(type: "integer", nullable: false),
+                    TemplateLanguage = table.Column<TemplateLanguage>(type: "template_language", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
-                    PhotoId = table.Column<Guid>(type: "uuid", nullable: true),
+                    Photo = table.Column<string>(type: "text", nullable: true),
                     Goals = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
                     SkillsAndTechnologies = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
-                    OtherExperience = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
+                    ExperienceHighlights = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Modified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     StudentId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -323,6 +301,32 @@ namespace Infrastructure.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CVs_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Experiences",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    CompanyName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
+                    JobType = table.Column<JobType>(type: "job_type", nullable: false),
+                    WorkFormat = table.Column<WorkFormat>(type: "work_format", nullable: false),
+                    ExperienceLevel = table.Column<ExperienceLevel>(type: "experience_level", nullable: false),
+                    JobLocation = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Experiences", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Experiences_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
@@ -454,7 +458,7 @@ namespace Infrastructure.Persistence.Migrations
                     City = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     Country = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     Specialty = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    Degree = table.Column<int>(type: "integer", nullable: false),
+                    Degree = table.Column<Degree>(type: "degree", nullable: false),
                     Start = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     End = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CVId = table.Column<Guid>(type: "uuid", nullable: false)
@@ -471,38 +475,12 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Experiences",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    CompanyName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    JobType = table.Column<int>(type: "integer", nullable: false),
-                    WorkFormat = table.Column<int>(type: "integer", nullable: false),
-                    ExperienceLevel = table.Column<int>(type: "integer", nullable: false),
-                    JobLocation = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
-                    StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CVId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Experiences", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Experiences_CVs_CVId",
-                        column: x => x.CVId,
-                        principalTable: "CVs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ForeignLanguages",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    LanguageLevel = table.Column<int>(type: "integer", nullable: false),
+                    LanguageLevel = table.Column<LanguageLevel>(type: "language_level", nullable: false),
                     CVId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -520,11 +498,6 @@ namespace Infrastructure.Persistence.Migrations
                 name: "IX_Accounts_NormalizedEmail",
                 table: "Accounts",
                 column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CompanyLinks_CompanyId",
-                table: "CompanyLinks",
-                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CompanyStudent_SubscribedStudentsId",
@@ -557,9 +530,9 @@ namespace Infrastructure.Persistence.Migrations
                 column: "CVId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Experiences_CVId",
+                name: "IX_Experiences_StudentId",
                 table: "Experiences",
-                column: "CVId");
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ForeignLanguages_CVId",
@@ -618,9 +591,6 @@ namespace Infrastructure.Persistence.Migrations
                 name: "Admins");
 
             migrationBuilder.DropTable(
-                name: "CompanyLinks");
-
-            migrationBuilder.DropTable(
                 name: "CompanyStudent");
 
             migrationBuilder.DropTable(
@@ -637,9 +607,6 @@ namespace Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "ForeignLanguages");
-
-            migrationBuilder.DropTable(
-                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "JobOfferStudent");
