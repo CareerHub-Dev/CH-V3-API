@@ -3,6 +3,7 @@ using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Npgsql;
+using Npgsql.Internal;
 
 namespace Infrastructure.Persistence;
 
@@ -24,6 +25,7 @@ public class ApplicationDbContextInitialiser
             if (_context.Database.IsNpgsql())
             {
                 await _context.Database.MigrateAsync();
+                ((NpgsqlConnection)_context.Database.GetDbConnection()).ReloadTypes();
             }
         }
         catch (Exception ex)
