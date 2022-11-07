@@ -22,6 +22,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Npgsql.Internal.TypeHandlers.DateTimeHandlers;
 using Application.Accounts.Queries.Authenticate;
+using Application.BackgroundServices;
 
 namespace API;
 
@@ -124,6 +125,8 @@ public static class ConfigureServices
 
         services.AddScoped<IAccountHelper, AccountHelper>();
         services.AddScoped<IRefreshTokenHelper, RefreshTokenHelper>();
+
+        services.AddHostedService<RemoveOldImagesBackgroundService>();
 
         services.Configure<EmailTemplateSettings>(configuration.GetSection(nameof(EmailTemplateSettings)));
         services.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
