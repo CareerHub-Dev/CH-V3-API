@@ -1,12 +1,12 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.Companies;
-using Application.Common.DTO.CompanyLinks;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
 using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.InviteCompany;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyDetail;
+using Application.Companies.Commands.UpdateCompanyLinks;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompanies;
@@ -129,6 +129,22 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateCompanyDetail(Guid companyId, UpdateCompanyDetailCommand command)
+    {
+        if (companyId != command.CompanyId)
+        {
+            return BadRequest();
+        }
+
+        await Mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpPut("{companyId}/Links")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateCompanyLinks(Guid companyId, UpdateCompanyLinksCommand command)
     {
         if (companyId != command.CompanyId)
         {
