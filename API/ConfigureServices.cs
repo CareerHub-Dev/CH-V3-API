@@ -20,9 +20,9 @@ using Application.Services;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Npgsql.Internal.TypeHandlers.DateTimeHandlers;
 using Application.Accounts.Queries.Authenticate;
 using Application.BackgroundServices;
+using System.IO.Abstractions;
 
 namespace API;
 
@@ -102,7 +102,6 @@ public static class ConfigureServices
         services.AddScoped<ApplicationDbContextInitialiser>();
 
         services.AddScoped<IMailKitService, MailKitService>();
-        services.AddScoped<IFileService, FileService>();
 
         return services;
     }
@@ -125,6 +124,8 @@ public static class ConfigureServices
 
         services.AddScoped<IAccountHelper, AccountHelper>();
         services.AddScoped<IRefreshTokenHelper, RefreshTokenHelper>();
+
+        services.AddScoped<IFileSystem, FileSystem>();
 
         services.AddHostedService<RemoveOldImagesBackgroundService>();
 
