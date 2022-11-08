@@ -25,6 +25,9 @@ public class ApplicationDbContextInitialiser
             if (_context.Database.IsNpgsql())
             {
                 await _context.Database.MigrateAsync();
+
+                _context.Database.OpenConnection();
+                ((NpgsqlConnection)_context.Database.GetDbConnection()).ReloadTypes();
             }
         }
         catch (Exception ex)
