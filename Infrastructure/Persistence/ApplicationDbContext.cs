@@ -53,6 +53,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<CV> CVs => Set<CV>();
     public DbSet<StudentLog> StudentLogs => Set<StudentLog>();
     public DbSet<Post> Posts => Set<Post>();
+    public DbSet<Ban> Bans => Set<Ban>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

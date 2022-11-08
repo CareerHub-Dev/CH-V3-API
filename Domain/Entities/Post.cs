@@ -1,8 +1,9 @@
-﻿namespace Domain.Entities;
+﻿using Domain.Common;
 
-public class Post
+namespace Domain.Entities;
+
+public class Post : BaseEntity
 {
-    public Guid Id { get; set; }
     public string Text { get; set; } = string.Empty;
     public DateTime CreatedDate { get; set; }
 
