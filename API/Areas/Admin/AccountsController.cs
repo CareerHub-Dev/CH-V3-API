@@ -1,5 +1,4 @@
-﻿using Application.Accounts.Commands.ChangeActivationStatus;
-using Application.Accounts.Queries.GetBriefAccount;
+﻿using Application.Accounts.Queries.GetBriefAccount;
 using Microsoft.AspNetCore.Mvc;
 using API.Authorize;
 
@@ -15,21 +14,5 @@ public class AccountsController : ApiControllerBase
     public async Task<IActionResult> GetBriefAccount(Guid accountId)
     {
         return Ok(await Mediator.Send(new GetBriefAccountQuery(accountId)));
-    }
-
-    [HttpPut("{accountId}/change-activation-status")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ChangeActivationStatusOfAccount(Guid accountId, ChangeActivationStatusCommand command)
-    {
-        if (accountId != command.AccountId)
-        {
-            return BadRequest();
-        }
-
-        await Mediator.Send(command);
-
-        return NoContent();
     }
 }

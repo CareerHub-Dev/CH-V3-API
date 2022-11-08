@@ -2,7 +2,6 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,10 +14,8 @@ public record GetAmountAppliedCVsOfCompanyJobOfferWithFilterQuery : IRequest<int
 
     public Guid CompanyId { get; init; }
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
-    public ActivationStatus? CompanyOfJobOfferMustHaveActivationStatus { get; init; }
 
     public bool? IsStudentOfAppliedCVMustBeVerified { get; init; }
-    public ActivationStatus? StudentOfCVMustHaveActivationStatus { get; init; }
 }
 
 public class GetAmountAppliedCVsOfCompanyJobOfferWithFilterQueryHandler
@@ -32,13 +29,12 @@ public class GetAmountAppliedCVsOfCompanyJobOfferWithFilterQueryHandler
     }
 
     public async Task<int> Handle(
-        GetAmountAppliedCVsOfCompanyJobOfferWithFilterQuery request, 
+        GetAmountAppliedCVsOfCompanyJobOfferWithFilterQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Companies
             .Filter(
-                isVerified: request.IsCompanyOfJobOfferMustBeVerified,
-                activationStatus: request.CompanyOfJobOfferMustHaveActivationStatus
+                isVerified: request.IsCompanyOfJobOfferMustBeVerified
             )
             .AnyAsync(x => x.Id == request.CompanyId))
         {
@@ -58,8 +54,7 @@ public class GetAmountAppliedCVsOfCompanyJobOfferWithFilterQueryHandler
             .Where(x => x.Id == request.JobOfferId)
             .SelectMany(x => x.AppliedCVs)
             .Filter(
-                isStudentVerified: request.IsStudentOfAppliedCVMustBeVerified,
-                studentActivationStatus: request.StudentOfCVMustHaveActivationStatus
+                isStudentVerified: request.IsStudentOfAppliedCVMustBeVerified
             )
             .CountAsync();
     }

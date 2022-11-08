@@ -1,7 +1,6 @@
 ﻿using Application.Admins.Events;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 
 namespace Application.Admins.Commands.InviteAdmin;
@@ -27,8 +26,7 @@ public class InviteAdminCommandHandler : IRequestHandler<InviteAdminCommand, Gui
         var admin = new Admin
         {
             Email = request.Email,
-            IsSuperAdmin = false,
-            ActivationStatus = ActivationStatus.Active
+            IsSuperAdmin = false
         };
 
         await _context.Admins.AddAsync(admin);

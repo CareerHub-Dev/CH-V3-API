@@ -53,10 +53,8 @@ public class JobOffersController : ApiControllerBase
             StatsFilter = new JobOfferStatsFilter
             {
                 IsStudentOfAppliedCVMustBeVerified = true,
-                StudentOfCVMustHaveActivationStatus = ActivationStatus.Active,
 
                 IsSubscriberMustBeVerified = true,
-                SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
             OrderByExpression = orderByExpression ?? "StartDate",
@@ -78,7 +76,6 @@ public class JobOffersController : ApiControllerBase
             CompanyId = AccountInfo!.Id,
 
             IsSubscriberMustBeVerified = true,
-            SubscriberMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -93,7 +90,6 @@ public class JobOffersController : ApiControllerBase
             CompanyId = AccountInfo!.Id,
 
             IsStudentOfAppliedCVMustBeVerified = true,
-            StudentOfCVMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 

@@ -82,8 +82,7 @@ public class CompaniesController : ApiControllerBase
         return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
-            IsSubscriberMustBeVerified = true,
-            SubscriberMustHaveActivationStatus = ActivationStatus.Active
+            IsSubscriberMustBeVerified = true
         }));
     }
 

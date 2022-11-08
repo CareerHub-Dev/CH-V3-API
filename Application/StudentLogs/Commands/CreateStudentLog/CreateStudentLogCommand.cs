@@ -25,7 +25,7 @@ public class CreateStudentLogCommandHandler : IRequestHandler<CreateStudentLogCo
 
     public async Task<Guid> Handle(CreateStudentLogCommand request, CancellationToken cancellationToken)
     {
-        if(!await _context.StudentGroups.AnyAsync(x => x.Id == request.StudentGroupId))
+        if (!await _context.StudentGroups.AnyAsync(x => x.Id == request.StudentGroupId))
         {
             throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
         }

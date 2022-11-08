@@ -2,7 +2,6 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,10 +11,8 @@ public record GetAmountCompanySubscriptionsOfStudentWithFilterQuery : IRequest<i
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentMustBeVerified { get; init; }
-    public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 
     public bool? IsCompanyMustBeVerified { get; init; }
-    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 }
 
 public class GetAmountCompanySubscriptionsOfStudentWithFilterQueryHandler
@@ -32,8 +29,7 @@ public class GetAmountCompanySubscriptionsOfStudentWithFilterQueryHandler
     {
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsStudentMustBeVerified, 
-                activationStatus: request.StudentMustHaveActivationStatus
+                isVerified: request.IsStudentMustBeVerified
             )
             .AnyAsync(x => x.Id == request.StudentId))
         {
@@ -44,8 +40,7 @@ public class GetAmountCompanySubscriptionsOfStudentWithFilterQueryHandler
             .Where(x => x.Id == request.StudentId)
             .SelectMany(x => x.CompanySubscriptions)
             .Filter(
-                isVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.CompanyMustHaveActivationStatus
+                isVerified: request.IsCompanyMustBeVerified
             )
             .CountAsync();
     }

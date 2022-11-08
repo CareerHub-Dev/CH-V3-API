@@ -15,8 +15,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221108162738_AddBan")]
-    partial class AddBan
+    [Migration("20221108170031_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,7 +25,6 @@ namespace Infrastructure.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "activation_status", new[] { "active", "inactive", "ban" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "degree", new[] { "bachelor", "master", "doctorate" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "experience_level", new[] { "intern", "trainee", "junior", "middle", "senior" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "job_type", new[] { "full_time", "part_time", "contract" });
@@ -69,9 +68,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
-
-                    b.Property<ActivationStatus>("ActivationStatus")
-                        .HasColumnType("activation_status");
 
                     b.Property<string>("Email")
                         .IsRequired()

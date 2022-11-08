@@ -15,8 +15,8 @@ public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifySt
     private readonly IAccountHelper _accountHelper;
 
     public SendVerifyStudentEmailCommandHandler(
-        IApplicationDbContext context, 
-        IEmailService emailService, 
+        IApplicationDbContext context,
+        IEmailService emailService,
         IAccountHelper accountHelper)
     {
         _context = context;

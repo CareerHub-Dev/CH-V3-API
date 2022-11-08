@@ -1,11 +1,10 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.StudentGroups;
+using Application.Common.DTO.Students;
+using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
-using Application.Common.DTO.StudentGroups;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Domain.Enums;
-using Application.Common.DTO.Students;
 
 namespace Application.Students.Queries.GetStudents;
 
@@ -19,7 +18,6 @@ public record GetStudentsWithPaginationWithSearchWithFilterWithSortQuery : IRequ
     public bool? IsStudentMustBeVerified { get; init; }
     public Guid? WithoutStudentId { get; init; }
     public List<Guid>? StudentGroupIds { get; init; }
-    public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 
     public string OrderByExpression { get; init; } = string.Empty;
 }
@@ -40,8 +38,7 @@ public class GetStudentsWithPaginationWithSearchWithFilterWithSortQueryHandler :
             .Filter(
                 withoutStudentId: request.WithoutStudentId,
                 isVerified: request.IsStudentMustBeVerified,
-                studentGroupIds: request.StudentGroupIds,
-                activationStatus: request.StudentMustHaveActivationStatus
+                studentGroupIds: request.StudentGroupIds
             )
             .Search(request.SearchTerm)
             .Select(x => new StudentDTO
@@ -55,8 +52,7 @@ public class GetStudentsWithPaginationWithSearchWithFilterWithSortQueryHandler :
                 BirthDate = x.BirthDate,
                 StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
                 Verified = x.Verified,
-                PasswordReset = x.PasswordReset,
-                ActivationStatus = x.ActivationStatus
+                PasswordReset = x.PasswordReset
             })
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);

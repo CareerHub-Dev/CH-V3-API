@@ -5,7 +5,6 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,11 +15,9 @@ public record GetFollowedDetailedStudentSubscribersOfStudentOwnerForFollowerStud
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
-    public ActivationStatus? FollowerStudentMustHaveActivationStatus { get; init; }
 
     public Guid StudentOwnerId { get; init; }
     public bool? IsStudentOwnerMustBeVerified { get; init; }
-    public ActivationStatus? StudentOwnerMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -30,7 +27,6 @@ public record GetFollowedDetailedStudentSubscribersOfStudentOwnerForFollowerStud
     public bool? IsStudentMustBeVerified { get; init; }
     public Guid? WithoutStudentId { get; init; }
     public List<Guid>? StudentGroupIds { get; init; }
-    public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 
     public string OrderByExpression { get; init; } = string.Empty;
 }
@@ -49,8 +45,7 @@ public class GetFollowedDetailedStudentSubscribersOfStudentOwnerForFollowerStude
     {
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsFollowerStudentMustBeVerified,
-                activationStatus: request.FollowerStudentMustHaveActivationStatus
+                isVerified: request.IsFollowerStudentMustBeVerified
             )
             .AnyAsync(x => x.Id == request.FollowerStudentId))
         {
@@ -59,8 +54,7 @@ public class GetFollowedDetailedStudentSubscribersOfStudentOwnerForFollowerStude
 
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsStudentOwnerMustBeVerified,
-                activationStatus: request.StudentOwnerMustHaveActivationStatus
+                isVerified: request.IsStudentOwnerMustBeVerified
             )
             .AnyAsync(x => x.Id == request.StudentOwnerId))
         {
@@ -72,8 +66,7 @@ public class GetFollowedDetailedStudentSubscribersOfStudentOwnerForFollowerStude
             .Filter(
                 withoutStudentId: request.WithoutStudentId,
                 isVerified: request.IsStudentMustBeVerified,
-                studentGroupIds: request.StudentGroupIds,
-                activationStatus: request.StudentMustHaveActivationStatus
+                studentGroupIds: request.StudentGroupIds
             )
             .Where(x => x.StudentSubscriptions.Any(x => x.SubscriptionTargetId == request.StudentOwnerId))
             .Search(request.SearchTerm)

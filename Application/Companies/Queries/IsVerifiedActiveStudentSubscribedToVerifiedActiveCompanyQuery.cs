@@ -2,7 +2,6 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +25,7 @@ public class IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQueryHandle
     public async Task<bool> Handle(IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQuery request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Filter(isVerified: true, activationStatus: ActivationStatus.Active)
+            .Filter(isVerified: true)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
@@ -35,7 +34,7 @@ public class IsVerifiedActiveStudentSubscribedToVerifiedActiveCompanyQueryHandle
         }
 
         var company = await _context.Companies
-            .Filter(isVerified: true, activationStatus: ActivationStatus.Active)
+            .Filter(isVerified: true)
             .Include(x => x.SubscribedStudents.Where(x => x.Id == request.StudentId))
             .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 

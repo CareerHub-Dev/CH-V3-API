@@ -3,7 +3,6 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +12,6 @@ public record GetDetailedCompanyWithFilterQuery : IRequest<DetailedCompanyDTO>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
-    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 }
 
 public class GetDetailedCompanyWithFilterQueryHandler
@@ -27,15 +25,14 @@ public class GetDetailedCompanyWithFilterQueryHandler
     }
 
     public async Task<DetailedCompanyDTO> Handle(
-        GetDetailedCompanyWithFilterQuery request, 
+        GetDetailedCompanyWithFilterQuery request,
         CancellationToken cancellationToken)
     {
         var company = await _context.Companies
             .AsNoTracking()
             .Where(x => x.Id == request.CompanyId)
             .Filter(
-                isVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.CompanyMustHaveActivationStatus
+                isVerified: request.IsCompanyMustBeVerified
             )
             .Select(x => new DetailedCompanyDTO
             {

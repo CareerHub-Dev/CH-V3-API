@@ -27,7 +27,6 @@ public class CompaniesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
-        [FromQuery] ActivationStatus? companyMustHaveActivationStatus,
         [FromQuery] bool? isCompanyMustBeVerified,
         [FromQuery] string? orderByExpression,
         [FromQuery] string? searchTerm,
@@ -40,7 +39,6 @@ public class CompaniesController : ApiControllerBase
             PageSize = pageSize,
             SearchTerm = searchTerm ?? string.Empty,
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
-            CompanyMustHaveActivationStatus = companyMustHaveActivationStatus,
             OrderByExpression = orderByExpression ?? "Name"
         });
 
@@ -222,7 +220,6 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentSubscribersOfCompany(
         Guid companyId,
-        [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? orderByExpression,
@@ -240,7 +237,6 @@ public class CompaniesController : ApiControllerBase
 
             IsStudentMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
-            StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
 
             OrderByExpression = orderByExpression ?? "LastName",
         });

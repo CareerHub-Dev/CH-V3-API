@@ -31,7 +31,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     static ApplicationDbContext()
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<WorkFormat>();
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<ActivationStatus>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<Degree>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<ExperienceLevel>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<JobType>();
@@ -60,7 +59,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         builder.HasPostgresEnum<WorkFormat>();
-        builder.HasPostgresEnum<ActivationStatus>();
         builder.HasPostgresEnum<Degree>();
         builder.HasPostgresEnum<ExperienceLevel>();
         builder.HasPostgresEnum<JobType>();

@@ -19,7 +19,6 @@ public record GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithF
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
-    public ActivationStatus? CompanyOfJobOfferMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -55,8 +54,7 @@ public class GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFi
 
         if (!await _context.Companies
             .Filter(
-                isVerified: request.IsCompanyOfJobOfferMustBeVerified,
-                activationStatus: request.CompanyOfJobOfferMustHaveActivationStatus
+                isVerified: request.IsCompanyOfJobOfferMustBeVerified
             )
             .AnyAsync(x => x.Id == request.CompanyId))
         {
@@ -93,16 +91,12 @@ public class GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFi
                             x.Verified != null || x.PasswordReset != null :
                             x.Verified == null && x.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus)
                 ),
                 AmountAppliedCVs = x.AppliedCVs.Count(x =>
                     (!request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.HasValue || (request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.Value ?
                             x.Student!.Verified != null || x.Student.PasswordReset != null :
                             x.Student!.Verified == null && x.Student.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.StudentOfCVMustHaveActivationStatus.HasValue || x.Student!.ActivationStatus == request.StatsFilter.StudentOfCVMustHaveActivationStatus)
                 )
             })
             .OrderByExpression(request.OrderByExpression)

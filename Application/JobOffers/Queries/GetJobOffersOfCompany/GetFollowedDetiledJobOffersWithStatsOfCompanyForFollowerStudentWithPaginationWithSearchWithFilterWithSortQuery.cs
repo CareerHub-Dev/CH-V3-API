@@ -19,11 +19,9 @@ public record GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWit
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
-    public ActivationStatus? FollowerStudentMustHaveActivationStatus { get; init; }
 
     public Guid CompanyId { get; init; }
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
-    public ActivationStatus? CompanyOfJobOfferMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -58,8 +56,7 @@ public class GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWith
     {
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsFollowerStudentMustBeVerified,
-                activationStatus: request.FollowerStudentMustHaveActivationStatus
+                isVerified: request.IsFollowerStudentMustBeVerified
             )
             .AnyAsync(x => x.Id == request.FollowerStudentId))
         {
@@ -68,8 +65,7 @@ public class GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWith
 
         if (!await _context.Companies
             .Filter(
-                isVerified: request.IsCompanyOfJobOfferMustBeVerified,
-                activationStatus: request.CompanyOfJobOfferMustHaveActivationStatus
+                isVerified: request.IsCompanyOfJobOfferMustBeVerified
             )
             .AnyAsync(x => x.Id == request.CompanyId))
         {
@@ -107,16 +103,12 @@ public class GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWith
                             x.Verified != null || x.PasswordReset != null :
                             x.Verified == null && x.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus)
                 ),
                 AmountAppliedCVs = x.AppliedCVs.Count(x =>
                     (!request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.HasValue || (request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.Value ?
                             x.Student!.Verified != null || x.Student.PasswordReset != null :
                             x.Student!.Verified == null && x.Student.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.StudentOfCVMustHaveActivationStatus.HasValue || x.Student!.ActivationStatus == request.StatsFilter.StudentOfCVMustHaveActivationStatus)
                 )
             })
             .OrderByExpression(request.OrderByExpression)

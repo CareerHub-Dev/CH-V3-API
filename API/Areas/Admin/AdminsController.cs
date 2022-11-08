@@ -20,7 +20,6 @@ public class AdminsController : ApiControllerBase
     public async Task<IActionResult> GetAdmins(
         [FromQuery] bool? isAdminMustBeVerified,
         [FromQuery] bool? isSuperAdmin,
-        [FromQuery] ActivationStatus? activationStatus,
         [FromQuery] string? orderByExpression,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
@@ -36,7 +35,6 @@ public class AdminsController : ApiControllerBase
             WithoutAdminId = AccountInfo!.Id,
             IsAdminMustBeVerified = isAdminMustBeVerified,
             IsSuperAdmin = isSuperAdmin,
-            ActivationStatus = activationStatus,
 
             OrderByExpression = orderByExpression ?? "Email"
         });

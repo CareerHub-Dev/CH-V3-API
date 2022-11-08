@@ -2,7 +2,6 @@
 using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +17,6 @@ public record GetAdminsWithPaginationWithSearchWithFilterWithSortQuery : IReques
     public bool? IsAdminMustBeVerified { get; init; }
     public Guid? WithoutAdminId { get; init; }
     public bool? IsSuperAdmin { get; init; }
-    public ActivationStatus? ActivationStatus { get; init; }
 
     public string OrderByExpression { get; init; } = string.Empty;
 }
@@ -39,8 +37,7 @@ public class GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler : I
             .Filter(
                 withoutAdminId: request.WithoutAdminId,
                 isVerified: request.IsAdminMustBeVerified,
-                isSuperAdmin: request.IsSuperAdmin,
-                activationStatus: request.ActivationStatus
+                isSuperAdmin: request.IsSuperAdmin
              )
             .Search(request.SearchTerm)
             .Select(x => new AdminDTO
@@ -49,8 +46,7 @@ public class GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler : I
                 Email = x.Email,
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
-                IsSuperAdmin = x.IsSuperAdmin,
-                ActivationStatus = x.ActivationStatus,
+                IsSuperAdmin = x.IsSuperAdmin
             })
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);

@@ -3,7 +3,6 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +13,6 @@ public record GetExperienceWithFilterQuery : IRequest<ExperienceDTO>
     public Guid ExperienceId { get; init; }
 
     public bool? IsStudentMustBeVerified { get; init; }
-    public ActivationStatus StudentMustHaveActivationStatus { get; init; }
 }
 
 public class GetExperienceWithFilterQueryHandler : IRequestHandler<GetExperienceWithFilterQuery, ExperienceDTO>
@@ -32,8 +30,7 @@ public class GetExperienceWithFilterQueryHandler : IRequestHandler<GetExperience
             .AsNoTracking()
             .Where(x => x.Id == request.ExperienceId)
             .Filter(
-                isStudentVerified: request.IsStudentMustBeVerified,
-                studentActivationStatus: request.StudentMustHaveActivationStatus
+                isStudentVerified: request.IsStudentMustBeVerified
             )
             .Select(x => new ExperienceDTO
             {

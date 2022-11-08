@@ -3,7 +3,6 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -53,8 +52,7 @@ public class RegisterStudentCommandHandler : IRequestHandler<RegisterStudentComm
             Verified = null,
             FirstName = studentLog.FirstName,
             LastName = studentLog.LastName,
-            StudentGroupId = studentLog.StudentGroupId,
-            ActivationStatus = ActivationStatus.Active,
+            StudentGroupId = studentLog.StudentGroupId
         };
 
         student.PasswordHash = _passwordHasher.HashPassword(student, request.Password);

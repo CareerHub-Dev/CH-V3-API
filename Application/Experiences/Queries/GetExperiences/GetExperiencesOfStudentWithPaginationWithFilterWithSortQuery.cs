@@ -4,7 +4,6 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +13,6 @@ public class GetExperiencesOfStudentWithPaginationWithFilterWithSortQuery : IReq
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentMustBeVerified { get; init; }
-    public ActivationStatus StudentMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -35,8 +33,7 @@ public class GetExperiencesOfStudentWithPaginationWithFilterWithSortQueryHandler
     {
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsStudentMustBeVerified,
-                activationStatus: request.StudentMustHaveActivationStatus
+                isVerified: request.IsStudentMustBeVerified
             )
             .AnyAsync(x => x.Id == request.StudentId))
         {

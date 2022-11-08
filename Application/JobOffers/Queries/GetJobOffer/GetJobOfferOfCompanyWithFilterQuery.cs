@@ -6,7 +6,6 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +18,6 @@ public record GetJobOfferOfCompanyWithFilterQuery : IRequest<JobOfferDTO>
 
     public Guid CompanyId { get; init; }
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
-    public ActivationStatus? CompanyOfJobOfferMustHaveActivationStatus { get; init; }
 }
 
 public class GetJobOfferOfCompanyWithFilterQueryHandler : IRequestHandler<GetJobOfferOfCompanyWithFilterQuery, JobOfferDTO>
@@ -35,8 +33,7 @@ public class GetJobOfferOfCompanyWithFilterQueryHandler : IRequestHandler<GetJob
     {
         if (!await _context.Companies
             .Filter(
-                isVerified: request.IsCompanyOfJobOfferMustBeVerified,
-                activationStatus: request.CompanyOfJobOfferMustHaveActivationStatus
+                isVerified: request.IsCompanyOfJobOfferMustBeVerified
             )
             .AnyAsync(x => x.Id == request.CompanyId))
         {

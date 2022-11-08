@@ -28,8 +28,7 @@ public class GetAdminQueryHandler : IRequestHandler<GetAdminQuery, AdminDTO>
                 Email = x.Email,
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
-                IsSuperAdmin = x.IsSuperAdmin,
-                ActivationStatus = x.ActivationStatus
+                IsSuperAdmin = x.IsSuperAdmin
             })
             .FirstOrDefaultAsync();
 

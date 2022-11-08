@@ -2,7 +2,6 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,10 +12,8 @@ public record GetAmountStudentSubscribersOfJobOfferWithFilterQuery : IRequest<in
     public Guid JobOfferId { get; set; }
     public bool? IsJobOfferMustBeActive { get; init; }
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
-    public ActivationStatus? CompanyOfJobOfferMustHaveActivationStatus { get; init; }
 
     public bool? IsSubscriberMustBeVerified { get; init; }
-    public ActivationStatus? SubscriberMustHaveActivationStatus { get; init; }
 }
 
 public class GetAmountStudentSubscribersOfJobOfferWithFilterQueryHandler
@@ -34,8 +31,7 @@ public class GetAmountStudentSubscribersOfJobOfferWithFilterQueryHandler
         if (!await _context.JobOffers
             .Filter(
                 isActive: request.IsJobOfferMustBeActive,
-                isCompanyVerified: request.IsCompanyOfJobOfferMustBeVerified,
-                companyActivationStatus: request.CompanyOfJobOfferMustHaveActivationStatus
+                isCompanyVerified: request.IsCompanyOfJobOfferMustBeVerified
             )
             .AnyAsync(x => x.Id == request.JobOfferId))
         {
@@ -46,8 +42,7 @@ public class GetAmountStudentSubscribersOfJobOfferWithFilterQueryHandler
             .Where(x => x.Id == request.JobOfferId)
             .SelectMany(x => x.SubscribedStudents)
             .Filter(
-                isVerified: request.IsSubscriberMustBeVerified,
-                activationStatus: request.SubscriberMustHaveActivationStatus
+                isVerified: request.IsSubscriberMustBeVerified
             )
             .CountAsync();
     }

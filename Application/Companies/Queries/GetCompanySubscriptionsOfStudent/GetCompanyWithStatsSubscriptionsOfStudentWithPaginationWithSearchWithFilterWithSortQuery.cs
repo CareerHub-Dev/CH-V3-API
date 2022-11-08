@@ -5,7 +5,6 @@ using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Companies.Queries.Models;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +15,6 @@ public record GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchW
 {
     public Guid StudentOwnerId { get; init; }
     public bool? IsStudentOwnerMustBeVerified { get; init; }
-    public ActivationStatus? StudentOwnerMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -25,7 +23,6 @@ public record GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchW
 
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
-    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 
     public StatsFilter StatsFilter { get; init; } = new StatsFilter();
 
@@ -43,13 +40,12 @@ public class GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWi
     }
 
     public async Task<PaginatedList<CompanyWithStatsDTO>> Handle(
-        GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery request, 
+        GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsStudentOwnerMustBeVerified,
-                activationStatus: request.StudentOwnerMustHaveActivationStatus
+                isVerified: request.IsStudentOwnerMustBeVerified
             )
             .AnyAsync(x => x.Id == request.StudentOwnerId))
         {
@@ -60,8 +56,7 @@ public class GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWi
             .AsNoTracking()
             .Filter(
                 withoutCompanyId: request.WithoutCompanyId,
-                isVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.CompanyMustHaveActivationStatus
+                isVerified: request.IsCompanyMustBeVerified
             )
             .Search(request.SearchTerm)
             .Where(x => x.SubscribedStudents.Any(x => x.Id == request.StudentOwnerId))
@@ -85,12 +80,9 @@ public class GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWi
                             x.Verified != null || x.PasswordReset != null :
                             x.Verified == null && x.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || (x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus))
                 ),
                 Verified = x.Verified,
-                PasswordReset = x.PasswordReset,
-                ActivationStatus = x.ActivationStatus
+                PasswordReset = x.PasswordReset
             })
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);

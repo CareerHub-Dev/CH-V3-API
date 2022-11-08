@@ -61,8 +61,7 @@ public class ApplicationDbContextInitialiser
                 Email = "Admin@CareerHub.ua",
                 PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
                 Verified = DateTime.UtcNow,
-                IsSuperAdmin = true,
-                ActivationStatus = ActivationStatus.Active
+                IsSuperAdmin = true
             });
         }
 
@@ -250,7 +249,6 @@ public class ApplicationDbContextInitialiser
                     Email = "Company1@company.com",
                     PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
                     Verified = DateTime.UtcNow,
-                    ActivationStatus = ActivationStatus.Active,
                     Links = new List<CompanyLink> { new CompanyLink { Title = "Title", Uri = "Uri"} }
                 },
                 new Company()
@@ -261,7 +259,6 @@ public class ApplicationDbContextInitialiser
                     Email = "Company2@company.com",
                     PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
                     Verified = DateTime.UtcNow,
-                    ActivationStatus = ActivationStatus.Active,
                     Links = new List<CompanyLink> { new CompanyLink { Title = "Title", Uri = "Uri" } }
                 },
                 new Company()
@@ -272,7 +269,6 @@ public class ApplicationDbContextInitialiser
                     Email = "Company3@company.com",
                     PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
                     Verified = DateTime.UtcNow,
-                    ActivationStatus = ActivationStatus.Active,
                     Links = new List<CompanyLink> { new CompanyLink { Title = "Title", Uri = "Uri" } }
                 }
             );

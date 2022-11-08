@@ -22,10 +22,6 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         {
             context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
         }
-        else if (account.ActivationStatus != ActivationStatus.Active)
-        {
-            context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
-        }
         else if (_roles.Any() && !_roles.Contains(account.Role))
         {
             context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);

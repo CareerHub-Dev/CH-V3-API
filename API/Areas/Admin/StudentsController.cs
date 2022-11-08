@@ -30,7 +30,6 @@ public class StudentsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentDTO>))]
     public async Task<IActionResult> GetStudents(
-        [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? orderByExpression,
@@ -45,7 +44,6 @@ public class StudentsController : ApiControllerBase
             SearchTerm = searchTerm ?? string.Empty,
             IsStudentMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
-            StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
             OrderByExpression = orderByExpression ?? "LastName",
         });
 
@@ -125,7 +123,6 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
         Guid studentId,
-        [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? orderByExpression,
@@ -143,7 +140,6 @@ public class StudentsController : ApiControllerBase
 
             IsStudentMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
-            StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
 
             OrderByExpression = orderByExpression ?? "LastName",
         });
@@ -158,7 +154,6 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentSubscribersOfStudent(
         Guid studentId,
-        [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? orderByExpression,
@@ -176,7 +171,6 @@ public class StudentsController : ApiControllerBase
 
             IsStudentMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
-            StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
 
             OrderByExpression = orderByExpression ?? "LastName",
         });
@@ -191,7 +185,6 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanySubscriptionsOfStudent(
         Guid studentId,
-        [FromQuery] ActivationStatus? companyMustHaveActivationStatus,
         [FromQuery] bool? isCompanyMustBeVerified,
         [FromQuery] string? orderByExpression,
         [FromQuery] string? searchTerm,
@@ -207,7 +200,6 @@ public class StudentsController : ApiControllerBase
             SearchTerm = searchTerm ?? string.Empty,
 
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
-            CompanyMustHaveActivationStatus = companyMustHaveActivationStatus,
             OrderByExpression = orderByExpression ?? "Name",
         });
 
@@ -229,7 +221,6 @@ public class StudentsController : ApiControllerBase
         [FromQuery] Guid? mustHavejobPositionId,
         [FromQuery] List<Guid>? mustHaveTagIds,
         [FromQuery] bool? isCompanyOfJobOfferMustBeVerified,
-        [FromQuery] ActivationStatus companyOfJobOfferMustHaveActivationStatus,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -249,7 +240,6 @@ public class StudentsController : ApiControllerBase
             MustHaveJobPositionId = mustHavejobPositionId,
             MustHaveTagIds = mustHaveTagIds,
             IsCompanyOfJobOfferMustBeVerified = isCompanyOfJobOfferMustBeVerified,
-            CompanyOfJobOfferMustHaveActivationStatus = companyOfJobOfferMustHaveActivationStatus,
 
             OrderByExpression = orderByExpression ?? "StartDate",
         });

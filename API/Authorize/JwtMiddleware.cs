@@ -22,7 +22,7 @@ public class JwtMiddleware
 
             context.Items["Account"] = 
                 result != null && result.IsVerified ? 
-                    new AccountInfo { Id = result.Id, Role = result.Role, ActivationStatus = result.ActivationStatus } : 
+                    new AccountInfo { Id = result.Id, Role = result.Role } : 
                     null;
         }
 

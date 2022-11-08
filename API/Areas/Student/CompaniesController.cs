@@ -40,14 +40,12 @@ public class CompaniesController : ApiControllerBase
             SearchTerm = searchTerm ?? string.Empty,
 
             IsCompanyMustBeVerified = true,
-            CompanyMustHaveActivationStatus = ActivationStatus.Active,
 
             StatsFilter = new CompanyStatsFilter
             {
                 IsJobOfferMustBeActive = true,
 
                 IsSubscriberMustBeVerified = true,
-                SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
             OrderByExpression = orderByExpression ?? "Name",
@@ -67,7 +65,6 @@ public class CompaniesController : ApiControllerBase
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
-            CompanyMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -80,10 +77,8 @@ public class CompaniesController : ApiControllerBase
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
-            CompanyMustHaveActivationStatus = ActivationStatus.Active,
 
             IsSubscriberMustBeVerified = true,
-            SubscriberMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -96,7 +91,6 @@ public class CompaniesController : ApiControllerBase
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
-            CompanyMustHaveActivationStatus = ActivationStatus.Active,
 
             IsJobOfferMustBeActive = true
         }));
@@ -162,7 +156,6 @@ public class CompaniesController : ApiControllerBase
 
             CompanyId = companyId,
             IsCompanyOfJobOfferMustBeVerified = true,
-            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -179,10 +172,8 @@ public class CompaniesController : ApiControllerBase
             StatsFilter = new JobOfferStatsFilter
             {
                 IsStudentOfAppliedCVMustBeVerified = true,
-                StudentOfCVMustHaveActivationStatus = ActivationStatus.Active,
 
                 IsSubscriberMustBeVerified = true,
-                SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
             OrderByExpression = orderByExpression ?? "StartDate",

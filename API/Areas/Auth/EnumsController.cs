@@ -50,11 +50,4 @@ public class EnumsController : ApiControllerBase
     {
         return Ok(await Mediator.Send(new GetWorkFormatsQuery()));
     }
-
-    [HttpGet("ActivationStatuses")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EnumDTO>))]
-    public async Task<IActionResult> GetActivationStatuses()
-    {
-        return Ok(await Mediator.Send(new GetActivationStatusesQuery()));
-    }
 }

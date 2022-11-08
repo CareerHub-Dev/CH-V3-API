@@ -6,7 +6,7 @@ namespace Application.Common.Entensions;
 public static class FiltrationExtentions
 {
     public static IQueryable<Account> Filter(
-        this IQueryable<Account> accounts, 
+        this IQueryable<Account> accounts,
         bool? isVerified = null)
     {
         if (isVerified.HasValue && isVerified == true)
@@ -21,11 +21,10 @@ public static class FiltrationExtentions
         return accounts;
     }
     public static IQueryable<Admin> Filter(
-        this IQueryable<Admin> admins, 
-        Guid? withoutAdminId = null, 
-        bool? isVerified = null, 
-        bool? isSuperAdmin = null,
-        ActivationStatus? activationStatus = null)
+        this IQueryable<Admin> admins,
+        Guid? withoutAdminId = null,
+        bool? isVerified = null,
+        bool? isSuperAdmin = null)
     {
         if (withoutAdminId.HasValue)
         {
@@ -46,16 +45,11 @@ public static class FiltrationExtentions
             admins = admins.Where(x => x.IsSuperAdmin == isSuperAdmin);
         }
 
-        if (activationStatus.HasValue)
-        {
-            admins = admins.Where(x => x.ActivationStatus == activationStatus);
-        }
-
         return admins;
     }
 
     public static IQueryable<StudentLog> Filter(
-        this IQueryable<StudentLog> studentLogs, 
+        this IQueryable<StudentLog> studentLogs,
         List<Guid>? studentGroupIds = null)
     {
         if (studentGroupIds != null && studentGroupIds.Count != 0)
@@ -67,7 +61,7 @@ public static class FiltrationExtentions
     }
 
     public static IQueryable<Tag> Filter(
-        this IQueryable<Tag> tags, 
+        this IQueryable<Tag> tags,
         bool? isAccepted = null)
     {
         if (isAccepted.HasValue)
@@ -79,10 +73,9 @@ public static class FiltrationExtentions
     }
 
     public static IQueryable<JobOffer> Filter(
-        this IQueryable<JobOffer> jobOffers, 
+        this IQueryable<JobOffer> jobOffers,
         bool? isActive = null,
         bool? isCompanyVerified = null,
-        ActivationStatus? companyActivationStatus = null,
         JobType? jobType = null,
         WorkFormat? workFormat = null,
         ExperienceLevel? experienceLevel = null,
@@ -105,11 +98,6 @@ public static class FiltrationExtentions
         else if (isCompanyVerified.HasValue && isCompanyVerified == false)
         {
             jobOffers = jobOffers.Where(x => x.Company!.Verified == null && x.Company!.PasswordReset == null);
-        }
-
-        if (companyActivationStatus.HasValue)
-        {
-            jobOffers = jobOffers.Where(x => x.Company!.ActivationStatus == companyActivationStatus);
         }
 
         if (jobType.HasValue)
@@ -141,11 +129,10 @@ public static class FiltrationExtentions
     }
 
     public static IQueryable<Student> Filter(
-        this IQueryable<Student> students, 
-        Guid? withoutStudentId = null, 
-        bool? isVerified = null, 
-        List<Guid>? studentGroupIds = null,
-        ActivationStatus? activationStatus = null)
+        this IQueryable<Student> students,
+        Guid? withoutStudentId = null,
+        bool? isVerified = null,
+        List<Guid>? studentGroupIds = null)
     {
         if (withoutStudentId.HasValue)
         {
@@ -166,19 +153,13 @@ public static class FiltrationExtentions
             students = students.Where(x => x.Verified == null && x.PasswordReset == null);
         }
 
-        if (activationStatus.HasValue)
-        {
-            students = students.Where(x => x.ActivationStatus == activationStatus);
-        }
-
         return students;
     }
 
     public static IQueryable<Company> Filter(
-        this IQueryable<Company> companies, 
-        Guid? withoutCompanyId = null, 
-        bool? isVerified = null,
-        ActivationStatus? activationStatus = null)
+        this IQueryable<Company> companies,
+        Guid? withoutCompanyId = null,
+        bool? isVerified = null)
     {
         if (withoutCompanyId.HasValue)
         {
@@ -194,18 +175,12 @@ public static class FiltrationExtentions
             companies = companies.Where(x => x.Verified == null && x.PasswordReset == null);
         }
 
-        if (activationStatus.HasValue)
-        {
-            companies = companies.Where(x => x.ActivationStatus == activationStatus);
-        }
-
         return companies;
     }
 
     public static IQueryable<Experience> Filter(
         this IQueryable<Experience> experiences,
-        bool? isStudentVerified = null,
-        ActivationStatus? studentActivationStatus = null)
+        bool? isStudentVerified = null)
     {
 
         if (isStudentVerified.HasValue && isStudentVerified == true)
@@ -217,18 +192,12 @@ public static class FiltrationExtentions
             experiences = experiences.Where(x => x.Student!.Verified == null && x.Student!.PasswordReset == null);
         }
 
-        if (studentActivationStatus.HasValue)
-        {
-            experiences = experiences.Where(x => x.Student!.ActivationStatus == studentActivationStatus);
-        }
-
         return experiences;
     }
 
     public static IQueryable<CV> Filter(
         this IQueryable<CV> cvs,
-        bool? isStudentVerified = null,
-        ActivationStatus? studentActivationStatus = null)
+        bool? isStudentVerified = null)
     {
 
         if (isStudentVerified.HasValue && isStudentVerified == true)
@@ -238,11 +207,6 @@ public static class FiltrationExtentions
         else if (isStudentVerified.HasValue && isStudentVerified == false)
         {
             cvs = cvs.Where(x => x.Student!.Verified == null && x.Student!.PasswordReset == null);
-        }
-
-        if (studentActivationStatus.HasValue)
-        {
-            cvs = cvs.Where(x => x.Student!.ActivationStatus == studentActivationStatus);
         }
 
         return cvs;

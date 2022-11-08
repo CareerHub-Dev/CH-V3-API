@@ -1,13 +1,12 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.StudentGroups;
+using Application.Common.DTO.Students;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
-using Application.Common.DTO.StudentGroups;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Application.Common.DTO.Students;
-using Domain.Enums;
 
 namespace Application.Students.Queries.GetStudentSubscribersOfStudent;
 
@@ -16,7 +15,6 @@ public record GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWi
 {
     public Guid StudentOwnerId { get; init; }
     public bool? IsStudentOwnerMustBeVerified { get; init; }
-    public ActivationStatus? StudentOwnerMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -26,7 +24,6 @@ public record GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWi
     public bool? IsStudentMustBeVerified { get; init; }
     public Guid? WithoutStudentId { get; init; }
     public List<Guid>? StudentGroupIds { get; init; }
-    public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 
     public string OrderByExpression { get; init; } = string.Empty;
 }
@@ -45,8 +42,7 @@ public class GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWit
     {
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsStudentOwnerMustBeVerified,
-                activationStatus: request.StudentOwnerMustHaveActivationStatus
+                isVerified: request.IsStudentOwnerMustBeVerified
             )
             .AnyAsync(x => x.Id == request.StudentOwnerId))
         {
@@ -59,8 +55,7 @@ public class GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWit
             .Filter(
                 withoutStudentId: request.WithoutStudentId,
                 isVerified: request.IsStudentMustBeVerified,
-                studentGroupIds: request.StudentGroupIds,
-                activationStatus: request.StudentMustHaveActivationStatus
+                studentGroupIds: request.StudentGroupIds
             )
             .Search(request.SearchTerm)
             .Select(x => new StudentDTO
@@ -74,8 +69,7 @@ public class GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWit
                 BirthDate = x.BirthDate,
                 StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
                 Verified = x.Verified,
-                PasswordReset = x.PasswordReset,
-                ActivationStatus = x.ActivationStatus
+                PasswordReset = x.PasswordReset
             })
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);

@@ -1,6 +1,4 @@
-﻿using Domain.Enums;
-
-namespace Application.Accounts.Queries.GetBriefAccount;
+﻿namespace Application.Accounts.Queries.GetBriefAccount;
 
 public class BriefAccountDTO
 {
@@ -9,5 +7,4 @@ public class BriefAccountDTO
     public DateTime? Verified { get; set; }
     public DateTime? PasswordReset { get; set; }
     public string Role { get; set; } = string.Empty;
-    public ActivationStatus ActivationStatus { get; set; }
 }

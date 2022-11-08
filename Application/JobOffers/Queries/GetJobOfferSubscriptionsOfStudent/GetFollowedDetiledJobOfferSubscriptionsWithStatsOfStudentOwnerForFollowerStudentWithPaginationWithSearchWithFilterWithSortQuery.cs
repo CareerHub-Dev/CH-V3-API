@@ -19,11 +19,9 @@ public record GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForF
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
-    public ActivationStatus? FollowerStudentMustHaveActivationStatus { get; init; }
 
     public Guid StudentOwnerId { get; init; }
     public bool? IsStudentOwnerMustBeVerified { get; init; }
-    public ActivationStatus? StudentOwnerMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -37,7 +35,6 @@ public record GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForF
     public Guid? MustHaveJobPositionId { get; set; }
     public List<Guid>? MustHaveTagIds { get; set; } = new List<Guid>();
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
-    public ActivationStatus? CompanyOfJobOfferMustHaveActivationStatus { get; init; }
 
     public StatsFilter StatsFilter { get; init; } = new StatsFilter();
 
@@ -60,8 +57,7 @@ public class GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFo
     {
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsFollowerStudentMustBeVerified,
-                activationStatus: request.FollowerStudentMustHaveActivationStatus
+                isVerified: request.IsFollowerStudentMustBeVerified
             )
             .AnyAsync(x => x.Id == request.FollowerStudentId))
         {
@@ -70,8 +66,7 @@ public class GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFo
 
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsStudentOwnerMustBeVerified,
-                activationStatus: request.StudentOwnerMustHaveActivationStatus
+                isVerified: request.IsStudentOwnerMustBeVerified
             )
             .AnyAsync(x => x.Id == request.StudentOwnerId))
         {
@@ -87,8 +82,7 @@ public class GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFo
                 experienceLevel: request.MustHaveExperienceLevel,
                 jobPositionId: request.MustHaveJobPositionId,
                 tagIds: request.MustHaveTagIds,
-                isCompanyVerified: request.IsCompanyOfJobOfferMustBeVerified,
-                companyActivationStatus: request.CompanyOfJobOfferMustHaveActivationStatus
+                isCompanyVerified: request.IsCompanyOfJobOfferMustBeVerified
             )
             .Where(x => x.SubscribedStudents.Any(x => x.Id == request.StudentOwnerId))
             .Search(request.SearchTerm)
@@ -111,16 +105,12 @@ public class GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFo
                             x.Verified != null || x.PasswordReset != null :
                             x.Verified == null && x.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus)
                 ),
                 AmountAppliedCVs = x.AppliedCVs.Count(x =>
                     (!request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.HasValue || (request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.Value ?
                             x.Student!.Verified != null || x.Student.PasswordReset != null :
                             x.Student!.Verified == null && x.Student.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.StudentOfCVMustHaveActivationStatus.HasValue || x.Student!.ActivationStatus == request.StatsFilter.StudentOfCVMustHaveActivationStatus)
                 )
             })
             .OrderByExpression(request.OrderByExpression)
