@@ -1,9 +1,8 @@
-﻿using Domain.Common;
-using Domain.Enums;
+﻿using Domain.Enums;
 
 namespace Domain.Entities;
 
-public class Education : BaseEntity
+public class Education
 {
     public string University { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
@@ -12,7 +11,4 @@ public class Education : BaseEntity
     public Degree Degree { get; set; }
     public DateTime Start { get; set; }
     public DateTime? End { get; set; }
-
-    public Guid CVId { get; set; }
-    public CV? CV { get; set; }
 }

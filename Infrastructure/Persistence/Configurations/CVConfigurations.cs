@@ -23,5 +23,14 @@ public class CVConfigurations : IEntityTypeConfiguration<CV>
         builder.Property(x => x.ExperienceHighlights)
             .HasMaxLength(1024)
             .IsRequired();
+
+        builder.Property(x => x.ForeignLanguages)
+            .HasColumnType("jsonb");
+
+        builder.Property(x => x.ProjectLinks)
+            .HasColumnType("jsonb");
+
+        builder.Property(x => x.Educations)
+            .HasColumnType("jsonb");
     }
 }
