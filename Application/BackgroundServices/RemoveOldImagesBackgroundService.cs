@@ -41,7 +41,7 @@ public class RemoveOldImagesBackgroundService : BackgroundService
 
             var exceptimageFileNames = imageFileNamesInStorage.Except(imageFileNamesInDB);
 
-            imageService.DeleteImagesIfExists(exceptimageFileNames);
+            imageService.DeleteImagesIfExist(exceptimageFileNames);
 
             await context.SaveChangesAsync(stoppingToken);
             await Task.Delay(interval, stoppingToken);

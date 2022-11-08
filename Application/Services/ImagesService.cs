@@ -62,7 +62,7 @@ public class ImagesService : IImagesService
         }
     }
 
-    public void DeleteImagesIfExists(IEnumerable<string> imageFileNames)
+    public void DeleteImagesIfExist(IEnumerable<string> imageFileNames)
     {
         var imagesRoute = _pathService.GetImagesRoute;
         var imagesDirectoryPath = _fileSystem.Path.Combine(_pathService.GetWebRootPath, imagesRoute);
