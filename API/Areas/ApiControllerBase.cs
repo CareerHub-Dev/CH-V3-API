@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using API.Authorize;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
 
 namespace API.Areas;
 

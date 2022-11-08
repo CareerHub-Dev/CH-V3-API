@@ -1,6 +1,6 @@
-﻿using Application.RefreshTokens.Commands.RevokeRefreshToken;
+﻿using API.Authorize;
+using Application.RefreshTokens.Commands.RevokeRefreshToken;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
 
 namespace API.Areas.Admin;
 

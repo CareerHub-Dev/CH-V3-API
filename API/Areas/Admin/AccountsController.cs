@@ -1,6 +1,6 @@
-﻿using Application.Accounts.Queries.GetBriefAccount;
+﻿using API.Authorize;
+using Application.Accounts.Queries.GetBriefAccount;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
 
 namespace API.Areas.Admin;
 

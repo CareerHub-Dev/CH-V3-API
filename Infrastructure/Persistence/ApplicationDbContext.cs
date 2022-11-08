@@ -63,7 +63,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         builder.HasPostgresEnum<ExperienceLevel>();
         builder.HasPostgresEnum<JobType>();
         builder.HasPostgresEnum<LanguageLevel>();
-        builder.HasPostgresEnum<TemplateLanguage>(); 
+        builder.HasPostgresEnum<TemplateLanguage>();
 
         base.OnModelCreating(builder);
     }

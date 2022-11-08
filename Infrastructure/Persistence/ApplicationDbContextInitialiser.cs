@@ -1,9 +1,7 @@
 ﻿using Domain.Entities;
-using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Npgsql.Internal;
 
 namespace Infrastructure.Persistence;
 
@@ -249,7 +247,7 @@ public class ApplicationDbContextInitialiser
                     Email = "Company1@company.com",
                     PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
                     Verified = DateTime.UtcNow,
-                    Links = new List<CompanyLink> { new CompanyLink { Title = "Title", Uri = "Uri"} }
+                    Links = new List<CompanyLink> { new CompanyLink { Title = "Title", Uri = "Uri" } }
                 },
                 new Company()
                 {

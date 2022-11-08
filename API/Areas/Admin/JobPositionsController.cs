@@ -1,4 +1,5 @@
-﻿using Application.Common.DTO.JobPositions;
+﻿using API.Authorize;
+using Application.Common.DTO.JobPositions;
 using Application.JobPositions.Commands.CreateJobPosition;
 using Application.JobPositions.Commands.DeleteJobPosition;
 using Application.JobPositions.Commands.UpdateJobPosition;
@@ -6,7 +7,6 @@ using Application.JobPositions.Queries.GetJobPositions;
 using Application.Tags.Queries.GetJobPosition;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
 
 namespace API.Areas.Admin;
 

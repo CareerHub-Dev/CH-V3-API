@@ -7,4 +7,5 @@ public class BriefAccountDTO
     public DateTime? Verified { get; set; }
     public DateTime? PasswordReset { get; set; }
     public string Role { get; set; } = string.Empty;
+    public bool IsBanned { get; set; }
 }

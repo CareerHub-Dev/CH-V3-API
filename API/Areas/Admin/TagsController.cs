@@ -1,4 +1,5 @@
-﻿using Application.Common.DTO.Tags;
+﻿using API.Authorize;
+using Application.Common.DTO.Tags;
 using Application.Tags.Commands.CreateTag;
 using Application.Tags.Commands.DeleteTag;
 using Application.Tags.Commands.UpdateTag;
@@ -6,7 +7,6 @@ using Application.Tags.Queries.GetTag;
 using Application.Tags.Queries.GetTags;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
 
 namespace API.Areas.Admin;
 

@@ -1,9 +1,13 @@
-﻿using Application.Common.DTO.Companies;
+﻿using API.Authorize;
+using API.DTO.Requests.Students;
+using Application.Common.DTO.Companies;
 using Application.Common.DTO.Experiences;
+using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
 using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
 using Application.Experiences.Queries.GetExperiences;
+using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 using Application.Students.Commands.DeleteStudent;
 using Application.Students.Commands.UpdateStudentDetail;
 using Application.Students.Commands.UpdateStudentPhoto;
@@ -13,18 +17,13 @@ using Application.Students.Queries;
 using Application.Students.Queries.GetAmount;
 using Application.Students.Queries.GetStudent;
 using Application.Students.Queries.GetStudents;
+using Application.Students.Queries.GetStudentSubscribersOfStudent;
 using Application.Students.Queries.GetStudentSubscriptionsOfStudent;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
-using API.DTO.Requests.Students;
-using Application.Common.DTO.JobOffers;
-using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
-
-using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 using CompanyStatsFilter = Application.Companies.Queries.Models.StatsFilter;
-using Application.Students.Queries.GetStudentSubscribersOfStudent;
+using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 
 namespace API.Areas.Student;
 

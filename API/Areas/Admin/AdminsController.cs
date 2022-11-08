@@ -1,13 +1,12 @@
-﻿using Application.Admins.Commands.DeleteAdmin;
+﻿using API.Authorize;
+using Application.Admins.Commands.DeleteAdmin;
 using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Queries.GetAdmin;
 using Application.Admins.Queries.GetAdmins;
 using Application.Common.DTO.Admins;
 using Application.Emails.Commands;
-using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
 
 namespace API.Areas.Admin;
 

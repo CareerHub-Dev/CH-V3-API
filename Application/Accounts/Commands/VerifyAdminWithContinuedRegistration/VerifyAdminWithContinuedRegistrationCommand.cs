@@ -27,7 +27,7 @@ public class VerifyAdminWithContinuedRegistrationCommandHandler : IRequestHandle
     public async Task<Unit> Handle(VerifyAdminWithContinuedRegistrationCommand request, CancellationToken cancellationToken)
     {
         var admin = await _context.Admins
-                .SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
+            .SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
 
         if (admin == null)
         {

@@ -1,7 +1,7 @@
-﻿using Application.RefreshTokens.Commands.RevokeRefreshTokenOfAccount;
-using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
+﻿using API.Authorize;
 using API.DTO.Requests.RefreshTokens;
+using Application.RefreshTokens.Commands.RevokeRefreshTokenOfAccount;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Auth;
 

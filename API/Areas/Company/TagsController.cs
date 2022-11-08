@@ -1,7 +1,7 @@
-﻿using Application.Tags.Commands.CreateTag;
-using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
+﻿using API.Authorize;
 using API.DTO.Requests.Tags;
+using Application.Tags.Commands.CreateTag;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Company;
 

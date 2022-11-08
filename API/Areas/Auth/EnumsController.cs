@@ -1,7 +1,7 @@
-﻿using Application.Common.DTO;
+﻿using API.Authorize;
+using Application.Common.DTO;
 using Application.Enums.Queries;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
 
 namespace API.Areas.Auth;
 

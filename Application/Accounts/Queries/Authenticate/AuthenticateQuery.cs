@@ -1,4 +1,5 @@
 ﻿using Application.Common.Entensions;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -39,6 +40,7 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
     {
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
+                .Include(x => x.Bans.OrderBy(x => x.Expires).Where(x => x.Expires >= DateTime.UtcNow))
                 .Filter(isVerified: true)
                 .SingleOrDefaultAsync(x =>
                     x.NormalizedEmail == request.Email.NormalizeName()
@@ -59,6 +61,13 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
             case PasswordVerificationResult.SuccessRehashNeeded:
                 account.PasswordHash = _passwordHasher.HashPassword(account, request.Password);
                 break;
+        }
+
+        if (account.Bans.Count != 0)
+        {
+            var ban = account.Bans.Last();
+
+            throw new BanException(ban.Reason, ban.Expires);
         }
 
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);

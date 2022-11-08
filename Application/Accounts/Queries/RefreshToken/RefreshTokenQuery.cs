@@ -39,12 +39,20 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
     {
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
+                .Include(x => x.Bans.OrderBy(x => x.Expires).Where(x => x.Expires >= DateTime.UtcNow))
                 .Filter(isVerified: true)
                 .SingleOrDefaultAsync(x => x.RefreshTokens.Any(t => t.Token == request.Token));
 
         if (account == null)
         {
             throw new NotFoundException(nameof(Account), request.Token);
+        }
+
+        if (account.Bans.Count != 0)
+        {
+            var ban = account.Bans.Last();
+
+            throw new BanException(ban.Reason, ban.Expires);
         }
 
         var refreshToken = account.RefreshTokens.Single(x => x.Token == request.Token);

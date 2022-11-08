@@ -1,8 +1,8 @@
-﻿using Application.Common.DTO.StudentGroups;
+﻿using API.Authorize;
+using Application.Common.DTO.StudentGroups;
 using Application.StudentGroups.Queries.GetStudentGroups;
 using Application.Tags.Queries.GetStudentGroup;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
 
 namespace API.Areas.Auth;
 

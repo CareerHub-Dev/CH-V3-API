@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
-using System.Runtime.CompilerServices;
 
 namespace Application.Common.Entensions;
 

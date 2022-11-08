@@ -1,8 +1,8 @@
-﻿using Application.Common.DTO.JobPositions;
+﻿using API.Authorize;
+using Application.Common.DTO.JobPositions;
 using Application.JobPositions.Queries.GetJobPositions;
 using Application.Tags.Queries.GetJobPosition;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
 
 namespace API.Areas.Auth;
 

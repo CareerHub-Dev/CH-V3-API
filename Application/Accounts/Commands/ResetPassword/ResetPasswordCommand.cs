@@ -27,7 +27,7 @@ public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand>
     public async Task<Unit> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
     {
         var account = await _context.Accounts
-                .SingleOrDefaultAsync(x => x.ResetToken == request.Token);
+            .SingleOrDefaultAsync(x => x.ResetToken == request.Token);
 
         if (account == null)
         {

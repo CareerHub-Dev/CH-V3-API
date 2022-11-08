@@ -1,5 +1,4 @@
-﻿using Domain.Enums;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace API.Authorize;
@@ -21,6 +20,10 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         if (account == null)
         {
             context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
+        }
+        else if (account.IsBanned)
+        {
+            context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
         else if (_roles.Any() && !_roles.Contains(account.Role))
         {

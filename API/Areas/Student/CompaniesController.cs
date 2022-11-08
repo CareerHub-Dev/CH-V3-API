@@ -1,18 +1,16 @@
-﻿using Application.Common.DTO.Companies;
-using Application.Common.DTO.CompanyLinks;
+﻿using API.Authorize;
+using Application.Common.DTO.Companies;
+using Application.Common.DTO.JobOffers;
 using Application.Companies.Commands.VerifiedActiveStudentSubscribeToVerifiedActiveCompany;
 using Application.Companies.Commands.VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompany;
 using Application.Companies.Queries;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompanies;
 using Application.Companies.Queries.GetCompany;
+using Application.JobOffers.Queries.GetJobOffersOfCompany;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
-using Application.Common.DTO.JobOffers;
-using Application.JobOffers.Queries.GetJobOffersOfCompany;
-
 using CompanyStatsFilter = Application.Companies.Queries.Models.StatsFilter;
 using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 

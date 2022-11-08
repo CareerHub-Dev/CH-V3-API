@@ -20,9 +20,9 @@ public class JwtMiddleware
         {
             var result = await mediator.Send(new IdentifyQuery { JwtToken = token });
 
-            context.Items["Account"] = 
-                result != null && result.IsVerified ? 
-                    new AccountInfo { Id = result.Id, Role = result.Role } : 
+            context.Items["Account"] =
+                result != null && result.IsVerified ?
+                    new AccountInfo { Id = result.Id, Role = result.Role, IsBanned = result.IsBanned } :
                     null;
         }
 
