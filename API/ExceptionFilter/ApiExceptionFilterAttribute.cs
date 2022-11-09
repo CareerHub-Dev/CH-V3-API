@@ -1,9 +1,10 @@
-﻿using Application.Common.Exceptions;
+﻿using API.ExceptionFilter.Models;
+using Application.Common.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Authentication;
 
-namespace API.Filters;
+namespace API.ExceptionFilter;
 
 public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 {

@@ -1,4 +1,4 @@
-﻿using API.Filters;
+﻿using API.ExceptionFilter;
 using API.Services;
 using Application.Accounts.Queries.Authenticate;
 using Application.BackgroundServices;

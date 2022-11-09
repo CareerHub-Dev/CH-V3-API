@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace API.Filters;
+namespace API.ExceptionFilter.Models;
 
 public class BanProblemDetails : ProblemDetails
 {
