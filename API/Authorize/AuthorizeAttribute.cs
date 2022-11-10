@@ -24,7 +24,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         }
         else if (account.IsBanned)
         {
-            context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
+            context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
         }
         else if (_roles.Any() && !_roles.Contains(account.Role))
         {
