@@ -12,6 +12,7 @@ public class GetBriefAccountQueryHandler : IRequestHandler<GetBriefAccountQuery,
 {
     private readonly IApplicationDbContext _context;
     private readonly IAccountHelper _accountHelper;
+
     public GetBriefAccountQueryHandler(IApplicationDbContext context, IAccountHelper accountHelper)
     {
         _context = context;
