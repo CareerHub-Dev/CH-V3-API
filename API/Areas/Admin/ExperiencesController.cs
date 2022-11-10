@@ -1,5 +1,6 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.Experiences;
+using Application.Common.Enums;
 using Application.Experiences.Commands.CreateExperience;
 using Application.Experiences.Commands.DeleteExperience;
 using Application.Experiences.Commands.UpdateExperience;
@@ -8,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class ExperiencesController : ApiControllerBase
 {

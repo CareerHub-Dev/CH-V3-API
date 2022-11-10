@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Common.Enums;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace API.Authorize;
@@ -6,9 +7,9 @@ namespace API.Authorize;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 {
-    private readonly IList<string> _roles;
+    private readonly IList<Role> _roles;
 
-    public AuthorizeAttribute(params string[] roles)
+    public AuthorizeAttribute(params Role[] roles)
     {
         _roles = roles;
     }

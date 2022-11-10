@@ -1,5 +1,6 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.JobOffers;
+using Application.Common.Enums;
 using Application.JobOffers.Commands.VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompany;
 using Application.JobOffers.Commands.VerifiedStudentUnubscribeFromActiveJobOffer;
 using Application.JobOffers.Queries;
@@ -13,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace API.Areas.Student;
 
-[Authorize("Student")]
+[Authorize(Role.Student)]
 [Route("api/Student/[controller]")]
 public class JobOffersController : ApiControllerBase
 {

@@ -1,10 +1,11 @@
 ﻿using API.Authorize;
 using Application.Accounts.Queries.GetBriefAccount;
+using Application.Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class AccountsController : ApiControllerBase
 {

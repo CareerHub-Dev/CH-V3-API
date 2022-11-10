@@ -1,6 +1,7 @@
 ﻿using API.Authorize;
 using API.DTO.Requests.JobOffers;
 using Application.Common.DTO.JobOffers;
+using Application.Common.Enums;
 using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOfferOfCompany;
 using Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
@@ -15,7 +16,7 @@ using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 
 namespace API.Areas.Company;
 
-[Authorize("Company")]
+[Authorize(Role.Company)]
 [Route("api/Company/self/[controller]")]
 public class JobOffersController : ApiControllerBase
 {

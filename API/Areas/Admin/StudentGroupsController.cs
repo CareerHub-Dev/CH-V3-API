@@ -1,5 +1,6 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.StudentGroups;
+using Application.Common.Enums;
 using Application.StudentGroups.Commands.CreateStudentGroup;
 using Application.StudentGroups.Commands.DeleteStudentGroup;
 using Application.StudentGroups.Commands.UpdateStudentGroup;
@@ -10,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class StudentGroupsController : ApiControllerBase
 {

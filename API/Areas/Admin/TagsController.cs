@@ -1,5 +1,6 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.Tags;
+using Application.Common.Enums;
 using Application.Tags.Commands.CreateTag;
 using Application.Tags.Commands.DeleteTag;
 using Application.Tags.Commands.UpdateTag;
@@ -10,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class TagsController : ApiControllerBase
 {

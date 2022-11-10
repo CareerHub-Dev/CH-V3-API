@@ -4,13 +4,14 @@ using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Queries.GetAdmin;
 using Application.Admins.Queries.GetAdmins;
 using Application.Common.DTO.Admins;
+using Application.Common.Enums;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace API.Areas.Admin;
 
-[Authorize("SuperAdmin")]
+[Authorize(Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class AdminsController : ApiControllerBase
 {

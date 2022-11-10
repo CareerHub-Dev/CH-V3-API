@@ -1,5 +1,6 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.JobOffers;
+using Application.Common.Enums;
 using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOffer;
 using Application.JobOffers.Commands.UpdateJobOfferDetail;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class JobOffersController : ApiControllerBase
 {

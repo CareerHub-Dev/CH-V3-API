@@ -49,7 +49,29 @@ public static class FiltrationExtentions
             admins = admins.Where(x => x.Id != withoutAdminId);
         }
 
-        admins = admins.Filter(isVerified: isVerified, isBanned: isBanned);
+        switch (isVerified)
+        {
+            case true:
+                admins = admins.Where(x => x.Verified != null || x.PasswordReset != null);
+                break;
+            case false:
+                admins = admins.Where(x => x.Verified == null && x.PasswordReset == null);
+                break;
+            default:
+                break;
+        }
+
+        switch (isBanned)
+        {
+            case true:
+                admins = admins.Where(x => x.Bans.Any(x => x.Expires >= DateTime.UtcNow));
+                break;
+            case false:
+                admins = admins.Where(x => x.Bans.All(x => x.Expires < DateTime.UtcNow));
+                break;
+            default:
+                break;
+        }
 
         if (isSuperAdmin.HasValue)
         {
@@ -172,7 +194,29 @@ public static class FiltrationExtentions
             students = students.Where(x => studentGroupIds.Contains(x.StudentGroupId));
         }
 
-        students = students.Filter(isVerified: isVerified, isBanned: isBanned);
+        switch (isVerified)
+        {
+            case true:
+                students = students.Where(x => x.Verified != null || x.PasswordReset != null);
+                break;
+            case false:
+                students = students.Where(x => x.Verified == null && x.PasswordReset == null);
+                break;
+            default:
+                break;
+        }
+
+        switch (isBanned)
+        {
+            case true:
+                students = students.Where(x => x.Bans.Any(x => x.Expires >= DateTime.UtcNow));
+                break;
+            case false:
+                students = students.Where(x => x.Bans.All(x => x.Expires < DateTime.UtcNow));
+                break;
+            default:
+                break;
+        }
 
         return students;
     }
@@ -188,7 +232,29 @@ public static class FiltrationExtentions
             companies = companies.Where(x => x.Id != withoutCompanyId);
         }
 
-        companies = companies.Filter(isVerified: isVerified, isBanned: isBanned);
+        switch (isVerified)
+        {
+            case true:
+                companies = companies.Where(x => x.Verified != null || x.PasswordReset != null);
+                break;
+            case false:
+                companies = companies.Where(x => x.Verified == null && x.PasswordReset == null);
+                break;
+            default:
+                break;
+        }
+
+        switch (isBanned)
+        {
+            case true:
+                companies = companies.Where(x => x.Bans.Any(x => x.Expires >= DateTime.UtcNow));
+                break;
+            case false:
+                companies = companies.Where(x => x.Bans.All(x => x.Expires < DateTime.UtcNow));
+                break;
+            default:
+                break;
+        }
 
         return companies;
     }

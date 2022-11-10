@@ -2,6 +2,7 @@
 using Application.Common.DTO.Companies;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
+using Application.Common.Enums;
 using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.InviteCompany;
 using Application.Companies.Commands.UpdateCompanyBanner;
@@ -20,7 +21,7 @@ using Newtonsoft.Json;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class CompaniesController : ApiControllerBase
 {

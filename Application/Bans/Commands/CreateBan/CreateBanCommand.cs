@@ -1,6 +1,7 @@
 ﻿using Application.Common.DTO.StudentGroups;
 using Application.Common.DTO.Students;
 using Application.Common.Entensions;
+using Application.Common.Enums;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
@@ -40,9 +41,9 @@ public class CreateBanCommandHandler : IRequestHandler<CreateBanCommand, Guid>
             throw new NotFoundException(nameof(Account), request.AccountId);
         }
 
-        if (_accountHelper.GetRole(account) == "SuperAdmin")
+        if (_accountHelper.GetRole(account) == Role.SuperAdmin)
         {
-            throw new ForbiddenException("Super admin can't be banned.");
+            throw new ForbiddenException($"It is forbidden to ban the {Role.SuperAdmin.ToString()}.");
         }
 
         var ban = new Ban

@@ -1,6 +1,7 @@
 ﻿using API.Authorize;
 using API.DTO.Requests.Companies;
 using Application.Common.DTO.Companies;
+using Application.Common.Enums;
 using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyDetail;
@@ -12,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Company;
 
-[Authorize("Company")]
+[Authorize(Role.Company)]
 [Route("api/Company/[controller]")]
 public class CompaniesController : ApiControllerBase
 {

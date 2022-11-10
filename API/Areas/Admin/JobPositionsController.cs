@@ -1,5 +1,6 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.JobPositions;
+using Application.Common.Enums;
 using Application.JobPositions.Commands.CreateJobPosition;
 using Application.JobPositions.Commands.DeleteJobPosition;
 using Application.JobPositions.Commands.UpdateJobPosition;
@@ -10,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class JobPositionsController : ApiControllerBase
 {

@@ -4,6 +4,7 @@ using Application.Common.DTO.Companies;
 using Application.Common.DTO.Experiences;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
+using Application.Common.Enums;
 using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
 using Application.Experiences.Queries.GetExperiences;
@@ -27,7 +28,7 @@ using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 
 namespace API.Areas.Student;
 
-[Authorize("Student")]
+[Authorize(Role.Student)]
 [Route("api/Student/[controller]")]
 public class StudentsController : ApiControllerBase
 {

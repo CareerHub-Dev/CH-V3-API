@@ -1,4 +1,5 @@
-﻿using Application.Common.Exceptions;
+﻿using Application.Common.Enums;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -30,9 +31,9 @@ public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
             throw new NotFoundException(nameof(Admin), request.AdminId);
         }
 
-        if (_accountHelper.GetRole(admin) == "SuperAdmin")
+        if (_accountHelper.GetRole(admin) == Role.SuperAdmin)
         {
-            throw new ArgumentException("It is forbidden to delete the super admin.");
+            throw new ForbiddenException($"It is forbidden to delete the {Role.SuperAdmin.ToString()}.");
         }
 
         _context.Admins.Remove(admin);

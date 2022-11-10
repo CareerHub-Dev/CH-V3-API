@@ -3,6 +3,7 @@ using Application.Common.DTO.Companies;
 using Application.Common.DTO.Experiences;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
+using Application.Common.Enums;
 using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Emails.Commands;
 using Application.Experiences.Queries.GetExperiences;
@@ -21,7 +22,7 @@ using Newtonsoft.Json;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class StudentsController : ApiControllerBase
 {

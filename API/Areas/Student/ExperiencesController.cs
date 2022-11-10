@@ -1,6 +1,7 @@
 ﻿using API.Authorize;
 using API.DTO.Requests.Experiences;
 using Application.Common.DTO.Experiences;
+using Application.Common.Enums;
 using Application.Experiences.Commands.CreateExperience;
 using Application.Experiences.Commands.DeleteExperienceOfStudent;
 using Application.Experiences.Commands.UpdateExperienceOfStudent;
@@ -11,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace API.Areas.Student;
 
-[Authorize("Student")]
+[Authorize(Role.Student)]
 [Route("api/Student/self/[controller]")]
 public class ExperiencesController : ApiControllerBase
 {
