@@ -24,9 +24,4 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Bans\Queries\" />
-    <Folder Include="Common\DTO\Bans\" />
-  </ItemGroup>
-
 </Project>

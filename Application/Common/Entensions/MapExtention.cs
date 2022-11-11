@@ -1,4 +1,5 @@
-﻿using Application.Common.DTO.JobPositions;
+﻿using Application.Common.DTO.Bans;
+using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.StudentGroups;
 using Application.Common.DTO.StudentLogs;
 using Application.Common.DTO.Tags;
@@ -102,6 +103,20 @@ public static class MapExtention
             CreatedBy = x.CreatedBy,
             LastModifiedBy = x.LastModifiedBy,
             StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name }
+        });
+    }
+
+    #endregion
+
+    #region Ban
+
+    public static IQueryable<BanDTO> MapToBanDTO(this IQueryable<Ban> bans)
+    {
+        return bans.Select(x => new BanDTO
+        {
+            Id = x.Id,
+            Reason = x.Reason,
+            Expires = x.Expires,
         });
     }
 
