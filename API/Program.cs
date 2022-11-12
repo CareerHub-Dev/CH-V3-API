@@ -1,5 +1,8 @@
 using API;
 using API.Authorize;
+using Application;
+using Hellang.Middleware.ProblemDetails;
+using Infrastructure;
 using Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +13,8 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddAPIServices();
 
 var app = builder.Build();
+
+app.UseProblemDetails();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
