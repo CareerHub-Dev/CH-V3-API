@@ -1,11 +1,13 @@
-﻿using Application.Accounts.Commands.ChangeActivationStatus;
+﻿using API.Authorize;
 using Application.Accounts.Queries.GetBriefAccount;
+using Application.Bans.Queries.GetBansOfAccount;
+using Application.Common.DTO.Bans;
+using Application.Common.Enums;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class AccountsController : ApiControllerBase
 {
@@ -17,19 +19,21 @@ public class AccountsController : ApiControllerBase
         return Ok(await Mediator.Send(new GetBriefAccountQuery(accountId)));
     }
 
-    [HttpPut("{accountId}/change-activation-status")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [HttpGet("{accountId}/Bans")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BanDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ChangeActivationStatusOfAccount(Guid accountId, ChangeActivationStatusCommand command)
+    public async Task<IActionResult> GetBansOfAccount(
+        Guid accountId,
+        [FromQuery] string? orderByExpression,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
     {
-        if (accountId != command.AccountId)
+        return Ok(await Mediator.Send(new GetBansOfAccountWithPaginationWithSortQuery
         {
-            return BadRequest();
-        }
-
-        await Mediator.Send(command);
-
-        return NoContent();
+            AccountId = accountId,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            OrderByExpression = orderByExpression ?? "Expires"
+        }));
     }
 }

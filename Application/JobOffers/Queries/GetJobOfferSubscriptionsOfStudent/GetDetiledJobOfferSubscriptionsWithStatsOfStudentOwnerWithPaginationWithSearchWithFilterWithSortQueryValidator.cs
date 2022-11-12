@@ -3,10 +3,10 @@
 namespace Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 
 public class GetDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerWithPaginationWithSearchWithFilterWithSortQueryValidator
-	: AbstractValidator<GetDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerWithPaginationWithSearchWithFilterWithSortQuery>
+    : AbstractValidator<GetDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerWithPaginationWithSearchWithFilterWithSortQuery>
 {
-	public GetDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerWithPaginationWithSearchWithFilterWithSortQueryValidator()
-	{
+    public GetDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerWithPaginationWithSearchWithFilterWithSortQueryValidator()
+    {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);
 

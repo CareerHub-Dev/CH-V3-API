@@ -2,7 +2,6 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +40,7 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
     {
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
+                .Include(x => x.Bans.OrderBy(x => x.Expires).Where(x => x.Expires >= DateTime.UtcNow))
                 .Filter(isVerified: true)
                 .SingleOrDefaultAsync(x =>
                     x.NormalizedEmail == request.Email.NormalizeName()
@@ -63,9 +63,11 @@ public class AuthenticateQueryHandler : IRequestHandler<AuthenticateQuery, Authe
                 break;
         }
 
-        if(account.ActivationStatus != ActivationStatus.Active)
+        if (account.Bans.Count != 0)
         {
-            throw new ForbiddenException($"This account has '{account.ActivationStatus.ToString()}' status");
+            var ban = account.Bans.Last();
+
+            throw new BanException(ban.Reason, ban.Expires);
         }
 
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);

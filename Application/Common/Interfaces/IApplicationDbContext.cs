@@ -19,5 +19,6 @@ public interface IApplicationDbContext
     public DbSet<CV> CVs { get; }
     public DbSet<StudentLog> StudentLogs { get; }
     public DbSet<Post> Posts { get; }
+    public DbSet<Ban> Bans { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

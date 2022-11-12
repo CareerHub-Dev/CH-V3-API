@@ -5,7 +5,6 @@ using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Companies.Queries.Models;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +15,6 @@ public record GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginat
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
-    public ActivationStatus? FollowerStudentMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -25,7 +23,6 @@ public record GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginat
 
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
-    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 
     public StatsFilter StatsFilter { get; init; } = new StatsFilter();
 
@@ -43,13 +40,12 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
     }
 
     public async Task<PaginatedList<FollowedDetailedCompanyWithStatsDTO>> Handle(
-        GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request, 
+        GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsFollowerStudentMustBeVerified,
-                activationStatus: request.FollowerStudentMustHaveActivationStatus
+                isVerified: request.IsFollowerStudentMustBeVerified
             )
             .AnyAsync(x => x.Id == request.FollowerStudentId))
         {
@@ -60,8 +56,7 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
             .AsNoTracking()
             .Filter(
                 withoutCompanyId: request.WithoutCompanyId,
-                isVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.CompanyMustHaveActivationStatus
+                isVerified: request.IsCompanyMustBeVerified
             )
             .Search(request.SearchTerm)
             .Select(x => new FollowedDetailedCompanyWithStatsDTO
@@ -84,8 +79,6 @@ public class GetFollowedDetailedCompaniesWithStatsForFollowerStudentWithPaginati
                             x.Verified != null || x.PasswordReset != null :
                             x.Verified == null && x.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || (x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus))
                 ),
                 IsFollowed = x.SubscribedStudents.Any(x => x.Id == request.FollowerStudentId),
             })

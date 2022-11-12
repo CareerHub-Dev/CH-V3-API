@@ -15,8 +15,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221107204739_init")]
-    partial class init
+    [Migration("20221108170031_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,7 +25,6 @@ namespace Infrastructure.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "activation_status", new[] { "active", "inactive", "ban" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "degree", new[] { "bachelor", "master", "doctorate" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "experience_level", new[] { "intern", "trainee", "junior", "middle", "senior" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "job_type", new[] { "full_time", "part_time", "contract" });
@@ -70,9 +69,6 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<ActivationStatus>("ActivationStatus")
-                        .HasColumnType("activation_status");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -111,6 +107,30 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Accounts");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Ban", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Bans");
+                });
+
             modelBuilder.Entity("Domain.Entities.CV", b =>
                 {
                     b.Property<Guid>("Id")
@@ -120,6 +140,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<List<Education>>("Educations")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
                     b.Property<string>("ExperienceHighlights")
                         .IsRequired()
                         .HasMaxLength(1024)
@@ -128,6 +152,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<List<ForeignLanguage>>("ForeignLanguages")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
 
                     b.Property<string>("Goals")
                         .IsRequired()
@@ -146,6 +174,10 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Photo")
                         .HasColumnType("text");
+
+                    b.Property<List<CVProjectLink>>("ProjectLinks")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
 
                     b.Property<string>("SkillsAndTechnologies")
                         .IsRequired()
@@ -170,76 +202,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("CVs");
-                });
-
-            modelBuilder.Entity("Domain.Entities.CVProjectLink", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CVId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CVId");
-
-                    b.ToTable("CVProjectLinks");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Education", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CVId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<Degree>("Degree")
-                        .HasColumnType("degree");
-
-                    b.Property<DateTime?>("End")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Specialty")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.Property<DateTime>("Start")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("University")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CVId");
-
-                    b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("Domain.Entities.Experience", b =>
@@ -286,30 +248,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("Experiences");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ForeignLanguage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CVId")
-                        .HasColumnType("uuid");
-
-                    b.Property<LanguageLevel>("LanguageLevel")
-                        .HasColumnType("language_level");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("character varying(32)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CVId");
-
-                    b.ToTable("ForeignLanguages");
                 });
 
             modelBuilder.Entity("Domain.Entities.JobOffer", b =>
@@ -402,6 +340,33 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("JobPositions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Post", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AccoundId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
@@ -671,8 +636,13 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Photo")
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("PostId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("StudentGroupId")
                         .HasColumnType("uuid");
+
+                    b.HasIndex("PostId");
 
                     b.HasIndex("StudentGroupId");
 
@@ -709,6 +679,17 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.Ban", b =>
+                {
+                    b.HasOne("Domain.Entities.Account", "Account")
+                        .WithMany("Bans")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("Domain.Entities.CV", b =>
                 {
                     b.HasOne("Domain.Entities.JobPosition", "JobPosition")
@@ -728,28 +709,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Domain.Entities.CVProjectLink", b =>
-                {
-                    b.HasOne("Domain.Entities.CV", "CV")
-                        .WithMany("ProjectLinks")
-                        .HasForeignKey("CVId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CV");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Education", b =>
-                {
-                    b.HasOne("Domain.Entities.CV", "CV")
-                        .WithMany("Educations")
-                        .HasForeignKey("CVId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CV");
-                });
-
             modelBuilder.Entity("Domain.Entities.Experience", b =>
                 {
                     b.HasOne("Domain.Entities.Student", "Student")
@@ -759,17 +718,6 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("Domain.Entities.ForeignLanguage", b =>
-                {
-                    b.HasOne("Domain.Entities.CV", "CV")
-                        .WithMany("ForeignLanguages")
-                        .HasForeignKey("CVId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CV");
                 });
 
             modelBuilder.Entity("Domain.Entities.JobOffer", b =>
@@ -789,6 +737,15 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("JobPosition");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Post", b =>
+                {
+                    b.HasOne("Domain.Entities.Account", "Account")
+                        .WithMany("Posts")
+                        .HasForeignKey("AccountId");
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
@@ -888,6 +845,10 @@ namespace Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.Post", null)
+                        .WithMany("StudentsLiked")
+                        .HasForeignKey("PostId");
+
                     b.HasOne("Domain.Entities.StudentGroup", "StudentGroup")
                         .WithMany()
                         .HasForeignKey("StudentGroupId")
@@ -899,16 +860,11 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Account", b =>
                 {
+                    b.Navigation("Bans");
+
+                    b.Navigation("Posts");
+
                     b.Navigation("RefreshTokens");
-                });
-
-            modelBuilder.Entity("Domain.Entities.CV", b =>
-                {
-                    b.Navigation("Educations");
-
-                    b.Navigation("ForeignLanguages");
-
-                    b.Navigation("ProjectLinks");
                 });
 
             modelBuilder.Entity("Domain.Entities.JobPosition", b =>
@@ -916,6 +872,11 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("CVs");
 
                     b.Navigation("JobOffers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Post", b =>
+                {
+                    b.Navigation("StudentsLiked");
                 });
 
             modelBuilder.Entity("Domain.Entities.Company", b =>

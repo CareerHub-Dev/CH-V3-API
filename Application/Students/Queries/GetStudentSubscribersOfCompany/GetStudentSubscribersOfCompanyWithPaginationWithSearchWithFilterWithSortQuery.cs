@@ -5,7 +5,6 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +15,6 @@ public record GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWi
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
-    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -26,7 +24,6 @@ public record GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWi
     public bool? IsStudentMustBeVerified { get; init; }
     public Guid? WithoutStudentId { get; init; }
     public List<Guid>? StudentGroupIds { get; init; }
-    public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 
     public string OrderByExpression { get; init; } = string.Empty;
 }
@@ -47,8 +44,7 @@ public class GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWit
     {
         if (!await _context.Companies
             .Filter(
-                isVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.CompanyMustHaveActivationStatus
+                isVerified: request.IsCompanyMustBeVerified
             )
             .AnyAsync(x => x.Id == request.CompanyId))
         {
@@ -61,8 +57,7 @@ public class GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWit
             .Filter(
                 withoutStudentId: request.WithoutStudentId,
                 isVerified: request.IsStudentMustBeVerified,
-                studentGroupIds: request.StudentGroupIds,
-                activationStatus: request.StudentMustHaveActivationStatus
+                studentGroupIds: request.StudentGroupIds
             )
             .Search(request.SearchTerm)
             .Select(x => new StudentDTO
@@ -76,8 +71,7 @@ public class GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWit
                 BirthDate = x.BirthDate,
                 StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
                 Verified = x.Verified,
-                PasswordReset = x.PasswordReset,
-                ActivationStatus = x.ActivationStatus
+                PasswordReset = x.PasswordReset
             })
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);

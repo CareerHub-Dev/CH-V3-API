@@ -1,11 +1,12 @@
-﻿using Application.Tags.Commands.CreateTag;
-using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
+﻿using API.Authorize;
 using API.DTO.Requests.Tags;
+using Application.Common.Enums;
+using Application.Tags.Commands.CreateTag;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Company;
 
-[Authorize("Company")]
+[Authorize(Role.Company)]
 [Route("api/Company/[controller]")]
 public class TagsController : ApiControllerBase
 {

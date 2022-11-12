@@ -1,8 +1,6 @@
 ﻿using Application.Common.DTO.CompanyLinks;
-using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Services;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +32,7 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
     private readonly IImagesService _imagesService;
 
     public VerifyCompanyWithContinuedRegistrationCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IPasswordHasher<Account> passwordHasher,
         IImagesService imagesService)
     {

@@ -28,16 +28,19 @@ public class IdentifyQueryHandler : IRequestHandler<IdentifyQuery, IdentifyResul
 
         if (accountId == null) return null;
 
-        var account = await _context.Accounts.AsNoTracking().FirstOrDefaultAsync(a => a.Id == accountId);
+        var account = await _context.Accounts
+            .AsNoTracking()
+            .Include(x => x.Bans.Where(x => x.Expires >= DateTime.UtcNow))
+            .FirstOrDefaultAsync(a => a.Id == accountId);
 
         if (account == null) return null;
 
-        return new IdentifyResult 
-        { 
-            Id = account.Id, 
-            Role = _accountHelper.GetRole(account), 
+        return new IdentifyResult
+        {
+            Id = account.Id,
+            Role = _accountHelper.GetRole(account),
             IsVerified = account.IsVerified,
-            ActivationStatus = account.ActivationStatus,
+            IsBanned = account.Bans.Any()
         };
     }
 }

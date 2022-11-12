@@ -1,5 +1,4 @@
 ﻿using Domain.Common;
-using Domain.Enums;
 
 namespace Domain.Entities;
 
@@ -15,10 +14,10 @@ public class Account : BaseEntity
     public DateTime? ResetTokenExpires { get; set; }
     public DateTime? PasswordReset { get; set; }
 
-    public ActivationStatus ActivationStatus { get; set; } = ActivationStatus.Active;
-
     public List<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+    public List<Ban> Bans { get; set; } = new List<Ban>();
     public List<Post> Posts { get; set; } = new List<Post>();
+
 
     public bool IsVerified => Verified.HasValue || PasswordReset.HasValue;
     public bool IsResetTokenExpired => !ResetTokenExpires.HasValue || ResetTokenExpires < DateTime.UtcNow;

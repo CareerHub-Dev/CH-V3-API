@@ -1,10 +1,9 @@
-﻿using Application.Common.Entensions;
+﻿using Application.Common.DTO.StudentLogs;
+using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
-using Application.Common.DTO.StudentGroups;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Application.Common.DTO.StudentLogs;
 
 namespace Application.StudentLogs.Queries.GetStudentLogs;
 

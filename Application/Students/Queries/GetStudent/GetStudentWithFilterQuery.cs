@@ -4,7 +4,6 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +13,6 @@ public record GetStudentWithFilterQuery : IRequest<StudentDTO>
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentMustBeVerified { get; init; }
-    public ActivationStatus? StudentMustHaveActivationStatus { get; init; }
 }
 
 public class GetStudentWithFilterQueryHandler
@@ -33,8 +31,7 @@ public class GetStudentWithFilterQueryHandler
             .AsNoTracking()
             .Where(x => x.Id == request.StudentId)
             .Filter(
-                isVerified: request.IsStudentMustBeVerified,
-                activationStatus: request.StudentMustHaveActivationStatus
+                isVerified: request.IsStudentMustBeVerified
             )
             .Select(x => new StudentDTO
             {
@@ -47,8 +44,7 @@ public class GetStudentWithFilterQueryHandler
                 BirthDate = x.BirthDate,
                 StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
                 Verified = x.Verified,
-                PasswordReset = x.PasswordReset,
-                ActivationStatus = x.ActivationStatus
+                PasswordReset = x.PasswordReset
             })
             .FirstOrDefaultAsync();
 

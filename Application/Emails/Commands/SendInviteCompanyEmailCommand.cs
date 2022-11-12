@@ -15,7 +15,7 @@ public class SendInviteCompanyEmailCommandHandler : IRequestHandler<SendInviteCo
     private readonly IAccountHelper _accountHelper;
 
     public SendInviteCompanyEmailCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IEmailService emailService,
         IAccountHelper accountHelper)
     {

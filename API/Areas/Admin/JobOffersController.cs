@@ -1,20 +1,17 @@
-﻿using Application.JobOffers.Commands.CreateJobOffer;
+﻿using API.Authorize;
+using Application.Common.DTO.JobOffers;
+using Application.Common.Enums;
+using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOffer;
 using Application.JobOffers.Commands.UpdateJobOfferDetail;
 using Application.JobOffers.Commands.UpdateJobOfferImage;
 using Application.JobOffers.Queries.GetAmount;
-using Application.Students.Queries.GetAmount;
-using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
-using Application.Common.DTO.StudentGroups;
-using Application.Tags.Queries.GetStudentGroup;
 using Application.JobOffers.Queries.GetJobOffer;
-using Application.Common.DTO.JobOffers;
-using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class JobOffersController : ApiControllerBase
 {

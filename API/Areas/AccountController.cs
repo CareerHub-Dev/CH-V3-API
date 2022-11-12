@@ -1,4 +1,5 @@
-﻿using Application.Accounts.Commands.RegisterStudent;
+﻿using API.DTO.Requests.RefreshTokens;
+using Application.Accounts.Commands.RegisterStudent;
 using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
@@ -7,7 +8,6 @@ using Application.Accounts.Queries.Authenticate;
 using Application.Accounts.Queries.RefreshToken;
 using Application.Emails.Commands;
 using Microsoft.AspNetCore.Mvc;
-using API.DTO.Requests.RefreshTokens;
 
 namespace API.Areas;
 

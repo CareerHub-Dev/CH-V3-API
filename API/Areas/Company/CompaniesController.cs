@@ -1,19 +1,19 @@
-﻿using Application.Common.DTO.Companies;
+﻿using API.Authorize;
+using API.DTO.Requests.Companies;
+using Application.Common.DTO.Companies;
+using Application.Common.Enums;
 using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyDetail;
+using Application.Companies.Commands.UpdateCompanyLinks;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetCompany;
-using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
-using API.DTO.Requests.Companies;
-using Application.Companies.Commands.UpdateCompanyLinks;
 
 namespace API.Areas.Company;
 
-[Authorize("Company")]
+[Authorize(Role.Company)]
 [Route("api/Company/[controller]")]
 public class CompaniesController : ApiControllerBase
 {
@@ -82,8 +82,7 @@ public class CompaniesController : ApiControllerBase
         return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
-            IsSubscriberMustBeVerified = true,
-            SubscriberMustHaveActivationStatus = ActivationStatus.Active
+            IsSubscriberMustBeVerified = true
         }));
     }
 

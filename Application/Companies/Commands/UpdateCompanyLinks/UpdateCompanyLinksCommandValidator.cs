@@ -5,8 +5,8 @@ namespace Application.Companies.Commands.UpdateCompanyLinks;
 
 public class UpdateCompanyLinksCommandValidator : AbstractValidator<UpdateCompanyLinksCommand>
 {
-	public UpdateCompanyLinksCommandValidator()
-	{
+    public UpdateCompanyLinksCommandValidator()
+    {
         RuleForEach(x => x.Links).ChildRules(link =>
         {
             link.RuleFor(x => x.Title)

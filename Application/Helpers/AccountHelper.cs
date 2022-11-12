@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Enums;
+using Application.Common.Interfaces;
 using Application.Common.Models;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -20,16 +21,21 @@ public class AccountHelper : IAccountHelper
         _context = context;
     }
 
-    public string GetRole(Account account)
+    public Role GetRole(Account account)
     {
-        var admin = account as Admin;
-
-        if (admin == null)
+        switch (account)
         {
-            return account.GetType().Name;
+            case Company:
+                return Role.Company;
+            case Student:
+                return Role.Student;
+            case Admin admin when admin.IsSuperAdmin:
+                return Role.SuperAdmin;
+            case Admin:
+                return Role.Admin;
+            default:
+                return Role.None;
         }
-
-        return admin.IsSuperAdmin ? "SuperAdmin" : "Admin";
     }
 
     public void RemoveOldRefreshTokensOfAccount(Account account)

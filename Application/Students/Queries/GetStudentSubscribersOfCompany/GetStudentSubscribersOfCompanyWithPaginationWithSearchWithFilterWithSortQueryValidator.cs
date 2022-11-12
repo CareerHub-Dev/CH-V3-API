@@ -5,8 +5,8 @@ namespace Application.Students.Queries.GetStudentSubscribersOfCompany;
 public class GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWithSortQueryValidator
     : AbstractValidator<GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWithSortQuery>
 {
-	public GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWithSortQueryValidator()
-	{
+    public GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWithSortQueryValidator()
+    {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);
 

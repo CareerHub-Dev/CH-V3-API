@@ -1,8 +1,8 @@
-﻿using Application.Common.DTO.Tags;
+﻿using API.Authorize;
+using Application.Common.DTO.Tags;
 using Application.Tags.Queries.GetTag;
 using Application.Tags.Queries.GetTags;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
 
 namespace API.Areas.Auth;
 

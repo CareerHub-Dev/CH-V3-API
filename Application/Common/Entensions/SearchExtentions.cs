@@ -46,7 +46,7 @@ public static class SearchExtentions
         var lowerCaseTerm = searchTerm.NormalizeName();
 
         return studentLogs
-            .Where(x => 
+            .Where(x =>
                 x.FirstName.Trim().ToLower().Contains(lowerCaseTerm) ||
                 x.LastName.Trim().ToLower().Contains(lowerCaseTerm)
             );
@@ -68,13 +68,13 @@ public static class SearchExtentions
 
     public static IQueryable<Student> Search(this IQueryable<Student> students, string searchTerm)
     {
-        if(string.IsNullOrWhiteSpace(searchTerm))
+        if (string.IsNullOrWhiteSpace(searchTerm))
             return students;
 
         var lowerCaseTerm = searchTerm.NormalizeName();
 
-        return students.Where(x => 
-            x.FirstName.ToLower().ToLower().Contains(lowerCaseTerm) || 
+        return students.Where(x =>
+            x.FirstName.ToLower().ToLower().Contains(lowerCaseTerm) ||
             x.LastName.ToLower().ToLower().Contains(lowerCaseTerm)
         );
     }

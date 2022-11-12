@@ -15,7 +15,7 @@ public class RevokeTokenCommandHandler : IRequestHandler<RevokeRefreshTokenComma
     private readonly IApplicationDbContext _context;
     private readonly IСurrentRemoteIpAddressService _сurrentRemoteIpAddressService;
     public RevokeTokenCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IСurrentRemoteIpAddressService сurrentRemoteIpAddressService)
     {
         _context = context;

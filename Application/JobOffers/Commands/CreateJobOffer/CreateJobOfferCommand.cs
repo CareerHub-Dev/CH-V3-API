@@ -1,13 +1,10 @@
-﻿using Application.Common.Entensions;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Services;
 using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Application.JobOffers.Commands.CreateJobOffer;
 
@@ -91,11 +88,11 @@ public class CreateJobOfferCommandHandler : IRequestHandler<CreateJobOfferComman
     {
         var tags = new List<Tag>();
 
-        foreach(var id in ids)
+        foreach (var id in ids)
         {
             var tag = await _context.Tags.FirstOrDefaultAsync(x => x.Id == id);
 
-            if(tag == null)
+            if (tag == null)
             {
                 throw new NotFoundException(nameof(Tag), id);
             }

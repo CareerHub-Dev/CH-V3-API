@@ -2,7 +2,6 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RefreshTokenEntity = Domain.Entities.RefreshToken;
@@ -40,6 +39,7 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
     {
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
+                .Include(x => x.Bans.OrderBy(x => x.Expires).Where(x => x.Expires >= DateTime.UtcNow))
                 .Filter(isVerified: true)
                 .SingleOrDefaultAsync(x => x.RefreshTokens.Any(t => t.Token == request.Token));
 
@@ -48,9 +48,11 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
             throw new NotFoundException(nameof(Account), request.Token);
         }
 
-        if (account.ActivationStatus != ActivationStatus.Active)
+        if (account.Bans.Count != 0)
         {
-            throw new ForbiddenException($"This account has '{account.ActivationStatus.ToString()}' status");
+            var ban = account.Bans.Last();
+
+            throw new BanException(ban.Reason, ban.Expires);
         }
 
         var refreshToken = account.RefreshTokens.Single(x => x.Token == request.Token);

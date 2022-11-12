@@ -1,4 +1,7 @@
-﻿using Application.Common.DTO.Experiences;
+﻿using API.Authorize;
+using API.DTO.Requests.Experiences;
+using Application.Common.DTO.Experiences;
+using Application.Common.Enums;
 using Application.Experiences.Commands.CreateExperience;
 using Application.Experiences.Commands.DeleteExperienceOfStudent;
 using Application.Experiences.Commands.UpdateExperienceOfStudent;
@@ -6,12 +9,10 @@ using Application.Experiences.Queries.GetExperience;
 using Application.Experiences.Queries.GetExperiences;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
-using API.DTO.Requests.Experiences;
 
 namespace API.Areas.Student;
 
-[Authorize("Student")]
+[Authorize(Role.Student)]
 [Route("api/Student/self/[controller]")]
 public class ExperiencesController : ApiControllerBase
 {

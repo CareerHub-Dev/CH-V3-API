@@ -1,22 +1,22 @@
-﻿using Application.JobOffers.Commands.CreateJobOffer;
+﻿using API.Authorize;
+using API.DTO.Requests.JobOffers;
+using Application.Common.DTO.JobOffers;
+using Application.Common.Enums;
+using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOfferOfCompany;
 using Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 using Application.JobOffers.Commands.UpdateJobOfferImageOfCompany;
-using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
-using API.DTO.Requests.JobOffers;
 using Application.JobOffers.Queries.GetAmount;
-using Domain.Enums;
-using Application.Common.DTO.JobOffers;
 using Application.JobOffers.Queries.GetJobOffer;
-using Newtonsoft.Json;
-
-using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 using Application.JobOffers.Queries.GetJobOffersOfCompany;
+using Domain.Enums;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 
 namespace API.Areas.Company;
 
-[Authorize("Company")]
+[Authorize(Role.Company)]
 [Route("api/Company/self/[controller]")]
 public class JobOffersController : ApiControllerBase
 {
@@ -53,10 +53,8 @@ public class JobOffersController : ApiControllerBase
             StatsFilter = new JobOfferStatsFilter
             {
                 IsStudentOfAppliedCVMustBeVerified = true,
-                StudentOfCVMustHaveActivationStatus = ActivationStatus.Active,
 
                 IsSubscriberMustBeVerified = true,
-                SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
             OrderByExpression = orderByExpression ?? "StartDate",
@@ -78,7 +76,6 @@ public class JobOffersController : ApiControllerBase
             CompanyId = AccountInfo!.Id,
 
             IsSubscriberMustBeVerified = true,
-            SubscriberMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -93,7 +90,6 @@ public class JobOffersController : ApiControllerBase
             CompanyId = AccountInfo!.Id,
 
             IsStudentOfAppliedCVMustBeVerified = true,
-            StudentOfCVMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -185,12 +181,12 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateJobOfferImageOfSelfCompany(Guid jobOfferId, IFormFile? file)
     {
-        var result = await Mediator.Send(new UpdateJobOfferImageOfCompanyCommand 
-        { 
-            CompanyId = AccountInfo!.Id, 
+        var result = await Mediator.Send(new UpdateJobOfferImageOfCompanyCommand
+        {
+            CompanyId = AccountInfo!.Id,
 
             JobofferId = jobOfferId,
-            Image = file 
+            Image = file
         });
 
         return Ok(result);

@@ -1,7 +1,7 @@
-﻿using Application.Accounts.Commands.ChangePassword;
-using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
+﻿using API.Authorize;
 using API.DTO.Requests.Accounts;
+using Application.Accounts.Commands.ChangePassword;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Auth;
 

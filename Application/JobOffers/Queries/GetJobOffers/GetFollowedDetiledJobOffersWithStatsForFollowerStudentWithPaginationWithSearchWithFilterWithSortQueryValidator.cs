@@ -5,8 +5,8 @@ namespace Application.JobOffers.Queries.GetJobOffers;
 public class GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryValidator
     : AbstractValidator<GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery>
 {
-	public GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryValidator()
-	{
+    public GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryValidator()
+    {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);
 

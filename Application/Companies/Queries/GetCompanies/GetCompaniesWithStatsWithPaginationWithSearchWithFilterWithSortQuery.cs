@@ -3,7 +3,6 @@ using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Companies.Queries.Models;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +18,6 @@ public record GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQue
 
     public bool? IsCompanyMustBeVerified { get; init; }
     public Guid? WithoutCompanyId { get; init; }
-    public ActivationStatus? CompanyMustHaveActivationStatus { get; init; }
 
     public StatsFilter StatsFilter { get; init; } = new StatsFilter();
 
@@ -37,15 +35,14 @@ public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuer
     }
 
     public async Task<PaginatedList<CompanyWithStatsDTO>> Handle(
-        GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuery request, 
+        GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuery request,
         CancellationToken cancellationToken)
     {
         return await _context.Companies
             .AsNoTracking()
             .Filter(
                 withoutCompanyId: request.WithoutCompanyId,
-                isVerified: request.IsCompanyMustBeVerified,
-                activationStatus: request.CompanyMustHaveActivationStatus
+                isVerified: request.IsCompanyMustBeVerified
             )
             .Search(request.SearchTerm)
             .Select(x => new CompanyWithStatsDTO
@@ -68,12 +65,9 @@ public class GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuer
                             x.Verified != null || x.PasswordReset != null :
                             x.Verified == null && x.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || (x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus))
                 ),
                 Verified = x.Verified,
                 PasswordReset = x.PasswordReset,
-                ActivationStatus = x.ActivationStatus,
             })
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);

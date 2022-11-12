@@ -1,4 +1,6 @@
-﻿using Application.Common.DTO.StudentLogs;
+﻿using API.Authorize;
+using Application.Common.DTO.StudentLogs;
+using Application.Common.Enums;
 using Application.StudentLogs.Commands.CreateStudentLog;
 using Application.StudentLogs.Commands.DeleteStudentLog;
 using Application.StudentLogs.Commands.UpdateStudentLog;
@@ -6,11 +8,10 @@ using Application.StudentLogs.Queries.GetStudentLogs;
 using Application.Tags.Queries.GetStudentLog;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class StudentLogsController : ApiControllerBase
 {

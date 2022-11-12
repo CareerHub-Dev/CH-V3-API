@@ -19,7 +19,6 @@ public record GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginati
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
-    public ActivationStatus? FollowerStudentMustHaveActivationStatus { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -33,7 +32,6 @@ public record GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginati
     public Guid? MustHaveJobPositionId { get; set; }
     public List<Guid>? MustHaveTagIds { get; set; } = new List<Guid>();
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
-    public ActivationStatus? CompanyOfJobOfferMustHaveActivationStatus { get; init; }
 
     public StatsFilter StatsFilter { get; init; } = new StatsFilter();
 
@@ -56,8 +54,7 @@ public class GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginatio
     {
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsFollowerStudentMustBeVerified,
-                activationStatus: request.FollowerStudentMustHaveActivationStatus
+                isVerified: request.IsFollowerStudentMustBeVerified
             )
             .AnyAsync(x => x.Id == request.FollowerStudentId))
         {
@@ -69,7 +66,6 @@ public class GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginatio
             .Filter(
                 isActive: request.IsJobOfferMustBeActive,
                 isCompanyVerified: request.IsCompanyOfJobOfferMustBeVerified,
-                companyActivationStatus: request.CompanyOfJobOfferMustHaveActivationStatus,
                 jobType: request.MustHaveJobType,
                 workFormat: request.MustHaveWorkFormat,
                 experienceLevel: request.MustHaveExperienceLevel,
@@ -96,16 +92,12 @@ public class GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginatio
                             x.Verified != null || x.PasswordReset != null :
                             x.Verified == null && x.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.SubscriberMustHaveActivationStatus.HasValue || (x.ActivationStatus == request.StatsFilter.SubscriberMustHaveActivationStatus))
                 ),
                 AmountAppliedCVs = x.AppliedCVs.Count(x =>
                     (!request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.HasValue || (request.StatsFilter.IsStudentOfAppliedCVMustBeVerified.Value ?
                             x.Student!.Verified != null || x.Student.PasswordReset != null :
                             x.Student!.Verified == null && x.Student.PasswordReset == null
                        ))
-                    &&
-                    (!request.StatsFilter.StudentOfCVMustHaveActivationStatus.HasValue || (x.Student!.ActivationStatus == request.StatsFilter.StudentOfCVMustHaveActivationStatus))
                 )
             })
             .OrderByExpression(request.OrderByExpression)

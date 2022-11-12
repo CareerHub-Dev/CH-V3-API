@@ -14,7 +14,7 @@ public class EmailService : IEmailService
 
     public EmailService(
         IEmailTemplateParserService emailTemplateParserService,
-        IEmailTemplatesService emailTemplatesService, 
+        IEmailTemplatesService emailTemplatesService,
         IMailKitService mailKitService,
         IOptions<EmailTemplateSettings> emailTemplateOptions)
     {

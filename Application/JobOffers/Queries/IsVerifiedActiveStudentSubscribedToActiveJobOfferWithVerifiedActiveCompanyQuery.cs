@@ -1,9 +1,7 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Companies.Queries;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,13 +25,12 @@ public class IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActive
     }
 
     public async Task<bool> Handle(
-        IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActiveCompanyQuery request, 
+        IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActiveCompanyQuery request,
         CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .Filter(
-                isVerified: true,
-                activationStatus: ActivationStatus.Active
+                isVerified: true
             )
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
@@ -46,8 +43,7 @@ public class IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActive
              .Include(x => x.SubscribedStudents.Where(x => x.Id == request.StudentId))
              .Filter(
                  isActive: true,
-                 isCompanyVerified: true,
-                 companyActivationStatus: ActivationStatus.Active
+                 isCompanyVerified: true
              )
              .FirstOrDefaultAsync(x => x.Id == request.JobOfferId);
 

@@ -23,7 +23,6 @@ namespace Infrastructure.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "activation_status", new[] { "active", "inactive", "ban" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "degree", new[] { "bachelor", "master", "doctorate" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "experience_level", new[] { "intern", "trainee", "junior", "middle", "senior" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "job_type", new[] { "full_time", "part_time", "contract" });
@@ -68,9 +67,6 @@ namespace Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<ActivationStatus>("ActivationStatus")
-                        .HasColumnType("activation_status");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -107,6 +103,30 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("NormalizedEmail");
 
                     b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Ban", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Bans");
                 });
 
             modelBuilder.Entity("Domain.Entities.CV", b =>
@@ -337,7 +357,8 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
 
                     b.HasKey("Id");
 
@@ -656,6 +677,17 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.Entities.Ban", b =>
+                {
+                    b.HasOne("Domain.Entities.Account", "Account")
+                        .WithMany("Bans")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
             modelBuilder.Entity("Domain.Entities.CV", b =>
                 {
                     b.HasOne("Domain.Entities.JobPosition", "JobPosition")
@@ -826,6 +858,8 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Account", b =>
                 {
+                    b.Navigation("Bans");
+
                     b.Navigation("Posts");
 
                     b.Navigation("RefreshTokens");

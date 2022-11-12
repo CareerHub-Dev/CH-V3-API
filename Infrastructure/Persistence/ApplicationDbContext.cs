@@ -31,7 +31,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     static ApplicationDbContext()
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<WorkFormat>();
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<ActivationStatus>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<Degree>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<ExperienceLevel>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<JobType>();
@@ -53,18 +52,18 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<CV> CVs => Set<CV>();
     public DbSet<StudentLog> StudentLogs => Set<StudentLog>();
     public DbSet<Post> Posts => Set<Post>();
+    public DbSet<Ban> Bans => Set<Ban>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
         builder.HasPostgresEnum<WorkFormat>();
-        builder.HasPostgresEnum<ActivationStatus>();
         builder.HasPostgresEnum<Degree>();
         builder.HasPostgresEnum<ExperienceLevel>();
         builder.HasPostgresEnum<JobType>();
         builder.HasPostgresEnum<LanguageLevel>();
-        builder.HasPostgresEnum<TemplateLanguage>(); 
+        builder.HasPostgresEnum<TemplateLanguage>();
 
         base.OnModelCreating(builder);
     }

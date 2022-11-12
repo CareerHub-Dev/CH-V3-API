@@ -6,7 +6,6 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +17,6 @@ public record GetJobOfferWithFilterQuery : IRequest<JobOfferDTO>
     public bool? IsJobOfferMustBeActive { get; init; }
 
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
-    public ActivationStatus? CompanyOfJobOfferMustHaveActivationStatus { get; init; }
 }
 
 public class GetJobOfferWithFilterQueryHandler : IRequestHandler<GetJobOfferWithFilterQuery, JobOfferDTO>
@@ -36,8 +34,7 @@ public class GetJobOfferWithFilterQueryHandler : IRequestHandler<GetJobOfferWith
             .AsNoTracking()
             .Filter(
                 isActive: request.IsJobOfferMustBeActive,
-                isCompanyVerified: request.IsCompanyOfJobOfferMustBeVerified,
-                companyActivationStatus: request.CompanyOfJobOfferMustHaveActivationStatus
+                isCompanyVerified: request.IsCompanyOfJobOfferMustBeVerified
             )
             .Where(x => x.Id == request.JobOfferId)
             .Select(x => new JobOfferDTO

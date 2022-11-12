@@ -2,7 +2,6 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +25,7 @@ public class VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTarge
     }
 
     public async Task<Unit> Handle(
-        VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTargetCommand request, 
+        VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTargetCommand request,
         CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)
@@ -36,8 +35,7 @@ public class VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTarge
 
         if (!await _context.Students
             .Filter(
-                isVerified: true,
-                activationStatus: ActivationStatus.Active
+                isVerified: true
             )
             .AnyAsync(x => x.Id == request.StudentOwnerId))
         {
@@ -46,8 +44,7 @@ public class VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTarge
 
         if (!await _context.Students
             .Filter(
-                isVerified: true,
-                activationStatus: ActivationStatus.Active
+                isVerified: true
             )
             .AnyAsync(x => x.Id == request.StudentTargetId))
         {

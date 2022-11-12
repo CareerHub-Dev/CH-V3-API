@@ -1,9 +1,14 @@
-﻿using Application.Common.DTO.Companies;
+﻿using API.Authorize;
+using API.DTO.Requests.Students;
+using Application.Common.DTO.Companies;
 using Application.Common.DTO.Experiences;
+using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
+using Application.Common.Enums;
 using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
 using Application.Companies.Queries.Models;
 using Application.Experiences.Queries.GetExperiences;
+using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 using Application.Students.Commands.DeleteStudent;
 using Application.Students.Commands.UpdateStudentDetail;
 using Application.Students.Commands.UpdateStudentPhoto;
@@ -13,29 +18,23 @@ using Application.Students.Queries;
 using Application.Students.Queries.GetAmount;
 using Application.Students.Queries.GetStudent;
 using Application.Students.Queries.GetStudents;
+using Application.Students.Queries.GetStudentSubscribersOfStudent;
 using Application.Students.Queries.GetStudentSubscriptionsOfStudent;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
-using API.DTO.Requests.Students;
-using Application.Common.DTO.JobOffers;
-using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
-
-using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 using CompanyStatsFilter = Application.Companies.Queries.Models.StatsFilter;
-using Application.Students.Queries.GetStudentSubscribersOfStudent;
+using JobOfferStatsFilter = Application.JobOffers.Queries.Models.StatsFilter;
 
 namespace API.Areas.Student;
 
-[Authorize("Student")]
+[Authorize(Role.Student)]
 [Route("api/Student/[controller]")]
 public class StudentsController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetailedStudentDTO>))]
     public async Task<IActionResult> GetStudents(
-        [FromQuery] ActivationStatus? studentMustHaveActivationStatus,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? orderByExpression,
         [FromQuery] string? searchTerm,
@@ -53,7 +52,6 @@ public class StudentsController : ApiControllerBase
             IsStudentMustBeVerified = true,
             WithoutStudentId = AccountInfo!.Id,
             StudentGroupIds = studentGroupIds,
-            StudentMustHaveActivationStatus = studentMustHaveActivationStatus,
 
             OrderByExpression = orderByExpression ?? "LastName",
         });
@@ -72,7 +70,6 @@ public class StudentsController : ApiControllerBase
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
-            StudentMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -85,10 +82,8 @@ public class StudentsController : ApiControllerBase
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
-            StudentMustHaveActivationStatus = ActivationStatus.Active,
 
             IsCompanyMustBeVerified = true,
-            CompanyMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -101,11 +96,9 @@ public class StudentsController : ApiControllerBase
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
-            StudentMustHaveActivationStatus = ActivationStatus.Active,
 
             IsJobOfferMustBeActive = true,
             IsCompanyOfJobOfferMustBeVerified = true,
-            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -118,10 +111,8 @@ public class StudentsController : ApiControllerBase
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
-            StudentMustHaveActivationStatus = ActivationStatus.Active,
 
             IsStudentTargetOfSubscriptionMustBeVerified = true,
-            StudentTargetOfSubscriptionMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -134,10 +125,8 @@ public class StudentsController : ApiControllerBase
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
-            StudentMustHaveActivationStatus = ActivationStatus.Active,
 
             IsStudentOwnerOfSubscriptionMustBeVerified = true,
-            StudentOwnerOfSubscriptionMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -158,7 +147,6 @@ public class StudentsController : ApiControllerBase
 
             StudentOwnerId = studentId,
             IsStudentOwnerMustBeVerified = true,
-            StudentOwnerMustHaveActivationStatus = ActivationStatus.Active,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -167,7 +155,6 @@ public class StudentsController : ApiControllerBase
             IsStudentMustBeVerified = true,
             WithoutStudentId = AccountInfo!.Id,
             StudentGroupIds = studentGroupIds,
-            StudentMustHaveActivationStatus = ActivationStatus.Active,
 
             OrderByExpression = orderByExpression ?? "LastName"
         });
@@ -194,7 +181,6 @@ public class StudentsController : ApiControllerBase
 
             StudentOwnerId = studentId,
             IsStudentOwnerMustBeVerified = true,
-            StudentOwnerMustHaveActivationStatus = ActivationStatus.Active,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -203,7 +189,6 @@ public class StudentsController : ApiControllerBase
             IsStudentMustBeVerified = true,
             WithoutStudentId = AccountInfo!.Id,
             StudentGroupIds = studentGroupIds,
-            StudentMustHaveActivationStatus = ActivationStatus.Active,
 
             OrderByExpression = orderByExpression ?? "LastName"
         });
@@ -227,25 +212,21 @@ public class StudentsController : ApiControllerBase
         {
             FollowerStudentId = AccountInfo!.Id,
             IsFollowerStudentMustBeVerified = true,
-            FollowerStudentMustHaveActivationStatus = ActivationStatus.Active,
 
             StudentOwnerId = studentId,
             IsStudentOwnerMustBeVerified = true,
-            StudentOwnerMustHaveActivationStatus = ActivationStatus.Active,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
             SearchTerm = searchTerm ?? string.Empty,
 
             IsCompanyMustBeVerified = true,
-            CompanyMustHaveActivationStatus = ActivationStatus.Active,
 
             StatsFilter = new CompanyStatsFilter
             {
                 IsJobOfferMustBeActive = true,
 
                 IsSubscriberMustBeVerified = true,
-                SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
             OrderByExpression = orderByExpression ?? "Name",
@@ -276,7 +257,6 @@ public class StudentsController : ApiControllerBase
 
             StudentOwnerId = studentId,
             IsStudentOwnerMustBeVerified = true,
-            StudentOwnerMustHaveActivationStatus = ActivationStatus.Active,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -290,15 +270,12 @@ public class StudentsController : ApiControllerBase
             MustHaveJobPositionId = mustHavejobPositionId,
             MustHaveTagIds = mustHaveTagIds,
             IsCompanyOfJobOfferMustBeVerified = true,
-            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active,
 
             StatsFilter = new JobOfferStatsFilter
             {
                 IsStudentOfAppliedCVMustBeVerified = true,
-                StudentOfCVMustHaveActivationStatus = ActivationStatus.Active,
 
                 IsSubscriberMustBeVerified = true,
-                SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
             OrderByExpression = orderByExpression ?? "StartDate",
@@ -322,7 +299,6 @@ public class StudentsController : ApiControllerBase
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
-            StudentMustHaveActivationStatus = ActivationStatus.Active,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -444,7 +420,6 @@ public class StudentsController : ApiControllerBase
 
             IsStudentMustBeVerified = true,
             StudentGroupIds = studentGroupIds,
-            StudentMustHaveActivationStatus = ActivationStatus.Active,
             WithoutStudentId = AccountInfo!.Id,
 
             OrderByExpression = orderByExpression ?? "LastName",
@@ -477,7 +452,6 @@ public class StudentsController : ApiControllerBase
 
             IsStudentMustBeVerified = true,
             StudentGroupIds = studentGroupIds,
-            StudentMustHaveActivationStatus = ActivationStatus.Active,
             WithoutStudentId = AccountInfo!.Id,
 
             OrderByExpression = orderByExpression ?? "LastName",
@@ -508,13 +482,11 @@ public class StudentsController : ApiControllerBase
             SearchTerm = searchTerm ?? string.Empty,
 
             IsCompanyMustBeVerified = true,
-            CompanyMustHaveActivationStatus = ActivationStatus.Active,
 
             StatsFilter = new StatsFilter
             {
                 IsJobOfferMustBeActive = true,
                 IsSubscriberMustBeVerified = true,
-                SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
             OrderByExpression = orderByExpression ?? "Name",
@@ -559,10 +531,8 @@ public class StudentsController : ApiControllerBase
             StatsFilter = new JobOfferStatsFilter
             {
                 IsStudentOfAppliedCVMustBeVerified = true,
-                StudentOfCVMustHaveActivationStatus = ActivationStatus.Active,
 
                 IsSubscriberMustBeVerified = true,
-                SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
             OrderByExpression = orderByExpression ?? "StartDate",
@@ -583,7 +553,6 @@ public class StudentsController : ApiControllerBase
             StudentId = AccountInfo!.Id,
 
             IsCompanyMustBeVerified = true,
-            CompanyMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -598,7 +567,6 @@ public class StudentsController : ApiControllerBase
 
             IsJobOfferMustBeActive = true,
             IsCompanyOfJobOfferMustBeVerified = true,
-            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -612,7 +580,6 @@ public class StudentsController : ApiControllerBase
             StudentId = AccountInfo!.Id,
 
             IsStudentTargetOfSubscriptionMustBeVerified = true,
-            StudentTargetOfSubscriptionMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -626,7 +593,6 @@ public class StudentsController : ApiControllerBase
             StudentId = AccountInfo!.Id,
 
             IsStudentOwnerOfSubscriptionMustBeVerified = true,
-            StudentOwnerOfSubscriptionMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 

@@ -1,5 +1,4 @@
-﻿using Application.Common.Entensions;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -41,7 +40,7 @@ public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPho
             student.Photo = null;
         }
 
-        if(request.Photo != null)
+        if (request.Photo != null)
         {
             student.Photo = await _imagesService.SaveImageAsync(request.Photo);
         }

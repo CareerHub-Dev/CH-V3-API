@@ -1,17 +1,17 @@
-﻿using Application.Admins.Commands.DeleteAdmin;
+﻿using API.Authorize;
+using Application.Admins.Commands.DeleteAdmin;
 using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Queries.GetAdmin;
 using Application.Admins.Queries.GetAdmins;
 using Application.Common.DTO.Admins;
+using Application.Common.Enums;
 using Application.Emails.Commands;
-using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
 
 namespace API.Areas.Admin;
 
-[Authorize("SuperAdmin")]
+[Authorize(Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class AdminsController : ApiControllerBase
 {
@@ -20,7 +20,6 @@ public class AdminsController : ApiControllerBase
     public async Task<IActionResult> GetAdmins(
         [FromQuery] bool? isAdminMustBeVerified,
         [FromQuery] bool? isSuperAdmin,
-        [FromQuery] ActivationStatus? activationStatus,
         [FromQuery] string? orderByExpression,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
@@ -36,7 +35,6 @@ public class AdminsController : ApiControllerBase
             WithoutAdminId = AccountInfo!.Id,
             IsAdminMustBeVerified = isAdminMustBeVerified,
             IsSuperAdmin = isSuperAdmin,
-            ActivationStatus = activationStatus,
 
             OrderByExpression = orderByExpression ?? "Email"
         });

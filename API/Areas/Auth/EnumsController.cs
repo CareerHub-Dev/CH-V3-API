@@ -1,7 +1,7 @@
-﻿using Application.Common.DTO;
+﻿using API.Authorize;
+using Application.Common.DTO;
 using Application.Enums.Queries;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
 
 namespace API.Areas.Auth;
 
@@ -49,12 +49,5 @@ public class EnumsController : ApiControllerBase
     public async Task<IActionResult> GetWorkFormats()
     {
         return Ok(await Mediator.Send(new GetWorkFormatsQuery()));
-    }
-
-    [HttpGet("ActivationStatuses")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EnumDTO>))]
-    public async Task<IActionResult> GetActivationStatuses()
-    {
-        return Ok(await Mediator.Send(new GetActivationStatusesQuery()));
     }
 }

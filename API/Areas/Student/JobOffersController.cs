@@ -1,5 +1,6 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.JobOffers;
+using Application.Common.Enums;
 using Application.JobOffers.Commands.VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompany;
 using Application.JobOffers.Commands.VerifiedStudentUnubscribeFromActiveJobOffer;
 using Application.JobOffers.Queries;
@@ -13,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace API.Areas.Student;
 
-[Authorize("Student")]
+[Authorize(Role.Student)]
 [Route("api/Student/[controller]")]
 public class JobOffersController : ApiControllerBase
 {
@@ -46,15 +47,12 @@ public class JobOffersController : ApiControllerBase
             MustHaveJobPositionId = mustHavejobPositionId,
             MustHaveTagIds = mustHaveTagIds,
             IsCompanyOfJobOfferMustBeVerified = true,
-            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active,
 
             StatsFilter = new StatsFilter
             {
                 IsStudentOfAppliedCVMustBeVerified = true,
-                StudentOfCVMustHaveActivationStatus = ActivationStatus.Active,
 
                 IsSubscriberMustBeVerified = true,
-                SubscriberMustHaveActivationStatus = ActivationStatus.Active
             },
 
             OrderByExpression = orderByExpression ?? "StartDate",
@@ -75,7 +73,6 @@ public class JobOffersController : ApiControllerBase
             JobOfferId = jobOfferId,
             IsJobOfferMustBeActive = true,
             IsCompanyOfJobOfferMustBeVerified = true,
-            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active,
         }));
     }
 
@@ -89,10 +86,8 @@ public class JobOffersController : ApiControllerBase
             JobOfferId = jobOfferId,
             IsJobOfferMustBeActive = true,
             IsCompanyOfJobOfferMustBeVerified = true,
-            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active,
 
             IsSubscriberMustBeVerified = true,
-            SubscriberMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 
@@ -106,10 +101,8 @@ public class JobOffersController : ApiControllerBase
             JobOfferId = jobOfferId,
             IsJobOfferMustBeActive = true,
             IsCompanyOfJobOfferMustBeVerified = true,
-            CompanyOfJobOfferMustHaveActivationStatus = ActivationStatus.Active,
 
             IsStudentOfAppliedCVMustBeVerified = true,
-            StudentOfCVMustHaveActivationStatus = ActivationStatus.Active
         }));
     }
 

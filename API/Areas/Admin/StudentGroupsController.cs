@@ -1,4 +1,6 @@
-﻿using Application.Common.DTO.StudentGroups;
+﻿using API.Authorize;
+using Application.Common.DTO.StudentGroups;
+using Application.Common.Enums;
 using Application.StudentGroups.Commands.CreateStudentGroup;
 using Application.StudentGroups.Commands.DeleteStudentGroup;
 using Application.StudentGroups.Commands.UpdateStudentGroup;
@@ -6,11 +8,10 @@ using Application.StudentGroups.Queries.GetStudentGroups;
 using Application.Tags.Queries.GetStudentGroup;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using API.Authorize;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class StudentGroupsController : ApiControllerBase
 {

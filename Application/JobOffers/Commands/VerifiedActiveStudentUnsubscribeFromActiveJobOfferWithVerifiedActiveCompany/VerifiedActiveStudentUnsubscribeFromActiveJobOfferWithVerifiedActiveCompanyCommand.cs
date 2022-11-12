@@ -2,7 +2,6 @@
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,13 +24,12 @@ public class VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiv
     }
 
     public async Task<Unit> Handle(
-        VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiveCompanyCommand request, 
+        VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiveCompanyCommand request,
         CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .Filter(
-                isVerified: true,
-                activationStatus: ActivationStatus.Active
+                isVerified: true
             )
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
@@ -44,8 +42,7 @@ public class VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiv
             .Include(x => x.SubscribedStudents)
             .Filter(
                 isActive: true,
-                isCompanyVerified: true,
-                companyActivationStatus: ActivationStatus.Active
+                isCompanyVerified: true
             )
             .FirstOrDefaultAsync(x => x.Id == request.JobOfferId);
 

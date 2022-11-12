@@ -12,6 +12,7 @@ public class GetBriefAccountQueryHandler : IRequestHandler<GetBriefAccountQuery,
 {
     private readonly IApplicationDbContext _context;
     private readonly IAccountHelper _accountHelper;
+
     public GetBriefAccountQueryHandler(IApplicationDbContext context, IAccountHelper accountHelper)
     {
         _context = context;
@@ -22,6 +23,7 @@ public class GetBriefAccountQueryHandler : IRequestHandler<GetBriefAccountQuery,
     {
         var account = await _context.Accounts
             .AsNoTracking()
+            .Include(x => x.Bans.Where(x => x.Expires >= DateTime.UtcNow))
             .Where(x => x.Id == request.AccountId)
             .FirstOrDefaultAsync();
 
@@ -37,7 +39,7 @@ public class GetBriefAccountQueryHandler : IRequestHandler<GetBriefAccountQuery,
             Verified = account.Verified,
             PasswordReset = account.PasswordReset,
             Role = _accountHelper.GetRole(account),
-            ActivationStatus = account.ActivationStatus
+            IsBanned = account.Bans.Any()
         };
     }
 }

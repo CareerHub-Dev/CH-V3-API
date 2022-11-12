@@ -1,5 +1,5 @@
-﻿using Application.Common.Interfaces;
-using API.Authorize;
+﻿using API.Authorize;
+using Application.Common.Interfaces;
 
 namespace API.Services;
 

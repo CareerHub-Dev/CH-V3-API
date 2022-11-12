@@ -21,7 +21,7 @@ public static class FluentValidationExtensions
     {
         return ruleBuilder
             .Matches(NureEmailPattern)
-            .WithMessage("The field '{PropertyName}' must match the regular expression '" +NureEmailPattern + "'.");
+            .WithMessage("The field '{PropertyName}' must match the regular expression '" + NureEmailPattern + "'.");
     }
 
     public static IRuleBuilderOptions<T, string> Phone<T>(this IRuleBuilder<T, string> ruleBuilder)

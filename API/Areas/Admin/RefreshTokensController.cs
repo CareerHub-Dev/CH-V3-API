@@ -1,10 +1,11 @@
-﻿using Application.RefreshTokens.Commands.RevokeRefreshToken;
+﻿using API.Authorize;
+using Application.Common.Enums;
+using Application.RefreshTokens.Commands.RevokeRefreshToken;
 using Microsoft.AspNetCore.Mvc;
-using API.Authorize;
 
 namespace API.Areas.Admin;
 
-[Authorize("Admin", "SuperAdmin")]
+[Authorize(Role.Admin, Role.SuperAdmin)]
 [Route("api/Admin/[controller]")]
 public class RefreshTokensController : ApiControllerBase
 {
