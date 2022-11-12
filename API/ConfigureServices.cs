@@ -1,27 +1,12 @@
-﻿using API.ExceptionFilter;
-using API.Services;
-using Application.Accounts.Queries.Authenticate;
-using Application.BackgroundServices;
-using Application.Common.Behaviours;
+﻿using API.Services;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Models;
-using Application.Common.Models.Email;
-using Application.Helpers;
-using Application.Services;
-using Application.Services.Jwt;
-using Domain.Entities;
-using FluentValidation;
+using Hellang.Middleware.ProblemDetails;
 using Infrastructure.Persistence;
-using Infrastructure.Persistence.Interceptors;
-using Infrastructure.Services;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System.Globalization;
-using System.IO.Abstractions;
 using System.Reflection;
+using System.Security.Authentication;
 using System.Text.Json.Serialization;
 
 namespace API;
@@ -38,14 +23,9 @@ public static class ConfigureServices
 
         services.AddHttpContextAccessor();
 
-        services.AddHealthChecks()
-            .AddDbContextCheck<ApplicationDbContext>();
+        services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>();
 
-        services.AddControllers(options =>
-        {
-            options.Filters.Add<ApiExceptionFilterAttribute>();
-        })
-        .AddJsonOptions(options =>
+        services.AddControllers().AddJsonOptions(options =>
         {
             var enumConverter = new JsonStringEnumConverter();
             options.JsonSerializerOptions.Converters.Add(enumConverter);
@@ -53,13 +33,102 @@ public static class ConfigureServices
 
         services.AddEndpointsApiExplorer();
 
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("en-US");
-
         // Customise default API behaviour
-        services.Configure<ApiBehaviorOptions>(options =>
-            options.SuppressModelStateInvalidFilter = true);
+        services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
+        services.AddProblemDetails();
+
+        services.AddSwagger();
+
+        return services;
+    }
+
+    private static IServiceCollection AddProblemDetails(this IServiceCollection services)
+    {
+        services.AddProblemDetails(setup =>
+        {
+            setup.IncludeExceptionDetails = (ctx, ex) =>
+            {
+                //var env = ctx.RequestServices.GetRequiredService<IHostEnvironment>();
+                //return env.IsDevelopment() || env.IsStaging();
+                return true;
+            };
+
+            setup.Map<ValidationException>(ex => new ValidationProblemDetails(ex.Errors)
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Status = StatusCodes.Status400BadRequest,
+                Detail = ex.Message
+            });
+
+            setup.Map<NotFoundException>(ex => new ProblemDetails()
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",
+                Status = StatusCodes.Status404NotFound,
+                Title = "The specified resource was not found.",
+                Detail = ex.Message
+            });
+
+            setup.Map<AuthenticationException>(ex => new ProblemDetails()
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Authorization failed.",
+                Detail = ex.Message
+            });
+
+            setup.Map<BanException>(ex =>
+            {
+                var problem = new ProblemDetails()
+                {
+                    Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.3",
+                    Status = StatusCodes.Status403Forbidden,
+                    Title = "Forbidden.",
+                    Detail = ex.Message
+                };
+                problem.Extensions.Add(nameof(ex.Expires), ex.Expires);
+                problem.Extensions.Add(nameof(ex.Reasone), ex.Reasone);
+                return problem;
+            });
+
+            setup.Map<ArgumentException>(ex => new ProblemDetails()
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Invalid argument.",
+                Detail = ex.Message
+            });
+
+            setup.Map<ArgumentOutOfRangeException>(ex => new ProblemDetails()
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Status = StatusCodes.Status400BadRequest,
+                Title = "Invalid argument.",
+                Detail = ex.Message
+            });
+
+            setup.Map<FileNotFoundException>(ex => new ProblemDetails()
+            {
+                Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+                Status = StatusCodes.Status400BadRequest,
+                Title = "The specified resource was not found.",
+                Detail = ex.Message
+            });
+
+            setup.Map<ForbiddenException>(ex => new ProblemDetails()
+            {
+                Type = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.3",
+                Status = StatusCodes.Status403Forbidden,
+                Title = "Forbidden.",
+                Detail = ex.Message
+            });
+        });
+
+        return services;
+    }
+
+    private static IServiceCollection AddSwagger(this IServiceCollection services)
+    {
         services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "CareerHub", Version = "v3" });
@@ -85,54 +154,6 @@ public static class ConfigureServices
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
-
-        return services;
-    }
-
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
-
-        services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
-                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
-
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
-        services.AddScoped<ApplicationDbContextInitialiser>();
-
-        services.AddScoped<IMailKitService, MailKitService>();
-
-        return services;
-    }
-
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddValidatorsFromAssembly(typeof(AuthenticateQuery).Assembly);
-        services.AddMediatR(typeof(AuthenticateQuery).Assembly);
-
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
-
-        services.AddScoped<IJwtService, JwtService>();
-        services.AddScoped<IEmailTemplateParserService, EmailTemplateParserService>();
-        services.AddScoped<IEmailTemplatesService, EmailTemplatesService>();
-        services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IImagesService, ImagesService>();
-        services.AddScoped<IPasswordHasher<Account>, BCryptPasswordHasher<Account>>();
-
-        services.AddScoped<IAccountHelper, AccountHelper>();
-        services.AddScoped<IRefreshTokenHelper, RefreshTokenHelper>();
-
-        services.AddScoped<IFileSystem, FileSystem>();
-
-        services.AddHostedService<RemoveOldImagesBackgroundService>();
-
-        services.Configure<EmailTemplateSettings>(configuration.GetSection(nameof(EmailTemplateSettings)));
-        services.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
-        services.Configure<ClientSettings>(configuration.GetSection(nameof(ClientSettings)));
-        services.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
 
         return services;
     }
