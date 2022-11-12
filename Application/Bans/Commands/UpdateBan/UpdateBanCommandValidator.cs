@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Bans.Commands.UpdateTag;
+namespace Application.Bans.Commands.UpdateBan;
 
 public class UpdateBanCommandValidator : AbstractValidator<UpdateBanCommand>
 {

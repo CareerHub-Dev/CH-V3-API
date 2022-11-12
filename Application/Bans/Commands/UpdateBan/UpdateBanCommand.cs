@@ -4,7 +4,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Bans.Commands.UpdateTag;
+namespace Application.Bans.Commands.UpdateBan;
 
 public record UpdateBanCommand : IRequest
 {

@@ -1,5 +1,4 @@
-﻿using Application.Bans.Queries.GetBan;
-using Application.Common.DTO.Bans;
+﻿using Application.Common.DTO.Bans;
 using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;

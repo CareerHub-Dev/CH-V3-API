@@ -10,7 +10,7 @@ namespace Application.Bans.Commands.CreateBan;
 
 public record CreateBanCommand : IRequest<Guid>
 {
-    public Guid AccountId { get; set; }
+    public Guid AccountId { get; init; }
     public string Reason { get; init; } = string.Empty;
     public DateTime Expires { get; init; }
 }
