@@ -126,7 +126,7 @@ public static class MapExtention
 
     #region Student
 
-    public static IQueryable<StudentSubscriberOfStudentDTO> MapToStudentSubscriberOfStudentDTO(this IQueryable<Student> students, Guid studentId)
+    public static IQueryable<StudentSubscriberOfStudentDTO> MapToStudentSubscriberOfStudentDTO(this IQueryable<Student> students, Guid followerStudentId)
     {
         return students.Select(x => new StudentSubscriberOfStudentDTO
         {
@@ -136,11 +136,11 @@ public static class MapExtention
             LastName = x.LastName,
             Photo = x.Photo,
             StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
-            IsFollowed = x.StudentsSubscribed.Any(x => x.SubscriptionOwnerId == studentId),
+            IsFollowed = x.StudentsSubscribed.Any(x => x.SubscriptionOwnerId == followerStudentId),
         });
     }
 
-    public static IQueryable<StudentSubscriptionOfStudentDTO> MapToStudentSubscriptionOfStudentDTO(this IQueryable<Student> students, Guid studentId)
+    public static IQueryable<StudentSubscriptionOfStudentDTO> MapToStudentSubscriptionOfStudentDTO(this IQueryable<Student> students, Guid followerStudentId)
     {
         return students.Select(x => new StudentSubscriptionOfStudentDTO
         {
@@ -150,7 +150,7 @@ public static class MapExtention
             LastName = x.LastName,
             Photo = x.Photo,
             StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
-            IsFollowed = x.StudentsSubscribed.Any(x => x.SubscriptionOwnerId == studentId),
+            IsFollowed = x.StudentsSubscribed.Any(x => x.SubscriptionOwnerId == followerStudentId),
         });
     }
 
