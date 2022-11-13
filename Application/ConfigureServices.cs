@@ -2,19 +2,19 @@
 using Application.BackgroundServices;
 using Application.Common.Behaviours;
 using Application.Common.Interfaces;
-using Application.Common.Models.Email;
 using Application.Common.Models;
+using Application.Common.Models.Email;
 using Application.Helpers;
-using Application.Services.Jwt;
 using Application.Services;
+using Application.Services.Jwt;
 using Domain.Entities;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.IO.Abstractions;
-using FluentValidation;
 using System.Globalization;
+using System.IO.Abstractions;
 
 namespace Application;
 

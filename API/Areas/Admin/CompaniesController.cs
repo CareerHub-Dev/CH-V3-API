@@ -236,7 +236,7 @@ public class CompaniesController : ApiControllerBase
             PageSize = pageSize,
             SearchTerm = searchTerm ?? string.Empty,
 
-            IsStudentMustBeVerified = isStudentMustBeVerified,
+            IsStudentSubscriberMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
 
             OrderByExpression = orderByExpression ?? "LastName",

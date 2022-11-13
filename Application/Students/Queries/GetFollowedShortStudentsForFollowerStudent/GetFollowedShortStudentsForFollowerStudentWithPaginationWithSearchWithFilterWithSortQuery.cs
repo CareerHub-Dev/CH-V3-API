@@ -1,5 +1,4 @@
-﻿using Application.Common.DTO.StudentGroups;
-using Application.Common.DTO.Students;
+﻿using Application.Common.DTO.Students;
 using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
@@ -8,10 +7,10 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Queries.GetStudents;
+namespace Application.Students.Queries.GetFollowedShortStudentsForFollowerStudent;
 
-public record GetFollowedDetailedStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
-    : IRequest<PaginatedList<FollowedDetailedStudentDTO>>
+public record GetFollowedShortStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+    : IRequest<PaginatedList<FollowedShortStudentDTO>>
 {
     public Guid FollowerStudentId { get; init; }
     public bool? IsFollowerStudentMustBeVerified { get; init; }
@@ -28,18 +27,19 @@ public record GetFollowedDetailedStudentsForFollowerStudentWithPaginationWithSea
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetFollowedDetailedStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler
-    : IRequestHandler<GetFollowedDetailedStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<FollowedDetailedStudentDTO>>
+public class GetFollowedShortStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler
+    : IRequestHandler<GetFollowedShortStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<FollowedShortStudentDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetFollowedDetailedStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
+    public GetFollowedShortStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<FollowedDetailedStudentDTO>> Handle(
-        GetFollowedDetailedStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request,
+    public async Task<PaginatedList<FollowedShortStudentDTO>> Handle(
+        GetFollowedShortStudentsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Students
@@ -59,18 +59,7 @@ public class GetFollowedDetailedStudentsForFollowerStudentWithPaginationWithSear
                 studentGroupIds: request.StudentGroupIds
             )
             .Search(request.SearchTerm)
-            .Select(x => new FollowedDetailedStudentDTO
-            {
-                Id = x.Id,
-                Email = x.Email,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Photo = x.Photo,
-                Phone = x.Phone,
-                BirthDate = x.BirthDate,
-                StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
-                IsFollowed = x.StudentsSubscribed.Any(x => x.SubscriptionOwnerId == request.FollowerStudentId),
-            })
+            .MapToFollowedShortStudentDTO(request.FollowerStudentId)
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

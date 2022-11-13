@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Queries;
 
-public record IsVerifiedActiveStudentOwnerSubscribedToVerifiedActiveStudentTargetQuery : IRequest<bool>
+public record IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQuery : IRequest<bool>
 {
     public Guid StudentOwnerId { get; init; }
     public Guid StudentTargetId { get; init; }
 }
 
-public class IsVerifiedActiveStudentOwnerSubscribedToVerifiedActiveStudentTargetQueryHandler : IRequestHandler<IsVerifiedActiveStudentOwnerSubscribedToVerifiedActiveStudentTargetQuery, bool>
+public class IsVerifiedActiveStudentOwnerSubscribedToVerifiedActiveStudentTargetQueryHandler : IRequestHandler<IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQuery, bool>
 {
     private readonly IApplicationDbContext _context;
 
@@ -22,7 +22,7 @@ public class IsVerifiedActiveStudentOwnerSubscribedToVerifiedActiveStudentTarget
         _context = context;
     }
 
-    public async Task<bool> Handle(IsVerifiedActiveStudentOwnerSubscribedToVerifiedActiveStudentTargetQuery request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQuery request, CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)
         {

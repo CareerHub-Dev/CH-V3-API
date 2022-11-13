@@ -1,5 +1,4 @@
-﻿using Application.Common.DTO.StudentGroups;
-using Application.Common.DTO.Students;
+﻿using Application.Common.DTO.Students;
 using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
@@ -13,16 +12,16 @@ namespace Application.Students.Queries.GetStudentSubscribersOfStudent;
 public record GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWithSortQuery
     : IRequest<PaginatedList<StudentDTO>>
 {
-    public Guid StudentOwnerId { get; init; }
-    public bool? IsStudentOwnerMustBeVerified { get; init; }
+    public Guid StudentId { get; init; }
+    public bool? IsStudentMustBeVerified { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
 
     public string SearchTerm { get; init; } = string.Empty;
 
-    public bool? IsStudentMustBeVerified { get; init; }
-    public Guid? WithoutStudentId { get; init; }
+    public bool? IsStudentSubscriberMustBeVerified { get; init; }
+    public Guid? WithoutStudentSubscriberId { get; init; }
     public List<Guid>? StudentGroupIds { get; init; }
 
     public string OrderByExpression { get; init; } = string.Empty;
@@ -33,44 +32,35 @@ public class GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWit
 {
     private readonly IApplicationDbContext _context;
 
-    public GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
+    public GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWithSortQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<StudentDTO>> Handle(GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWithSortQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<StudentDTO>> Handle(
+        GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWithSortQuery request,
+        CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .Filter(
-                isVerified: request.IsStudentOwnerMustBeVerified
+                isVerified: request.IsStudentMustBeVerified
             )
-            .AnyAsync(x => x.Id == request.StudentOwnerId))
+            .AnyAsync(x => x.Id == request.StudentId))
         {
-            throw new NotFoundException(nameof(Student), request.StudentOwnerId);
+            throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
         return await _context.Students
             .AsNoTracking()
-            .Where(x => x.StudentSubscriptions.Any(x => x.SubscriptionTargetId == request.StudentOwnerId))
+            .Where(x => x.StudentSubscriptions.Any(x => x.SubscriptionTargetId == request.StudentId))
             .Filter(
-                withoutStudentId: request.WithoutStudentId,
-                isVerified: request.IsStudentMustBeVerified,
+                withoutStudentId: request.WithoutStudentSubscriberId,
+                isVerified: request.IsStudentSubscriberMustBeVerified,
                 studentGroupIds: request.StudentGroupIds
             )
             .Search(request.SearchTerm)
-            .Select(x => new StudentDTO
-            {
-                Id = x.Id,
-                Email = x.Email,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Photo = x.Photo,
-                Phone = x.Phone,
-                BirthDate = x.BirthDate,
-                StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
-                Verified = x.Verified,
-                PasswordReset = x.PasswordReset
-            })
+            .MapToStudentDTO()
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

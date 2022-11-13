@@ -131,13 +131,13 @@ public class StudentsController : ApiControllerBase
     {
         var result = await Mediator.Send(new GetStudentSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
-            StudentOwnerId = studentId,
+            StudentId = studentId,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
             SearchTerm = searchTerm ?? string.Empty,
 
-            IsStudentMustBeVerified = isStudentMustBeVerified,
+            IsStudentSubscriptionMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
 
             OrderByExpression = orderByExpression ?? "LastName",
@@ -162,13 +162,13 @@ public class StudentsController : ApiControllerBase
     {
         var result = await Mediator.Send(new GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
-            StudentOwnerId = studentId,
+            StudentId = studentId,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
             SearchTerm = searchTerm ?? string.Empty,
 
-            IsStudentMustBeVerified = isStudentMustBeVerified,
+            IsStudentSubscriberMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
 
             OrderByExpression = orderByExpression ?? "LastName",

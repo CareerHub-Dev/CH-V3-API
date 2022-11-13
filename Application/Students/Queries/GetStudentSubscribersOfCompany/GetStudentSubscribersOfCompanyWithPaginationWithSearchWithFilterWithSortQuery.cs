@@ -1,5 +1,4 @@
-﻿using Application.Common.DTO.StudentGroups;
-using Application.Common.DTO.Students;
+﻿using Application.Common.DTO.Students;
 using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
@@ -21,8 +20,8 @@ public record GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWi
 
     public string SearchTerm { get; init; } = string.Empty;
 
-    public bool? IsStudentMustBeVerified { get; init; }
-    public Guid? WithoutStudentId { get; init; }
+    public bool? IsStudentSubscriberMustBeVerified { get; init; }
+    public Guid? WithoutStudentSubscriberId { get; init; }
     public List<Guid>? StudentGroupIds { get; init; }
 
     public string OrderByExpression { get; init; } = string.Empty;
@@ -33,7 +32,8 @@ public class GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWit
 {
     private readonly IApplicationDbContext _context;
 
-    public GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
+    public GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWithSortQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
@@ -55,24 +55,12 @@ public class GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWit
             .AsNoTracking()
             .Where(x => x.CompanySubscriptions.Any(x => x.Id == request.CompanyId))
             .Filter(
-                withoutStudentId: request.WithoutStudentId,
-                isVerified: request.IsStudentMustBeVerified,
+                withoutStudentId: request.WithoutStudentSubscriberId,
+                isVerified: request.IsStudentSubscriberMustBeVerified,
                 studentGroupIds: request.StudentGroupIds
             )
             .Search(request.SearchTerm)
-            .Select(x => new StudentDTO
-            {
-                Id = x.Id,
-                Email = x.Email,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Photo = x.Photo,
-                Phone = x.Phone,
-                BirthDate = x.BirthDate,
-                StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
-                Verified = x.Verified,
-                PasswordReset = x.PasswordReset
-            })
+            .MapToStudentDTO()
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }

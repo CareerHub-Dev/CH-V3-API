@@ -5,7 +5,6 @@ using Application.Common.DTO.StudentLogs;
 using Application.Common.DTO.Students;
 using Application.Common.DTO.Tags;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Common.Entensions;
 
@@ -126,9 +125,22 @@ public static class MapExtention
 
     #region Student
 
-    public static IQueryable<StudentSubscriberOfStudentDTO> MapToStudentSubscriberOfStudentDTO(this IQueryable<Student> students, Guid followerStudentId)
+    public static IQueryable<ShortStudentDTO> MapToShortStudentDTO(this IQueryable<Student> students)
     {
-        return students.Select(x => new StudentSubscriberOfStudentDTO
+        return students.Select(x => new ShortStudentDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            FirstName = x.FirstName,
+            LastName = x.LastName,
+            Photo = x.Photo,
+            StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
+        });
+    }
+
+    public static IQueryable<FollowedShortStudentDTO> MapToFollowedShortStudentDTO(this IQueryable<Student> students, Guid followerStudentId)
+    {
+        return students.Select(x => new FollowedShortStudentDTO
         {
             Id = x.Id,
             Email = x.Email,
@@ -140,17 +152,35 @@ public static class MapExtention
         });
     }
 
-    public static IQueryable<StudentSubscriptionOfStudentDTO> MapToStudentSubscriptionOfStudentDTO(this IQueryable<Student> students, Guid followerStudentId)
+    public static IQueryable<DetailedStudentDTO> MapToDetailedStudentDTO(this IQueryable<Student> students)
     {
-        return students.Select(x => new StudentSubscriptionOfStudentDTO
+        return students.Select(x => new DetailedStudentDTO
         {
             Id = x.Id,
             Email = x.Email,
             FirstName = x.FirstName,
             LastName = x.LastName,
             Photo = x.Photo,
+            Phone = x.Phone,
+            BirthDate = x.BirthDate,
             StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
-            IsFollowed = x.StudentsSubscribed.Any(x => x.SubscriptionOwnerId == followerStudentId),
+        });
+    }
+
+    public static IQueryable<StudentDTO> MapToStudentDTO(this IQueryable<Student> students)
+    {
+        return students.Select(x => new StudentDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            FirstName = x.FirstName,
+            LastName = x.LastName,
+            Photo = x.Photo,
+            Phone = x.Phone,
+            BirthDate = x.BirthDate,
+            StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
+            Verified = x.Verified,
+            PasswordReset = x.PasswordReset
         });
     }
 

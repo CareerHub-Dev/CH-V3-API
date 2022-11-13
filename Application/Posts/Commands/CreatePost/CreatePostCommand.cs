@@ -38,7 +38,7 @@ public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, Guid>
             Text = request.Text,
         };
 
-        foreach(var image in request.Images) 
+        foreach (var image in request.Images)
         {
             post.Images.Add(await _imagesService.SaveImageAsync(image));
         }

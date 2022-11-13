@@ -1,5 +1,4 @@
-﻿using Application.Common.DTO.StudentGroups;
-using Application.Common.DTO.Students;
+﻿using Application.Common.DTO.Students;
 using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
@@ -20,12 +19,15 @@ public class GetStudentWithFilterQueryHandler
 {
     private readonly IApplicationDbContext _context;
 
-    public GetStudentWithFilterQueryHandler(IApplicationDbContext context)
+    public GetStudentWithFilterQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<StudentDTO> Handle(GetStudentWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<StudentDTO> Handle(
+        GetStudentWithFilterQuery request,
+        CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .AsNoTracking()
@@ -33,19 +35,7 @@ public class GetStudentWithFilterQueryHandler
             .Filter(
                 isVerified: request.IsStudentMustBeVerified
             )
-            .Select(x => new StudentDTO
-            {
-                Id = x.Id,
-                Email = x.Email,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Photo = x.Photo,
-                Phone = x.Phone,
-                BirthDate = x.BirthDate,
-                StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
-                Verified = x.Verified,
-                PasswordReset = x.PasswordReset
-            })
+            .MapToStudentDTO()
             .FirstOrDefaultAsync();
 
         if (student == null)
