@@ -25,11 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Posts\Commands\CreatePost\" />
-    <Folder Include="Posts\Commands\UpdatePost\" />
-    <Folder Include="Posts\Commands\DeletePost\" />
-    <Folder Include="Posts\Commands\DeletePostOfAccount\" />
-    <Folder Include="Posts\Commands\UpdatePostOfAccount\" />
     <Folder Include="Posts\Queries\GetPost\" />
     <Folder Include="Posts\Queries\GetPosts\" />
     <Folder Include="Posts\Queries\GetPostsOfAccount\" />

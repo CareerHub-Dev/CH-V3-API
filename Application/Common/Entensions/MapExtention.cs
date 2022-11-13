@@ -2,8 +2,10 @@
 using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.StudentGroups;
 using Application.Common.DTO.StudentLogs;
+using Application.Common.DTO.Students;
 using Application.Common.DTO.Tags;
 using Domain.Entities;
+using MediatR;
 
 namespace Application.Common.Entensions;
 
@@ -117,6 +119,38 @@ public static class MapExtention
             Id = x.Id,
             Reason = x.Reason,
             Expires = x.Expires,
+        });
+    }
+
+    #endregion
+
+    #region Student
+
+    public static IQueryable<StudentSubscriberOfStudentDTO> MapToStudentSubscriberOfStudentDTO(this IQueryable<Student> students, Guid studentId)
+    {
+        return students.Select(x => new StudentSubscriberOfStudentDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            FirstName = x.FirstName,
+            LastName = x.LastName,
+            Photo = x.Photo,
+            StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
+            IsFollowed = x.StudentsSubscribed.Any(x => x.SubscriptionOwnerId == studentId),
+        });
+    }
+
+    public static IQueryable<StudentSubscriptionOfStudentDTO> MapToStudentSubscriptionOfStudentDTO(this IQueryable<Student> students, Guid studentId)
+    {
+        return students.Select(x => new StudentSubscriptionOfStudentDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            FirstName = x.FirstName,
+            LastName = x.LastName,
+            Photo = x.Photo,
+            StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
+            IsFollowed = x.StudentsSubscribed.Any(x => x.SubscriptionOwnerId == studentId),
         });
     }
 
