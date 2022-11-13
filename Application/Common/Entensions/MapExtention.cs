@@ -1,4 +1,5 @@
-﻿using Application.Common.DTO.Bans;
+﻿using Application.Common.DTO.Admins;
+using Application.Common.DTO.Bans;
 using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.StudentGroups;
 using Application.Common.DTO.StudentLogs;
@@ -118,6 +119,22 @@ public static class MapExtention
             Id = x.Id,
             Reason = x.Reason,
             Expires = x.Expires,
+        });
+    }
+
+    #endregion
+
+    #region Admin
+
+    public static IQueryable<AdminDTO> MapToAdminDTO(this IQueryable<Admin> admins)
+    {
+        return admins.Select(x => new AdminDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            Verified = x.Verified,
+            PasswordReset = x.PasswordReset,
+            IsSuperAdmin = x.IsSuperAdmin
         });
     }
 

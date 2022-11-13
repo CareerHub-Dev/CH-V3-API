@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTO.Admins;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
@@ -22,14 +23,7 @@ public class GetAdminQueryHandler : IRequestHandler<GetAdminQuery, AdminDTO>
         var admin = await _context.Admins
             .AsNoTracking()
             .Where(x => x.Id == request.AdminId)
-            .Select(x => new AdminDTO
-            {
-                Id = x.Id,
-                Email = x.Email,
-                Verified = x.Verified,
-                PasswordReset = x.PasswordReset,
-                IsSuperAdmin = x.IsSuperAdmin
-            })
+            .MapToAdminDTO()
             .FirstOrDefaultAsync();
 
         if (admin == null)

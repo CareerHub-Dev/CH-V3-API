@@ -40,14 +40,7 @@ public class GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler : I
                 isSuperAdmin: request.IsSuperAdmin
              )
             .Search(request.SearchTerm)
-            .Select(x => new AdminDTO
-            {
-                Id = x.Id,
-                Email = x.Email,
-                Verified = x.Verified,
-                PasswordReset = x.PasswordReset,
-                IsSuperAdmin = x.IsSuperAdmin
-            })
+            .MapToAdminDTO()
             .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
