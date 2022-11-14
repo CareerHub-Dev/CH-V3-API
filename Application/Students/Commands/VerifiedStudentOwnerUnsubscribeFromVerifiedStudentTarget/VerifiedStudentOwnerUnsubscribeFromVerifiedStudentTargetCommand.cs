@@ -5,27 +5,28 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Commands.VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTarget;
+namespace Application.Students.Commands.VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTarget;
 
-public record VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTargetCommand : IRequest
+public record VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand 
+    : IRequest
 {
     public Guid StudentOwnerId { get; init; }
     public Guid StudentTargetId { get; init; }
 }
 
-public class VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTargetCommandHandler
-    : IRequestHandler<VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTargetCommand>
+public class VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommandHandler
+    : IRequestHandler<VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTargetCommandHandler(
+    public VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommandHandler(
         IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<Unit> Handle(
-        VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTargetCommand request,
+        VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand request,
         CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)
@@ -34,34 +35,31 @@ public class VerifiedActiveStudentOwnerUnsubscribeFromVerifiedActiveStudentTarge
         }
 
         if (!await _context.Students
-            .Filter(
-                isVerified: true
-            )
+            .Filter(isVerified: true)
             .AnyAsync(x => x.Id == request.StudentOwnerId))
         {
             throw new NotFoundException(nameof(Student), request.StudentOwnerId);
         }
 
         if (!await _context.Students
-            .Filter(
-                isVerified: true
-            )
+            .Filter(isVerified: true)
             .AnyAsync(x => x.Id == request.StudentTargetId))
         {
             throw new NotFoundException(nameof(Student), request.StudentTargetId);
         }
 
-        var StudentSubscription = await _context.StudentSubscriptions.AsNoTracking().FirstOrDefaultAsync(x =>
-            x.SubscriptionOwnerId == request.StudentOwnerId &&
-            x.SubscriptionTargetId == request.StudentTargetId
-        );
+        var studentSubscription = await _context.StudentSubscriptions
+            .FirstOrDefaultAsync(x =>
+                x.SubscriptionOwnerId == request.StudentOwnerId &&
+                x.SubscriptionTargetId == request.StudentTargetId
+            );
 
-        if (StudentSubscription == null)
+        if (studentSubscription == null)
         {
             return Unit.Value;
         }
 
-        _context.StudentSubscriptions.Remove(StudentSubscription);
+        _context.StudentSubscriptions.Remove(studentSubscription);
 
         await _context.SaveChangesAsync();
 

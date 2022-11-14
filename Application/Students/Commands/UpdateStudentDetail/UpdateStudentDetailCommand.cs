@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Commands.UpdateStudentDetail;
 
-public record UpdateStudentDetailCommand : IRequest
+public record UpdateStudentDetailCommand 
+    : IRequest
 {
     public Guid StudentId { get; set; }
     public string FirstName { get; init; } = string.Empty;
@@ -28,14 +29,16 @@ public class UpdateStudentDetailCommandHandler : IRequestHandler<UpdateStudentDe
     public async Task<Unit> Handle(UpdateStudentDetailCommand request, CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
+            .Where(x => x.Id == request.StudentId)
+            .FirstOrDefaultAsync();
 
         if (student == null)
         {
             throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
-        if (!await _context.StudentGroups.AnyAsync(x => x.Id == request.StudentGroupId))
+        if (!await _context.StudentGroups
+            .AnyAsync(x => x.Id == request.StudentGroupId))
         {
             throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
         }

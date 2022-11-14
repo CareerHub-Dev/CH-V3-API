@@ -5,27 +5,28 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Students.Commands.VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTarget;
+namespace Application.Students.Commands.VerifiedStudentOwnerSubscribeToVerifiedStudentTarget;
 
-public record VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTargetCommand : IRequest
+public record VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommand
+    : IRequest
 {
     public Guid StudentOwnerId { get; init; }
     public Guid StudentTargetId { get; init; }
 }
 
-public class VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTargetCommandHandler
-    : IRequestHandler<VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTargetCommand>
+public class VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommandHandler
+    : IRequestHandler<VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTargetCommandHandler(
+    public VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommandHandler(
         IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<Unit> Handle(
-        VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTargetCommand request,
+        VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommand request,
         CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)
@@ -34,18 +35,14 @@ public class VerifiedActiveStudentOwnerSubscribeToVerifiedActiveStudentTargetCom
         }
 
         if (!await _context.Students
-            .Filter(
-                isVerified: true
-            )
+            .Filter(isVerified: true)
             .AnyAsync(x => x.Id == request.StudentOwnerId))
         {
             throw new NotFoundException(nameof(Student), request.StudentOwnerId);
         }
 
         if (!await _context.Students
-            .Filter(
-                isVerified: true
-            )
+            .Filter(isVerified: true)
             .AnyAsync(x => x.Id == request.StudentTargetId))
         {
             throw new NotFoundException(nameof(Student), request.StudentTargetId);

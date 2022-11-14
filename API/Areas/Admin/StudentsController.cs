@@ -285,6 +285,7 @@ public class StudentsController : ApiControllerBase
     public async Task<IActionResult> SendVerifyStudentEmail(SendVerifyStudentEmailCommand command)
     {
         await Mediator.Send(command);
+
         return Ok();
     }
 
