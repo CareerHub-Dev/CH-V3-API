@@ -5,7 +5,7 @@ using Application.Tags.Commands.CreateTag;
 using Application.Tags.Commands.DeleteTag;
 using Application.Tags.Commands.UpdateTag;
 using Application.Tags.Queries.GetTag;
-using Application.Tags.Queries.GetTags;
+using Application.Tags.Queries.GetTagsWithPaging;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -24,7 +24,7 @@ public class TagsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetTagsWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetTagsWithPagingQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,

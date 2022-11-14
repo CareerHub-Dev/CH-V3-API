@@ -8,7 +8,6 @@ using Application.Common.DTO.StudentLogs;
 using Application.Common.DTO.Students;
 using Application.Common.DTO.Tags;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Common.Entensions;
 
@@ -222,8 +221,8 @@ public static class MapExtention
 
     public static IQueryable<BriefCompanyWithStatsDTO> MapToBriefCompanyWithStatsDTO(
         this IQueryable<Company> companies,
-        bool? isJobOfferMustBeActive,
-        bool? isSubscriberMustBeVerified)
+        bool? isJobOfferMustBeActive = null,
+        bool? isSubscriberMustBeVerified = null)
     {
         return companies.Select(x => new BriefCompanyWithStatsDTO
         {
@@ -256,8 +255,8 @@ public static class MapExtention
 
     public static IQueryable<ShortCompanyWithStatsDTO> MapToShortCompanyWithStatsDTO(
         this IQueryable<Company> companies,
-        bool? isJobOfferMustBeActive,
-        bool? isSubscriberMustBeVerified)
+        bool? isJobOfferMustBeActive = null,
+        bool? isSubscriberMustBeVerified = null)
     {
         return companies.Select(x => new ShortCompanyWithStatsDTO
         {
@@ -279,8 +278,8 @@ public static class MapExtention
     public static IQueryable<FollowedShortCompanyWithStatsDTO> MapToFollowedShortCompanyWithStatsDTO(
         this IQueryable<Company> companies,
         Guid followerStudentId,
-        bool? isJobOfferMustBeActive,
-        bool? isSubscriberMustBeVerified)
+        bool? isJobOfferMustBeActive = null,
+        bool? isSubscriberMustBeVerified = null)
     {
         return companies.Select(x => new FollowedShortCompanyWithStatsDTO
         {

@@ -6,20 +6,25 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Tags.Queries.GetTag;
+namespace Application.Tags.Queries.GetBriefTag;
 
-public record GetBriefTagQuery(Guid TagId) : IRequest<BriefTagDTO>;
+public record GetBriefTagQuery(Guid TagId)
+    : IRequest<BriefTagDTO>;
 
-public class GetBriefTagQueryHandler : IRequestHandler<GetBriefTagQuery, BriefTagDTO>
+public class GetBriefTagQueryHandler
+    : IRequestHandler<GetBriefTagQuery, BriefTagDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetBriefTagQueryHandler(IApplicationDbContext context)
+    public GetBriefTagQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<BriefTagDTO> Handle(GetBriefTagQuery request, CancellationToken cancellationToken)
+    public async Task<BriefTagDTO> Handle(
+        GetBriefTagQuery request,
+        CancellationToken cancellationToken)
     {
         var tag = await _context.Tags
             .AsNoTracking()
