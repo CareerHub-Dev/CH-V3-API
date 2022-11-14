@@ -36,7 +36,6 @@ public class GetTagsWithPagingHandler
         CancellationToken cancellationToken)
     {
         return await _context.Tags
-            .AsNoTracking()
             .Search(request.SearchTerm)
             .Filter(isAccepted: request.IsAccepted)
             .MapToTagDTO()

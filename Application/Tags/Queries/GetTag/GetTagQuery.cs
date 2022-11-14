@@ -27,7 +27,6 @@ public class GetTagQueryHandler
         CancellationToken cancellationToken)
     {
         var tag = await _context.Tags
-            .AsNoTracking()
             .Where(x => x.Id == request.TagId)
             .MapToTagDTO()
             .FirstOrDefaultAsync();

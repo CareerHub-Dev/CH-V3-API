@@ -28,7 +28,6 @@ public class GetBriefTagsWithSearchQueryHandler
         CancellationToken cancellationToken)
     {
         return await _context.Tags
-            .AsNoTracking()
             .Search(request.SearchTerm ?? "")
             .OrderBy(x => x.Name)
             .MapToBriefTagDTO()
