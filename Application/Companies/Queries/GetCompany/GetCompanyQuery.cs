@@ -8,24 +8,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetCompany;
 
-public record GetCompanyWithFilterQuery : IRequest<CompanyDTO>
+public record GetCompanyQuery : IRequest<CompanyDTO>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
 }
 
-public class GetCompanyWithFilterQueryHandler
-    : IRequestHandler<GetCompanyWithFilterQuery, CompanyDTO>
+public class GetCompanyQueryHandler
+    : IRequestHandler<GetCompanyQuery, CompanyDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetCompanyWithFilterQueryHandler(IApplicationDbContext context)
+    public GetCompanyQueryHandler(IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<CompanyDTO> Handle(
-        GetCompanyWithFilterQuery request,
+        GetCompanyQuery request,
         CancellationToken cancellationToken)
     {
         var company = await _context.Companies
@@ -34,18 +34,7 @@ public class GetCompanyWithFilterQueryHandler
             .Filter(
                 isVerified: request.IsCompanyMustBeVerified
             )
-            .Select(x => new CompanyDTO
-            {
-                Id = x.Id,
-                Email = x.Email,
-                Name = x.Name,
-                Logo = x.Logo,
-                Banner = x.Banner,
-                Motto = x.Motto,
-                Description = x.Description,
-                Verified = x.Verified,
-                PasswordReset = x.PasswordReset
-            })
+            .MapToCompanyDTO()
             .FirstOrDefaultAsync();
 
         if (company == null)

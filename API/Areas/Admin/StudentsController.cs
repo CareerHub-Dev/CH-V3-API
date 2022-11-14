@@ -4,7 +4,7 @@ using Application.Common.DTO.Experiences;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
 using Application.Common.Enums;
-using Application.Companies.Queries.GetCompanySubscriptionsOfStudent;
+using Application.Companies.Queries.GetBriefCompanySubscriptionsWithStatsOfStudentWithPaging;
 using Application.Emails.Commands;
 using Application.Experiences.Queries.GetExperiences;
 using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
@@ -180,7 +180,7 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpGet("{studentId}/company-subscriptions")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefCompanyWithStatsDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanySubscriptionsOfStudent(
         Guid studentId,
@@ -190,7 +190,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetCompanyWithStatsSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetBriefCompanySubscriptionsWithStatsOfStudentWithPagingQuery
         {
             StudentOwnerId = studentId,
 

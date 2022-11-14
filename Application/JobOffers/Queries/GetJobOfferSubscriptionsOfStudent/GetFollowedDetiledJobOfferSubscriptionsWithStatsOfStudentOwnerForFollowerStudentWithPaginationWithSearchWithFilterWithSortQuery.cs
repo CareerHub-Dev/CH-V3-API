@@ -1,5 +1,4 @@
-﻿using Application.Common.DTO.Companies;
-using Application.Common.DTO.JobOffers;
+﻿using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.Tags;
 using Application.Common.Entensions;

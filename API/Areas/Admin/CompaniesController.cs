@@ -10,7 +10,7 @@ using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyLinks;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
-using Application.Companies.Queries.GetCompanies;
+using Application.Companies.Queries.GetBriefCompaniesWithStatsWithPaginig;
 using Application.Companies.Queries.GetCompany;
 using Application.Emails.Commands;
 using Application.JobOffers.Queries.GetJobOffersOfCompany;
@@ -26,7 +26,7 @@ namespace API.Areas.Admin;
 public class CompaniesController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefCompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
         [FromQuery] bool? isCompanyMustBeVerified,
         [FromQuery] string? orderByExpression,
@@ -34,7 +34,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetBriefCompaniesWithStatsWithPagingQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -53,7 +53,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new GetCompanyWithFilterQuery
+        return Ok(await Mediator.Send(new GetCompanyQuery
         {
             CompanyId = companyId
         }));

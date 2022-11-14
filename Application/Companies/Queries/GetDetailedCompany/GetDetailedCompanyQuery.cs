@@ -6,26 +6,28 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Queries.GetCompany;
+namespace Application.Companies.Queries.GetDetailedCompany;
 
-public record GetDetailedCompanyWithFilterQuery : IRequest<DetailedCompanyDTO>
+public record GetDetailedCompanyQuery
+    : IRequest<DetailedCompanyDTO>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
 }
 
-public class GetDetailedCompanyWithFilterQueryHandler
-    : IRequestHandler<GetDetailedCompanyWithFilterQuery, DetailedCompanyDTO>
+public class GetDetailedCompanyQueryHandler
+    : IRequestHandler<GetDetailedCompanyQuery, DetailedCompanyDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetDetailedCompanyWithFilterQueryHandler(IApplicationDbContext context)
+    public GetDetailedCompanyQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<DetailedCompanyDTO> Handle(
-        GetDetailedCompanyWithFilterQuery request,
+        GetDetailedCompanyQuery request,
         CancellationToken cancellationToken)
     {
         var company = await _context.Companies
@@ -34,16 +36,7 @@ public class GetDetailedCompanyWithFilterQueryHandler
             .Filter(
                 isVerified: request.IsCompanyMustBeVerified
             )
-            .Select(x => new DetailedCompanyDTO
-            {
-                Id = x.Id,
-                Email = x.Email,
-                Name = x.Name,
-                Logo = x.Logo,
-                Banner = x.Banner,
-                Motto = x.Motto,
-                Description = x.Description,
-            })
+            .MapToDetailedCompanyDTO()
             .FirstOrDefaultAsync();
 
         if (company == null)

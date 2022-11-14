@@ -8,7 +8,7 @@ using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyLinks;
 using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
-using Application.Companies.Queries.GetCompany;
+using Application.Companies.Queries.GetDetailedCompany;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Company;
@@ -21,7 +21,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedCompanyDTO))]
     public async Task<IActionResult> GetSelfCompany()
     {
-        return Ok(await Mediator.Send(new GetDetailedCompanyWithFilterQuery
+        return Ok(await Mediator.Send(new GetDetailedCompanyQuery
         {
             CompanyId = AccountInfo!.Id
         }));
