@@ -1,11 +1,14 @@
 ﻿using Application.Common.DTO.Admins;
 using Application.Common.DTO.Bans;
+using Application.Common.DTO.Companies;
+using Application.Common.DTO.CompanyLinks;
 using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.StudentGroups;
 using Application.Common.DTO.StudentLogs;
 using Application.Common.DTO.Students;
 using Application.Common.DTO.Tags;
 using Domain.Entities;
+using MediatR;
 
 namespace Application.Common.Entensions;
 
@@ -198,6 +201,147 @@ public static class MapExtention
             StudentGroup = new BriefStudentGroupDTO { Id = x.StudentGroup!.Id, Name = x.StudentGroup.Name },
             Verified = x.Verified,
             PasswordReset = x.PasswordReset
+        });
+    }
+
+    #endregion
+
+    #region Company 
+
+    public static IQueryable<BriefCompanyDTO> MapToBriefCompanyDTO(this IQueryable<Company> companies)
+    {
+        return companies.Select(x => new BriefCompanyDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            Name = x.Name,
+            Logo = x.Logo,
+            Banner = x.Banner
+        });
+    }
+
+    public static IQueryable<BriefCompanyWithStatsDTO> MapToBriefCompanyWithStatsDTO(
+        this IQueryable<Company> companies,
+        bool? isJobOfferMustBeActive,
+        bool? isSubscriberMustBeVerified)
+    {
+        return companies.Select(x => new BriefCompanyWithStatsDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            Name = x.Name,
+            Logo = x.Logo,
+            Banner = x.Banner,
+            AmountJobOffers = x.JobOffers.Count(x => !isJobOfferMustBeActive.HasValue || (isJobOfferMustBeActive.Value ?
+                x.EndDate >= DateTime.UtcNow && x.StartDate <= DateTime.UtcNow : x.StartDate > DateTime.UtcNow)
+            ),
+            AmountSubscribers = x.SubscribedStudents.Count(x => !isSubscriberMustBeVerified.HasValue || (isSubscriberMustBeVerified.Value ?
+                x.Verified != null || x.PasswordReset != null : x.Verified == null && x.PasswordReset == null)
+            )
+        });
+    }
+
+    public static IQueryable<ShortCompanyDTO> MapToShortCompanyDTO(this IQueryable<Company> companies)
+    {
+        return companies.Select(x => new ShortCompanyDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            Name = x.Name,
+            Logo = x.Logo,
+            Banner = x.Banner,
+            Motto = x.Motto,
+        });
+    }
+
+    public static IQueryable<ShortCompanyWithStatsDTO> MapToShortCompanyWithStatsDTO(
+        this IQueryable<Company> companies,
+        bool? isJobOfferMustBeActive,
+        bool? isSubscriberMustBeVerified)
+    {
+        return companies.Select(x => new ShortCompanyWithStatsDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            Name = x.Name,
+            Logo = x.Logo,
+            Banner = x.Banner,
+            Motto = x.Motto,
+            AmountJobOffers = x.JobOffers.Count(x => !isJobOfferMustBeActive.HasValue || (isJobOfferMustBeActive.Value ?
+                x.EndDate >= DateTime.UtcNow && x.StartDate <= DateTime.UtcNow : x.StartDate > DateTime.UtcNow)
+            ),
+            AmountSubscribers = x.SubscribedStudents.Count(x => !isSubscriberMustBeVerified.HasValue || (isSubscriberMustBeVerified.Value ?
+                x.Verified != null || x.PasswordReset != null : x.Verified == null && x.PasswordReset == null)
+            )
+        });
+    }
+
+    public static IQueryable<FollowedShortCompanyWithStatsDTO> MapToFollowedShortCompanyWithStatsDTO(
+        this IQueryable<Company> companies,
+        Guid followerStudentId,
+        bool? isJobOfferMustBeActive,
+        bool? isSubscriberMustBeVerified)
+    {
+        return companies.Select(x => new FollowedShortCompanyWithStatsDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            Name = x.Name,
+            Logo = x.Logo,
+            Banner = x.Banner,
+            Motto = x.Motto,
+            AmountJobOffers = x.JobOffers.Count(x => !isJobOfferMustBeActive.HasValue || (isJobOfferMustBeActive.Value ?
+                x.EndDate >= DateTime.UtcNow && x.StartDate <= DateTime.UtcNow : x.StartDate > DateTime.UtcNow)
+            ),
+            AmountSubscribers = x.SubscribedStudents.Count(x => !isSubscriberMustBeVerified.HasValue || (isSubscriberMustBeVerified.Value ?
+                x.Verified != null || x.PasswordReset != null : x.Verified == null && x.PasswordReset == null)
+            ),
+            IsFollowed = x.SubscribedStudents.Any(x => x.Id == followerStudentId),
+        });
+    }
+
+    public static IQueryable<DetailedCompanyDTO> MapToDetailedCompanyDTO(this IQueryable<Company> companies)
+    {
+        return companies.Select(x => new DetailedCompanyDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            Name = x.Name,
+            Logo = x.Logo,
+            Banner = x.Banner,
+            Motto = x.Motto,
+            Description = x.Description,
+            Links = x.Links.MapToCompanyLinkDTO().ToList(),
+        });
+    }
+
+    public static IQueryable<CompanyDTO> MapToCompanyDTO(this IQueryable<Company> companies)
+    {
+        return companies.Select(x => new CompanyDTO
+        {
+            Id = x.Id,
+            Email = x.Email,
+            Name = x.Name,
+            Logo = x.Logo,
+            Banner = x.Banner,
+            Motto = x.Motto,
+            Description = x.Description,
+            Links = x.Links.MapToCompanyLinkDTO().ToList(),
+            Verified = x.Verified,
+            PasswordReset = x.PasswordReset,
+        });
+    }
+
+    #endregion
+
+    #region CompanyLink
+
+    public static IEnumerable<CompanyLinkDTO> MapToCompanyLinkDTO(this IEnumerable<CompanyLink> links)
+    {
+        return links.Select(x => new CompanyLinkDTO
+        {
+            Title = x.Title,
+            Uri = x.Uri
         });
     }
 

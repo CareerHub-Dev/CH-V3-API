@@ -1,6 +1,6 @@
 ﻿namespace Application.Common.DTO.Companies;
 
-public class FollowedDetailedCompanyWithStatsDTO : DetailedCompanyWithStatsDTO
+public class FollowedShortCompanyWithStatsDTO : ShortCompanyWithStatsDTO
 {
     public bool IsFollowed { get; set; }
 }

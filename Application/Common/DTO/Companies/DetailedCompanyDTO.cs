@@ -1,10 +1,9 @@
-﻿namespace Application.Common.DTO.Companies;
+﻿using Application.Common.DTO.CompanyLinks;
 
-public class DetailedCompanyDTO : BriefCompanyDTO
+namespace Application.Common.DTO.Companies;
+
+public class DetailedCompanyDTO : ShortCompanyDTO
 {
-    public string Email { get; set; } = string.Empty;
-    public string? Logo { get; set; }
-    public string? Banner { get; set; }
-    public string Motto { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
+    public List<CompanyLinkDTO> Links { get; set; } = new List<CompanyLinkDTO>();
 }
