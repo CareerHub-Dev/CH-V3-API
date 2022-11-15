@@ -204,7 +204,7 @@ public class ApplicationDbContextInitialiser
 
         #region SeedStudentLogs
 
-        if (!await _context.StudentLogs.AnyAsync() && await _context.StudentGroups.AnyAsync())
+        if (!await _context.StudentLogs.AnyAsync() && await _context.StudentGroups.AnyAsync() && !await _context.Students.AnyAsync())
         {
             var studentLog = await _context.StudentGroups.ToListAsync();
             await _context.StudentLogs.AddRangeAsync(

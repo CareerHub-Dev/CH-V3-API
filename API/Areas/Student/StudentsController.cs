@@ -10,6 +10,7 @@ using Application.Companies.Queries.Models;
 using Application.Experiences.Queries.GetExperiences;
 using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 using Application.Students.Commands.DeleteStudent;
+using Application.Students.Commands.ReturnStudentToLog;
 using Application.Students.Commands.UpdateStudentDetail;
 using Application.Students.Commands.UpdateStudentPhoto;
 using Application.Students.Commands.VerifiedStudentOwnerSubscribeToVerifiedStudentTarget;
@@ -392,7 +393,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteSelfStudent()
     {
-        await Mediator.Send(new DeleteStudentCommand(AccountInfo!.Id));
+        await Mediator.Send(new ReturnStudentToLogCommand(AccountInfo!.Id));
 
         return NoContent();
     }
