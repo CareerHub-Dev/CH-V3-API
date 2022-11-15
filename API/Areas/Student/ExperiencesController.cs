@@ -5,8 +5,8 @@ using Application.Common.Enums;
 using Application.Experiences.Commands.CreateExperience;
 using Application.Experiences.Commands.DeleteExperienceOfStudent;
 using Application.Experiences.Commands.UpdateExperienceOfStudent;
-using Application.Experiences.Queries.GetExperience;
-using Application.Experiences.Queries.GetExperiences;
+using Application.Experiences.Queries.GetExperienceOfStudent;
+using Application.Experiences.Queries.GetExperiencesOfStudentWithPaging;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -18,13 +18,12 @@ public class ExperiencesController : ApiControllerBase
 {
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExperienceDTO>))]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExperiencesOfSelfStudent(
         [FromQuery] string? orderByExpression,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetExperiencesOfStudentWithPaginationWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetExperiencesOfStudentWithPagingQuery
         {
             StudentId = AccountInfo!.Id,
 
@@ -44,7 +43,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExperienceOfSelfStudent(Guid experienceId)
     {
-        return Ok(await Mediator.Send(new GetExperienceOfStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetExperienceOfStudentQuery
         {
             ExperienceId = experienceId,
             StudentId = AccountInfo!.Id
@@ -53,7 +52,6 @@ public class ExperiencesController : ApiControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateExperienceForSelfStudent(CreateExperienceRequest view)
     {
         var result = await Mediator.Send(new CreateExperienceCommand
@@ -86,24 +84,24 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateExperienceOfSelfStudent(Guid experienceId, UpdateExperienceRequest view)
+    public async Task<IActionResult> UpdateExperienceOfSelfStudent(Guid experienceId, UpdateExperienceRequest request)
     {
-        if (experienceId != view.ExperienceId)
+        if (experienceId != request.ExperienceId)
         {
             return BadRequest();
         }
 
         await Mediator.Send(new UpdateExperienceOfStudentCommand
         {
-            ExperienceId = view.ExperienceId,
-            Title = view.Title,
-            CompanyName = view.CompanyName,
-            JobType = view.JobType,
-            WorkFormat = view.WorkFormat,
-            ExperienceLevel = view.ExperienceLevel,
-            JobLocation = view.JobLocation,
-            StartDate = view.StartDate,
-            EndDate = view.EndDate,
+            ExperienceId = request.ExperienceId,
+            Title = request.Title,
+            CompanyName = request.CompanyName,
+            JobType = request.JobType,
+            WorkFormat = request.WorkFormat,
+            ExperienceLevel = request.ExperienceLevel,
+            JobLocation = request.JobLocation,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
             StudentId = AccountInfo!.Id
         });
 

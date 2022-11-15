@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Experiences.Commands.CreateExperience;
 
-public record CreateExperienceCommand : IRequest<Guid>
+public record CreateExperienceCommand
+    : IRequest<Guid>
 {
     public string Title { get; init; } = string.Empty;
     public string CompanyName { get; init; } = string.Empty;
@@ -21,18 +22,23 @@ public record CreateExperienceCommand : IRequest<Guid>
     public Guid StudentId { get; init; }
 }
 
-public class CreateExperienceCommandHandler : IRequestHandler<CreateExperienceCommand, Guid>
+public class CreateExperienceCommandHandler
+    : IRequestHandler<CreateExperienceCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
-    public CreateExperienceCommandHandler(IApplicationDbContext context)
+    public CreateExperienceCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Guid> Handle(CreateExperienceCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        CreateExperienceCommand request, 
+        CancellationToken cancellationToken)
     {
-        if (!await _context.Students.AnyAsync(x => x.Id == request.StudentId))
+        if (!await _context.Students
+            .AnyAsync(x => x.Id == request.StudentId))
         {
             throw new NotFoundException(nameof(Student), request.StudentId);
         }

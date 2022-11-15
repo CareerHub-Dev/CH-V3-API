@@ -18,13 +18,12 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExperience(Guid experienceId)
     {
-        return Ok(await Mediator.Send(new GetExperienceWithFilterQuery { ExperienceId = experienceId }));
+        return Ok(await Mediator.Send(new GetExperienceQuery { ExperienceId = experienceId }));
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateExperience(CreateExperienceCommand command)
     {
         var result = await Mediator.Send(command);

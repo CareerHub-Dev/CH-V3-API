@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Experiences.Commands.UpdateExperienceOfStudent;
 
-public record UpdateExperienceOfStudentCommand : IRequest
+public record UpdateExperienceOfStudentCommand
+    : IRequest
 {
     public Guid ExperienceId { get; init; }
     public string Title { get; init; } = string.Empty;
@@ -22,16 +23,20 @@ public record UpdateExperienceOfStudentCommand : IRequest
     public Guid StudentId { get; init; }
 }
 
-public class UpdateExperienceOfStudentCommandHandler : IRequestHandler<UpdateExperienceOfStudentCommand>
+public class UpdateExperienceOfStudentCommandHandler
+    : IRequestHandler<UpdateExperienceOfStudentCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateExperienceOfStudentCommandHandler(IApplicationDbContext context)
+    public UpdateExperienceOfStudentCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateExperienceOfStudentCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        UpdateExperienceOfStudentCommand request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Students
             .AnyAsync(x => x.Id == request.StudentId))
@@ -40,7 +45,8 @@ public class UpdateExperienceOfStudentCommandHandler : IRequestHandler<UpdateExp
         }
 
         var experience = await _context.Experiences
-            .FirstOrDefaultAsync(x => x.Id == request.ExperienceId && x.StudentId == request.StudentId);
+            .Where(x => x.Id == request.ExperienceId && x.StudentId == request.StudentId)
+            .FirstOrDefaultAsync();
 
         if (experience == null)
         {

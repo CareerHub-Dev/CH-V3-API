@@ -6,9 +6,10 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Experiences.Queries.GetExperience;
+namespace Application.Experiences.Queries.GetExperienceOfStudent;
 
-public record GetExperienceOfStudentWithFilterQuery : IRequest<ExperienceDTO>
+public record GetExperienceOfStudentQuery
+    : IRequest<ExperienceDTO>
 {
     public Guid ExperienceId { get; init; }
 
@@ -16,21 +17,23 @@ public record GetExperienceOfStudentWithFilterQuery : IRequest<ExperienceDTO>
     public bool? IsStudentMustBeVerified { get; init; }
 }
 
-public class GetExperienceOfStudentWithFilterQueryHandler : IRequestHandler<GetExperienceOfStudentWithFilterQuery, ExperienceDTO>
+public class GetExperienceOfStudentQueryHandler
+    : IRequestHandler<GetExperienceOfStudentQuery, ExperienceDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetExperienceOfStudentWithFilterQueryHandler(IApplicationDbContext context)
+    public GetExperienceOfStudentQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<ExperienceDTO> Handle(GetExperienceOfStudentWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<ExperienceDTO> Handle(
+        GetExperienceOfStudentQuery request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Students
-            .Filter(
-                isVerified: request.IsStudentMustBeVerified
-            )
+            .Filter(isVerified: request.IsStudentMustBeVerified)
             .AnyAsync(x => x.Id == request.StudentId))
         {
             throw new NotFoundException(nameof(Company), request.StudentId);
@@ -39,18 +42,7 @@ public class GetExperienceOfStudentWithFilterQueryHandler : IRequestHandler<GetE
         var companyLink = await _context.Experiences
             .AsNoTracking()
             .Where(x => x.Id == request.ExperienceId && x.StudentId == request.StudentId)
-            .Select(x => new ExperienceDTO
-            {
-                Id = x.Id,
-                Title = x.Title,
-                CompanyName = x.CompanyName,
-                JobType = x.JobType,
-                WorkFormat = x.WorkFormat,
-                ExperienceLevel = x.ExperienceLevel,
-                JobLocation = x.JobLocation,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate
-            })
+            .MapToExperienceDTO()
             .FirstOrDefaultAsync();
 
         if (companyLink == null)

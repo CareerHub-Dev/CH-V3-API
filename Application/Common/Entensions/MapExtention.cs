@@ -2,6 +2,7 @@
 using Application.Common.DTO.Bans;
 using Application.Common.DTO.Companies;
 using Application.Common.DTO.CompanyLinks;
+using Application.Common.DTO.Experiences;
 using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.StudentGroups;
 using Application.Common.DTO.StudentLogs;
@@ -341,6 +342,26 @@ public static class MapExtention
         {
             Title = x.Title,
             Uri = x.Uri
+        });
+    }
+
+    #endregion
+
+    #region Experience
+
+    public static IQueryable<ExperienceDTO> MapToExperienceDTO(this IQueryable<Experience> experiences)
+    {
+        return experiences.Select(x => new ExperienceDTO
+        {
+            Id = x.Id,
+            Title = x.Title,
+            CompanyName = x.CompanyName,
+            JobType = x.JobType,
+            WorkFormat = x.WorkFormat,
+            ExperienceLevel = x.ExperienceLevel,
+            JobLocation = x.JobLocation,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate
         });
     }
 

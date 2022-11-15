@@ -6,7 +6,7 @@ using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
 using Application.Common.Enums;
 using Application.Companies.Queries.GetFollowedShortCompanySubscriptionsWithStatsOfStudentForFollowerStudentWithPaging;
-using Application.Experiences.Queries.GetExperiences;
+using Application.Experiences.Queries.GetExperiencesOfStudentWithPaging;
 using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 using Application.Students.Commands.ReturnStudentToLog;
 using Application.Students.Commands.UpdateStudentDetail;
@@ -340,7 +340,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetExperiencesOfStudentWithPaginationWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetExperiencesOfStudentWithPagingQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,

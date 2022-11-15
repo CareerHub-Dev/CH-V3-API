@@ -2,7 +2,8 @@
 
 namespace Application.Experiences.Commands.UpdateExperience;
 
-public class UpdateExperienceCommandValidator : AbstractValidator<UpdateExperienceCommand>
+public class UpdateExperienceCommandValidator
+    : AbstractValidator<UpdateExperienceCommand>
 {
     public UpdateExperienceCommandValidator()
     {
@@ -27,6 +28,7 @@ public class UpdateExperienceCommandValidator : AbstractValidator<UpdateExperien
         RuleFor(x => x.ExperienceLevel)
             .IsInEnum();
 
-        RuleFor(x => x.StartDate).LessThan(x => x.EndDate).When(x => x.EndDate.HasValue);
+        RuleFor(x => x.StartDate)
+            .LessThan(x => x.EndDate).When(x => x.EndDate.HasValue);
     }
 }

@@ -6,22 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Experiences.Commands.DeleteExperience;
 
-public record DeleteExperienceCommand(Guid ExperienceId) : IRequest;
+public record DeleteExperienceCommand(Guid ExperienceId)
+    : IRequest;
 
-public class DeleteExperienceCommandHandler : IRequestHandler<DeleteExperienceCommand>
+public class DeleteExperienceCommandHandler
+    : IRequestHandler<DeleteExperienceCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public DeleteExperienceCommandHandler(IApplicationDbContext context)
+    public DeleteExperienceCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(DeleteExperienceCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        DeleteExperienceCommand request, 
+        CancellationToken cancellationToken)
     {
         var experience = await _context.Experiences
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.ExperienceId);
+            .Where(x => x.Id == request.ExperienceId)
+            .FirstOrDefaultAsync();
 
         if (experience == null)
         {
