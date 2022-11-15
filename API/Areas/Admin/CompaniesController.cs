@@ -14,7 +14,7 @@ using Application.Companies.Queries.GetBriefCompaniesWithStatsWithPaginig;
 using Application.Companies.Queries.GetCompany;
 using Application.Emails.Commands;
 using Application.JobOffers.Queries.GetJobOffersOfCompany;
-using Application.Students.Queries.GetStudentSubscribersOfCompany;
+using Application.Students.Queries.GetStudentSubscribersOfCompanyWithPaging;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -228,7 +228,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetStudentSubscribersOfCompanyWithPagingQuery
         {
             CompanyId = companyId,
 

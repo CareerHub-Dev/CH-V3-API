@@ -11,11 +11,15 @@ using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 using Application.Students.Commands.DeleteStudent;
 using Application.Students.Commands.UpdateStudentDetail;
 using Application.Students.Commands.UpdateStudentPhoto;
-using Application.Students.Queries.GetAmount;
+using Application.Students.Queries.GetAmountCompanySubscriptionsOfStudent;
+using Application.Students.Queries.GetAmountCVsOfStudent;
+using Application.Students.Queries.GetAmountJobOfferSubscriptionsOfStudent;
+using Application.Students.Queries.GetAmountStudentSubscribersOfStudent;
+using Application.Students.Queries.GetAmountStudentSubscriptionsOfStudent;
 using Application.Students.Queries.GetStudent;
 using Application.Students.Queries.GetStudents;
-using Application.Students.Queries.GetStudentSubscribersOfStudent;
-using Application.Students.Queries.GetStudentSubscriptionsOfStudent;
+using Application.Students.Queries.GetStudentSubscribersOfStudentWithPaging;
+using Application.Students.Queries.GetStudentSubscriptionsOfStudentWithPaging;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -36,7 +40,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentsWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetStudentsWithPagingQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -56,7 +60,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetStudentQuery
         {
             StudentId = studentId
         }));
@@ -67,7 +71,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountCompanySubscriptionsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentQuery
         {
             StudentId = studentId
         }));
@@ -78,7 +82,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountCVsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountCVsOfStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountCVsOfStudentQuery
         {
             StudentId = studentId
         }));
@@ -89,7 +93,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOfferSubscriptionsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentQuery
         {
             StudentId = studentId
         }));
@@ -100,7 +104,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscriptionsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentQuery
         {
             StudentId = studentId
         }));
@@ -111,7 +115,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfStudentWithFilterQuery
+        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfStudentQuery
         {
             StudentId = studentId
         }));
@@ -129,7 +133,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentSubscriptionsOfStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetStudentSubscriptionsOfStudentWithPagingQuery
         {
             StudentId = studentId,
 
@@ -160,7 +164,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentSubscribersOfStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetStudentSubscribersOfStudentWithPagingQuery
         {
             StudentId = studentId,
 
