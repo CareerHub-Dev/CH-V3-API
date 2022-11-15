@@ -4,7 +4,7 @@ using Application.Common.Enums;
 using Application.StudentLogs.Commands.CreateStudentLog;
 using Application.StudentLogs.Commands.DeleteStudentLog;
 using Application.StudentLogs.Commands.UpdateStudentLog;
-using Application.StudentLogs.Queries.GetStudentLogs;
+using Application.StudentLogs.Queries.GetStudentLogsWithPaging;
 using Application.Tags.Queries.GetStudentLog;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -24,7 +24,7 @@ public class StudentLogsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentLogsWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Mediator.Send(new GetStudentLogsWithPagingQuery
         {
             StudentGroupIds = studentGroupIds,
             OrderByExpression = orderByExpression ?? "LastName",

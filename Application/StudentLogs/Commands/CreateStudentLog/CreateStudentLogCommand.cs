@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentLogs.Commands.CreateStudentLog;
 
-public record CreateStudentLogCommand : IRequest<Guid>
+public record CreateStudentLogCommand
+    : IRequest<Guid>
 {
     public string FirstName { get; init; } = string.Empty;
     public string LastName { get; init; } = string.Empty;
@@ -14,18 +15,24 @@ public record CreateStudentLogCommand : IRequest<Guid>
     public Guid StudentGroupId { get; init; }
 }
 
-public class CreateStudentLogCommandHandler : IRequestHandler<CreateStudentLogCommand, Guid>
+public class CreateStudentLogCommandHandler
+    : IRequestHandler<CreateStudentLogCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
-    public CreateStudentLogCommandHandler(IApplicationDbContext context)
+    public CreateStudentLogCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Guid> Handle(CreateStudentLogCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        CreateStudentLogCommand request, 
+        CancellationToken cancellationToken)
     {
-        if (!await _context.StudentGroups.AnyAsync(x => x.Id == request.StudentGroupId))
+        if (!await _context
+            .StudentGroups
+            .AnyAsync(x => x.Id == request.StudentGroupId))
         {
             throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
         }

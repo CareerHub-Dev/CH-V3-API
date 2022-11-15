@@ -6,22 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentLogs.Commands.DeleteStudentLog;
 
-public record DeleteStudentLogCommand(Guid StudentLogId) : IRequest;
+public record DeleteStudentLogCommand(Guid StudentLogId)
+    : IRequest;
 
-public class DeleteStudentLogCommandHandler : IRequestHandler<DeleteStudentLogCommand>
+public class DeleteStudentLogCommandHandler
+    : IRequestHandler<DeleteStudentLogCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public DeleteStudentLogCommandHandler(IApplicationDbContext context)
+    public DeleteStudentLogCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(DeleteStudentLogCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        DeleteStudentLogCommand request, 
+        CancellationToken cancellationToken)
     {
         var studentLog = await _context.StudentLogs
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.StudentLogId);
+            .Where(x => x.Id == request.StudentLogId)
+            .FirstOrDefaultAsync();
 
         if (studentLog == null)
         {
