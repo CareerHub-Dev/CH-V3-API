@@ -6,7 +6,6 @@ using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
 using Application.Common.Enums;
 using Application.Companies.Queries.GetFollowedShortCompanySubscriptionsWithStatsOfStudentForFollowerStudentWithPaging;
-using Application.Companies.Queries.Models;
 using Application.Experiences.Queries.GetExperiences;
 using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 using Application.Students.Commands.ReturnStudentToLog;

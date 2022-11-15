@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Commands.VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTarget;
 
-public record VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand 
+public record VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand
     : IRequest
 {
     public Guid StudentOwnerId { get; init; }

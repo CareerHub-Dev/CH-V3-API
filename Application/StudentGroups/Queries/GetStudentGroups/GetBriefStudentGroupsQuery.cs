@@ -24,11 +24,10 @@ public class GetBriefStudentGroupsQueryHandler
     }
 
     public async Task<IEnumerable<BriefStudentGroupDTO>> Handle(
-        GetBriefStudentGroupsQuery request, 
+        GetBriefStudentGroupsQuery request,
         CancellationToken cancellationToken)
     {
         return await _context.StudentGroups
-            .AsNoTracking()
             .Search(request.SearchTerm)
             .OrderBy(x => x.Name)
             .MapToBriefStudentGroupDTO()

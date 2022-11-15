@@ -8,21 +8,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Queries.GetJobPosition;
 
-public record GetJobPositionQuery(Guid JobPositionId) : IRequest<JobPositionDTO>;
+public record GetJobPositionQuery(Guid JobPositionId)
+    : IRequest<JobPositionDTO>;
 
-public class GetJobPositionQueryHandler : IRequestHandler<GetJobPositionQuery, JobPositionDTO>
+public class GetJobPositionQueryHandler
+    : IRequestHandler<GetJobPositionQuery, JobPositionDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetJobPositionQueryHandler(IApplicationDbContext context)
+    public GetJobPositionQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<JobPositionDTO> Handle(GetJobPositionQuery request, CancellationToken cancellationToken)
+    public async Task<JobPositionDTO> Handle(
+        GetJobPositionQuery request,
+        CancellationToken cancellationToken)
     {
         var tag = await _context.JobPositions
-            .AsNoTracking()
             .Where(x => x.Id == request.JobPositionId)
             .MapToJobPositionDTO()
             .FirstOrDefaultAsync();

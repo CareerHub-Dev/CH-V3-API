@@ -1,7 +1,7 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.JobPositions;
-using Application.JobPositions.Queries.GetJobPositions;
-using Application.Tags.Queries.GetJobPosition;
+using Application.JobPositions.Queries.GetBriefJobPosition;
+using Application.JobPositions.Queries.GetBriefJobPositions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Auth;
@@ -15,7 +15,7 @@ public class JobPositionsController : ApiControllerBase
     public async Task<IActionResult> GetJobPositions(
         [FromQuery] string? searchTerm)
     {
-        return Ok(await Mediator.Send(new GetBriefJobPositionsWithSearchQuery
+        return Ok(await Mediator.Send(new GetBriefJobPositionsQuery
         {
             SearchTerm = searchTerm ?? string.Empty
         }));

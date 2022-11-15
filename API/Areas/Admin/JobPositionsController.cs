@@ -23,7 +23,7 @@ public class JobPositionsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetJobPositionsWithPaginationWithSearchWithSortQuery
+        var result = await Mediator.Send(new GetJobPositionsWithPagingQuery
         {
             PageSize = pageSize,
             PageNumber = pageNumber,

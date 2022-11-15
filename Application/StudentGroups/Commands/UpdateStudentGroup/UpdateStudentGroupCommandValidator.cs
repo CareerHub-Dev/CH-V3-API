@@ -22,8 +22,8 @@ public class UpdateStudentGroupCommandValidator
     }
 
     private async Task<bool> BeUniqueName(
-        UpdateStudentGroupCommand model, 
-        string name, 
+        UpdateStudentGroupCommand model,
+        string name,
         CancellationToken cancellationToken)
     {
         return !await _context.StudentGroups

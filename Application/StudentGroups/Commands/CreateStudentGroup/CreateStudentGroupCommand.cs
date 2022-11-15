@@ -22,7 +22,7 @@ public class CreateStudentGroupCommandHandler
     }
 
     public async Task<Guid> Handle(
-        CreateStudentGroupCommand request, 
+        CreateStudentGroupCommand request,
         CancellationToken cancellationToken)
     {
         var studentGroup = new StudentGroup

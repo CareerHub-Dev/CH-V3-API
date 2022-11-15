@@ -25,7 +25,7 @@ public class UpdateStudentGroupCommandHandler
     }
 
     public async Task<Unit> Handle(
-        UpdateStudentGroupCommand request, 
+        UpdateStudentGroupCommand request,
         CancellationToken cancellationToken)
     {
         var studentGroup = await _context.StudentGroups

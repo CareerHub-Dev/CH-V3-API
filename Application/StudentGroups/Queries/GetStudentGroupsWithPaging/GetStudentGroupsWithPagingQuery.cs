@@ -3,7 +3,6 @@ using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentGroups.Queries.GetStudentGroupsWithPaging;
 
@@ -30,11 +29,10 @@ public class GetStudentGroupsWithPagingQueryHandler
     }
 
     public async Task<PaginatedList<StudentGroupDTO>> Handle(
-        GetStudentGroupsWithPagingQuery request, 
+        GetStudentGroupsWithPagingQuery request,
         CancellationToken cancellationToken)
     {
         return await _context.StudentGroups
-            .AsNoTracking()
             .Search(request.SearchTerm)
             .MapToStudentGroupDTO()
             .OrderByExpression(request.OrderByExpression)

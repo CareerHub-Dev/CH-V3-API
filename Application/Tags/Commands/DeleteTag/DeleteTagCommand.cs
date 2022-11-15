@@ -21,7 +21,7 @@ public class DeleteTagCommandHandler
     }
 
     public async Task<Unit> Handle(
-        DeleteTagCommand request, 
+        DeleteTagCommand request,
         CancellationToken cancellationToken)
     {
         var tag = await _context.Tags

@@ -25,7 +25,7 @@ public class RevokeRefreshTokenCommandHandler
     }
 
     public async Task<Unit> Handle(
-        RevokeRefreshTokenCommand request, 
+        RevokeRefreshTokenCommand request,
         CancellationToken cancellationToken)
     {
         var refreshToken = await _context.RefreshTokens

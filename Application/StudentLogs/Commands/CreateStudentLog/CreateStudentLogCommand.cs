@@ -27,7 +27,7 @@ public class CreateStudentLogCommandHandler
     }
 
     public async Task<Guid> Handle(
-        CreateStudentLogCommand request, 
+        CreateStudentLogCommand request,
         CancellationToken cancellationToken)
     {
         if (!await _context

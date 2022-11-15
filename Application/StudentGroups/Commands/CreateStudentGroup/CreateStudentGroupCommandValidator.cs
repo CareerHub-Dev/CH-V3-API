@@ -22,7 +22,7 @@ public class CreateStudentGroupCommandValidator
     }
 
     private async Task<bool> BeUniqueName(
-        string name, 
+        string name,
         CancellationToken cancellationToken)
     {
         return !await _context.StudentGroups

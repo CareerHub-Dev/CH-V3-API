@@ -23,7 +23,7 @@ public class CreateTagCommandHandler
     }
 
     public async Task<Guid> Handle(
-        CreateTagCommand request, 
+        CreateTagCommand request,
         CancellationToken cancellationToken)
     {
         var tag = new Tag

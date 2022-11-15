@@ -26,7 +26,7 @@ public class UpdateTagCommandHandler
     }
 
     public async Task<Unit> Handle(
-        UpdateTagCommand request, 
+        UpdateTagCommand request,
         CancellationToken cancellationToken)
     {
         var tag = await _context.Tags

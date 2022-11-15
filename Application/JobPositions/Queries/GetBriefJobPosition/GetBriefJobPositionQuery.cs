@@ -6,23 +6,27 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Tags.Queries.GetJobPosition;
+namespace Application.JobPositions.Queries.GetBriefJobPosition;
 
-public record GetBriefJobPositionQuery(Guid JobPositionId) : IRequest<BriefJobPositionDTO>;
+public record GetBriefJobPositionQuery(Guid JobPositionId)
+    : IRequest<BriefJobPositionDTO>;
 
-public class GetBriefJobPositionQueryHandler : IRequestHandler<GetBriefJobPositionQuery, BriefJobPositionDTO>
+public class GetBriefJobPositionQueryHandler
+    : IRequestHandler<GetBriefJobPositionQuery, BriefJobPositionDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetBriefJobPositionQueryHandler(IApplicationDbContext context)
+    public GetBriefJobPositionQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<BriefJobPositionDTO> Handle(GetBriefJobPositionQuery request, CancellationToken cancellationToken)
+    public async Task<BriefJobPositionDTO> Handle(
+        GetBriefJobPositionQuery request,
+        CancellationToken cancellationToken)
     {
         var tag = await _context.JobPositions
-            .AsNoTracking()
             .Where(x => x.Id == request.JobPositionId)
             .MapToBriefJobPositionDTO()
             .FirstOrDefaultAsync();

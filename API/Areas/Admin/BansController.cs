@@ -4,7 +4,6 @@ using Application.Bans.Commands.DeleteBan;
 using Application.Bans.Commands.UpdateBan;
 using Application.Bans.Queries.GetBan;
 using Application.Common.DTO.Bans;
-using Application.Common.DTO.Tags;
 using Application.Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 

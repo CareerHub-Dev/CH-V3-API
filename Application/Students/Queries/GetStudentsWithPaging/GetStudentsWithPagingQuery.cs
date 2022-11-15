@@ -3,7 +3,6 @@ using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Queries.GetStudents;
 
@@ -38,7 +37,6 @@ public class GetStudentsWithPagingQueryHandler
         CancellationToken cancellationToken)
     {
         return await _context.Students
-            .AsNoTracking()
             .Filter(
                 withoutStudentId: request.WithoutStudentId,
                 isVerified: request.IsStudentMustBeVerified,

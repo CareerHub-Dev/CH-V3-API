@@ -22,8 +22,8 @@ public class UpdateTagCommandValidator
     }
 
     private async Task<bool> BeUniqueName(
-        UpdateTagCommand model, 
-        string name, 
+        UpdateTagCommand model,
+        string name,
         CancellationToken cancellationToken)
     {
         return !await _context.Tags

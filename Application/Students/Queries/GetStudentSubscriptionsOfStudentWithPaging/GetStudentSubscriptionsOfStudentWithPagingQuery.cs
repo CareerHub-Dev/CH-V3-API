@@ -43,16 +43,13 @@ public class GetStudentSubscriptionsOfStudentWithPagingQueryHandler
         CancellationToken cancellationToken)
     {
         if (!await _context.Students
-            .Filter(
-                isVerified: request.IsStudentMustBeVerified
-            )
+            .Filter(isVerified: request.IsStudentMustBeVerified)
             .AnyAsync(x => x.Id == request.StudentId))
         {
             throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
         return await _context.Students
-            .AsNoTracking()
             .Where(x => x.StudentsSubscribed.Any(x => x.SubscriptionOwnerId == request.StudentId))
             .Filter(
                 withoutStudentId: request.WithoutStudentSubscriptionId,

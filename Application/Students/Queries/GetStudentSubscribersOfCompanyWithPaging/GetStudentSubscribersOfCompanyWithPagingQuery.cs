@@ -50,7 +50,6 @@ public class GetStudentSubscribersOfCompanyWithPagingQueryQueryHandler
         }
 
         return await _context.Students
-            .AsNoTracking()
             .Where(x => x.CompanySubscriptions.Any(x => x.Id == request.CompanyId))
             .Filter(
                 withoutStudentId: request.WithoutStudentSubscriberId,

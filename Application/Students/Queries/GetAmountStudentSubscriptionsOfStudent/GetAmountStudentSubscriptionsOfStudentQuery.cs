@@ -31,9 +31,7 @@ public class GetAmountStudentSubscriptionsOfStudentQueryHandler
         CancellationToken cancellationToken)
     {
         if (!await _context.Students
-            .Filter(
-                isVerified: request.IsStudentMustBeVerified
-            )
+            .Filter(isVerified: request.IsStudentMustBeVerified)
             .AnyAsync(x => x.Id == request.StudentId))
         {
             throw new NotFoundException(nameof(Student), request.StudentId);

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Commands.UpdateStudentDetail;
 
-public record UpdateStudentDetailCommand 
+public record UpdateStudentDetailCommand
     : IRequest
 {
     public Guid StudentId { get; set; }

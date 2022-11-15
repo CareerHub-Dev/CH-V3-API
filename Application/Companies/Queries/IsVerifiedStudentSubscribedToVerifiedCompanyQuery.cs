@@ -7,14 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries;
 
-public class IsVerifiedStudentSubscribedToVerifiedCompanyQuery 
+public class IsVerifiedStudentSubscribedToVerifiedCompanyQuery
     : IRequest<bool>
 {
     public Guid StudentId { get; init; }
     public Guid CompanyId { get; init; }
 }
 
-public class IsVerifiedStudentSubscribedToVerifiedCompanyQueryHandler 
+public class IsVerifiedStudentSubscribedToVerifiedCompanyQueryHandler
     : IRequestHandler<IsVerifiedStudentSubscribedToVerifiedCompanyQuery, bool>
 {
     private readonly IApplicationDbContext _context;
@@ -26,7 +26,7 @@ public class IsVerifiedStudentSubscribedToVerifiedCompanyQueryHandler
     }
 
     public async Task<bool> Handle(
-        IsVerifiedStudentSubscribedToVerifiedCompanyQuery request, 
+        IsVerifiedStudentSubscribedToVerifiedCompanyQuery request,
         CancellationToken cancellationToken)
     {
         var student = await _context.Students

@@ -1,10 +1,10 @@
 ﻿using Application.Common.Interfaces;
-using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence;
+using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 

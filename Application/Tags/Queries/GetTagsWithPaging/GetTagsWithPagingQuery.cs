@@ -3,7 +3,6 @@ using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Queries.GetTagsWithPaging;
 
@@ -32,7 +31,7 @@ public class GetTagsWithPagingHandler
     }
 
     public async Task<PaginatedList<TagDTO>> Handle(
-        GetTagsWithPagingQuery request, 
+        GetTagsWithPagingQuery request,
         CancellationToken cancellationToken)
     {
         return await _context.Tags

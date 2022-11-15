@@ -28,7 +28,7 @@ public class UpdateStudentLogCommandHandler
     }
 
     public async Task<Unit> Handle(
-        UpdateStudentLogCommand request, 
+        UpdateStudentLogCommand request,
         CancellationToken cancellationToken)
     {
         var studentLog = await _context.StudentLogs

@@ -20,7 +20,7 @@ public class UpdateStudentPhotoCommandHandler
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;
     public UpdateStudentPhotoCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IImagesService imagesService)
     {
         _context = context;
@@ -28,7 +28,7 @@ public class UpdateStudentPhotoCommandHandler
     }
 
     public async Task<string?> Handle(
-        UpdateStudentPhotoCommand request, 
+        UpdateStudentPhotoCommand request,
         CancellationToken cancellationToken)
     {
         var student = await _context.Students

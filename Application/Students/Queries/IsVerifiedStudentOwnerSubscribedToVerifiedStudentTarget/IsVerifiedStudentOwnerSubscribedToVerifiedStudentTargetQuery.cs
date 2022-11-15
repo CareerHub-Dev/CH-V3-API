@@ -26,7 +26,7 @@ public class IsVerifiedActiveStudentOwnerSubscribedToVerifiedActiveStudentTarget
     }
 
     public async Task<bool> Handle(
-        IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQuery request, 
+        IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQuery request,
         CancellationToken cancellationToken)
     {
         if (request.StudentOwnerId == request.StudentTargetId)

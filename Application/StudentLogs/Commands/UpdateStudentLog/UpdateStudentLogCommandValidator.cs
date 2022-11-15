@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentLogs.Commands.UpdateStudentLog;
 
-public class UpdateStudentLogCommandValidator 
+public class UpdateStudentLogCommandValidator
     : AbstractValidator<UpdateStudentLogCommand>
 {
     private readonly IApplicationDbContext _context;
@@ -31,8 +31,8 @@ public class UpdateStudentLogCommandValidator
     }
 
     private async Task<bool> BeUniqueEmail(
-        UpdateStudentLogCommand model, 
-        string email, 
+        UpdateStudentLogCommand model,
+        string email,
         CancellationToken cancellationToken)
     {
         var query = _context.Accounts.Select(x => x.NormalizedEmail)

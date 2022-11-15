@@ -2,7 +2,7 @@
 
 namespace Application.StudentLogs.Queries.GetStudentLogsWithPaging;
 
-public class GetStudentLogsWithPagingQueryValidator 
+public class GetStudentLogsWithPagingQueryValidator
     : AbstractValidator<GetStudentLogsWithPagingQuery>
 {
     public GetStudentLogsWithPagingQueryValidator()

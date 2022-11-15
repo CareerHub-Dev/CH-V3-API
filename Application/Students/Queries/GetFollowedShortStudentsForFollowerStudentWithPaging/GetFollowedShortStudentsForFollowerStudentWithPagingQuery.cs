@@ -50,7 +50,6 @@ public class GetFollowedShortStudentsForFollowerStudentWithPagingQueryHandler
         }
 
         return await _context.Students
-            .AsNoTracking()
             .Filter(
                 withoutStudentId: request.WithoutStudentId,
                 isVerified: request.IsStudentMustBeVerified,

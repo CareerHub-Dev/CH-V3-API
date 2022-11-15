@@ -21,7 +21,7 @@ public class DeleteStudentCommandHandler
     }
 
     public async Task<Unit> Handle(
-        DeleteStudentCommand request, 
+        DeleteStudentCommand request,
         CancellationToken cancellationToken)
     {
         var student = await _context.Students

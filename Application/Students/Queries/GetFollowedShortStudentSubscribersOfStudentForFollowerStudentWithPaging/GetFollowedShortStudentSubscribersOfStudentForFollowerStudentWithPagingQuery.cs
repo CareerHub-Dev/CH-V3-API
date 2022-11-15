@@ -60,7 +60,6 @@ public class GetFollowedShortStudentSubscribersOfStudentForFollowerStudentWithPa
         }
 
         return await _context.Students
-            .AsNoTracking()
             .Filter(
                 withoutStudentId: request.WithoutStudentSubscriberId,
                 isVerified: request.IsStudentSubscriberMustBeVerified,

@@ -23,11 +23,10 @@ public class GetStudentLogQueryHandler
     }
 
     public async Task<StudentLogDTO> Handle(
-        GetStudentLogQuery request, 
+        GetStudentLogQuery request,
         CancellationToken cancellationToken)
     {
         var studentGroup = await _context.StudentLogs
-            .AsNoTracking()
             .Where(x => x.Id == request.StudentLogId)
             .MapToStudentLogDTO()
             .FirstOrDefaultAsync();

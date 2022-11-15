@@ -31,7 +31,7 @@ public class CreateStudentLogCommandValidator
     }
 
     private async Task<bool> BeUniqueEmail(
-        string email, 
+        string email,
         CancellationToken cancellationToken)
     {
         var query = _context.Accounts.Select(x => x.NormalizedEmail)
