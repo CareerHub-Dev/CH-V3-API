@@ -1,7 +1,7 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.StudentGroups;
+using Application.StudentGroups.Queries.GetBriefStudentGroup;
 using Application.StudentGroups.Queries.GetStudentGroups;
-using Application.Tags.Queries.GetStudentGroup;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Auth;
@@ -15,7 +15,7 @@ public class StudentGroupsController : ApiControllerBase
     public async Task<IActionResult> GetStudentGroups(
         [FromQuery] string? searchTerm)
     {
-        return Ok(await Mediator.Send(new GetBriefStudentGroupsWithSearchQuery
+        return Ok(await Mediator.Send(new GetBriefStudentGroupsQuery
         {
             SearchTerm = searchTerm ?? string.Empty
         }));

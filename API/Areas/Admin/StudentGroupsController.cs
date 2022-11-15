@@ -4,7 +4,7 @@ using Application.Common.Enums;
 using Application.StudentGroups.Commands.CreateStudentGroup;
 using Application.StudentGroups.Commands.DeleteStudentGroup;
 using Application.StudentGroups.Commands.UpdateStudentGroup;
-using Application.StudentGroups.Queries.GetStudentGroups;
+using Application.StudentGroups.Queries.GetStudentGroupsWithPaging;
 using Application.Tags.Queries.GetStudentGroup;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -23,7 +23,7 @@ public class StudentGroupsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentGroupsWithPaginationWithSearchWithSortQuery
+        var result = await Mediator.Send(new GetStudentGroupsWithPagingQuery
         {
             PageSize = pageSize,
             PageNumber = pageNumber,

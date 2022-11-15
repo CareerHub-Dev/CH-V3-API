@@ -6,24 +6,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentGroups.Commands.UpdateStudentGroup;
 
-public record UpdateStudentGroupCommand : IRequest
+public record UpdateStudentGroupCommand
+    : IRequest
 {
     public Guid StudentGroupId { get; init; }
     public string Name { get; init; } = string.Empty;
 }
 
-public class UpdateStudentGroupCommandHandler : IRequestHandler<UpdateStudentGroupCommand>
+public class UpdateStudentGroupCommandHandler
+    : IRequestHandler<UpdateStudentGroupCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateStudentGroupCommandHandler(IApplicationDbContext context)
+    public UpdateStudentGroupCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateStudentGroupCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        UpdateStudentGroupCommand request, 
+        CancellationToken cancellationToken)
     {
         var studentGroup = await _context.StudentGroups
+            .Where(x => x.Id == request.StudentGroupId)
             .FirstOrDefaultAsync(x => x.Id == request.StudentGroupId);
 
         if (studentGroup == null)

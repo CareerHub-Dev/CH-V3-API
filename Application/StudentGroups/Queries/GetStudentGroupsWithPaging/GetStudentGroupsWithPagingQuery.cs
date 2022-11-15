@@ -5,9 +5,10 @@ using Application.Common.Models.Pagination;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.StudentGroups.Queries.GetStudentGroups;
+namespace Application.StudentGroups.Queries.GetStudentGroupsWithPaging;
 
-public record GetStudentGroupsWithPaginationWithSearchWithSortQuery : IRequest<PaginatedList<StudentGroupDTO>>
+public record GetStudentGroupsWithPagingQuery
+    : IRequest<PaginatedList<StudentGroupDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -17,16 +18,20 @@ public record GetStudentGroupsWithPaginationWithSearchWithSortQuery : IRequest<P
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetStudentGroupsWithPaginationWithSearchWithSortQueryHandler : IRequestHandler<GetStudentGroupsWithPaginationWithSearchWithSortQuery, PaginatedList<StudentGroupDTO>>
+public class GetStudentGroupsWithPagingQueryHandler
+    : IRequestHandler<GetStudentGroupsWithPagingQuery, PaginatedList<StudentGroupDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetStudentGroupsWithPaginationWithSearchWithSortQueryHandler(IApplicationDbContext context)
+    public GetStudentGroupsWithPagingQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<StudentGroupDTO>> Handle(GetStudentGroupsWithPaginationWithSearchWithSortQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<StudentGroupDTO>> Handle(
+        GetStudentGroupsWithPagingQuery request, 
+        CancellationToken cancellationToken)
     {
         return await _context.StudentGroups
             .AsNoTracking()

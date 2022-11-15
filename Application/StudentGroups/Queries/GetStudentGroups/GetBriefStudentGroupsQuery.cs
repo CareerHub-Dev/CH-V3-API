@@ -6,21 +6,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentGroups.Queries.GetStudentGroups;
 
-public record GetBriefStudentGroupsWithSearchQuery : IRequest<IEnumerable<BriefStudentGroupDTO>>
+public record GetBriefStudentGroupsQuery
+    : IRequest<IEnumerable<BriefStudentGroupDTO>>
 {
     public string SearchTerm { get; init; } = string.Empty;
 }
 
-public class GetBriefStudentGroupsWithSearchQueryHandler : IRequestHandler<GetBriefStudentGroupsWithSearchQuery, IEnumerable<BriefStudentGroupDTO>>
+public class GetBriefStudentGroupsQueryHandler
+    : IRequestHandler<GetBriefStudentGroupsQuery, IEnumerable<BriefStudentGroupDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetBriefStudentGroupsWithSearchQueryHandler(IApplicationDbContext context)
+    public GetBriefStudentGroupsQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<IEnumerable<BriefStudentGroupDTO>> Handle(GetBriefStudentGroupsWithSearchQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<BriefStudentGroupDTO>> Handle(
+        GetBriefStudentGroupsQuery request, 
+        CancellationToken cancellationToken)
     {
         return await _context.StudentGroups
             .AsNoTracking()
