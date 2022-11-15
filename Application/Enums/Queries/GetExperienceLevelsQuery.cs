@@ -4,11 +4,15 @@ using MediatR;
 
 namespace Application.Enums.Queries;
 
-public record GetExperienceLevelsQuery : IRequest<IEnumerable<EnumDTO>>;
+public record GetExperienceLevelsQuery
+    : IRequest<IEnumerable<EnumDTO>>;
 
-public class GetExperienceLevelsQueryHandler : IRequestHandler<GetExperienceLevelsQuery, IEnumerable<EnumDTO>>
+public class GetExperienceLevelsQueryHandler
+    : IRequestHandler<GetExperienceLevelsQuery, IEnumerable<EnumDTO>>
 {
-    public Task<IEnumerable<EnumDTO>> Handle(GetExperienceLevelsQuery request, CancellationToken cancellationToken)
+    public Task<IEnumerable<EnumDTO>> Handle(
+        GetExperienceLevelsQuery request, 
+        CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<ExperienceLevel>()
             .Select(p => new EnumDTO { Value = (int)p, Name = p.ToString() })
