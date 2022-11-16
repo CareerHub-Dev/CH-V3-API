@@ -5,7 +5,7 @@ using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
 using Application.Common.Enums;
 using Application.Companies.Queries.GetBriefCompanySubscriptionsWithStatsOfStudentWithPaging;
-using Application.Emails.Commands;
+using Application.Emails.Commands.SendVerifyStudentEmail;
 using Application.Experiences.Queries.GetExperiencesOfStudentWithPaging;
 using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
 using Application.Students.Commands.DeleteStudent;

@@ -5,14 +5,16 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Emails.Commands;
+namespace Application.Emails.Commands.SendPasswordResetEmail;
 
-public record SendPasswordResetEmailCommand : IRequest
+public record SendPasswordResetEmailCommand
+    : IRequest
 {
     public string Email { get; init; } = string.Empty;
 }
 
-public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPasswordResetEmailCommand>
+public class SendPasswordResetEmailCommandHandler
+    : IRequestHandler<SendPasswordResetEmailCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly IEmailService _emailService;
@@ -28,9 +30,13 @@ public class SendPasswordResetEmailCommandHandler : IRequestHandler<SendPassword
         _accountHelper = accountHelper;
     }
 
-    public async Task<Unit> Handle(SendPasswordResetEmailCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        SendPasswordResetEmailCommand request,
+        CancellationToken cancellationToken)
     {
-        var account = await _context.Accounts.FirstOrDefaultAsync(x => x.NormalizedEmail == request.Email.NormalizeName());
+        var account = await _context.Accounts
+            .Where(x => x.NormalizedEmail == request.Email.NormalizeName())
+            .SingleOrDefaultAsync();
 
         if (account == null)
         {

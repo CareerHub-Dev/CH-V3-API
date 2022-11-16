@@ -1,4 +1,4 @@
-﻿using Application.Emails.Commands;
+﻿using Application.Emails.Commands.SendVerifyStudentEmail;
 using Domain.Entities;
 using MediatR;
 

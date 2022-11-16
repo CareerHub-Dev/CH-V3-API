@@ -4,11 +4,13 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Emails.Commands;
+namespace Application.Emails.Commands.SendInviteAdminEmail;
 
-public record SendInviteAdminEmailCommand(Guid AdminId) : IRequest;
+public record SendInviteAdminEmailCommand(Guid AdminId)
+    : IRequest;
 
-public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdminEmailCommand>
+public class SendInviteAdminEmailCommandHandler
+    : IRequestHandler<SendInviteAdminEmailCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly IEmailService _emailService;
@@ -23,9 +25,13 @@ public class SendInviteAdminEmailCommandHandler : IRequestHandler<SendInviteAdmi
         _accountHelper = accountHelper;
     }
 
-    public async Task<Unit> Handle(SendInviteAdminEmailCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        SendInviteAdminEmailCommand request,
+        CancellationToken cancellationToken)
     {
-        var admin = await _context.Admins.FirstOrDefaultAsync(x => x.Id == request.AdminId);
+        var admin = await _context.Admins
+            .Where(x => x.Id == request.AdminId)
+            .FirstOrDefaultAsync();
 
         if (admin == null)
         {

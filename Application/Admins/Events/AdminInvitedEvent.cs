@@ -1,4 +1,5 @@
 ﻿using Application.Emails.Commands;
+using Application.Emails.Commands.SendInviteAdminEmail;
 using Domain.Entities;
 using MediatR;
 

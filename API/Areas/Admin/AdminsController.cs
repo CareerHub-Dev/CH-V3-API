@@ -5,7 +5,7 @@ using Application.Admins.Queries.GetAdmin;
 using Application.Admins.Queries.GetAdmins;
 using Application.Common.DTO.Admins;
 using Application.Common.Enums;
-using Application.Emails.Commands;
+using Application.Emails.Commands.SendInviteAdminEmail;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 

@@ -1,4 +1,4 @@
-﻿using Application.Emails.Commands;
+﻿using Application.Emails.Commands.SendInviteCompany;
 using Domain.Entities;
 using MediatR;
 

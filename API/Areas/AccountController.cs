@@ -6,7 +6,7 @@ using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyStudent;
 using Application.Accounts.Queries.Authenticate;
 using Application.Accounts.Queries.RefreshToken;
-using Application.Emails.Commands;
+using Application.Emails.Commands.SendPasswordResetEmail;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas;

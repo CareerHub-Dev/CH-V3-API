@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
 
-namespace Application.Emails.Commands;
+namespace Application.Emails.Commands.SendPasswordResetEmail;
 
-public class SendPasswordResetEmailCommandValidator : AbstractValidator<SendPasswordResetEmailCommand>
+public class SendPasswordResetEmailCommandValidator
+    : AbstractValidator<SendPasswordResetEmailCommand>
 {
     public SendPasswordResetEmailCommandValidator()
     {

@@ -4,11 +4,13 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Emails.Commands;
+namespace Application.Emails.Commands.SendVerifyStudentEmail;
 
-public record SendVerifyStudentEmailCommand(Guid StudentId) : IRequest;
+public record SendVerifyStudentEmailCommand(Guid StudentId)
+    : IRequest;
 
-public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifyStudentEmailCommand>
+public class SendVerifyStudentEmailCommandHandler
+    : IRequestHandler<SendVerifyStudentEmailCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly IEmailService _emailService;
@@ -24,9 +26,13 @@ public class SendVerifyStudentEmailCommandHandler : IRequestHandler<SendVerifySt
         _accountHelper = accountHelper;
     }
 
-    public async Task<Unit> Handle(SendVerifyStudentEmailCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        SendVerifyStudentEmailCommand request,
+        CancellationToken cancellationToken)
     {
-        var student = await _context.Students.FirstOrDefaultAsync(x => x.Id == request.StudentId);
+        var student = await _context.Students
+            .Where(x => x.Id == request.StudentId)
+            .FirstOrDefaultAsync();
 
         if (student == null)
         {

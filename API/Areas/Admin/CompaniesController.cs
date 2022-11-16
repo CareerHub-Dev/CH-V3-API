@@ -12,7 +12,7 @@ using Application.Companies.Commands.UpdateCompanyLogo;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetBriefCompaniesWithStatsWithPaginig;
 using Application.Companies.Queries.GetCompany;
-using Application.Emails.Commands;
+using Application.Emails.Commands.SendInviteCompany;
 using Application.JobOffers.Queries.GetJobOffersOfCompany;
 using Application.Students.Queries.GetStudentSubscribersOfCompanyWithPaging;
 using Domain.Enums;
