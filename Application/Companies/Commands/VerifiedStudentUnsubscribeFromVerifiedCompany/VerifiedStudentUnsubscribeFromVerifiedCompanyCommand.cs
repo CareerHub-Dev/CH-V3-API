@@ -5,28 +5,34 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Commands.VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompany;
+namespace Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
 
-public record VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommand : IRequest
+public record VerifiedStudentUnsubscribeFromVerifiedCompanyCommand
+    : IRequest
 {
     public Guid StudentId { get; init; }
     public Guid CompanyId { get; init; }
 }
 
-public class VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommandHandler : IRequestHandler<VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommand>
+public class VerifiedStudentUnsubscribeFromVerifiedCompanyCommandHandler
+    : IRequestHandler<VerifiedStudentUnsubscribeFromVerifiedCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommandHandler(IApplicationDbContext context)
+    public VerifiedStudentUnsubscribeFromVerifiedCompanyCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        VerifiedStudentUnsubscribeFromVerifiedCompanyCommand request, 
+        CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .Filter(isVerified: true)
-            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
+            .Where(x => x.Id == request.StudentId)
+            .FirstOrDefaultAsync();
 
         if (student == null)
         {
@@ -36,14 +42,17 @@ public class VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommandHan
         var company = await _context.Companies
             .Include(x => x.SubscribedStudents)
             .Filter(isVerified: true)
-            .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
+            .Where(x => x.Id == request.CompanyId)
+            .FirstOrDefaultAsync();
 
         if (company == null)
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        var subscribedStudent = company.SubscribedStudents.FirstOrDefault(x => x.Id == request.StudentId);
+        var subscribedStudent = company.SubscribedStudents
+            .Where(x => x.Id == request.StudentId)
+            .FirstOrDefault();
 
         if (subscribedStudent == null)
         {

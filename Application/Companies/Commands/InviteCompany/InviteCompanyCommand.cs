@@ -5,23 +5,29 @@ using MediatR;
 
 namespace Application.Companies.Commands.InviteCompany;
 
-public record InviteCompanyCommand : IRequest<Guid>
+public record InviteCompanyCommand
+    : IRequest<Guid>
 {
     public string Email { get; init; } = string.Empty;
 }
 
-public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand, Guid>
+public class InviteCompanyCommandHandler 
+    : IRequestHandler<InviteCompanyCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IMediator _mediator;
+    private readonly IPublisher _publisher;
 
-    public InviteCompanyCommandHandler(IApplicationDbContext context, IMediator mediator)
+    public InviteCompanyCommandHandler(
+        IApplicationDbContext context, 
+        IPublisher publisher)
     {
         _context = context;
-        _mediator = mediator;
+        _publisher = publisher;
     }
 
-    public async Task<Guid> Handle(InviteCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        InviteCompanyCommand request, 
+        CancellationToken cancellationToken)
     {
         var company = new Company
         {
@@ -32,7 +38,7 @@ public class InviteCompanyCommandHandler : IRequestHandler<InviteCompanyCommand,
 
         await _context.SaveChangesAsync();
 
-        await _mediator.Publish(new CompanyInvitedEvent(company));
+        await _publisher.Publish(new CompanyInvitedEvent(company));
 
         return company.Id;
     }

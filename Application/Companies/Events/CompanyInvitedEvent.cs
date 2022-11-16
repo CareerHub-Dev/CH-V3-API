@@ -4,7 +4,8 @@ using MediatR;
 
 namespace Application.Companies.Events;
 
-public class CompanyInvitedEvent : INotification
+public class CompanyInvitedEvent
+    : INotification
 {
     public CompanyInvitedEvent(Company company)
     {
@@ -14,17 +15,21 @@ public class CompanyInvitedEvent : INotification
     public Company Company { get; }
 }
 
-public class CompanyInvitedEventHandler : INotificationHandler<CompanyInvitedEvent>
+public class CompanyInvitedEventHandler
+    : INotificationHandler<CompanyInvitedEvent>
 {
-    private readonly IMediator _mediator;
+    private readonly ISender _sender;
 
-    public CompanyInvitedEventHandler(IMediator mediator)
+    public CompanyInvitedEventHandler(
+        ISender sender)
     {
-        _mediator = mediator;
+        _sender = sender;
     }
 
-    public async Task Handle(CompanyInvitedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(
+        CompanyInvitedEvent notification, 
+        CancellationToken cancellationToken)
     {
-        await _mediator.Send(new SendInviteCompanyEmailCommand(notification.Company.Id));
+        await _sender.Send(new SendInviteCompanyEmailCommand(notification.Company.Id));
     }
 }

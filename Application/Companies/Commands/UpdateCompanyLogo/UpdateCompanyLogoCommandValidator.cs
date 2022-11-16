@@ -3,7 +3,8 @@ using FluentValidation;
 
 namespace Application.Companies.Commands.UpdateCompanyLogo;
 
-public class UpdateCompanyLogoCommandValidator : AbstractValidator<UpdateCompanyLogoCommand>
+public class UpdateCompanyLogoCommandValidator
+    : AbstractValidator<UpdateCompanyLogoCommand>
 {
     public UpdateCompanyLogoCommandValidator()
     {

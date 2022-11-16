@@ -5,28 +5,34 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Commands.VerifiedActiveStudentSubscribeToVerifiedActiveCompany;
+namespace Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
 
-public record VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommand : IRequest
+public record VerifiedStudentSubscribeToVerifiedCompanyCommand
+    : IRequest
 {
     public Guid StudentId { get; init; }
     public Guid CompanyId { get; init; }
 }
 
-public class VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommandHandler : IRequestHandler<VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommand>
+public class VerifiedStudentSubscribeToVerifiedCompanyCommandHandler
+    : IRequestHandler<VerifiedStudentSubscribeToVerifiedCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommandHandler(IApplicationDbContext context)
+    public VerifiedStudentSubscribeToVerifiedCompanyCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        VerifiedStudentSubscribeToVerifiedCompanyCommand request, 
+        CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .Filter(isVerified: true)
-            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
+            .Where(x => x.Id == request.StudentId)
+            .FirstOrDefaultAsync();
 
         if (student == null)
         {
@@ -36,7 +42,8 @@ public class VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommandHandler
         var company = await _context.Companies
             .Include(x => x.SubscribedStudents)
             .Filter(isVerified: true)
-            .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
+            .Where(x => x.Id == request.CompanyId)
+            .FirstOrDefaultAsync();
 
         if (company == null)
         {

@@ -7,24 +7,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Commands.UpdateCompanyLinks;
 
-public record UpdateCompanyLinksCommand : IRequest
+public record UpdateCompanyLinksCommand
+    : IRequest
 {
     public Guid CompanyId { get; init; }
     public List<CompanyLinkDTO> Links { get; init; } = new List<CompanyLinkDTO>();
 }
 
-public class UpdateCompanyLinksCommandHandler : IRequestHandler<UpdateCompanyLinksCommand>
+public class UpdateCompanyLinksCommandHandler 
+    : IRequestHandler<UpdateCompanyLinksCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateCompanyLinksCommandHandler(IApplicationDbContext context)
+    public UpdateCompanyLinksCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateCompanyLinksCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        UpdateCompanyLinksCommand request, 
+        CancellationToken cancellationToken)
     {
-        var company = await _context.Companies.FirstOrDefaultAsync(x => x.Id == request.CompanyId);
+        var company = await _context.Companies
+            .Where(x => x.Id == request.CompanyId)
+            .FirstOrDefaultAsync();
 
         if (company == null)
         {

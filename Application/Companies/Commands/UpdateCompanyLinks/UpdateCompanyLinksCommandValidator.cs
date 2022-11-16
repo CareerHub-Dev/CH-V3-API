@@ -3,7 +3,8 @@ using FluentValidation;
 
 namespace Application.Companies.Commands.UpdateCompanyLinks;
 
-public class UpdateCompanyLinksCommandValidator : AbstractValidator<UpdateCompanyLinksCommand>
+public class UpdateCompanyLinksCommandValidator
+    : AbstractValidator<UpdateCompanyLinksCommand>
 {
     public UpdateCompanyLinksCommandValidator()
     {

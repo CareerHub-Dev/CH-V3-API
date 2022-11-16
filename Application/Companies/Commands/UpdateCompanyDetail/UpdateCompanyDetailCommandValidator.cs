@@ -2,7 +2,8 @@
 
 namespace Application.Companies.Commands.UpdateCompanyDetail;
 
-public class UpdateCompanyDetailCommandValidator : AbstractValidator<UpdateCompanyDetailCommand>
+public class UpdateCompanyDetailCommandValidator
+    : AbstractValidator<UpdateCompanyDetailCommand>
 {
     public UpdateCompanyDetailCommandValidator()
     {

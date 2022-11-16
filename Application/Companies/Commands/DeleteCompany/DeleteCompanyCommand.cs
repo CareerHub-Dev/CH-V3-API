@@ -6,22 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Commands.DeleteCompany;
 
-public record DeleteCompanyCommand(Guid ComapnyId) : IRequest;
+public record DeleteCompanyCommand(Guid ComapnyId)
+    : IRequest;
 
-public class DeleteCompanyCommandHandler : IRequestHandler<DeleteCompanyCommand>
+public class DeleteCompanyCommandHandler
+    : IRequestHandler<DeleteCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public DeleteCompanyCommandHandler(IApplicationDbContext context)
+    public DeleteCompanyCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(DeleteCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        DeleteCompanyCommand request, 
+        CancellationToken cancellationToken)
     {
         var company = await _context.Companies
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.ComapnyId);
+            .Where(x => x.Id == request.ComapnyId)
+            .FirstOrDefaultAsync();
 
         if (company == null)
         {
