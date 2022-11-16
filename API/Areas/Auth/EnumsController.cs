@@ -13,41 +13,41 @@ public class EnumsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EnumDTO>))]
     public async Task<IActionResult> GetDegrees()
     {
-        return Ok(await Mediator.Send(new GetDegreesQuery()));
+        return Ok(await Sender.Send(new GetDegreesQuery()));
     }
 
     [HttpGet("ExperienceLevels")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EnumDTO>))]
     public async Task<IActionResult> GetExperienceLevels()
     {
-        return Ok(await Mediator.Send(new GetExperienceLevelsQuery()));
+        return Ok(await Sender.Send(new GetExperienceLevelsQuery()));
     }
 
     [HttpGet("JobTypes")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EnumDTO>))]
     public async Task<IActionResult> GetJobTypes()
     {
-        return Ok(await Mediator.Send(new GetJobTypesQuery()));
+        return Ok(await Sender.Send(new GetJobTypesQuery()));
     }
 
     [HttpGet("LanguageLevels")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EnumDTO>))]
     public async Task<IActionResult> GetLanguageLevels()
     {
-        return Ok(await Mediator.Send(new GetLanguageLevelsQuery()));
+        return Ok(await Sender.Send(new GetLanguageLevelsQuery()));
     }
 
     [HttpGet("TemplateLanguages")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EnumDTO>))]
     public async Task<IActionResult> GetTemplateLanguages()
     {
-        return Ok(await Mediator.Send(new GetTemplateLanguagesQuery()));
+        return Ok(await Sender.Send(new GetTemplateLanguagesQuery()));
     }
 
     [HttpGet("WorkFormats")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EnumDTO>))]
     public async Task<IActionResult> GetWorkFormats()
     {
-        return Ok(await Mediator.Send(new GetWorkFormatsQuery()));
+        return Ok(await Sender.Send(new GetWorkFormatsQuery()));
     }
 }

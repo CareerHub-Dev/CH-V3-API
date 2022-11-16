@@ -21,7 +21,7 @@ public class RefreshTokensController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RevokeTokenAsync(RevokeRefreshTokenCommand command)
     {
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }

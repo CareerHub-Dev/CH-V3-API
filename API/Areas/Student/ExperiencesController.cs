@@ -23,7 +23,7 @@ public class ExperiencesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetExperiencesOfStudentWithPagingQuery
+        var result = await Sender.Send(new GetExperiencesOfStudentWithPagingQuery
         {
             StudentId = AccountInfo!.Id,
 
@@ -43,7 +43,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExperienceOfSelfStudent(Guid experienceId)
     {
-        return Ok(await Mediator.Send(new GetExperienceOfStudentQuery
+        return Ok(await Sender.Send(new GetExperienceOfStudentQuery
         {
             ExperienceId = experienceId,
             StudentId = AccountInfo!.Id
@@ -54,7 +54,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> CreateExperienceForSelfStudent(CreateExperienceRequest view)
     {
-        var result = await Mediator.Send(new CreateExperienceCommand
+        var result = await Sender.Send(new CreateExperienceCommand
         {
             Title = view.Title,
             CompanyName = view.CompanyName,
@@ -75,7 +75,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteExperienceOfSelfStudent(Guid experienceId)
     {
-        await Mediator.Send(new DeleteExperienceOfStudentCommand(experienceId, AccountInfo!.Id));
+        await Sender.Send(new DeleteExperienceOfStudentCommand(experienceId, AccountInfo!.Id));
 
         return NoContent();
     }
@@ -91,7 +91,7 @@ public class ExperiencesController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(new UpdateExperienceOfStudentCommand
+        await Sender.Send(new UpdateExperienceOfStudentCommand
         {
             ExperienceId = request.ExperienceId,
             Title = request.Title,

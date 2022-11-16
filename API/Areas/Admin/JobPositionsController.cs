@@ -23,7 +23,7 @@ public class JobPositionsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetJobPositionsWithPagingQuery
+        var result = await Sender.Send(new GetJobPositionsWithPagingQuery
         {
             PageSize = pageSize,
             PageNumber = pageNumber,
@@ -43,14 +43,14 @@ public class JobPositionsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetJobPosition(Guid jobPositionId)
     {
-        return Ok(await Mediator.Send(new GetJobPositionQuery(jobPositionId)));
+        return Ok(await Sender.Send(new GetJobPositionQuery(jobPositionId)));
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> CreateJobPosition(CreateJobPositionCommand command)
     {
-        var result = await Mediator.Send(command);
+        var result = await Sender.Send(command);
 
         return Ok(result);
     }
@@ -66,7 +66,7 @@ public class JobPositionsController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -76,7 +76,7 @@ public class JobPositionsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteJobPosition(Guid jobPositionId)
     {
-        await Mediator.Send(new DeleteJobpositionCommand(jobPositionId));
+        await Sender.Send(new DeleteJobpositionCommand(jobPositionId));
 
         return NoContent();
     }

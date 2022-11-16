@@ -24,7 +24,7 @@ public class TagsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetTagsWithPagingQuery
+        var result = await Sender.Send(new GetTagsWithPagingQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -43,14 +43,14 @@ public class TagsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTag(Guid tagId)
     {
-        return Ok(await Mediator.Send(new GetTagQuery(tagId)));
+        return Ok(await Sender.Send(new GetTagQuery(tagId)));
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> CreateTag(CreateTagCommand command)
     {
-        var result = await Mediator.Send(command);
+        var result = await Sender.Send(command);
 
         return Ok(result);
     }
@@ -66,7 +66,7 @@ public class TagsController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -76,7 +76,7 @@ public class TagsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteTag(Guid tagId)
     {
-        await Mediator.Send(new DeleteTagCommand(tagId));
+        await Sender.Send(new DeleteTagCommand(tagId));
 
         return NoContent();
     }

@@ -34,7 +34,7 @@ public class JobOffersController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
         {
             CompanyId = AccountInfo!.Id,
 
@@ -70,7 +70,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfSelfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfCompanyJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyJobOfferWithFilterQuery
         {
             JobOfferId = jobOfferId,
             CompanyId = AccountInfo!.Id,
@@ -84,7 +84,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountAppliedCVsOfSelfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetAmountAppliedCVsOfCompanyJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountAppliedCVsOfCompanyJobOfferWithFilterQuery
         {
             JobOfferId = jobOfferId,
             CompanyId = AccountInfo!.Id,
@@ -98,7 +98,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetJobOfferOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetJobOfferOfCompanyWithFilterQuery
         {
             JobOfferId = jobOfferId,
             CompanyId = AccountInfo!.Id
@@ -110,7 +110,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateJobOfferForSelfCompany(CreateJobOfferRequest view)
     {
-        var result = await Mediator.Send(new CreateJobOfferCommand
+        var result = await Sender.Send(new CreateJobOfferCommand
         {
             Title = view.Title,
             Overview = view.Overview,
@@ -137,7 +137,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteJobOfferOfSelfCompany(Guid jobOfferId)
     {
-        await Mediator.Send(new DeleteJobOfferOfCompanyCommand(jobOfferId, AccountInfo!.Id));
+        await Sender.Send(new DeleteJobOfferOfCompanyCommand(jobOfferId, AccountInfo!.Id));
 
         return NoContent();
     }
@@ -153,7 +153,7 @@ public class JobOffersController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(new UpdateJobOfferDetailOfCompanyCommand
+        await Sender.Send(new UpdateJobOfferDetailOfCompanyCommand
         {
             JobOfferId = view.JobOfferId,
             Title = view.Title,
@@ -181,7 +181,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateJobOfferImageOfSelfCompany(Guid jobOfferId, IFormFile? file)
     {
-        var result = await Mediator.Send(new UpdateJobOfferImageOfCompanyCommand
+        var result = await Sender.Send(new UpdateJobOfferImageOfCompanyCommand
         {
             CompanyId = AccountInfo!.Id,
 

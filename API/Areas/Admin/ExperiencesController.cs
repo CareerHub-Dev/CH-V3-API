@@ -18,7 +18,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExperience(Guid experienceId)
     {
-        return Ok(await Mediator.Send(new GetExperienceQuery { ExperienceId = experienceId }));
+        return Ok(await Sender.Send(new GetExperienceQuery { ExperienceId = experienceId }));
     }
 
     [HttpPost]
@@ -26,7 +26,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateExperience(CreateExperienceCommand command)
     {
-        var result = await Mediator.Send(command);
+        var result = await Sender.Send(command);
 
         return Ok(result);
     }
@@ -36,7 +36,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteExperience(Guid experienceId)
     {
-        await Mediator.Send(new DeleteExperienceCommand(experienceId));
+        await Sender.Send(new DeleteExperienceCommand(experienceId));
 
         return NoContent();
     }
@@ -52,7 +52,7 @@ public class ExperiencesController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }

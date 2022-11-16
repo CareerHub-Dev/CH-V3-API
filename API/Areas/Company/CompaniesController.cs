@@ -21,7 +21,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedCompanyDTO))]
     public async Task<IActionResult> GetSelfCompany()
     {
-        return Ok(await Mediator.Send(new GetDetailedCompanyQuery
+        return Ok(await Sender.Send(new GetDetailedCompanyQuery
         {
             CompanyId = AccountInfo!.Id
         }));
@@ -31,7 +31,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateSelfCompanyDetailAccount(UpdateOwnCompanyDetailRequest view)
     {
-        await Mediator.Send(new UpdateCompanyDetailCommand
+        await Sender.Send(new UpdateCompanyDetailCommand
         {
             CompanyId = AccountInfo!.Id,
             Motto = view.Motto,
@@ -46,7 +46,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateCompanyLinks(UpdateOwnCompanyLinksRequest command)
     {
-        await Mediator.Send(new UpdateCompanyLinksCommand
+        await Sender.Send(new UpdateCompanyLinksCommand
         {
             CompanyId = AccountInfo!.Id,
             Links = command.Links
@@ -60,7 +60,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateSelfCompanyLogo(IFormFile? file)
     {
-        var result = await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file });
+        var result = await Sender.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file });
 
         return Ok(result);
     }
@@ -70,7 +70,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateSelfCompanyBanner(IFormFile? file)
     {
-        var result = await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = AccountInfo!.Id, Banner = file });
+        var result = await Sender.Send(new UpdateCompanyBannerCommand { CompanyId = AccountInfo!.Id, Banner = file });
 
         return Ok(result);
     }
@@ -79,7 +79,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     public async Task<IActionResult> GetAmountStudentSubscribersOfSelfCompany()
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id,
             IsSubscriberMustBeVerified = true
@@ -90,7 +90,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     public async Task<IActionResult> GetAmountJobOffersOfSelfCompany()
     {
-        return Ok(await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
         {
             CompanyId = AccountInfo!.Id
         }));
@@ -100,6 +100,6 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteSelfCompany()
     {
-        return Ok(await Mediator.Send(new DeleteCompanyCommand(AccountInfo!.Id)));
+        return Ok(await Sender.Send(new DeleteCompanyCommand(AccountInfo!.Id)));
     }
 }

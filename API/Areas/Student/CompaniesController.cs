@@ -2,8 +2,8 @@
 using Application.Common.DTO.Companies;
 using Application.Common.DTO.JobOffers;
 using Application.Common.Enums;
-using Application.Companies.Commands.VerifiedActiveStudentSubscribeToVerifiedActiveCompany;
-using Application.Companies.Commands.VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompany;
+using Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
+using Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
 using Application.Companies.Queries;
 using Application.Companies.Queries.GetAmount;
 using Application.Companies.Queries.GetDetailedCompany;
@@ -29,7 +29,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedShortCompaniesWithStatsForFollowerStudentWithPagingQuery
+        var result = await Sender.Send(new GetFollowedShortCompaniesWithStatsForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -60,7 +60,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new GetDetailedCompanyQuery
+        return Ok(await Sender.Send(new GetDetailedCompanyQuery
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
@@ -72,7 +72,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
@@ -86,7 +86,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOffersOfCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
@@ -100,7 +100,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> IsStudentSubscribedToCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new IsVerifiedStudentSubscribedToVerifiedCompanyQuery
+        return Ok(await Sender.Send(new IsVerifiedStudentSubscribedToVerifiedCompanyQuery
         {
             StudentId = AccountInfo!.Id,
             CompanyId = companyId
@@ -112,7 +112,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SubscribeToCompany(Guid companyId)
     {
-        await Mediator.Send(new VerifiedActiveStudentSubscribeToVerifiedActiveCompanyCommand
+        await Sender.Send(new VerifiedStudentSubscribeToVerifiedCompanyCommand
         {
             StudentId = AccountInfo!.Id,
             CompanyId = companyId
@@ -126,7 +126,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UnsubscribeFromCompany(Guid companyId)
     {
-        await Mediator.Send(new VerifiedActiveStudentUnsubscribeFromVerifiedActiveCompanyCommand
+        await Sender.Send(new VerifiedStudentUnsubscribeFromVerifiedCompanyCommand
         {
             StudentId = AccountInfo!.Id,
             CompanyId = companyId
@@ -149,7 +149,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 

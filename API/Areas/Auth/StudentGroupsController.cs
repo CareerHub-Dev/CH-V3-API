@@ -15,7 +15,7 @@ public class StudentGroupsController : ApiControllerBase
     public async Task<IActionResult> GetStudentGroups(
         [FromQuery] string? searchTerm)
     {
-        return Ok(await Mediator.Send(new GetBriefStudentGroupsQuery
+        return Ok(await Sender.Send(new GetBriefStudentGroupsQuery
         {
             SearchTerm = searchTerm ?? string.Empty
         }));
@@ -26,6 +26,6 @@ public class StudentGroupsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentGroup(Guid studentGroupId)
     {
-        return Ok(await Mediator.Send(new GetBriefStudentGroupQuery(studentGroupId)));
+        return Ok(await Sender.Send(new GetBriefStudentGroupQuery(studentGroupId)));
     }
 }

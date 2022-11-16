@@ -40,7 +40,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentsWithPagingQuery
+        var result = await Sender.Send(new GetStudentsWithPagingQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -60,7 +60,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetStudentQuery
+        return Ok(await Sender.Send(new GetStudentQuery
         {
             StudentId = studentId
         }));
@@ -71,7 +71,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountCompanySubscriptionsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountCompanySubscriptionsOfStudentQuery
         {
             StudentId = studentId
         }));
@@ -82,7 +82,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountCVsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountCVsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountCVsOfStudentQuery
         {
             StudentId = studentId
         }));
@@ -93,7 +93,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOfferSubscriptionsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountJobOfferSubscriptionsOfStudentQuery
         {
             StudentId = studentId
         }));
@@ -104,7 +104,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscriptionsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscriptionsOfStudentQuery
         {
             StudentId = studentId
         }));
@@ -115,7 +115,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfStudentQuery
         {
             StudentId = studentId
         }));
@@ -133,7 +133,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentSubscriptionsOfStudentWithPagingQuery
+        var result = await Sender.Send(new GetStudentSubscriptionsOfStudentWithPagingQuery
         {
             StudentId = studentId,
 
@@ -164,7 +164,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentSubscribersOfStudentWithPagingQuery
+        var result = await Sender.Send(new GetStudentSubscribersOfStudentWithPagingQuery
         {
             StudentId = studentId,
 
@@ -194,7 +194,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetBriefCompanySubscriptionsWithStatsOfStudentWithPagingQuery
+        var result = await Sender.Send(new GetBriefCompanySubscriptionsWithStatsOfStudentWithPagingQuery
         {
             StudentOwnerId = studentId,
 
@@ -227,7 +227,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerWithPaginationWithSearchWithFilterWithSortQuery
         {
             StudentOwnerId = studentId,
 
@@ -261,7 +261,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetExperiencesOfStudentWithPagingQuery
+        var result = await Sender.Send(new GetExperiencesOfStudentWithPagingQuery
         {
             StudentId = studentId,
 
@@ -288,7 +288,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SendVerifyStudentEmail(SendVerifyStudentEmailCommand command)
     {
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return Ok();
     }
@@ -304,7 +304,7 @@ public class StudentsController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -315,7 +315,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateStudentPhoto(Guid studentId, IFormFile? file)
     {
-        return Ok(await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = studentId, Photo = file }));
+        return Ok(await Sender.Send(new UpdateStudentPhotoCommand { StudentId = studentId, Photo = file }));
     }
 
     [HttpDelete("{studentId}")]
@@ -323,7 +323,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteStudent(Guid studentId)
     {
-        await Mediator.Send(new DeleteStudentCommand(studentId));
+        await Sender.Send(new DeleteStudentCommand(studentId));
 
         return NoContent();
     }

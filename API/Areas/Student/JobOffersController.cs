@@ -31,7 +31,7 @@ public class JobOffersController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -68,7 +68,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetJobOfferWithFilterQuery
         {
             JobOfferId = jobOfferId,
             IsJobOfferMustBeActive = true,
@@ -81,7 +81,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfJobOfferWithFilterQuery
         {
             JobOfferId = jobOfferId,
             IsJobOfferMustBeActive = true,
@@ -96,7 +96,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountAppliedCVsOfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetAmountAppliedCVsOfJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountAppliedCVsOfJobOfferWithFilterQuery
         {
             JobOfferId = jobOfferId,
             IsJobOfferMustBeActive = true,
@@ -111,7 +111,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> IsStudentSubscribedToJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActiveCompanyQuery
+        return Ok(await Sender.Send(new IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActiveCompanyQuery
         {
             StudentId = AccountInfo!.Id,
             JobOfferId = jobOfferId
@@ -123,7 +123,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SubscribeToJobOffer(Guid jobOfferId)
     {
-        await Mediator.Send(new VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompanyCommand
+        await Sender.Send(new VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompanyCommand
         {
             StudentId = AccountInfo!.Id,
             JobOfferId = jobOfferId
@@ -137,7 +137,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UnsubscribeFromJobOffer(Guid jobOfferId)
     {
-        await Mediator.Send(new VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiveCompanyCommand
+        await Sender.Send(new VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiveCompanyCommand
         {
             StudentId = AccountInfo!.Id,
             JobOfferId = jobOfferId

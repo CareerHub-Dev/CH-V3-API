@@ -15,7 +15,7 @@ public class JobPositionsController : ApiControllerBase
     public async Task<IActionResult> GetJobPositions(
         [FromQuery] string? searchTerm)
     {
-        return Ok(await Mediator.Send(new GetBriefJobPositionsQuery
+        return Ok(await Sender.Send(new GetBriefJobPositionsQuery
         {
             SearchTerm = searchTerm ?? string.Empty
         }));
@@ -26,6 +26,6 @@ public class JobPositionsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetJobPosition(Guid jobPositionId)
     {
-        return Ok(await Mediator.Send(new GetBriefJobPositionQuery(jobPositionId)));
+        return Ok(await Sender.Send(new GetBriefJobPositionQuery(jobPositionId)));
     }
 }

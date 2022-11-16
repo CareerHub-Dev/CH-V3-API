@@ -24,7 +24,7 @@ public class StudentLogsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentLogsWithPagingQuery
+        var result = await Sender.Send(new GetStudentLogsWithPagingQuery
         {
             StudentGroupIds = studentGroupIds,
             OrderByExpression = orderByExpression ?? "LastName",
@@ -43,7 +43,7 @@ public class StudentLogsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentLog(Guid studentLogId)
     {
-        return Ok(await Mediator.Send(new GetStudentLogQuery(studentLogId)));
+        return Ok(await Sender.Send(new GetStudentLogQuery(studentLogId)));
     }
 
     [HttpPost]
@@ -51,7 +51,7 @@ public class StudentLogsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateStudentLog(CreateStudentLogCommand command)
     {
-        var result = await Mediator.Send(command);
+        var result = await Sender.Send(command);
 
         return Ok(result);
     }
@@ -67,7 +67,7 @@ public class StudentLogsController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -77,7 +77,7 @@ public class StudentLogsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteStudentLog(Guid studentLogId)
     {
-        await Mediator.Send(new DeleteStudentLogCommand(studentLogId));
+        await Sender.Send(new DeleteStudentLogCommand(studentLogId));
 
         return NoContent();
     }

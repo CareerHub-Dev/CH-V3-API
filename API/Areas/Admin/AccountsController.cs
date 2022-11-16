@@ -16,7 +16,7 @@ public class AccountsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBriefAccount(Guid accountId)
     {
-        return Ok(await Mediator.Send(new GetBriefAccountQuery(accountId)));
+        return Ok(await Sender.Send(new GetBriefAccountQuery(accountId)));
     }
 
     [HttpGet("{accountId}/Bans")]
@@ -28,7 +28,7 @@ public class AccountsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        return Ok(await Mediator.Send(new GetBansOfAccountWithPaginationWithSortQuery
+        return Ok(await Sender.Send(new GetBansOfAccountWithPaginationWithSortQuery
         {
             AccountId = accountId,
             PageNumber = pageNumber,

@@ -44,7 +44,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedShortStudentsForFollowerStudentWithPagingQuery
+        var result = await Sender.Send(new GetFollowedShortStudentsForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -69,7 +69,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetDetailedStudentQuery
+        return Ok(await Sender.Send(new GetDetailedStudentQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
@@ -81,7 +81,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountCompanySubscriptionsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountCompanySubscriptionsOfStudentQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
@@ -95,7 +95,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOfferSubscriptionsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountJobOfferSubscriptionsOfStudentQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
@@ -110,7 +110,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscriptionsOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscriptionsOfStudentQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
@@ -124,7 +124,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfStudent(Guid studentId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfStudentQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
@@ -138,7 +138,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<bool> IsStudentOwnerSubscribedToStudentTarget(Guid studentId)
     {
-        var result = await Mediator.Send(new IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQuery
+        var result = await Sender.Send(new IsVerifiedStudentOwnerSubscribedToVerifiedStudentTargetQuery
         {
             StudentOwnerId = AccountInfo!.Id,
             StudentTargetId = studentId,
@@ -152,7 +152,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SubscribeToStudent(Guid studentId)
     {
-        await Mediator.Send(new VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommand
+        await Sender.Send(new VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommand
         {
             StudentOwnerId = AccountInfo!.Id,
             StudentTargetId = studentId
@@ -166,7 +166,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UnsubscribeFromStudent(Guid studentId)
     {
-        await Mediator.Send(new VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand
+        await Sender.Send(new VerifiedStudentOwnerUnsubscribeFromVerifiedStudentTargetCommand
         {
             StudentOwnerId = AccountInfo!.Id,
             StudentTargetId = studentId
@@ -186,7 +186,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedShortStudentSubscriptionsOfStudentForFollowerStudentWithPagingQuery
+        var result = await Sender.Send(new GetFollowedShortStudentSubscriptionsOfStudentForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -220,7 +220,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedShortStudentSubscribersOfStudentForFollowerStudentWithPagingQuery
+        var result = await Sender.Send(new GetFollowedShortStudentSubscribersOfStudentForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -253,7 +253,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedShortCompanySubscriptionsWithStatsOfStudentForFollowerStudentWithPagingQuery
+        var result = await Sender.Send(new GetFollowedShortCompanySubscriptionsWithStatsOfStudentForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
             IsFollowerStudentMustBeVerified = true,
@@ -296,7 +296,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -340,7 +340,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetExperiencesOfStudentWithPagingQuery
+        var result = await Sender.Send(new GetExperiencesOfStudentWithPagingQuery
         {
             StudentId = studentId,
             IsStudentMustBeVerified = true,
@@ -362,7 +362,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedStudentDTO))]
     public async Task<DetailedStudentDTO> GetSelfStudent()
     {
-        return await Mediator.Send(new GetDetailedStudentQuery
+        return await Sender.Send(new GetDetailedStudentQuery
         {
             StudentId = AccountInfo!.Id
         });
@@ -372,7 +372,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateSelfStudentDetail(UpdateOwnStudentDetailRequest request)
     {
-        await Mediator.Send(new UpdateStudentDetailCommand
+        await Sender.Send(new UpdateStudentDetailCommand
         {
             StudentId = AccountInfo!.Id,
             FirstName = request.FirstName,
@@ -390,14 +390,14 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateSelfStudentPhoto(IFormFile? file)
     {
-        return Ok(await Mediator.Send(new UpdateStudentPhotoCommand { StudentId = AccountInfo!.Id, Photo = file }));
+        return Ok(await Sender.Send(new UpdateStudentPhotoCommand { StudentId = AccountInfo!.Id, Photo = file }));
     }
 
     [HttpDelete("self")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> DeleteSelfStudent()
     {
-        await Mediator.Send(new ReturnStudentToLogCommand(AccountInfo!.Id));
+        await Sender.Send(new ReturnStudentToLogCommand(AccountInfo!.Id));
 
         return NoContent();
     }
@@ -411,7 +411,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedShortStudentSubscriptionsOfStudentForFollowerStudentWithPagingQuery
+        var result = await Sender.Send(new GetFollowedShortStudentSubscriptionsOfStudentForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -442,7 +442,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedShortStudentSubscribersOfStudentForFollowerStudentWithPagingQuery
+        var result = await Sender.Send(new GetFollowedShortStudentSubscribersOfStudentForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -472,7 +472,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedShortCompanySubscriptionsWithStatsOfStudentForFollowerStudentWithPagingQuery
+        var result = await Sender.Send(new GetFollowedShortCompanySubscriptionsWithStatsOfStudentForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -511,7 +511,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -548,7 +548,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     public async Task<IActionResult> GetAmountCompanySubscriptionsOfSelfStudent()
     {
-        return Ok(await Mediator.Send(new GetAmountCompanySubscriptionsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountCompanySubscriptionsOfStudentQuery
         {
             StudentId = AccountInfo!.Id,
 
@@ -560,7 +560,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     public async Task<IActionResult> GetAmountJobOfferSubscriptionsOfSelfStudent()
     {
-        return Ok(await Mediator.Send(new GetAmountJobOfferSubscriptionsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountJobOfferSubscriptionsOfStudentQuery
         {
             StudentId = AccountInfo!.Id,
 
@@ -573,7 +573,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     public async Task<IActionResult> GetAmountStudentSubscriptionsOfSelfStudent()
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscriptionsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscriptionsOfStudentQuery
         {
             StudentId = AccountInfo!.Id,
 
@@ -585,7 +585,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     public async Task<IActionResult> GetAmountStudentSubscribersOfStudent()
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfStudentQuery
         {
             StudentId = AccountInfo!.Id,
 
@@ -597,7 +597,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     public async Task<IActionResult> GetAmountCVsOfSelfStudent()
     {
-        return Ok(await Mediator.Send(new GetAmountCVsOfStudentQuery
+        return Ok(await Sender.Send(new GetAmountCVsOfStudentQuery
         {
             StudentId = AccountInfo!.Id,
         }));

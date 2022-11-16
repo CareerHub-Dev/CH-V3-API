@@ -20,7 +20,7 @@ public class RefreshTokensController : ApiControllerBase
             request.Token = Request.Cookies["refreshToken"] ?? "";
         }
 
-        await Mediator.Send(new RevokeRefreshTokenOfAccountCommand { Token = request.Token, AccountId = AccountInfo!.Id });
+        await Sender.Send(new RevokeRefreshTokenOfAccountCommand { Token = request.Token, AccountId = AccountInfo!.Id });
 
         return NoContent();
     }
