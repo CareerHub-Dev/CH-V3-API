@@ -23,18 +23,21 @@ public static class ConfigureServices
 
         services.AddHttpContextAccessor();
 
-        services.AddHealthChecks().AddDbContextCheck<ApplicationDbContext>();
+        services.AddHealthChecks()
+            .AddDbContextCheck<ApplicationDbContext>();
 
-        services.AddControllers().AddJsonOptions(options =>
-        {
-            var enumConverter = new JsonStringEnumConverter();
-            options.JsonSerializerOptions.Converters.Add(enumConverter);
-        });
+        services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                var enumConverter = new JsonStringEnumConverter();
+                options.JsonSerializerOptions.Converters.Add(enumConverter);
+            });
 
         services.AddEndpointsApiExplorer();
 
         // Customise default API behaviour
-        services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+        services.Configure<ApiBehaviorOptions>(options 
+            => options.SuppressModelStateInvalidFilter = true);
 
         services.AddProblemDetails();
 

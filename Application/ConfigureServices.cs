@@ -20,7 +20,9 @@ namespace Application;
 
 public static class ConfigureServices
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApplicationServices(
+        this IServiceCollection services, 
+        IConfiguration configuration)
     {
         services.AddValidatorsFromAssembly(typeof(AuthenticateQuery).Assembly);
         ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("en-US");
@@ -45,10 +47,17 @@ public static class ConfigureServices
 
         services.AddHostedService<RemoveOldImagesBackgroundService>();
 
-        services.Configure<EmailTemplateSettings>(configuration.GetSection(nameof(EmailTemplateSettings)));
-        services.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
-        services.Configure<ClientSettings>(configuration.GetSection(nameof(ClientSettings)));
-        services.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
+        services.Configure<EmailTemplateSettings>(
+            configuration.GetSection(nameof(EmailTemplateSettings)));
+
+        services.Configure<EmailSettings>(
+            configuration.GetSection(nameof(EmailSettings)));
+
+        services.Configure<ClientSettings>(
+            configuration.GetSection(nameof(ClientSettings)));
+
+        services.Configure<JwtSettings>(
+            configuration.GetSection(nameof(JwtSettings)));
 
         return services;
     }
