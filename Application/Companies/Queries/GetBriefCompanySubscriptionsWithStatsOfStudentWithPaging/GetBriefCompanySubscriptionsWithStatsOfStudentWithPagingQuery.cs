@@ -13,8 +13,8 @@ namespace Application.Companies.Queries.GetBriefCompanySubscriptionsWithStatsOfS
 public record GetBriefCompanySubscriptionsWithStatsOfStudentWithPagingQuery
     : IRequest<PaginatedList<BriefCompanyWithStatsDTO>>
 {
-    public Guid StudentOwnerId { get; init; }
-    public bool? IsStudentOwnerMustBeVerified { get; init; }
+    public Guid StudentId { get; init; }
+    public bool? IsStudentMustBeVerified { get; init; }
 
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -45,22 +45,19 @@ public class GetBriefCompanySubscriptionsWithStatsOfStudentWithPagingQueryHandle
         CancellationToken cancellationToken)
     {
         if (!await _context.Students
-            .Filter(
-                isVerified: request.IsStudentOwnerMustBeVerified
-            )
-            .AnyAsync(x => x.Id == request.StudentOwnerId))
+            .Filter(isVerified: request.IsStudentMustBeVerified)
+            .AnyAsync(x => x.Id == request.StudentId))
         {
-            throw new NotFoundException(nameof(Student), request.StudentOwnerId);
+            throw new NotFoundException(nameof(Student), request.StudentId);
         }
 
         return await _context.Companies
-            .AsNoTracking()
             .Filter(
                 withoutCompanyId: request.WithoutCompanyId,
                 isVerified: request.IsCompanyMustBeVerified
             )
             .Search(request.SearchTerm)
-            .Where(x => x.SubscribedStudents.Any(x => x.Id == request.StudentOwnerId))
+            .Where(x => x.SubscribedStudents.Any(x => x.Id == request.StudentId))
             .MapToBriefCompanyWithStatsDTO(
                 isJobOfferMustBeActive: request.StatsFilter.IsJobOfferMustBeActive,
                 isSubscriberMustBeVerified: request.StatsFilter.IsSubscriberMustBeVerified

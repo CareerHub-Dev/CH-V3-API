@@ -5,7 +5,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Queries;
+namespace Application.Companies.Queries.IsVerifiedStudentSubscribedToVerifiedCompany;
 
 public class IsVerifiedStudentSubscribedToVerifiedCompanyQuery
     : IRequest<bool>

@@ -45,16 +45,13 @@ public class GetFollowedShortCompaniesWithStatsForFollowerStudentWithPagingQuery
         CancellationToken cancellationToken)
     {
         if (!await _context.Students
-            .Filter(
-                isVerified: request.IsFollowerStudentMustBeVerified
-            )
+            .Filter(isVerified: request.IsFollowerStudentMustBeVerified)
             .AnyAsync(x => x.Id == request.FollowerStudentId))
         {
             throw new NotFoundException(nameof(Student), request.FollowerStudentId);
         }
 
         return await _context.Companies
-            .AsNoTracking()
             .Filter(
                 withoutCompanyId: request.WithoutCompanyId,
                 isVerified: request.IsCompanyMustBeVerified

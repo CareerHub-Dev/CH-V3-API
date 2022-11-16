@@ -196,7 +196,7 @@ public class StudentsController : ApiControllerBase
     {
         var result = await Sender.Send(new GetBriefCompanySubscriptionsWithStatsOfStudentWithPagingQuery
         {
-            StudentOwnerId = studentId,
+            StudentId = studentId,
 
             PageNumber = pageNumber,
             PageSize = pageSize,

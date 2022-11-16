@@ -9,7 +9,8 @@ using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyLinks;
 using Application.Companies.Commands.UpdateCompanyLogo;
-using Application.Companies.Queries.GetAmount;
+using Application.Companies.Queries.GetAmountJobOffersOfCompany;
+using Application.Companies.Queries.GetAmountStudentSubscribersOfCompany;
 using Application.Companies.Queries.GetBriefCompaniesWithStatsWithPaginig;
 using Application.Companies.Queries.GetCompany;
 using Application.Emails.Commands.SendInviteCompany;
@@ -64,7 +65,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfCompany(Guid companyId)
     {
-        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyQuery
         {
             CompanyId = companyId
         }));
@@ -75,7 +76,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOffersOfCompany(Guid companyId)
     {
-        return Ok(await Sender.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountJobOffersOfCompanyQuery
         {
             CompanyId = companyId
         }));

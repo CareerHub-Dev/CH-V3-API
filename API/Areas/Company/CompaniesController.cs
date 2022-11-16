@@ -7,7 +7,8 @@ using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyLinks;
 using Application.Companies.Commands.UpdateCompanyLogo;
-using Application.Companies.Queries.GetAmount;
+using Application.Companies.Queries.GetAmountJobOffersOfCompany;
+using Application.Companies.Queries.GetAmountStudentSubscribersOfCompany;
 using Application.Companies.Queries.GetDetailedCompany;
 using Microsoft.AspNetCore.Mvc;
 
@@ -79,7 +80,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     public async Task<IActionResult> GetAmountStudentSubscribersOfSelfCompany()
     {
-        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyQuery
         {
             CompanyId = AccountInfo!.Id,
             IsSubscriberMustBeVerified = true
@@ -90,7 +91,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     public async Task<IActionResult> GetAmountJobOffersOfSelfCompany()
     {
-        return Ok(await Sender.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountJobOffersOfCompanyQuery
         {
             CompanyId = AccountInfo!.Id
         }));

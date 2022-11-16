@@ -5,9 +5,10 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Queries.GetAmount;
+namespace Application.Companies.Queries.GetAmountStudentSubscribersOfCompany;
 
-public record GetAmountStudentSubscribersOfCompanyWithFilterQuery : IRequest<int>
+public record GetAmountStudentSubscribersOfCompanyQuery 
+    : IRequest<int>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
@@ -16,21 +17,22 @@ public record GetAmountStudentSubscribersOfCompanyWithFilterQuery : IRequest<int
 }
 
 public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
-    : IRequestHandler<GetAmountStudentSubscribersOfCompanyWithFilterQuery, int>
+    : IRequestHandler<GetAmountStudentSubscribersOfCompanyQuery, int>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetAmountSubscribersOfCompanyWithFilterQueryHandler(IApplicationDbContext context)
+    public GetAmountSubscribersOfCompanyWithFilterQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<int> Handle(GetAmountStudentSubscribersOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<int> Handle(
+        GetAmountStudentSubscribersOfCompanyQuery request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Companies
-            .Filter(
-                isVerified: request.IsCompanyMustBeVerified
-            )
+            .Filter(isVerified: request.IsCompanyMustBeVerified)
             .AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
@@ -39,9 +41,7 @@ public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
         return await _context.Companies
             .Where(x => x.Id == request.CompanyId)
             .SelectMany(x => x.SubscribedStudents)
-            .Filter(
-                isVerified: request.IsSubscriberMustBeVerified
-            )
+            .Filter(isVerified: request.IsSubscriberMustBeVerified)
             .CountAsync();
     }
 }

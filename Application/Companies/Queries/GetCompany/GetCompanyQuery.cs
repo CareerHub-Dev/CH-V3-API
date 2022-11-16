@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetCompany;
 
-public record GetCompanyQuery : IRequest<CompanyDTO>
+public record GetCompanyQuery
+    : IRequest<CompanyDTO>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
@@ -29,11 +30,8 @@ public class GetCompanyQueryHandler
         CancellationToken cancellationToken)
     {
         var company = await _context.Companies
-            .AsNoTracking()
             .Where(x => x.Id == request.CompanyId)
-            .Filter(
-                isVerified: request.IsCompanyMustBeVerified
-            )
+            .Filter(isVerified: request.IsCompanyMustBeVerified)
             .MapToCompanyDTO()
             .FirstOrDefaultAsync();
 

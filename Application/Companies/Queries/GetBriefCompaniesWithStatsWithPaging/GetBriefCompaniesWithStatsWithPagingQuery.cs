@@ -40,7 +40,6 @@ public class GetBriefCompaniesWithStatsWithPagingQueryHandler
         CancellationToken cancellationToken)
     {
         return await _context.Companies
-            .AsNoTracking()
             .Filter(
                 withoutCompanyId: request.WithoutCompanyId,
                 isVerified: request.IsCompanyMustBeVerified

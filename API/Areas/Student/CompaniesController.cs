@@ -5,9 +5,11 @@ using Application.Common.Enums;
 using Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
 using Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
 using Application.Companies.Queries;
-using Application.Companies.Queries.GetAmount;
+using Application.Companies.Queries.GetAmountJobOffersOfCompany;
+using Application.Companies.Queries.GetAmountStudentSubscribersOfCompany;
 using Application.Companies.Queries.GetDetailedCompany;
 using Application.Companies.Queries.GetFollowedShortCompaniesWithStatsForFollowerStudentWithPaginig;
+using Application.Companies.Queries.IsVerifiedStudentSubscribedToVerifiedCompany;
 using Application.JobOffers.Queries.GetJobOffersOfCompany;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -72,7 +74,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfCompany(Guid companyId)
     {
-        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyQuery
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,
@@ -86,7 +88,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOffersOfCompany(Guid companyId)
     {
-        return Ok(await Sender.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountJobOffersOfCompanyQuery
         {
             CompanyId = companyId,
             IsCompanyMustBeVerified = true,

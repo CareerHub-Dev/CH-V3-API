@@ -5,9 +5,10 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Companies.Queries.GetAmount;
+namespace Application.Companies.Queries.GetAmountJobOffersOfCompany;
 
-public record GetAmountJobOffersOfCompanyWithFilterQuery : IRequest<int>
+public record GetAmountJobOffersOfCompanyQuery
+    : IRequest<int>
 {
     public Guid CompanyId { get; init; }
     public bool? IsCompanyMustBeVerified { get; init; }
@@ -16,21 +17,22 @@ public record GetAmountJobOffersOfCompanyWithFilterQuery : IRequest<int>
 }
 
 public class GetAmountJobOffersOfCompanyWithFilterQueryHandler
-    : IRequestHandler<GetAmountJobOffersOfCompanyWithFilterQuery, int>
+    : IRequestHandler<GetAmountJobOffersOfCompanyQuery, int>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetAmountJobOffersOfCompanyWithFilterQueryHandler(IApplicationDbContext context)
+    public GetAmountJobOffersOfCompanyWithFilterQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<int> Handle(GetAmountJobOffersOfCompanyWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<int> Handle(
+        GetAmountJobOffersOfCompanyQuery request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Companies
-            .Filter(
-                isVerified: request.IsCompanyMustBeVerified
-            )
+            .Filter(isVerified: request.IsCompanyMustBeVerified)
             .AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);

@@ -258,8 +258,8 @@ public class StudentsController : ApiControllerBase
             FollowerStudentId = AccountInfo!.Id,
             IsFollowerStudentMustBeVerified = true,
 
-            StudentOwnerId = studentId,
-            IsStudentOwnerMustBeVerified = true,
+            StudentId = studentId,
+            IsStudentMustBeVerified = true,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -476,7 +476,7 @@ public class StudentsController : ApiControllerBase
         {
             FollowerStudentId = AccountInfo!.Id,
 
-            StudentOwnerId = AccountInfo!.Id,
+            StudentId = AccountInfo!.Id,
 
             PageNumber = pageNumber,
             PageSize = pageSize,
