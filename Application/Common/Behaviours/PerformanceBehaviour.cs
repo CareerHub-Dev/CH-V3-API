@@ -5,7 +5,8 @@ using System.Diagnostics;
 
 namespace Application.Common.Behaviours;
 
-public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+public class PerformanceBehaviour<TRequest, TResponse> 
+    : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
     private readonly Stopwatch _timer;
     private readonly ILogger<TRequest> _logger;
@@ -21,7 +22,10 @@ public class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
         _currentAccountService = currentAccountService;
     }
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(
+        TRequest request, 
+        RequestHandlerDelegate<TResponse> next, 
+        CancellationToken cancellationToken)
     {
         _timer.Start();
 

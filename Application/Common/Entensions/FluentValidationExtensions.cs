@@ -14,34 +14,37 @@ public static class FluentValidationExtensions
     {
         return ruleBuilder
             .Matches(PasswordPattern)
-            .WithMessage("The field '{PropertyName}' must match the regular expression '" + PasswordPattern + "'.");
+            .WithMessage($"The field '{{PropertyName}}' must match the regular expression '{PasswordPattern}'.");
     }
 
     public static IRuleBuilderOptions<T, string> NureEmailAddress<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
         return ruleBuilder
             .Matches(NureEmailPattern)
-            .WithMessage("The field '{PropertyName}' must match the regular expression '" + NureEmailPattern + "'.");
+            .WithMessage($"The field '{{PropertyName}}' must match the regular expression '{NureEmailPattern}'.");
     }
 
     public static IRuleBuilderOptions<T, string> Phone<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
         return ruleBuilder
             .Matches(PhonePattern)
-            .WithMessage("The field '{PropertyName}' must match the regular expression '" + PhonePattern + "'.");
+            .WithMessage($"The field '{{PropertyName}}' must match the regular expression '{PhonePattern}'.");
     }
 
     public static IRuleBuilderOptions<T, string> Uri<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
         return ruleBuilder
             .Matches(UriPattern)
-            .WithMessage("The field '{PropertyName}' must match the regular expression '" + UriPattern + "'.");
+            .WithMessage($"The field '{{PropertyName}}' must match the regular expression '{UriPattern}'.");
     }
 
-    public static IRuleBuilderOptions<T, IFormFile> AllowedExtensions<T>(this IRuleBuilder<T, IFormFile> ruleBuilder, params string[] extensions)
+    public static IRuleBuilderOptions<T, IFormFile> AllowedExtensions<T>(
+        this IRuleBuilder<T, IFormFile> ruleBuilder, 
+        params string[] extensions)
     {
         return ruleBuilder
-            .Must(x => extensions.Contains(Path.GetExtension(x.FileName))).WithMessage("'{PropertyName}' extension is not allowed!");
+            .Must(x => extensions.Contains(Path.GetExtension(x.FileName)))
+            .WithMessage("'{PropertyName}' extension is not allowed!");
     }
 
     public static IRuleBuilderOptions<T, IFormFile> MaxFileSize<T>(this IRuleBuilder<T, IFormFile> ruleBuilder, int maxFileSize)
