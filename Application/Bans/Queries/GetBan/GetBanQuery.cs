@@ -8,21 +8,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Bans.Queries.GetBan;
 
-public record GetBanQuery(Guid BanId) : IRequest<BanDTO>;
+public record GetBanQuery(Guid BanId) 
+    : IRequest<BanDTO>;
 
-public class GetBanQueryHandler : IRequestHandler<GetBanQuery, BanDTO>
+public class GetBanQueryHandler 
+    : IRequestHandler<GetBanQuery, BanDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetBanQueryHandler(IApplicationDbContext context)
+    public GetBanQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<BanDTO> Handle(GetBanQuery request, CancellationToken cancellationToken)
+    public async Task<BanDTO> Handle(
+        GetBanQuery request, 
+        CancellationToken cancellationToken)
     {
         var ban = await _context.Bans
-            .AsNoTracking()
             .Where(x => x.Id == request.BanId)
             .MapToBanDTO()
             .FirstOrDefaultAsync();

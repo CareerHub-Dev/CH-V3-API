@@ -2,7 +2,8 @@
 
 namespace Application.Bans.Commands.UpdateBan;
 
-public class UpdateBanCommandValidator : AbstractValidator<UpdateBanCommand>
+public class UpdateBanCommandValidator 
+    : AbstractValidator<UpdateBanCommand>
 {
     public UpdateBanCommandValidator()
     {

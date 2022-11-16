@@ -9,7 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Bans.Queries.GetBansOfAccount;
 
-public record GetBansOfAccountWithPaginationWithSortQuery : IRequest<PaginatedList<BanDTO>>
+public record GetBansOfAccountWithPagingQuery 
+    : IRequest<PaginatedList<BanDTO>>
 {
     public Guid AccountId { get; init; }
 
@@ -19,16 +20,20 @@ public record GetBansOfAccountWithPaginationWithSortQuery : IRequest<PaginatedLi
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetBansOfAccountWithPaginationWithSortQueryHandler : IRequestHandler<GetBansOfAccountWithPaginationWithSortQuery, PaginatedList<BanDTO>>
+public class GetBansOfAccountWithPagingQueryHandler 
+    : IRequestHandler<GetBansOfAccountWithPagingQuery, PaginatedList<BanDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetBansOfAccountWithPaginationWithSortQueryHandler(IApplicationDbContext context)
+    public GetBansOfAccountWithPagingQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<BanDTO>> Handle(GetBansOfAccountWithPaginationWithSortQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<BanDTO>> Handle(
+        GetBansOfAccountWithPagingQuery request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Accounts
             .AnyAsync(x => x.Id == request.AccountId))
@@ -37,7 +42,6 @@ public class GetBansOfAccountWithPaginationWithSortQueryHandler : IRequestHandle
         }
 
         var bans = await _context.Bans
-            .AsNoTracking()
             .Where(x => x.AccountId == request.AccountId)
             .MapToBanDTO()
             .OrderByExpression(request.OrderByExpression)

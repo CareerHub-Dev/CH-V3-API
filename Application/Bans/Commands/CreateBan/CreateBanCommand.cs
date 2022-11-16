@@ -8,25 +8,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Bans.Commands.CreateBan;
 
-public record CreateBanCommand : IRequest<Guid>
+public record CreateBanCommand
+    : IRequest<Guid>
 {
     public Guid AccountId { get; init; }
     public string Reason { get; init; } = string.Empty;
     public DateTime Expires { get; init; }
 }
 
-public class CreateBanCommandHandler : IRequestHandler<CreateBanCommand, Guid>
+public class CreateBanCommandHandler 
+    : IRequestHandler<CreateBanCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
     private readonly IAccountHelper _accountHelper;
 
-    public CreateBanCommandHandler(IApplicationDbContext context, IAccountHelper accountHelper)
+    public CreateBanCommandHandler(
+        IApplicationDbContext context, 
+        IAccountHelper accountHelper)
     {
         _context = context;
         _accountHelper = accountHelper;
     }
 
-    public async Task<Guid> Handle(CreateBanCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        CreateBanCommand request, 
+        CancellationToken cancellationToken)
     {
         var account = await _context.Accounts
            .AsNoTracking()

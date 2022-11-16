@@ -28,7 +28,7 @@ public class AccountsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        return Ok(await Sender.Send(new GetBansOfAccountWithPaginationWithSortQuery
+        return Ok(await Sender.Send(new GetBansOfAccountWithPagingQuery
         {
             AccountId = accountId,
             PageNumber = pageNumber,
