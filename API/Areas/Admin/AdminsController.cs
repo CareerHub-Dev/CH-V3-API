@@ -2,7 +2,7 @@
 using Application.Admins.Commands.DeleteAdmin;
 using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Queries.GetAdmin;
-using Application.Admins.Queries.GetAdmins;
+using Application.Admins.Queries.GetAdminsWithPaging;
 using Application.Common.DTO.Admins;
 using Application.Common.Enums;
 using Application.Emails.Commands.SendInviteAdminEmail;
@@ -25,7 +25,7 @@ public class AdminsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Sender.Send(new GetAdminsWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetAdminsWithPagingQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,

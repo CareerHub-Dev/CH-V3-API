@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Admins.Commands.InviteAdmin;
 
-public class InviteAdminCommandValidator : AbstractValidator<InviteAdminCommand>
+public class InviteAdminCommandValidator 
+    : AbstractValidator<InviteAdminCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public InviteAdminCommandValidator(IApplicationDbContext context)
+    public InviteAdminCommandValidator(
+        IApplicationDbContext context)
     {
         _context = context;
 
@@ -20,7 +22,9 @@ public class InviteAdminCommandValidator : AbstractValidator<InviteAdminCommand>
             .MustAsync(BeUniqueEmail).WithMessage("The specified email already exists.");
     }
 
-    private async Task<bool> BeUniqueEmail(string email, CancellationToken cancellationToken)
+    private async Task<bool> BeUniqueEmail(
+        string email, 
+        CancellationToken cancellationToken)
     {
         var query = _context.Accounts.Select(x => x.NormalizedEmail)
             .Union(_context.StudentLogs.Select(x => x.NormalizedEmail));

@@ -5,9 +5,10 @@ using Application.Common.Models.Pagination;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Admins.Queries.GetAdmins;
+namespace Application.Admins.Queries.GetAdminsWithPaging;
 
-public record GetAdminsWithPaginationWithSearchWithFilterWithSortQuery : IRequest<PaginatedList<AdminDTO>>
+public record GetAdminsWithPagingQuery 
+    : IRequest<PaginatedList<AdminDTO>>
 {
     public int PageNumber { get; init; } = 1;
     public int PageSize { get; init; } = 10;
@@ -21,19 +22,22 @@ public record GetAdminsWithPaginationWithSearchWithFilterWithSortQuery : IReques
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler : IRequestHandler<GetAdminsWithPaginationWithSearchWithFilterWithSortQuery, PaginatedList<AdminDTO>>
+public class GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler 
+    : IRequestHandler<GetAdminsWithPagingQuery, PaginatedList<AdminDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler(IApplicationDbContext context)
+    public GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PaginatedList<AdminDTO>> Handle(GetAdminsWithPaginationWithSearchWithFilterWithSortQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<AdminDTO>> Handle(
+        GetAdminsWithPagingQuery request, 
+        CancellationToken cancellationToken)
     {
         return await _context.Admins
-            .AsNoTracking()
             .Filter(
                 withoutAdminId: request.WithoutAdminId,
                 isVerified: request.IsAdminMustBeVerified,

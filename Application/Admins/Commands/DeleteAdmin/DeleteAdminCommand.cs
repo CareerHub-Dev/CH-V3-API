@@ -7,24 +7,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Admins.Commands.DeleteAdmin;
 
-public record DeleteAdminCommand(Guid AdminId) : IRequest;
+public record DeleteAdminCommand(Guid AdminId)
+    : IRequest;
 
-public class DeleteAdminCommandHandler : IRequestHandler<DeleteAdminCommand>
+public class DeleteAdminCommandHandler
+    : IRequestHandler<DeleteAdminCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly IAccountHelper _accountHelper;
 
-    public DeleteAdminCommandHandler(IApplicationDbContext context, IAccountHelper accountHelper)
+    public DeleteAdminCommandHandler(
+        IApplicationDbContext context, 
+        IAccountHelper accountHelper)
     {
         _context = context;
         _accountHelper = accountHelper;
     }
 
-    public async Task<Unit> Handle(DeleteAdminCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        DeleteAdminCommand request, 
+        CancellationToken cancellationToken)
     {
         var admin = await _context.Admins
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.AdminId);
+            .Where(x => x.Id == request.AdminId)
+            .FirstOrDefaultAsync();
 
         if (admin == null)
         {
