@@ -96,7 +96,7 @@ public class GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFo
                 WorkFormat = x.WorkFormat,
                 ExperienceLevel = x.ExperienceLevel,
                 JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
-                Company = new BriefCompanyDTO { Id = x.Company!.Id, Name = x.Company.Name },
+                Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
                 Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
                 IsFollowed = x.SubscribedStudents.Any(x => x.Id == request.FollowerStudentId),
                 AmountSubscribers = x.SubscribedStudents.Count(x =>

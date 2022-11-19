@@ -19,7 +19,7 @@ public class DetiledJobOfferDTO
 
     public BriefJobPositionDTO JobPosition { get; set; } = new BriefJobPositionDTO();
 
-    public BriefCompanyDTO Company { get; set; } = new BriefCompanyDTO();
+    public BriefCompanyOfJobOfferDTO Company { get; set; } = new BriefCompanyOfJobOfferDTO();
 
     public List<TagDTO> Tags { get; set; } = new List<TagDTO>();
 }

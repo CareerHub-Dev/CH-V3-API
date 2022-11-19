@@ -56,7 +56,7 @@ public class GetJobOfferOfCompanyWithFilterQueryHandler : IRequestHandler<GetJob
                 WorkFormat = x.WorkFormat,
                 ExperienceLevel = x.ExperienceLevel,
                 JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
-                Company = new BriefCompanyDTO { Id = x.Company!.Id, Name = x.Company.Name },
+                Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
                 Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
                 Overview = x.Overview,
                 Requirements = x.Requirements,
