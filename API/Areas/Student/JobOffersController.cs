@@ -5,8 +5,8 @@ using Application.JobOffers.Commands.VerifiedStudentSubscribeToActiveJobOfferWit
 using Application.JobOffers.Commands.VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompany;
 using Application.JobOffers.Queries.GetAmountAppliedCVsOfJobOffer;
 using Application.JobOffers.Queries.GetAmountStudentSubscribersOfJobOffer;
+using Application.JobOffers.Queries.GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaging;
 using Application.JobOffers.Queries.GetJobOffer;
-using Application.JobOffers.Queries.GetJobOffers;
 using Application.JobOffers.Queries.IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompany;
 using Application.JobOffers.Queries.Models;
 using Domain.Enums;
@@ -32,7 +32,7 @@ public class JobOffersController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Sender.Send(new GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 

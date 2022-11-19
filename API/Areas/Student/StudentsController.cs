@@ -7,7 +7,7 @@ using Application.Common.DTO.Students;
 using Application.Common.Enums;
 using Application.Companies.Queries.GetFollowedShortCompanySubscriptionsWithStatsOfStudentForFollowerStudentWithPaging;
 using Application.Experiences.Queries.GetExperiencesOfStudentWithPaging;
-using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
+using Application.JobOffers.Queries.GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentForFollowerStudentWithPaging;
 using Application.Students.Commands.ReturnStudentToLog;
 using Application.Students.Commands.UpdateStudentDetail;
 using Application.Students.Commands.UpdateStudentPhoto;
@@ -296,7 +296,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Sender.Send(new GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -511,7 +511,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Sender.Send(new GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetFollowedDetiledJobOfferSubscriptionsWithStatsOfStudentForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 

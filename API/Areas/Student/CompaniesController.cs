@@ -4,13 +4,12 @@ using Application.Common.DTO.JobOffers;
 using Application.Common.Enums;
 using Application.Companies.Commands.VerifiedStudentSubscribeToVerifiedCompany;
 using Application.Companies.Commands.VerifiedStudentUnsubscribeFromVerifiedCompany;
-using Application.Companies.Queries;
 using Application.Companies.Queries.GetAmountJobOffersOfCompany;
 using Application.Companies.Queries.GetAmountStudentSubscribersOfCompany;
 using Application.Companies.Queries.GetDetailedCompany;
 using Application.Companies.Queries.GetFollowedShortCompaniesWithStatsForFollowerStudentWithPaginig;
 using Application.Companies.Queries.IsVerifiedStudentSubscribedToVerifiedCompany;
-using Application.JobOffers.Queries.GetJobOffersOfCompany;
+using Application.JobOffers.Queries.GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaging;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -151,7 +150,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Sender.Send(new GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetFollowedDetiledJobOffersWithStatsOfCompanyForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 

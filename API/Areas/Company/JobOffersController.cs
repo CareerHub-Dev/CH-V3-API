@@ -8,8 +8,8 @@ using Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 using Application.JobOffers.Commands.UpdateJobOfferImageOfCompany;
 using Application.JobOffers.Queries.GetAmountAppliedCVsOfCompanyJobOffer;
 using Application.JobOffers.Queries.GetAmountStudentSubscribersOfCompanyJobOffer;
+using Application.JobOffers.Queries.GetDetiledJobOffersWithStatsOfCompanyWithPaging;
 using Application.JobOffers.Queries.GetJobOfferOfCompany;
-using Application.JobOffers.Queries.GetJobOffersOfCompany;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -35,7 +35,7 @@ public class JobOffersController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Sender.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPagingQuery
         {
             CompanyId = AccountInfo!.Id,
 

@@ -14,7 +14,7 @@ using Application.Companies.Queries.GetAmountStudentSubscribersOfCompany;
 using Application.Companies.Queries.GetBriefCompaniesWithStatsWithPaginig;
 using Application.Companies.Queries.GetCompany;
 using Application.Emails.Commands.SendInviteCompany;
-using Application.JobOffers.Queries.GetJobOffersOfCompany;
+using Application.JobOffers.Queries.GetDetiledJobOffersWithStatsOfCompanyWithPaging;
 using Application.Students.Queries.GetStudentSubscribersOfCompanyWithPaging;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -193,7 +193,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Sender.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPagingQuery
         {
             CompanyId = companyId,
 

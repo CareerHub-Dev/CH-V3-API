@@ -7,7 +7,7 @@ using Application.Common.Enums;
 using Application.Companies.Queries.GetBriefCompanySubscriptionsWithStatsOfStudentWithPaging;
 using Application.Emails.Commands.SendVerifyStudentEmail;
 using Application.Experiences.Queries.GetExperiencesOfStudentWithPaging;
-using Application.JobOffers.Queries.GetJobOfferSubscriptionsOfStudent;
+using Application.JobOffers.Queries.GetDetiledJobOfferSubscriptionsWithStatsOfStudentWithPaging;
 using Application.Students.Commands.DeleteStudent;
 using Application.Students.Commands.UpdateStudentDetail;
 using Application.Students.Commands.UpdateStudentPhoto;
@@ -227,7 +227,7 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Sender.Send(new GetDetiledJobOfferSubscriptionsWithStatsOfStudentOwnerWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetDetiledJobOfferSubscriptionsWithStatsOfStudentWithPagingQuery
         {
             StudentOwnerId = studentId,
 
