@@ -3,7 +3,8 @@ using FluentValidation;
 
 namespace Application.JobOffers.Commands.CreateJobOffer;
 
-public class CreateJobOfferCommandValidator : AbstractValidator<CreateJobOfferCommand>
+public class CreateJobOfferCommandValidator 
+    : AbstractValidator<CreateJobOfferCommand>
 {
     public CreateJobOfferCommandValidator()
     {

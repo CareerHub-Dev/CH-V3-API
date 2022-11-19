@@ -5,33 +5,32 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.JobOffers.Queries;
+namespace Application.JobOffers.Queries.IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompany;
 
-public record IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActiveCompanyQuery : IRequest<bool>
+public record IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompanyQuery
+    : IRequest<bool>
 {
     public Guid StudentId { get; init; }
     public Guid JobOfferId { get; init; }
 }
 
-public class IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActiveCompanyQueryHandler
-    : IRequestHandler<IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActiveCompanyQuery, bool>
+public class IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompanyQueryHandler
+    : IRequestHandler<IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompanyQuery, bool>
 {
     private readonly IApplicationDbContext _context;
 
-    public IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActiveCompanyQueryHandler(
+    public IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompanyQueryHandler(
         IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<bool> Handle(
-        IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActiveCompanyQuery request,
+        IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompanyQuery request,
         CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Filter(
-                isVerified: true
-            )
+            .Filter(isVerified: true)
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)

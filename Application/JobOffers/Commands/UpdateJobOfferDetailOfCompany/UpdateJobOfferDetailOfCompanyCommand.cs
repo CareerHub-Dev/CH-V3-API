@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 
-public record UpdateJobOfferDetailOfCompanyCommand : IRequest
+public record UpdateJobOfferDetailOfCompanyCommand 
+    : IRequest
 {
     public Guid JobOfferId { get; init; }
 
@@ -31,16 +32,20 @@ public record UpdateJobOfferDetailOfCompanyCommand : IRequest
     public Guid CompanyId { get; init; }
 }
 
-public class UpdateJobOfferDetailOfCompanyCommandHandler : IRequestHandler<UpdateJobOfferDetailOfCompanyCommand>
+public class UpdateJobOfferDetailOfCompanyCommandHandler 
+    : IRequestHandler<UpdateJobOfferDetailOfCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateJobOfferDetailOfCompanyCommandHandler(IApplicationDbContext context)
+    public UpdateJobOfferDetailOfCompanyCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateJobOfferDetailOfCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        UpdateJobOfferDetailOfCompanyCommand request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Companies
             .AnyAsync(x => x.Id == request.CompanyId))
@@ -48,7 +53,8 @@ public class UpdateJobOfferDetailOfCompanyCommandHandler : IRequestHandler<Updat
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        if (!await _context.JobPositions.AnyAsync(x => x.Id == request.JobPositionId))
+        if (!await _context.JobPositions
+            .AnyAsync(x => x.Id == request.JobPositionId))
         {
             throw new NotFoundException(nameof(JobPosition), request.JobPositionId);
         }
@@ -56,8 +62,8 @@ public class UpdateJobOfferDetailOfCompanyCommandHandler : IRequestHandler<Updat
         var tags = await GetTagsAsync(request.TagIds);
 
         var jobOffer = await _context.JobOffers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.JobOfferId && x.CompanyId == request.CompanyId);
+            .Where(x => x.Id == request.JobOfferId && x.CompanyId == request.CompanyId)
+            .FirstOrDefaultAsync();
 
         if (jobOffer == null)
         {

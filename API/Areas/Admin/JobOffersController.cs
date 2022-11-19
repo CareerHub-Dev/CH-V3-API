@@ -5,7 +5,8 @@ using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOffer;
 using Application.JobOffers.Commands.UpdateJobOfferDetail;
 using Application.JobOffers.Commands.UpdateJobOfferImage;
-using Application.JobOffers.Queries.GetAmount;
+using Application.JobOffers.Queries.GetAmountAppliedCVsOfJobOffer;
+using Application.JobOffers.Queries.GetAmountStudentSubscribersOfJobOffer;
 using Application.JobOffers.Queries.GetJobOffer;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfJobOfferQuery
         {
             JobOfferId = jobOfferId
         }));
@@ -31,7 +32,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountAppliedCVsOfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Sender.Send(new GetAmountAppliedCVsOfJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountAppliedCVsOfJobOfferQuery
         {
             JobOfferId = jobOfferId
         }));
@@ -42,7 +43,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetJobOffer(Guid jobOfferId)
     {
-        return Ok(await Sender.Send(new GetJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetJobOfferQuery
         {
             JobOfferId = jobOfferId
         }));

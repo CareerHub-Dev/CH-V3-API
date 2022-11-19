@@ -6,22 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.DeleteJobOffer;
 
-public record DeleteJobOfferCommand(Guid JobOfferId) : IRequest;
+public record DeleteJobOfferCommand(Guid JobOfferId) 
+    : IRequest;
 
-public class DeleteJobOfferCommandHandler : IRequestHandler<DeleteJobOfferCommand>
+public class DeleteJobOfferCommandHandler 
+    : IRequestHandler<DeleteJobOfferCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public DeleteJobOfferCommandHandler(IApplicationDbContext context)
+    public DeleteJobOfferCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(DeleteJobOfferCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        DeleteJobOfferCommand request, 
+        CancellationToken cancellationToken)
     {
         var jobOffer = await _context.JobOffers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.JobOfferId);
+            .Where(x => x.Id == request.JobOfferId)
+            .FirstOrDefaultAsync();
 
         if (jobOffer == null)
         {

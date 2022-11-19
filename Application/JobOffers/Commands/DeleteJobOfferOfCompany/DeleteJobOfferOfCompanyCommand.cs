@@ -6,18 +6,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.DeleteJobOfferOfCompany;
 
-public record DeleteJobOfferOfCompanyCommand(Guid JobOfferId, Guid CompanyId) : IRequest;
+public record DeleteJobOfferOfCompanyCommand(Guid JobOfferId, Guid CompanyId) 
+    : IRequest;
 
-public class DeleteJobOfferOfCompanyCommandHandler : IRequestHandler<DeleteJobOfferOfCompanyCommand>
+public class DeleteJobOfferOfCompanyCommandHandler 
+    : IRequestHandler<DeleteJobOfferOfCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public DeleteJobOfferOfCompanyCommandHandler(IApplicationDbContext context)
+    public DeleteJobOfferOfCompanyCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(DeleteJobOfferOfCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        DeleteJobOfferOfCompanyCommand request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Companies
             .AnyAsync(x => x.Id == request.CompanyId))
@@ -26,8 +31,8 @@ public class DeleteJobOfferOfCompanyCommandHandler : IRequestHandler<DeleteJobOf
         }
 
         var jobOffer = await _context.JobOffers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.JobOfferId && x.CompanyId == request.CompanyId);
+            .Where(x => x.Id == request.JobOfferId && x.CompanyId == request.CompanyId)
+            .FirstOrDefaultAsync();
 
         if (jobOffer == null)
         {

@@ -5,28 +5,32 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.JobOffers.Queries.GetAmount;
+namespace Application.JobOffers.Queries.GetAmountStudentSubscribersOfJobOffer;
 
-public record GetAmountAppliedCVsOfJobOfferWithFilterQuery : IRequest<int>
+public record GetAmountStudentSubscribersOfJobOfferQuery 
+    : IRequest<int>
 {
     public Guid JobOfferId { get; set; }
     public bool? IsJobOfferMustBeActive { get; init; }
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
 
-    public bool? IsStudentOfAppliedCVMustBeVerified { get; init; }
+    public bool? IsSubscriberMustBeVerified { get; init; }
 }
 
-public class GetAmountAppliedCVsOfJobOfferWithFilterQueryHandler
-    : IRequestHandler<GetAmountAppliedCVsOfJobOfferWithFilterQuery, int>
+public class GetAmountStudentSubscribersOfJobOfferQueryHandler
+    : IRequestHandler<GetAmountStudentSubscribersOfJobOfferQuery, int>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetAmountAppliedCVsOfJobOfferWithFilterQueryHandler(IApplicationDbContext context)
+    public GetAmountStudentSubscribersOfJobOfferQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<int> Handle(GetAmountAppliedCVsOfJobOfferWithFilterQuery request, CancellationToken cancellationToken)
+    public async Task<int> Handle(
+        GetAmountStudentSubscribersOfJobOfferQuery request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.JobOffers
             .Filter(
@@ -40,10 +44,8 @@ public class GetAmountAppliedCVsOfJobOfferWithFilterQueryHandler
 
         return await _context.JobOffers
             .Where(x => x.Id == request.JobOfferId)
-            .SelectMany(x => x.AppliedCVs)
-            .Filter(
-                isStudentVerified: request.IsStudentOfAppliedCVMustBeVerified
-            )
+            .SelectMany(x => x.SubscribedStudents)
+            .Filter(isVerified: request.IsSubscriberMustBeVerified)
             .CountAsync();
     }
 }

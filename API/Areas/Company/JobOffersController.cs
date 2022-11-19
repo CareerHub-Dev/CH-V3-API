@@ -6,8 +6,9 @@ using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOfferOfCompany;
 using Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 using Application.JobOffers.Commands.UpdateJobOfferImageOfCompany;
-using Application.JobOffers.Queries.GetAmount;
-using Application.JobOffers.Queries.GetJobOffer;
+using Application.JobOffers.Queries.GetAmountAppliedCVsOfCompanyJobOffer;
+using Application.JobOffers.Queries.GetAmountStudentSubscribersOfCompanyJobOffer;
+using Application.JobOffers.Queries.GetJobOfferOfCompany;
 using Application.JobOffers.Queries.GetJobOffersOfCompany;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -70,7 +71,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfSelfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyJobOfferQuery
         {
             JobOfferId = jobOfferId,
             CompanyId = AccountInfo!.Id,
@@ -84,7 +85,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountAppliedCVsOfSelfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Sender.Send(new GetAmountAppliedCVsOfCompanyJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountAppliedCVsOfCompanyJobOfferQuery
         {
             JobOfferId = jobOfferId,
             CompanyId = AccountInfo!.Id,
@@ -98,7 +99,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetJobOffer(Guid jobOfferId)
     {
-        return Ok(await Sender.Send(new GetJobOfferOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetJobOfferOfCompanyQuery
         {
             JobOfferId = jobOfferId,
             CompanyId = AccountInfo!.Id

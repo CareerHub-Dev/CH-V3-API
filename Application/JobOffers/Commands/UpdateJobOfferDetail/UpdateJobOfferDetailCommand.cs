@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.UpdateJobOfferDetail;
 
-public record UpdateJobOfferDetailCommand : IRequest
+public record UpdateJobOfferDetailCommand 
+    : IRequest
 {
     public Guid JobOfferId { get; init; }
 
@@ -29,18 +30,23 @@ public record UpdateJobOfferDetailCommand : IRequest
     public List<Guid> TagIds { get; init; } = new List<Guid>();
 }
 
-public class UpdateJobOfferDetailCommandHandler : IRequestHandler<UpdateJobOfferDetailCommand>
+public class UpdateJobOfferDetailCommandHandler 
+    : IRequestHandler<UpdateJobOfferDetailCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateJobOfferDetailCommandHandler(IApplicationDbContext context)
+    public UpdateJobOfferDetailCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateJobOfferDetailCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        UpdateJobOfferDetailCommand request, 
+        CancellationToken cancellationToken)
     {
-        if (!await _context.JobPositions.AnyAsync(x => x.Id == request.JobPositionId))
+        if (!await _context.JobPositions
+            .AnyAsync(x => x.Id == request.JobPositionId))
         {
             throw new NotFoundException(nameof(JobPosition), request.JobPositionId);
         }
@@ -48,8 +54,8 @@ public class UpdateJobOfferDetailCommandHandler : IRequestHandler<UpdateJobOffer
         var tags = await GetTagsAsync(request.TagIds);
 
         var jobOffer = await _context.JobOffers
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == request.JobOfferId);
+            .Where(x => x.Id == request.JobOfferId)
+            .FirstOrDefaultAsync();
 
         if (jobOffer == null)
         {

@@ -5,31 +5,34 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.JobOffers.Commands.VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompany;
+namespace Application.JobOffers.Commands.VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompany;
 
-public record VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompanyCommand : IRequest
+public record VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommand 
+    : IRequest
 {
     public Guid StudentId { get; init; }
     public Guid JobOfferId { get; init; }
 }
 
-public class VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompanyCommandHandler
-    : IRequestHandler<VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompanyCommand>
+public class VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommandHandler
+    : IRequestHandler<VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompanyCommandHandler(IApplicationDbContext context)
+    public VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompanyCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommand request, 
+        CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Filter(
-                isVerified: true
-            )
-            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
+            .Filter(isVerified: true)
+            .Where(x => x.Id == request.StudentId)
+            .FirstOrDefaultAsync();
 
         if (student == null)
         {

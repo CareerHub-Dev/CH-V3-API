@@ -5,33 +5,34 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.JobOffers.Commands.VerifiedStudentUnubscribeFromActiveJobOffer;
+namespace Application.JobOffers.Commands.VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompany;
 
-public record VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiveCompanyCommand : IRequest
+public record VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompanyCommand 
+    : IRequest
 {
     public Guid StudentId { get; init; }
     public Guid JobOfferId { get; init; }
 }
 
-public class VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiveCompanyCommandHandler
-    : IRequestHandler<VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiveCompanyCommand>
+public class VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompanyCommandHandler
+    : IRequestHandler<VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiveCompanyCommandHandler(IApplicationDbContext context)
+    public VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompanyCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<Unit> Handle(
-        VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiveCompanyCommand request,
+        VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompanyCommand request,
         CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Filter(
-                isVerified: true
-            )
-            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
+            .Filter(isVerified: true)
+            .Where(x => x.Id == request.StudentId)
+            .FirstOrDefaultAsync();
 
         if (student == null)
         {
