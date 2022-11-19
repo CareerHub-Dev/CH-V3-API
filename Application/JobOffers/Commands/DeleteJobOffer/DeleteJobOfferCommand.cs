@@ -25,8 +25,7 @@ public class DeleteJobOfferCommandHandler
         CancellationToken cancellationToken)
     {
         var jobOffer = await _context.JobOffers
-            .Where(x => x.Id == request.JobOfferId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.JobOfferId);
 
         if (jobOffer == null)
         {

@@ -24,8 +24,7 @@ public class DeleteStudentGroupCommandHandler
         DeleteStudentGroupCommand request, CancellationToken cancellationToken)
     {
         var studentGroup = await _context.StudentGroups
-            .Where(x => x.Id == request.StudentGroupId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.StudentGroupId);
 
         if (studentGroup == null)
         {

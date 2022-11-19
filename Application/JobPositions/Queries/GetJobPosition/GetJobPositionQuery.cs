@@ -27,9 +27,8 @@ public class GetJobPositionQueryHandler
         CancellationToken cancellationToken)
     {
         var tag = await _context.JobPositions
-            .Where(x => x.Id == request.JobPositionId)
             .MapToJobPositionDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.JobPositionId);
 
         if (tag == null)
         {

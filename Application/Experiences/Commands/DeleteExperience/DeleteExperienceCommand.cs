@@ -25,8 +25,7 @@ public class DeleteExperienceCommandHandler
         CancellationToken cancellationToken)
     {
         var experience = await _context.Experiences
-            .Where(x => x.Id == request.ExperienceId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.ExperienceId);
 
         if (experience == null)
         {

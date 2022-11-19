@@ -32,8 +32,7 @@ public class UpdateStudentPhotoCommandHandler
         CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Where(x => x.Id == request.StudentId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
         {

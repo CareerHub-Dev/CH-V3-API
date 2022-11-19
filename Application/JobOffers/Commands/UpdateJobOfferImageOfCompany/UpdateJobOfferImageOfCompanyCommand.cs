@@ -41,8 +41,7 @@ public class UpdateJobOfferImageOfCompanyCommandHandler
         }
 
         var jobOffer = await _context.JobOffers
-            .Where(x => x.Id == request.JobofferId && x.CompanyId == request.CompanyId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.JobofferId && x.CompanyId == request.CompanyId);
 
         if (jobOffer == null)
         {

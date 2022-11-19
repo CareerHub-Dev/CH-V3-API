@@ -29,8 +29,7 @@ public class RevokeRefreshTokenCommandHandler
         CancellationToken cancellationToken)
     {
         var refreshToken = await _context.RefreshTokens
-            .Where(x => x.Token == request.Token)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(x => x.Token == request.Token);
 
         if (refreshToken == null)
         {

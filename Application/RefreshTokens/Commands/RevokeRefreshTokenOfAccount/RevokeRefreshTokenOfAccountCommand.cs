@@ -25,7 +25,9 @@ public class RevokeRefreshTokenOfAccountCommandHandler
         _сurrentRemoteIpAddressService = сurrentRemoteIpAddressService;
     }
 
-    public async Task<Unit> Handle(RevokeRefreshTokenOfAccountCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        RevokeRefreshTokenOfAccountCommand request, 
+        CancellationToken cancellationToken)
     {
         if (!await _context.Accounts
             .AnyAsync(x => x.Id == request.AccountId))
@@ -34,8 +36,7 @@ public class RevokeRefreshTokenOfAccountCommandHandler
         }
 
         var refreshToken = await _context.RefreshTokens
-            .Where(x => x.Token == request.Token && x.AccountId == request.AccountId)
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(x => x.Token == request.Token && x.AccountId == request.AccountId);
 
         if (refreshToken == null)
         {

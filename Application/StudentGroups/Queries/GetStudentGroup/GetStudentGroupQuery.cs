@@ -27,9 +27,8 @@ public class GetStudentGroupQueryHandler
         CancellationToken cancellationToken)
     {
         var studentGroup = await _context.StudentGroups
-            .Where(x => x.Id == request.StudentGroupId)
             .MapToStudentGroupDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.StudentGroupId);
 
         if (studentGroup == null)
         {

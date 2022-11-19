@@ -32,10 +32,9 @@ public class GetExperienceQueryHandler
         CancellationToken cancellationToken)
     {
         var experience = await _context.Experiences
-            .Where(x => x.Id == request.ExperienceId)
             .Filter(isStudentVerified: request.IsStudentMustBeVerified)
             .MapToExperienceDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.ExperienceId);
 
         if (experience == null)
         {

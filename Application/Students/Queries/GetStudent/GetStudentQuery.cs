@@ -30,10 +30,9 @@ public class GetStudentQueryHandler
         CancellationToken cancellationToken)
     {
         var student = await _context.Students
-            .Where(x => x.Id == request.StudentId)
             .Filter(isVerified: request.IsStudentMustBeVerified)
             .MapToStudentDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
         {

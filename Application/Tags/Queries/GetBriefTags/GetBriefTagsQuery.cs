@@ -12,12 +12,12 @@ public record GetBriefTagsQuery
     public string? SearchTerm { get; init; }
 }
 
-public class GetBriefTagsWithSearchQueryHandler
+public class GetBriefTagsQueryHandler
     : IRequestHandler<GetBriefTagsQuery, IEnumerable<BriefTagDTO>>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetBriefTagsWithSearchQueryHandler(
+    public GetBriefTagsQueryHandler(
         IApplicationDbContext context)
     {
         _context = context;

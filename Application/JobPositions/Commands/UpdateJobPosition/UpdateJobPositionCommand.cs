@@ -29,8 +29,7 @@ public class UpdateJobPositionCommandHandler
         CancellationToken cancellationToken)
     {
         var jobPosition = await _context.JobPositions
-            .Where(x => x.Id == request.JobPositionId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.JobPositionId);
 
         if (jobPosition == null)
         {

@@ -37,9 +37,8 @@ public class GetJobOfferQueryHandler
                 isActive: request.IsJobOfferMustBeActive,
                 isCompanyVerified: request.IsCompanyOfJobOfferMustBeVerified
             )
-            .Where(x => x.Id == request.JobOfferId)
             .MapToJobOfferDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.JobOfferId);
 
         if (jobOffer == null)
         {

@@ -34,21 +34,16 @@ public class GetJobOfferOfCompanyQueryHandler
         CancellationToken cancellationToken)
     {
         if (!await _context.Companies
-            .Filter(
-                isVerified: request.IsCompanyOfJobOfferMustBeVerified
-            )
+            .Filter(isVerified: request.IsCompanyOfJobOfferMustBeVerified)
             .AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
         var jobOffer = await _context.JobOffers
-            .Filter(
-                isActive: request.IsJobOfferMustBeActive
-            )
-            .Where(x => x.Id == request.JobOfferId && x.CompanyId == request.CompanyId)
+            .Filter(isActive: request.IsJobOfferMustBeActive)
             .MapToJobOfferDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.JobOfferId && x.Company.Id == request.CompanyId);
 
         if (jobOffer == null)
         {

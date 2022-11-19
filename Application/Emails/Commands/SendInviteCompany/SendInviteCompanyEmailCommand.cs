@@ -31,8 +31,7 @@ public class SendInviteCompanyEmailCommandHandler
         CancellationToken cancellationToken)
     {
         var company = await _context.Companies
-            .Where(x => x.Id == request.CompanyId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (company == null)
         {

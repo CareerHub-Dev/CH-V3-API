@@ -2,7 +2,8 @@
 
 namespace Application.Students.Queries.GetStudents;
 
-public class GetStudentsWithPagingQueryValidator : AbstractValidator<GetStudentsWithPagingQuery>
+public class GetStudentsWithPagingQueryValidator 
+    : AbstractValidator<GetStudentsWithPagingQuery>
 {
     public GetStudentsWithPagingQueryValidator()
     {

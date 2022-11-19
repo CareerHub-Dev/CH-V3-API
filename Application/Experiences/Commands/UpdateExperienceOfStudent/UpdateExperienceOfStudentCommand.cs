@@ -45,8 +45,7 @@ public class UpdateExperienceOfStudentCommandHandler
         }
 
         var experience = await _context.Experiences
-            .Where(x => x.Id == request.ExperienceId && x.StudentId == request.StudentId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.ExperienceId && x.StudentId == request.StudentId);
 
         if (experience == null)
         {

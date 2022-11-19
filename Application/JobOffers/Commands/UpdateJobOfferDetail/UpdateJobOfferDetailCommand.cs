@@ -54,8 +54,7 @@ public class UpdateJobOfferDetailCommandHandler
         var tags = await GetTagsAsync(request.TagIds);
 
         var jobOffer = await _context.JobOffers
-            .Where(x => x.Id == request.JobOfferId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.JobOfferId);
 
         if (jobOffer == null)
         {

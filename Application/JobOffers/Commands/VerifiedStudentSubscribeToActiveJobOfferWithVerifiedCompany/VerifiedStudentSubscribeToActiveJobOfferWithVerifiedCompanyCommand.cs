@@ -31,8 +31,7 @@ public class VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommandH
     {
         var student = await _context.Students
             .Filter(isVerified: true)
-            .Where(x => x.Id == request.StudentId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
         {

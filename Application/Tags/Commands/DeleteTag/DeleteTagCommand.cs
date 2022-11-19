@@ -25,8 +25,7 @@ public class DeleteTagCommandHandler
         CancellationToken cancellationToken)
     {
         var tag = await _context.Tags
-            .Where(x => x.Id == request.TagId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.TagId);
 
         if (tag == null)
         {

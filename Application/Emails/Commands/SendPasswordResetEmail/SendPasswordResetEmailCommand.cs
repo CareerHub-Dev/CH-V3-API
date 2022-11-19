@@ -35,8 +35,7 @@ public class SendPasswordResetEmailCommandHandler
         CancellationToken cancellationToken)
     {
         var account = await _context.Accounts
-            .Where(x => x.NormalizedEmail == request.Email.NormalizeName())
-            .SingleOrDefaultAsync();
+            .SingleOrDefaultAsync(x => x.NormalizedEmail == request.Email.NormalizeName());
 
         if (account == null)
         {

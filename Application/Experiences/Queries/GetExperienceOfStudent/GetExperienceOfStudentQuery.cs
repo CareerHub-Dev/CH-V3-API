@@ -39,17 +39,15 @@ public class GetExperienceOfStudentQueryHandler
             throw new NotFoundException(nameof(Company), request.StudentId);
         }
 
-        var companyLink = await _context.Experiences
-            .AsNoTracking()
-            .Where(x => x.Id == request.ExperienceId && x.StudentId == request.StudentId)
+        var experience = await _context.Experiences
             .MapToExperienceDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.ExperienceId && x.StudentId == request.StudentId);
 
-        if (companyLink == null)
+        if (experience == null)
         {
             throw new NotFoundException(nameof(CompanyLink), request.ExperienceId);
         }
 
-        return companyLink;
+        return experience;
     }
 }

@@ -27,9 +27,8 @@ public class GetBriefJobPositionQueryHandler
         CancellationToken cancellationToken)
     {
         var tag = await _context.JobPositions
-            .Where(x => x.Id == request.JobPositionId)
             .MapToBriefJobPositionDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.JobPositionId);
 
         if (tag == null)
         {

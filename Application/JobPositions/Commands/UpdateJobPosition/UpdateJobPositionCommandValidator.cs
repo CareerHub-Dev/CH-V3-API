@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobPositions.Commands.UpdateJobPosition;
 
-public class UpdateJobPositionCommandValidator : AbstractValidator<UpdateJobPositionCommand>
+public class UpdateJobPositionCommandValidator 
+    : AbstractValidator<UpdateJobPositionCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateJobPositionCommandValidator(IApplicationDbContext context)
+    public UpdateJobPositionCommandValidator(
+        IApplicationDbContext context)
     {
         _context = context;
 
@@ -19,7 +21,10 @@ public class UpdateJobPositionCommandValidator : AbstractValidator<UpdateJobPosi
             .MustAsync(BeUniqueName).WithMessage("The specified name already exists.");
     }
 
-    private async Task<bool> BeUniqueName(UpdateJobPositionCommand model, string name, CancellationToken cancellationToken)
+    private async Task<bool> BeUniqueName(
+        UpdateJobPositionCommand model, 
+        string name, 
+        CancellationToken cancellationToken)
     {
         return !await _context.JobPositions
             .Where(x => x.Id != model.JobPositionId)

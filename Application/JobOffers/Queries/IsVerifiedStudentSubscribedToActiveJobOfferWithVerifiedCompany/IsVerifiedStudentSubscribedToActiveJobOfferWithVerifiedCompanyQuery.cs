@@ -39,7 +39,7 @@ public class IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompanyQuery
         }
 
         var joboffer = await _context.JobOffers
-             .Include(x => x.SubscribedStudents.Where(x => x.Id == request.StudentId))
+             .Include(x => x.SubscribedStudents)
              .Filter(
                  isActive: true,
                  isCompanyVerified: true
@@ -51,6 +51,6 @@ public class IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompanyQuery
             throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
         }
 
-        return joboffer.SubscribedStudents.Any();
+        return joboffer.SubscribedStudents.Any(x => x.Id == request.StudentId);
     }
 }

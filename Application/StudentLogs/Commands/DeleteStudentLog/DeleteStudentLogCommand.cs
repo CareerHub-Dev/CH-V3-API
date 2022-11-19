@@ -25,8 +25,7 @@ public class DeleteStudentLogCommandHandler
         CancellationToken cancellationToken)
     {
         var studentLog = await _context.StudentLogs
-            .Where(x => x.Id == request.StudentLogId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.StudentLogId);
 
         if (studentLog == null)
         {

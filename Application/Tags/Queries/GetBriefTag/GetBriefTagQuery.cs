@@ -27,9 +27,8 @@ public class GetBriefTagQueryHandler
         CancellationToken cancellationToken)
     {
         var tag = await _context.Tags
-            .Where(x => x.Id == request.TagId)
             .MapToBriefTagDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.TagId);
 
         if (tag == null)
         {

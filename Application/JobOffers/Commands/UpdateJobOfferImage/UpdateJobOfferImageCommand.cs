@@ -33,8 +33,7 @@ public class UpdateJobOfferImageCommandHandler
         CancellationToken cancellationToken)
     {
         var jobOffer = await _context.JobOffers
-            .Where(x => x.Id == request.JobofferId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.JobofferId);
 
         if (jobOffer == null)
         {

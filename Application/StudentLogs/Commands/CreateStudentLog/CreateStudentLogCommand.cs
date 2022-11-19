@@ -30,8 +30,7 @@ public class CreateStudentLogCommandHandler
         CreateStudentLogCommand request,
         CancellationToken cancellationToken)
     {
-        if (!await _context
-            .StudentGroups
+        if (!await _context.StudentGroups
             .AnyAsync(x => x.Id == request.StudentGroupId))
         {
             throw new NotFoundException(nameof(StudentGroup), request.StudentGroupId);
