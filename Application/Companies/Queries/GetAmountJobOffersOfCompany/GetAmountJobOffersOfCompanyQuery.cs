@@ -28,7 +28,7 @@ public class GetAmountJobOffersOfCompanyWithFilterQueryHandler
     }
 
     public async Task<int> Handle(
-        GetAmountJobOffersOfCompanyQuery request, 
+        GetAmountJobOffersOfCompanyQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Companies

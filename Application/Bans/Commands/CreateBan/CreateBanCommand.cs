@@ -16,14 +16,14 @@ public record CreateBanCommand
     public DateTime Expires { get; init; }
 }
 
-public class CreateBanCommandHandler 
+public class CreateBanCommandHandler
     : IRequestHandler<CreateBanCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
     private readonly IAccountHelper _accountHelper;
 
     public CreateBanCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IAccountHelper accountHelper)
     {
         _context = context;
@@ -31,14 +31,13 @@ public class CreateBanCommandHandler
     }
 
     public async Task<Guid> Handle(
-        CreateBanCommand request, 
+        CreateBanCommand request,
         CancellationToken cancellationToken)
     {
         var account = await _context.Accounts
            .AsNoTracking()
            .Filter(isVerified: true)
-           .Where(x => x.Id == request.AccountId)
-           .FirstOrDefaultAsync();
+           .FirstOrDefaultAsync(x => x.Id == request.AccountId);
 
         if (account == null)
         {

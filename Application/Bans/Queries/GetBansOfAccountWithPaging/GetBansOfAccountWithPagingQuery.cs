@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Bans.Queries.GetBansOfAccount;
 
-public record GetBansOfAccountWithPagingQuery 
+public record GetBansOfAccountWithPagingQuery
     : IRequest<PaginatedList<BanDTO>>
 {
     public Guid AccountId { get; init; }
@@ -20,7 +20,7 @@ public record GetBansOfAccountWithPagingQuery
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetBansOfAccountWithPagingQueryHandler 
+public class GetBansOfAccountWithPagingQueryHandler
     : IRequestHandler<GetBansOfAccountWithPagingQuery, PaginatedList<BanDTO>>
 {
     private readonly IApplicationDbContext _context;
@@ -32,7 +32,7 @@ public class GetBansOfAccountWithPagingQueryHandler
     }
 
     public async Task<PaginatedList<BanDTO>> Handle(
-        GetBansOfAccountWithPagingQuery request, 
+        GetBansOfAccountWithPagingQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Accounts

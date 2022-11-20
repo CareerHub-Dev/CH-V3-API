@@ -21,7 +21,7 @@ public class UpdateCompanyBannerCommandHandler
     private readonly IImagesService _imagesService;
 
     public UpdateCompanyBannerCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IImagesService imagesService)
     {
         _context = context;
@@ -29,12 +29,11 @@ public class UpdateCompanyBannerCommandHandler
     }
 
     public async Task<string?> Handle(
-        UpdateCompanyBannerCommand request, 
+        UpdateCompanyBannerCommand request,
         CancellationToken cancellationToken)
     {
         var company = await _context.Companies
-            .Where(x => x.Id == request.CompanyId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (company == null)
         {

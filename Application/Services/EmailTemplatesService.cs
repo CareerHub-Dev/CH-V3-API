@@ -3,13 +3,13 @@ using System.IO.Abstractions;
 
 namespace Application.Services;
 
-public class EmailTemplatesService 
+public class EmailTemplatesService
     : IEmailTemplatesService
 {
     private readonly IPathService _pathService;
     private readonly IFileSystem _fileSystem;
     public EmailTemplatesService(
-        IPathService pathService, 
+        IPathService pathService,
         IFileSystem fileSystem)
     {
         _pathService = pathService;
@@ -17,11 +17,11 @@ public class EmailTemplatesService
     }
 
     public async Task<string> ReadTemplateAsync(
-        string templateName, 
+        string templateName,
         CancellationToken cancellationToken = default)
     {
         var templatePath = Path.Combine(
-            _pathService.GetWebRootPath, 
+            _pathService.GetWebRootPath,
             _pathService.GetEmailTemplateRoute(templateName));
 
         if (!_fileSystem.File.Exists(templatePath))

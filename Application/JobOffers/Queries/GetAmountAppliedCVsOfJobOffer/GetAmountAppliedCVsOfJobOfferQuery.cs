@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Queries.GetAmountAppliedCVsOfJobOffer;
 
-public record GetAmountAppliedCVsOfJobOfferQuery 
+public record GetAmountAppliedCVsOfJobOfferQuery
     : IRequest<int>
 {
     public Guid JobOfferId { get; set; }
@@ -29,7 +29,7 @@ public class GetAmountAppliedCVsOfJobOfferQueryHandler
     }
 
     public async Task<int> Handle(
-        GetAmountAppliedCVsOfJobOfferQuery request, 
+        GetAmountAppliedCVsOfJobOfferQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.JobOffers

@@ -11,7 +11,7 @@ public class GetLanguageLevelsQueryHandler
     : IRequestHandler<GetLanguageLevelsQuery, IEnumerable<EnumDTO>>
 {
     public Task<IEnumerable<EnumDTO>> Handle(
-        GetLanguageLevelsQuery request, 
+        GetLanguageLevelsQuery request,
         CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<LanguageLevel>()

@@ -17,7 +17,7 @@ public class DeleteAdminCommandHandler
     private readonly IAccountHelper _accountHelper;
 
     public DeleteAdminCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IAccountHelper accountHelper)
     {
         _context = context;
@@ -25,12 +25,11 @@ public class DeleteAdminCommandHandler
     }
 
     public async Task<Unit> Handle(
-        DeleteAdminCommand request, 
+        DeleteAdminCommand request,
         CancellationToken cancellationToken)
     {
         var admin = await _context.Admins
-            .Where(x => x.Id == request.AdminId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.AdminId);
 
         if (admin == null)
         {

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Queries.GetAmountStudentSubscribersOfJobOffer;
 
-public record GetAmountStudentSubscribersOfJobOfferQuery 
+public record GetAmountStudentSubscribersOfJobOfferQuery
     : IRequest<int>
 {
     public Guid JobOfferId { get; set; }
@@ -29,7 +29,7 @@ public class GetAmountStudentSubscribersOfJobOfferQueryHandler
     }
 
     public async Task<int> Handle(
-        GetAmountStudentSubscribersOfJobOfferQuery request, 
+        GetAmountStudentSubscribersOfJobOfferQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.JobOffers

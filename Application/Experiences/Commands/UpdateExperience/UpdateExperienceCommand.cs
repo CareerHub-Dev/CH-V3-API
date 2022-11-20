@@ -33,7 +33,7 @@ public class UpdateExperienceCommandHandler
     }
 
     public async Task<Unit> Handle(
-        UpdateExperienceCommand request, 
+        UpdateExperienceCommand request,
         CancellationToken cancellationToken)
     {
         var experience = await _context.Experiences

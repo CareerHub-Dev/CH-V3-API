@@ -26,13 +26,12 @@ public class VerifiedStudentSubscribeToVerifiedCompanyCommandHandler
     }
 
     public async Task<Unit> Handle(
-        VerifiedStudentSubscribeToVerifiedCompanyCommand request, 
+        VerifiedStudentSubscribeToVerifiedCompanyCommand request,
         CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .Filter(isVerified: true)
-            .Where(x => x.Id == request.StudentId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.StudentId);
 
         if (student == null)
         {
@@ -42,8 +41,7 @@ public class VerifiedStudentSubscribeToVerifiedCompanyCommandHandler
         var company = await _context.Companies
             .Include(x => x.SubscribedStudents)
             .Filter(isVerified: true)
-            .Where(x => x.Id == request.CompanyId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (company == null)
         {

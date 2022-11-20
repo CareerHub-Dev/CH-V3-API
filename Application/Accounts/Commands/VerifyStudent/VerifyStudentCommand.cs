@@ -6,12 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Accounts.Commands.VerifyStudent;
 
-public record VerifyStudentCommand : IRequest
+public record VerifyStudentCommand
+    : IRequest
 {
     public string Token { get; init; } = string.Empty;
 }
 
-public class VerifyStudentCommandHandler : IRequestHandler<VerifyStudentCommand>
+public class VerifyStudentCommandHandler
+    : IRequestHandler<VerifyStudentCommand>
 {
     private readonly IApplicationDbContext _context;
 
@@ -20,7 +22,9 @@ public class VerifyStudentCommandHandler : IRequestHandler<VerifyStudentCommand>
         _context = context;
     }
 
-    public async Task<Unit> Handle(VerifyStudentCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        VerifyStudentCommand request,
+        CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .SingleOrDefaultAsync(x => x.VerificationToken == request.Token);

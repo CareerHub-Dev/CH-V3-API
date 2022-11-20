@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetAmountStudentSubscribersOfCompany;
 
-public record GetAmountStudentSubscribersOfCompanyQuery 
+public record GetAmountStudentSubscribersOfCompanyQuery
     : IRequest<int>
 {
     public Guid CompanyId { get; init; }
@@ -28,7 +28,7 @@ public class GetAmountSubscribersOfCompanyWithFilterQueryHandler
     }
 
     public async Task<int> Handle(
-        GetAmountStudentSubscribersOfCompanyQuery request, 
+        GetAmountStudentSubscribersOfCompanyQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Companies

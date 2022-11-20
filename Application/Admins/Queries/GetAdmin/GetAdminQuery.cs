@@ -26,9 +26,8 @@ public class GetAdminQueryHandler
         CancellationToken cancellationToken)
     {
         var admin = await _context.Admins
-            .Where(x => x.Id == request.AdminId)
             .MapToAdminDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.AdminId);
 
         if (admin == null)
         {

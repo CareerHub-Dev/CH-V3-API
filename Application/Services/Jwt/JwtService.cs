@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Application.Services.Jwt;
 
-public class JwtService 
+public class JwtService
     : IJwtService
 {
     private readonly IApplicationDbContext _context;
@@ -42,7 +42,7 @@ public class JwtService
             Subject = new ClaimsIdentity(new[] { new Claim("Id", accountId.ToString()) }),
             Expires = jwtToken.Expires,
             SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key), 
+                new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature)
         };
 
@@ -53,7 +53,7 @@ public class JwtService
     }
 
     public async Task<RefreshToken> GenerateRefreshTokenAsync(
-        string ipAddress, 
+        string ipAddress,
         CancellationToken cancellationToken = default)
     {
         var refreshToken = new RefreshToken
@@ -85,7 +85,7 @@ public class JwtService
         try
         {
             var result = await tokenHandler.ValidateTokenAsync(
-                token, 
+                token,
                 new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,

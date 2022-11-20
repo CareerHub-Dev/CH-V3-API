@@ -6,9 +6,9 @@ namespace Application.Helpers;
 public class RefreshTokenHelper : IRefreshTokenHelper
 {
     public void RevokeRefreshToken(
-        RefreshToken refreshToken, 
-        string ipAddress, 
-        string reason = "", 
+        RefreshToken refreshToken,
+        string ipAddress,
+        string reason = "",
         string replacedByToken = "")
     {
         refreshToken.Revoked = DateTime.UtcNow;
@@ -18,22 +18,27 @@ public class RefreshTokenHelper : IRefreshTokenHelper
     }
 
     public void RevokeDescendantRefreshTokens(
-        RefreshToken refreshToken, 
-        Account account, 
-        string ipAddress, 
+        RefreshToken refreshToken,
+        Account account,
+        string ipAddress,
         string reason)
     {
         // recursively traverse the refresh token chain and ensure all descendants are revoked
         if (!string.IsNullOrEmpty(refreshToken.ReplacedByToken))
         {
-            var childToken = account.RefreshTokens.Single(x => x.Token == refreshToken.ReplacedByToken);
-            if (childToken.IsActive)
+            var childToken = account.RefreshTokens
+                .SingleOrDefault(x => x.Token == refreshToken.ReplacedByToken);
+
+            if (childToken != null)
             {
-                RevokeRefreshToken(childToken, ipAddress, reason);
-            }
-            else
-            {
-                RevokeDescendantRefreshTokens(childToken, account, ipAddress, reason);
+                if (childToken.IsActive)
+                {
+                    RevokeRefreshToken(childToken, ipAddress, reason);
+                }
+                else
+                {
+                    RevokeDescendantRefreshTokens(childToken, account, ipAddress, reason);
+                }
             }
         }
     }

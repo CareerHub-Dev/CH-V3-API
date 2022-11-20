@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Bans.Commands.UpdateBan;
 
-public record UpdateBanCommand 
+public record UpdateBanCommand
     : IRequest
 {
     public Guid BanId { get; init; }
@@ -14,7 +14,7 @@ public record UpdateBanCommand
     public DateTime Expires { get; init; }
 }
 
-public class UpdateBanCommandHandler 
+public class UpdateBanCommandHandler
     : IRequestHandler<UpdateBanCommand>
 {
     private readonly IApplicationDbContext _context;
@@ -26,12 +26,11 @@ public class UpdateBanCommandHandler
     }
 
     public async Task<Unit> Handle(
-        UpdateBanCommand request, 
+        UpdateBanCommand request,
         CancellationToken cancellationToken)
     {
         var ban = await _context.Bans
-            .Where(x => x.Id == request.BanId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.BanId);
 
         if (ban == null)
         {

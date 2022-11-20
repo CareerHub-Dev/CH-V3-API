@@ -5,20 +5,20 @@ using MediatR;
 
 namespace Application.Admins.Commands.InviteAdmin;
 
-public record InviteAdminCommand 
+public record InviteAdminCommand
     : IRequest<Guid>
 {
     public string Email { get; init; } = string.Empty;
 }
 
-public class InviteAdminCommandHandler 
+public class InviteAdminCommandHandler
     : IRequestHandler<InviteAdminCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
     private readonly IPublisher _publisher;
 
     public InviteAdminCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IPublisher publisher)
     {
         _context = context;
@@ -26,7 +26,7 @@ public class InviteAdminCommandHandler
     }
 
     public async Task<Guid> Handle(
-        InviteAdminCommand request, 
+        InviteAdminCommand request,
         CancellationToken cancellationToken)
     {
         var admin = new Admin

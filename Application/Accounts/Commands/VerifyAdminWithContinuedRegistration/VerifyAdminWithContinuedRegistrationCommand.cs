@@ -7,24 +7,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
 
-public record VerifyAdminWithContinuedRegistrationCommand : IRequest
+public record VerifyAdminWithContinuedRegistrationCommand
+    : IRequest
 {
     public string Token { get; init; } = string.Empty;
     public string Password { get; init; } = string.Empty;
 }
 
-public class VerifyAdminWithContinuedRegistrationCommandHandler : IRequestHandler<VerifyAdminWithContinuedRegistrationCommand>
+public class VerifyAdminWithContinuedRegistrationCommandHandler
+    : IRequestHandler<VerifyAdminWithContinuedRegistrationCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly IPasswordHasher<Account> _passwordHasher;
 
-    public VerifyAdminWithContinuedRegistrationCommandHandler(IApplicationDbContext context, IPasswordHasher<Account> passwordHasher)
+    public VerifyAdminWithContinuedRegistrationCommandHandler(
+        IApplicationDbContext context,
+        IPasswordHasher<Account> passwordHasher)
     {
         _context = context;
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<Unit> Handle(VerifyAdminWithContinuedRegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        VerifyAdminWithContinuedRegistrationCommand request,
+        CancellationToken cancellationToken)
     {
         var admin = await _context.Admins
             .SingleOrDefaultAsync(x => x.VerificationToken == request.Token);

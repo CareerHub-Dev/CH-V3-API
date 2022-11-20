@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace Application.Services;
 
-public class EmailTemplateParserService 
+public class EmailTemplateParserService
     : IEmailTemplateParserService
 {
     private readonly ClientSettings _clientSettings;

@@ -21,7 +21,7 @@ namespace Application;
 public static class ConfigureServices
 {
     public static IServiceCollection AddApplicationServices(
-        this IServiceCollection services, 
+        this IServiceCollection services,
         IConfiguration configuration)
     {
         services.AddValidatorsFromAssembly(typeof(AuthenticateQuery).Assembly);

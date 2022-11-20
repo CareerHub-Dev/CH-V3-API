@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompany;
 
-public record VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompanyCommand 
+public record VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompanyCommand
     : IRequest
 {
     public Guid StudentId { get; init; }

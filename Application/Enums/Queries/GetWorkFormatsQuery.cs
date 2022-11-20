@@ -11,7 +11,7 @@ public class GetWorkFormatsQueryHandler
     : IRequestHandler<GetWorkFormatsQuery, IEnumerable<EnumDTO>>
 {
     public Task<IEnumerable<EnumDTO>> Handle(
-        GetWorkFormatsQuery request, 
+        GetWorkFormatsQuery request,
         CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<WorkFormat>()

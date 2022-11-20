@@ -39,7 +39,7 @@ public static class FluentValidationExtensions
     }
 
     public static IRuleBuilderOptions<T, IFormFile> AllowedExtensions<T>(
-        this IRuleBuilder<T, IFormFile> ruleBuilder, 
+        this IRuleBuilder<T, IFormFile> ruleBuilder,
         params string[] extensions)
     {
         return ruleBuilder

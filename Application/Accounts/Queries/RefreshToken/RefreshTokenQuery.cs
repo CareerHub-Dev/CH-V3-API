@@ -8,12 +8,14 @@ using RefreshTokenEntity = Domain.Entities.RefreshToken;
 
 namespace Application.Accounts.Queries.RefreshToken;
 
-public record RefreshTokenQuery : IRequest<RefreshTokenResult>
+public record RefreshTokenQuery
+    : IRequest<RefreshTokenResult>
 {
     public string Token { init; get; } = string.Empty;
 }
 
-public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, RefreshTokenResult>
+public class RefreshTokenQueryHandler
+    : IRequestHandler<RefreshTokenQuery, RefreshTokenResult>
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtService _jwtService;
@@ -35,11 +37,13 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
         _refreshTokenHelper = refreshTokenHelper;
     }
 
-    public async Task<RefreshTokenResult> Handle(RefreshTokenQuery request, CancellationToken cancellationToken)
+    public async Task<RefreshTokenResult> Handle(
+        RefreshTokenQuery request,
+        CancellationToken cancellationToken)
     {
         var account = await _context.Accounts
                 .Include(x => x.RefreshTokens)
-                .Include(x => x.Bans.OrderBy(x => x.Expires).Where(x => x.Expires >= DateTime.UtcNow))
+                .Include(x => x.Bans)
                 .Filter(isVerified: true)
                 .SingleOrDefaultAsync(x => x.RefreshTokens.Any(t => t.Token == request.Token));
 
@@ -48,19 +52,19 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
             throw new NotFoundException(nameof(Account), request.Token);
         }
 
-        if (account.Bans.Count != 0)
-        {
-            var ban = account.Bans.Last();
-
-            throw new BanException(ban.Reason, ban.Expires);
-        }
+        _accountHelper.ThrowIfBanned(account);
 
         var refreshToken = account.RefreshTokens.Single(x => x.Token == request.Token);
 
         if (refreshToken.IsRevoked)
         {
             // revoke all descendant tokens in case this token has been compromised
-            _refreshTokenHelper.RevokeDescendantRefreshTokens(refreshToken, account, _сurrentRemoteIpAddressService.IpAddress, $"Attempted reuse of revoked ancestor token: {request.Token}");
+            _refreshTokenHelper.RevokeDescendantRefreshTokens(
+                refreshToken,
+                account,
+                _сurrentRemoteIpAddressService.IpAddress,
+                $"Attempted reuse of revoked ancestor token: {request.Token}");
+
             await _context.SaveChangesAsync();
         }
 
@@ -73,7 +77,7 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
         var newRefreshToken = await RotateRefreshTokenAsync(refreshToken, _сurrentRemoteIpAddressService.IpAddress);
         account.RefreshTokens.Add(newRefreshToken);
 
-        _accountHelper.RemoveOldRefreshTokensOfAccount(account);
+        _accountHelper.RemoveOldRefreshTokens(account);
 
         // generate new jwt
         var jwtToken = _jwtService.GenerateJwtToken(account.Id);
@@ -91,10 +95,18 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Refre
         };
     }
 
-    private async Task<RefreshTokenEntity> RotateRefreshTokenAsync(RefreshTokenEntity refreshToken, string ipAddress)
+    private async Task<RefreshTokenEntity> RotateRefreshTokenAsync(
+        RefreshTokenEntity refreshToken,
+        string ipAddress)
     {
         var newRefreshToken = await _jwtService.GenerateRefreshTokenAsync(ipAddress);
-        _refreshTokenHelper.RevokeRefreshToken(refreshToken, ipAddress, "Replaced by new token", newRefreshToken.Token);
+
+        _refreshTokenHelper.RevokeRefreshToken(
+            refreshToken,
+            ipAddress,
+            "Replaced by new token",
+            newRefreshToken.Token);
+
         return newRefreshToken;
     }
 }

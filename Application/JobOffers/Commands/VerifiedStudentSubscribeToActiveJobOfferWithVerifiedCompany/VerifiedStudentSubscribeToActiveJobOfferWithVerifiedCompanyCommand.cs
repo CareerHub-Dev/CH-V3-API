@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompany;
 
-public record VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommand 
+public record VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommand
     : IRequest
 {
     public Guid StudentId { get; init; }
@@ -26,7 +26,7 @@ public class VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommandH
     }
 
     public async Task<Unit> Handle(
-        VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommand request, 
+        VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommand request,
         CancellationToken cancellationToken)
     {
         var student = await _context.Students

@@ -11,7 +11,7 @@ public class GetTemplateLanguagesQueryHandler
     : IRequestHandler<GetTemplateLanguagesQuery, IEnumerable<EnumDTO>>
 {
     public Task<IEnumerable<EnumDTO>> Handle(
-        GetTemplateLanguagesQuery request, 
+        GetTemplateLanguagesQuery request,
         CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<TemplateLanguage>()

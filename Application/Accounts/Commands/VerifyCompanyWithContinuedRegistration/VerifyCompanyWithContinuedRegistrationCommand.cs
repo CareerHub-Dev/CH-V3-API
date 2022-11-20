@@ -9,7 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 
-public record VerifyCompanyWithContinuedRegistrationCommand : IRequest
+public record VerifyCompanyWithContinuedRegistrationCommand
+    : IRequest
 {
     public string Token { get; init; } = string.Empty;
 
@@ -25,7 +26,8 @@ public record VerifyCompanyWithContinuedRegistrationCommand : IRequest
     public string Password { get; init; } = string.Empty;
 }
 
-public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHandler<VerifyCompanyWithContinuedRegistrationCommand>
+public class VerifyCompanyWithContinuedRegistrationCommandHandler
+    : IRequestHandler<VerifyCompanyWithContinuedRegistrationCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly IPasswordHasher<Account> _passwordHasher;
@@ -41,10 +43,12 @@ public class VerifyCompanyWithContinuedRegistrationCommandHandler : IRequestHand
         _imagesService = imagesService;
     }
 
-    public async Task<Unit> Handle(VerifyCompanyWithContinuedRegistrationCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        VerifyCompanyWithContinuedRegistrationCommand request,
+        CancellationToken cancellationToken)
     {
         var company = await _context.Companies
-                .SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
+            .SingleOrDefaultAsync(x => x.VerificationToken == request.Token);
 
         if (company == null)
         {

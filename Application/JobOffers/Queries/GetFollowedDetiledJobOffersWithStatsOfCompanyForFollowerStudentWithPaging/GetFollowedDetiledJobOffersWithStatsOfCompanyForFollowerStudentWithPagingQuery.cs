@@ -1,6 +1,4 @@
 ﻿using Application.Common.DTO.JobOffers;
-using Application.Common.DTO.JobPositions;
-using Application.Common.DTO.Tags;
 using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;

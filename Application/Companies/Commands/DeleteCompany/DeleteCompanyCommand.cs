@@ -21,12 +21,11 @@ public class DeleteCompanyCommandHandler
     }
 
     public async Task<Unit> Handle(
-        DeleteCompanyCommand request, 
+        DeleteCompanyCommand request,
         CancellationToken cancellationToken)
     {
         var company = await _context.Companies
-            .Where(x => x.Id == request.ComapnyId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.ComapnyId);
 
         if (company == null)
         {

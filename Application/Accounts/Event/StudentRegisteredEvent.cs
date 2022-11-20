@@ -4,7 +4,8 @@ using MediatR;
 
 namespace Application.Accounts.Event;
 
-public class StudentRegisteredEvent : INotification
+public class StudentRegisteredEvent
+    : INotification
 {
     public StudentRegisteredEvent(Student student)
     {
@@ -14,17 +15,21 @@ public class StudentRegisteredEvent : INotification
     public Student Student { get; }
 }
 
-public class StudentRegisteredEventHandler : INotificationHandler<StudentRegisteredEvent>
+public class StudentRegisteredEventHandler
+    : INotificationHandler<StudentRegisteredEvent>
 {
-    private readonly IMediator _mediator;
+    private readonly ISender _sender;
 
-    public StudentRegisteredEventHandler(IMediator mediator)
+    public StudentRegisteredEventHandler(
+        ISender sender)
     {
-        _mediator = mediator;
+        _sender = sender;
     }
 
-    public async Task Handle(StudentRegisteredEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(
+        StudentRegisteredEvent notification,
+        CancellationToken cancellationToken)
     {
-        await _mediator.Send(new SendVerifyStudentEmailCommand(notification.Student.Id));
+        await _sender.Send(new SendVerifyStudentEmailCommand(notification.Student.Id));
     }
 }

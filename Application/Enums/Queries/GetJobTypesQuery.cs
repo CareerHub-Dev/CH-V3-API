@@ -11,7 +11,7 @@ public class GetJobTypesQueryHandler
     : IRequestHandler<GetJobTypesQuery, IEnumerable<EnumDTO>>
 {
     public Task<IEnumerable<EnumDTO>> Handle(
-        GetJobTypesQuery request, 
+        GetJobTypesQuery request,
         CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<JobType>()

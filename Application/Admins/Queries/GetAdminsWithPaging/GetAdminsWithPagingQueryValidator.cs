@@ -2,7 +2,7 @@
 
 namespace Application.Admins.Queries.GetAdminsWithPaging;
 
-public class GetAdminsWithPagingQueryValidator 
+public class GetAdminsWithPagingQueryValidator
     : AbstractValidator<GetAdminsWithPagingQuery>
 {
     public GetAdminsWithPagingQueryValidator()

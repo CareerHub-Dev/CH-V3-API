@@ -123,6 +123,7 @@ public static class MapExtention
             Id = x.Id,
             Reason = x.Reason,
             Expires = x.Expires,
+            AccountId = x.AccountId
         });
     }
 
@@ -409,12 +410,12 @@ public static class MapExtention
             Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
             AmountSubscribers = x.SubscribedStudents.Count(x =>
                 !isSubscriberMustBeVerified.HasValue || (isSubscriberMustBeVerified.Value ?
-                    x.Verified != null || x.PasswordReset != null : 
+                    x.Verified != null || x.PasswordReset != null :
                     x.Verified == null && x.PasswordReset == null)
             ),
             AmountAppliedCVs = x.AppliedCVs.Count(x =>
                 !isStudentOfAppliedCVMustBeVerified.HasValue || (isStudentOfAppliedCVMustBeVerified.Value ?
-                    x.Student!.Verified != null || x.Student.PasswordReset != null : 
+                    x.Student!.Verified != null || x.Student.PasswordReset != null :
                     x.Student!.Verified == null && x.Student.PasswordReset == null)
             )
         });

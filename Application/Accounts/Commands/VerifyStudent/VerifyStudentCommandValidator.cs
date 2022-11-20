@@ -2,7 +2,8 @@
 
 namespace Application.Accounts.Commands.VerifyStudent;
 
-public class VerifyStudentCommandValidator : AbstractValidator<VerifyStudentCommand>
+public class VerifyStudentCommandValidator
+    : AbstractValidator<VerifyStudentCommand>
 {
     public VerifyStudentCommandValidator()
     {

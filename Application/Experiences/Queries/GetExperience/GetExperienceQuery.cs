@@ -28,7 +28,7 @@ public class GetExperienceQueryHandler
     }
 
     public async Task<ExperienceDTO> Handle(
-        GetExperienceQuery request, 
+        GetExperienceQuery request,
         CancellationToken cancellationToken)
     {
         var experience = await _context.Experiences

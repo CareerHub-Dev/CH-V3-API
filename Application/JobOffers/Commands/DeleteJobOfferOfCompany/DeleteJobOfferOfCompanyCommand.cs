@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.DeleteJobOfferOfCompany;
 
-public record DeleteJobOfferOfCompanyCommand(Guid JobOfferId, Guid CompanyId) 
+public record DeleteJobOfferOfCompanyCommand(Guid JobOfferId, Guid CompanyId)
     : IRequest;
 
-public class DeleteJobOfferOfCompanyCommandHandler 
+public class DeleteJobOfferOfCompanyCommandHandler
     : IRequestHandler<DeleteJobOfferOfCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
@@ -21,7 +21,7 @@ public class DeleteJobOfferOfCompanyCommandHandler
     }
 
     public async Task<Unit> Handle(
-        DeleteJobOfferOfCompanyCommand request, 
+        DeleteJobOfferOfCompanyCommand request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Companies

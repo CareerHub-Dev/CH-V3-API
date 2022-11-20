@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobPositions.Commands.UpdateJobPosition;
 
-public class UpdateJobPositionCommandValidator 
+public class UpdateJobPositionCommandValidator
     : AbstractValidator<UpdateJobPositionCommand>
 {
     private readonly IApplicationDbContext _context;
@@ -22,8 +22,8 @@ public class UpdateJobPositionCommandValidator
     }
 
     private async Task<bool> BeUniqueName(
-        UpdateJobPositionCommand model, 
-        string name, 
+        UpdateJobPositionCommand model,
+        string name,
         CancellationToken cancellationToken)
     {
         return !await _context.JobPositions

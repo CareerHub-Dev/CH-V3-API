@@ -33,7 +33,7 @@ public class GetExperiencesOfStudentWithPagingQueryHandler
     }
 
     public async Task<PaginatedList<ExperienceDTO>> Handle(
-        GetExperiencesOfStudentWithPagingQuery request, 
+        GetExperiencesOfStudentWithPagingQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Students

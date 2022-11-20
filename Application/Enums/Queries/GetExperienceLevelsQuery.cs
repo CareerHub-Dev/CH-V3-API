@@ -11,7 +11,7 @@ public class GetExperienceLevelsQueryHandler
     : IRequestHandler<GetExperienceLevelsQuery, IEnumerable<EnumDTO>>
 {
     public Task<IEnumerable<EnumDTO>> Handle(
-        GetExperienceLevelsQuery request, 
+        GetExperienceLevelsQuery request,
         CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<ExperienceLevel>()

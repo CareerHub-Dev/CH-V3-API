@@ -11,7 +11,7 @@ public class GetDegreesQueryHandler
     : IRequestHandler<GetDegreesQuery, IEnumerable<EnumDTO>>
 {
     public Task<IEnumerable<EnumDTO>> Handle(
-        GetDegreesQuery request, 
+        GetDegreesQuery request,
         CancellationToken cancellationToken)
     {
         var result = Enum.GetValues<Degree>()

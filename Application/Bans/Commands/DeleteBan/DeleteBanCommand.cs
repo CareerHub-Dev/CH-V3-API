@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Bans.Commands.DeleteBan;
 
-public record DeleteBanCommand(Guid BanId) 
+public record DeleteBanCommand(Guid BanId)
     : IRequest;
 
-public class DeleteBanCommandHandler 
+public class DeleteBanCommandHandler
     : IRequestHandler<DeleteBanCommand>
 {
     private readonly IApplicationDbContext _context;
@@ -21,12 +21,11 @@ public class DeleteBanCommandHandler
     }
 
     public async Task<Unit> Handle(
-        DeleteBanCommand request, 
+        DeleteBanCommand request,
         CancellationToken cancellationToken)
     {
         var ban = await _context.Bans
-            .Where(x => x.Id == request.BanId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.BanId);
 
         if (ban == null)
         {

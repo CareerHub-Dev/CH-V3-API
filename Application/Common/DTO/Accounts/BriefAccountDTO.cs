@@ -1,6 +1,6 @@
 ﻿using Application.Common.Enums;
 
-namespace Application.Accounts.Queries.GetBriefAccount;
+namespace Application.Common.DTO.Accounts;
 
 public class BriefAccountDTO
 {

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 
-public record UpdateJobOfferDetailOfCompanyCommand 
+public record UpdateJobOfferDetailOfCompanyCommand
     : IRequest
 {
     public Guid JobOfferId { get; init; }
@@ -32,7 +32,7 @@ public record UpdateJobOfferDetailOfCompanyCommand
     public Guid CompanyId { get; init; }
 }
 
-public class UpdateJobOfferDetailOfCompanyCommandHandler 
+public class UpdateJobOfferDetailOfCompanyCommandHandler
     : IRequestHandler<UpdateJobOfferDetailOfCompanyCommand>
 {
     private readonly IApplicationDbContext _context;
@@ -44,7 +44,7 @@ public class UpdateJobOfferDetailOfCompanyCommandHandler
     }
 
     public async Task<Unit> Handle(
-        UpdateJobOfferDetailOfCompanyCommand request, 
+        UpdateJobOfferDetailOfCompanyCommand request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Companies

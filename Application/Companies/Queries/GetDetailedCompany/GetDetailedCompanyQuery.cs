@@ -31,10 +31,9 @@ public class GetDetailedCompanyQueryHandler
         CancellationToken cancellationToken)
     {
         var company = await _context.Companies
-            .Where(x => x.Id == request.CompanyId)
             .Filter(isVerified: request.IsCompanyMustBeVerified)
             .MapToDetailedCompanyDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (company == null)
         {

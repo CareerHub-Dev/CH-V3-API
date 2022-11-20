@@ -6,7 +6,8 @@ using System.IO.Abstractions;
 
 namespace Application.BackgroundServices;
 
-public class RemoveOldImagesBackgroundService : BackgroundService
+public class RemoveOldImagesBackgroundService
+    : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly TimeSpan interval = TimeSpan.FromDays(30);

@@ -27,7 +27,7 @@ public class SendInviteCompanyEmailCommandHandler
     }
 
     public async Task<Unit> Handle(
-        SendInviteCompanyEmailCommand request, 
+        SendInviteCompanyEmailCommand request,
         CancellationToken cancellationToken)
     {
         var company = await _context.Companies

@@ -1,6 +1,7 @@
 ﻿using API.Authorize;
 using Application.Accounts.Queries.GetBriefAccount;
 using Application.Bans.Queries.GetBansOfAccount;
+using Application.Common.DTO.Accounts;
 using Application.Common.DTO.Bans;
 using Application.Common.Enums;
 using Microsoft.AspNetCore.Mvc;

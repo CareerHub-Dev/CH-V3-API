@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.JobOffers.Commands.UpdateJobOfferImage;
 
-public class UpdateJobOfferImageCommandValidator 
+public class UpdateJobOfferImageCommandValidator
     : AbstractValidator<UpdateJobOfferImageCommand>
 {
     public UpdateJobOfferImageCommandValidator()

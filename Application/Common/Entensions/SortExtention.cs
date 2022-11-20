@@ -28,10 +28,10 @@ public static class SortExtention
         }
 
         MethodCallExpression orderByCall = Expression.Call(
-            typeof(Queryable), 
-            orderByMethod, 
-            new Type[] { query.ElementType, ex.Type }, 
-            query.Expression, 
+            typeof(Queryable),
+            orderByMethod,
+            new Type[] { query.ElementType, ex.Type },
+            query.Expression,
             Expression.Quote(Expression.Lambda(ex, pe)));
 
         return (IQueryable<T>)query.Provider.CreateQuery(orderByCall);

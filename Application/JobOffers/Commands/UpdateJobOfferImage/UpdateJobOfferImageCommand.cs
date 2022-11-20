@@ -14,14 +14,14 @@ public record UpdateJobOfferImageCommand
     public IFormFile? Image { get; init; }
 }
 
-public class UpdateJobOfferImageCommandHandler 
+public class UpdateJobOfferImageCommandHandler
     : IRequestHandler<UpdateJobOfferImageCommand, string?>
 {
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;
 
     public UpdateJobOfferImageCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IImagesService imagesService)
     {
         _context = context;
@@ -29,7 +29,7 @@ public class UpdateJobOfferImageCommandHandler
     }
 
     public async Task<string?> Handle(
-        UpdateJobOfferImageCommand request, 
+        UpdateJobOfferImageCommand request,
         CancellationToken cancellationToken)
     {
         var jobOffer = await _context.JobOffers

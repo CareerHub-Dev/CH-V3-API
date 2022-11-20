@@ -36,7 +36,7 @@ public static class ConfigureServices
         services.AddEndpointsApiExplorer();
 
         // Customise default API behaviour
-        services.Configure<ApiBehaviorOptions>(options 
+        services.Configure<ApiBehaviorOptions>(options
             => options.SuppressModelStateInvalidFilter = true);
 
         services.AddProblemDetails();

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Queries.GetAmountAppliedCVsOfCompanyJobOffer;
 
-public record GetAmountAppliedCVsOfCompanyJobOfferQuery 
+public record GetAmountAppliedCVsOfCompanyJobOfferQuery
     : IRequest<int>
 {
     public Guid JobOfferId { get; set; }

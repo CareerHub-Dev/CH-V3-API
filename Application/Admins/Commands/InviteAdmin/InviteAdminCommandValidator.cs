@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Admins.Commands.InviteAdmin;
 
-public class InviteAdminCommandValidator 
+public class InviteAdminCommandValidator
     : AbstractValidator<InviteAdminCommand>
 {
     private readonly IApplicationDbContext _context;
@@ -23,7 +23,7 @@ public class InviteAdminCommandValidator
     }
 
     private async Task<bool> BeUniqueEmail(
-        string email, 
+        string email,
         CancellationToken cancellationToken)
     {
         var query = _context.Accounts.Select(x => x.NormalizedEmail)

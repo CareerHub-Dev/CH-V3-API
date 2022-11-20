@@ -2,7 +2,7 @@
 
 namespace Application.JobOffers.Commands.UpdateJobOfferDetail;
 
-public class UpdateJobOfferDetailCommandValidator 
+public class UpdateJobOfferDetailCommandValidator
     : AbstractValidator<UpdateJobOfferDetailCommand>
 {
     public UpdateJobOfferDetailCommandValidator()

@@ -27,7 +27,7 @@ public class CompanyInvitedEventHandler
     }
 
     public async Task Handle(
-        CompanyInvitedEvent notification, 
+        CompanyInvitedEvent notification,
         CancellationToken cancellationToken)
     {
         await _sender.Send(new SendInviteCompanyEmailCommand(notification.Company.Id));

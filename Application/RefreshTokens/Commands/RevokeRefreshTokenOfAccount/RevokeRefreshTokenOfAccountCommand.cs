@@ -26,7 +26,7 @@ public class RevokeRefreshTokenOfAccountCommandHandler
     }
 
     public async Task<Unit> Handle(
-        RevokeRefreshTokenOfAccountCommand request, 
+        RevokeRefreshTokenOfAccountCommand request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Accounts

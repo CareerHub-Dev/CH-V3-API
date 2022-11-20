@@ -34,7 +34,7 @@ public class CreateExperienceCommandHandler
     }
 
     public async Task<Guid> Handle(
-        CreateExperienceCommand request, 
+        CreateExperienceCommand request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Students

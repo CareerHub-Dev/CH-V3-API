@@ -2,7 +2,8 @@
 
 namespace Application.Accounts.Queries.Authenticate;
 
-public class AuthenticateQueryValidator : AbstractValidator<AuthenticateQuery>
+public class AuthenticateQueryValidator
+    : AbstractValidator<AuthenticateQuery>
 {
     public AuthenticateQueryValidator()
     {

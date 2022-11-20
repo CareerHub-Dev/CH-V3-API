@@ -4,14 +4,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Common.Behaviours;
 
-public class LoggingBehaviour<TRequest> 
+public class LoggingBehaviour<TRequest>
     : IRequestPreProcessor<TRequest> where TRequest : notnull
 {
     private readonly ILogger _logger;
     private readonly ICurrentAccountService _currentAccountService;
 
     public LoggingBehaviour(
-        ILogger<TRequest> logger, 
+        ILogger<TRequest> logger,
         ICurrentAccountService currentAccountService)
     {
         _logger = logger;
@@ -19,7 +19,7 @@ public class LoggingBehaviour<TRequest>
     }
 
     public Task Process(
-        TRequest request, 
+        TRequest request,
         CancellationToken cancellationToken)
     {
         var requestName = typeof(TRequest).Name;

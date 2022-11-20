@@ -2,7 +2,7 @@
 
 namespace Application.Bans.Commands.CreateBan;
 
-public class CreateBanCommandValidator 
+public class CreateBanCommandValidator
     : AbstractValidator<CreateBanCommand>
 {
     public CreateBanCommandValidator()

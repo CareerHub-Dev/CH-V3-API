@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Application.Common.Behaviours;
 
-public class PerformanceBehaviour<TRequest, TResponse> 
+public class PerformanceBehaviour<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
     private readonly Stopwatch _timer;
@@ -23,8 +23,8 @@ public class PerformanceBehaviour<TRequest, TResponse>
     }
 
     public async Task<TResponse> Handle(
-        TRequest request, 
-        RequestHandlerDelegate<TResponse> next, 
+        TRequest request,
+        RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
         _timer.Start();

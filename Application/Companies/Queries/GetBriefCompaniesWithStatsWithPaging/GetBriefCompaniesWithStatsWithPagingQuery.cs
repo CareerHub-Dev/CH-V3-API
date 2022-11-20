@@ -4,7 +4,6 @@ using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using Application.Companies.Queries.Models;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Queries.GetBriefCompaniesWithStatsWithPaginig;
 

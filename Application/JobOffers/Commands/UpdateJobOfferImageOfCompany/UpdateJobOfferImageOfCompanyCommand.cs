@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.UpdateJobOfferImageOfCompany;
 
-public record UpdateJobOfferImageOfCompanyCommand 
+public record UpdateJobOfferImageOfCompanyCommand
     : IRequest<string?>
 {
     public Guid JobofferId { get; init; }
@@ -16,14 +16,14 @@ public record UpdateJobOfferImageOfCompanyCommand
     public Guid CompanyId { get; init; }
 }
 
-public class UpdateJobOfferImageOfCompanyCommandHandler 
+public class UpdateJobOfferImageOfCompanyCommandHandler
     : IRequestHandler<UpdateJobOfferImageOfCompanyCommand, string?>
 {
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;
 
     public UpdateJobOfferImageOfCompanyCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IImagesService imagesService)
     {
         _context = context;
@@ -31,7 +31,7 @@ public class UpdateJobOfferImageOfCompanyCommandHandler
     }
 
     public async Task<string?> Handle(
-        UpdateJobOfferImageOfCompanyCommand request, 
+        UpdateJobOfferImageOfCompanyCommand request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Companies

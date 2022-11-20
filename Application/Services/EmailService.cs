@@ -32,8 +32,8 @@ public class EmailService : IEmailService
         template = _emailTemplateParserService.PrepareInviteAdminEmail(admin, template);
 
         await _mailKitService.SendAsync(
-            admin.NormalizedEmail, 
-            _emailTemplateSettings.InviteAdmin.Subject, 
+            admin.NormalizedEmail,
+            _emailTemplateSettings.InviteAdmin.Subject,
             template);
     }
 
@@ -45,8 +45,8 @@ public class EmailService : IEmailService
         template = _emailTemplateParserService.PrepareInviteCompanyEmail(company, template);
 
         await _mailKitService.SendAsync(
-            company.NormalizedEmail, 
-            _emailTemplateSettings.InviteCompany.Subject, 
+            company.NormalizedEmail,
+            _emailTemplateSettings.InviteCompany.Subject,
             template);
     }
 
@@ -58,8 +58,8 @@ public class EmailService : IEmailService
         template = _emailTemplateParserService.PreparePasswordResetEmail(account, template);
 
         await _mailKitService.SendAsync(
-            account.NormalizedEmail, 
-            _emailTemplateSettings.PasswordReset.Subject, 
+            account.NormalizedEmail,
+            _emailTemplateSettings.PasswordReset.Subject,
             template);
     }
 
@@ -71,8 +71,8 @@ public class EmailService : IEmailService
         template = _emailTemplateParserService.PrepareVerifyStudentEmail(student, template);
 
         await _mailKitService.SendAsync(
-            student.NormalizedEmail, 
-            _emailTemplateSettings.VerifyStudent.Subject, 
+            student.NormalizedEmail,
+            _emailTemplateSettings.VerifyStudent.Subject,
             template);
     }
 }

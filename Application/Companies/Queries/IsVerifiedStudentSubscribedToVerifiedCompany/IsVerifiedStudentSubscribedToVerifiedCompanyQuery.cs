@@ -40,7 +40,7 @@ public class IsVerifiedStudentSubscribedToVerifiedCompanyQueryHandler
 
         var company = await _context.Companies
             .Filter(isVerified: true)
-            .Include(x => x.SubscribedStudents.Where(x => x.Id == request.StudentId))
+            .Include(x => x.SubscribedStudents)
             .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (company == null)
@@ -48,6 +48,6 @@ public class IsVerifiedStudentSubscribedToVerifiedCompanyQueryHandler
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        return company.SubscribedStudents.Any();
+        return company.SubscribedStudents.Any(x => x.Id == request.StudentId);
     }
 }

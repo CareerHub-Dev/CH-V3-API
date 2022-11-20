@@ -14,7 +14,7 @@ public record UpdateCompanyLinksCommand
     public List<CompanyLinkDTO> Links { get; init; } = new List<CompanyLinkDTO>();
 }
 
-public class UpdateCompanyLinksCommandHandler 
+public class UpdateCompanyLinksCommandHandler
     : IRequestHandler<UpdateCompanyLinksCommand>
 {
     private readonly IApplicationDbContext _context;
@@ -26,12 +26,11 @@ public class UpdateCompanyLinksCommandHandler
     }
 
     public async Task<Unit> Handle(
-        UpdateCompanyLinksCommand request, 
+        UpdateCompanyLinksCommand request,
         CancellationToken cancellationToken)
     {
         var company = await _context.Companies
-            .Where(x => x.Id == request.CompanyId)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (company == null)
         {

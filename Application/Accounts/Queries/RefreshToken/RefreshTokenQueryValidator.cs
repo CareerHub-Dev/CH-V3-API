@@ -2,7 +2,8 @@
 
 namespace Application.Accounts.Queries.RefreshToken;
 
-public class RefreshTokenQueryValidator : AbstractValidator<RefreshTokenQuery>
+public class RefreshTokenQueryValidator
+    : AbstractValidator<RefreshTokenQuery>
 {
     public RefreshTokenQueryValidator()
     {

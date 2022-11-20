@@ -35,7 +35,7 @@ public class UpdateExperienceOfStudentCommandHandler
     }
 
     public async Task<Unit> Handle(
-        UpdateExperienceOfStudentCommand request, 
+        UpdateExperienceOfStudentCommand request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Students

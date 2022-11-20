@@ -6,8 +6,8 @@ namespace Application.Common.Entensions;
 public static class PaginationExtensions
 {
     public static PaginatedList<T> ToPagedList<T>(
-        this IEnumerable<T> source, 
-        int pageNumber, 
+        this IEnumerable<T> source,
+        int pageNumber,
         int pageSize)
     {
         var count = source.Count();
@@ -20,9 +20,9 @@ public static class PaginationExtensions
     }
 
     public static async Task<PaginatedList<T>> ToPagedListAsync<T>(
-        this IQueryable<T> source, 
-        int pageNumber, 
-        int pageSize, 
+        this IQueryable<T> source,
+        int pageNumber,
+        int pageSize,
         CancellationToken cancellationToken = default)
     {
         var count = await source.CountAsync(cancellationToken);

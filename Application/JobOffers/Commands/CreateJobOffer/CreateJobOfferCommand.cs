@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.CreateJobOffer;
 
-public record CreateJobOfferCommand 
+public record CreateJobOfferCommand
     : IRequest<Guid>
 {
     public string Title { init; get; } = string.Empty;
@@ -31,14 +31,14 @@ public record CreateJobOfferCommand
     public List<Guid> TagIds { get; init; } = new List<Guid>();
 }
 
-public class CreateJobOfferCommandHandler 
+public class CreateJobOfferCommandHandler
     : IRequestHandler<CreateJobOfferCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;
 
     public CreateJobOfferCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IImagesService imagesService)
     {
         _context = context;
@@ -46,7 +46,7 @@ public class CreateJobOfferCommandHandler
     }
 
     public async Task<Guid> Handle(
-        CreateJobOfferCommand request, 
+        CreateJobOfferCommand request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Companies

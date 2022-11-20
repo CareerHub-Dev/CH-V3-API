@@ -8,7 +8,7 @@ using MimeKit.Text;
 
 namespace Infrastructure.Services;
 
-public class MailKitService 
+public class MailKitService
     : IMailKitService
 {
     private readonly EmailSettings _emailSettings;
@@ -21,9 +21,9 @@ public class MailKitService
 
     public async Task SendAsync(
         string to,
-        string subject, 
-        string html, 
-        string? from = null, 
+        string subject,
+        string html,
+        string? from = null,
         CancellationToken cancellationToken = default)
     {
         // create message
@@ -37,14 +37,14 @@ public class MailKitService
         using var smtp = new SmtpClient();
 
         await smtp.ConnectAsync(
-            _emailSettings.SmtpHost, 
-            _emailSettings.SmtpPort, 
-            SecureSocketOptions.StartTls, 
+            _emailSettings.SmtpHost,
+            _emailSettings.SmtpPort,
+            SecureSocketOptions.StartTls,
             cancellationToken);
 
         await smtp.AuthenticateAsync(
-            _emailSettings.SmtpUser, 
-            _emailSettings.SmtpPass, 
+            _emailSettings.SmtpUser,
+            _emailSettings.SmtpPass,
             cancellationToken);
 
         await smtp.SendAsync(email, cancellationToken);

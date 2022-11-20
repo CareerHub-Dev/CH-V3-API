@@ -3,11 +3,10 @@ using Application.Common.Entensions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Admins.Queries.GetAdminsWithPaging;
 
-public record GetAdminsWithPagingQuery 
+public record GetAdminsWithPagingQuery
     : IRequest<PaginatedList<AdminDTO>>
 {
     public int PageNumber { get; init; } = 1;
@@ -22,7 +21,7 @@ public record GetAdminsWithPagingQuery
     public string OrderByExpression { get; init; } = string.Empty;
 }
 
-public class GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler 
+public class GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler
     : IRequestHandler<GetAdminsWithPagingQuery, PaginatedList<AdminDTO>>
 {
     private readonly IApplicationDbContext _context;
@@ -34,7 +33,7 @@ public class GetAdminsWithPaginationWithSearchWithFilterWithSortQueryHandler
     }
 
     public async Task<PaginatedList<AdminDTO>> Handle(
-        GetAdminsWithPagingQuery request, 
+        GetAdminsWithPagingQuery request,
         CancellationToken cancellationToken)
     {
         return await _context.Admins

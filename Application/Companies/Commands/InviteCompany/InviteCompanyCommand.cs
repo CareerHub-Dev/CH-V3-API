@@ -11,14 +11,14 @@ public record InviteCompanyCommand
     public string Email { get; init; } = string.Empty;
 }
 
-public class InviteCompanyCommandHandler 
+public class InviteCompanyCommandHandler
     : IRequestHandler<InviteCompanyCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
     private readonly IPublisher _publisher;
 
     public InviteCompanyCommandHandler(
-        IApplicationDbContext context, 
+        IApplicationDbContext context,
         IPublisher publisher)
     {
         _context = context;
@@ -26,7 +26,7 @@ public class InviteCompanyCommandHandler
     }
 
     public async Task<Guid> Handle(
-        InviteCompanyCommand request, 
+        InviteCompanyCommand request,
         CancellationToken cancellationToken)
     {
         var company = new Company

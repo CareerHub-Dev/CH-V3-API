@@ -21,7 +21,7 @@ public class DeleteExperienceCommandHandler
     }
 
     public async Task<Unit> Handle(
-        DeleteExperienceCommand request, 
+        DeleteExperienceCommand request,
         CancellationToken cancellationToken)
     {
         var experience = await _context.Experiences

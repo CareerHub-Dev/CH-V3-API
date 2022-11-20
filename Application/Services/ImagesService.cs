@@ -4,13 +4,13 @@ using System.IO.Abstractions;
 
 namespace Application.Services;
 
-public class ImagesService 
+public class ImagesService
     : IImagesService
 {
     private readonly IPathService _pathService;
     private readonly IFileSystem _fileSystem;
     public ImagesService(
-        IPathService pathService, 
+        IPathService pathService,
         IFileSystem fileSystem)
     {
         _pathService = pathService;
@@ -33,7 +33,7 @@ public class ImagesService
     }
 
     public async Task<string> SaveImageAsync(
-        IFormFile image, 
+        IFormFile image,
         CancellationToken cancellationToken = default)
     {
         var imagesRoute = _pathService.GetImagesRoute;

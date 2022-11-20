@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Common.Behaviours;
 
-public class UnhandledExceptionBehaviour<TRequest, TResponse> 
+public class UnhandledExceptionBehaviour<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
 {
     private readonly ILogger<TRequest> _logger;
@@ -15,8 +15,8 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse>
     }
 
     public async Task<TResponse> Handle(
-        TRequest request, 
-        RequestHandlerDelegate<TResponse> next, 
+        TRequest request,
+        RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
         try

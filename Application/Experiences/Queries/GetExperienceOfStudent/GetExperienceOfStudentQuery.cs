@@ -29,7 +29,7 @@ public class GetExperienceOfStudentQueryHandler
     }
 
     public async Task<ExperienceDTO> Handle(
-        GetExperienceOfStudentQuery request, 
+        GetExperienceOfStudentQuery request,
         CancellationToken cancellationToken)
     {
         if (!await _context.Students
