@@ -6,26 +6,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Posts.Commands.DeletePostOfAccount;
 
-public record DeletePostOfAccountCommand(Guid PostId, Guid AccountId) : IRequest;
+public record DeletePostOfAccountCommand(Guid PostId, Guid AccountId) 
+    : IRequest;
 
-public class DeletePostOfAccountCommandHandler : IRequestHandler<DeletePostOfAccountCommand>
+public class DeletePostOfAccountCommandHandler 
+    : IRequestHandler<DeletePostOfAccountCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public DeletePostOfAccountCommandHandler(IApplicationDbContext context)
+    public DeletePostOfAccountCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(DeletePostOfAccountCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        DeletePostOfAccountCommand request, 
+        CancellationToken cancellationToken)
     {
-        if (!await _context.Accounts.AnyAsync(x => x.Id == request.AccountId))
+        if (!await _context.Accounts
+            .AnyAsync(x => x.Id == request.AccountId))
         {
             throw new NotFoundException(nameof(Account), request.AccountId);
         }
 
         var post = await _context.Posts
-            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == request.PostId && x.AccoundId == request.AccountId);
 
         if (post == null)

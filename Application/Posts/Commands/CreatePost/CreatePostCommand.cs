@@ -21,15 +21,20 @@ public class CreatePostCommandHandler
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;
 
-    public CreatePostCommandHandler(IApplicationDbContext context, IImagesService imagesService)
+    public CreatePostCommandHandler(
+        IApplicationDbContext context, 
+        IImagesService imagesService)
     {
         _context = context;
         _imagesService = imagesService;
     }
 
-    public async Task<Guid> Handle(CreatePostCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        CreatePostCommand request, 
+        CancellationToken cancellationToken)
     {
-        if (!await _context.Accounts.AnyAsync(x => x.Id == request.AccountId))
+        if (!await _context.Accounts
+            .AnyAsync(x => x.Id == request.AccountId))
         {
             throw new NotFoundException(nameof(Account), request.AccountId);
         }

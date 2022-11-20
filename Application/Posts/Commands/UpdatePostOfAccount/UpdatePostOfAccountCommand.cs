@@ -6,25 +6,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Posts.Commands.UpdatePostOfAccount;
 
-public record UpdatePostOfAccountCommand : IRequest
+public record UpdatePostOfAccountCommand 
+    : IRequest
 {
     public Guid PostId { get; init; }
     public string Text { get; init; } = string.Empty;
     public Guid AccountId { get; init; }
 }
 
-public class UpdatePostOfAccountCommandHandler : IRequestHandler<UpdatePostOfAccountCommand>
+public class UpdatePostOfAccountCommandHandler 
+    : IRequestHandler<UpdatePostOfAccountCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdatePostOfAccountCommandHandler(IApplicationDbContext context)
+    public UpdatePostOfAccountCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdatePostOfAccountCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        UpdatePostOfAccountCommand request, 
+        CancellationToken cancellationToken)
     {
-        if (!await _context.Accounts.AnyAsync(x => x.Id == request.AccountId))
+        if (!await _context.Accounts
+            .AnyAsync(x => x.Id == request.AccountId))
         {
             throw new NotFoundException(nameof(Account), request.AccountId);
         }
