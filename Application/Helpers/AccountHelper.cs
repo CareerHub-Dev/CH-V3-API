@@ -89,9 +89,13 @@ public class AccountHelper : IAccountHelper
     {
         var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
 
-        var tokenIsUnique = !await _context.Accounts.AnyAsync(x => x.ResetToken == token, cancellationToken);
+        var tokenIsUnique = !await _context.Accounts
+            .AnyAsync(x => x.ResetToken == token, cancellationToken);
+
         if (!tokenIsUnique)
+        {
             return await GenerateUniqueResetTokenAsync(cancellationToken);
+        }
 
         return token;
     }
@@ -100,9 +104,13 @@ public class AccountHelper : IAccountHelper
     {
         var token = Convert.ToHexString(RandomNumberGenerator.GetBytes(64));
 
-        var tokenIsUnique = !await _context.Accounts.AnyAsync(x => x.VerificationToken == token, cancellationToken);
+        var tokenIsUnique = !await _context.Accounts
+            .AnyAsync(x => x.VerificationToken == token, cancellationToken);
+
         if (!tokenIsUnique)
+        {
             return await GenerateUniqueVerificationTokenAsync(cancellationToken);
+        }
 
         return token;
     }

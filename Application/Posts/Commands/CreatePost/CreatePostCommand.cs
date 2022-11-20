@@ -7,14 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Posts.Commands.CreatePost;
 
-public record CreatePostCommand : IRequest<Guid>
+public record CreatePostCommand 
+    : IRequest<Guid>
 {
     public Guid AccountId { get; init; }
     public string Text { get; init; } = string.Empty;
     public List<IFormFile> Images { get; init; } = new List<IFormFile>();
 }
 
-public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, Guid>
+public class CreatePostCommandHandler 
+    : IRequestHandler<CreatePostCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;

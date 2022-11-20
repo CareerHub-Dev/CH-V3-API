@@ -2,11 +2,13 @@
 
 namespace API.Services;
 
-public class СurrentRemoteIpAddressService : IСurrentRemoteIpAddressService
+public class СurrentRemoteIpAddressService 
+    : IСurrentRemoteIpAddressService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public СurrentRemoteIpAddressService(IHttpContextAccessor httpContextAccessor)
+    public СurrentRemoteIpAddressService(
+        IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }
@@ -15,14 +17,26 @@ public class СurrentRemoteIpAddressService : IСurrentRemoteIpAddressService
     {
         get
         {
-            if (_httpContextAccessor.HttpContext!.Request.Headers.ContainsKey("X-Forwarded-For"))
+            var context = _httpContextAccessor.HttpContext;
+
+            if(context == null)
             {
-                return _httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
+                return string.Empty;
             }
-            else
+
+            if (context.Request.Headers.ContainsKey("X-Forwarded-For"))
             {
-                return _httpContextAccessor.HttpContext.Connection.RemoteIpAddress!.MapToIPv4().ToString();
+                return context.Request.Headers["X-Forwarded-For"]!;
             }
+
+            var remoteIpAddress = context.Connection.RemoteIpAddress;
+
+            if (remoteIpAddress != null)
+            {
+                return remoteIpAddress.MapToIPv4().ToString();
+            }
+
+            return string.Empty;
         }
     }
 }
