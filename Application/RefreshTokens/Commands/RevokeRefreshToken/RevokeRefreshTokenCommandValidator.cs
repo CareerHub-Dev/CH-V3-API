@@ -2,7 +2,8 @@
 
 namespace Application.RefreshTokens.Commands.RevokeRefreshToken;
 
-public class RevokeRefreshTokenCommandValidator : AbstractValidator<RevokeRefreshTokenCommand>
+public class RevokeRefreshTokenCommandValidator
+    : AbstractValidator<RevokeRefreshTokenCommand>
 {
     public RevokeRefreshTokenCommandValidator()
     {

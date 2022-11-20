@@ -4,7 +4,6 @@ using Application.Bans.Commands.DeleteBan;
 using Application.Bans.Commands.UpdateBan;
 using Application.Bans.Queries.GetBan;
 using Application.Common.DTO.Bans;
-using Application.Common.DTO.Tags;
 using Application.Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,14 +18,14 @@ public class BansController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBan(Guid banId)
     {
-        return Ok(await Mediator.Send(new GetBanQuery(banId)));
+        return Ok(await Sender.Send(new GetBanQuery(banId)));
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> CreateBan(CreateBanCommand command)
     {
-        var result = await Mediator.Send(command);
+        var result = await Sender.Send(command);
 
         return Ok(result);
     }
@@ -42,7 +41,7 @@ public class BansController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -52,7 +51,7 @@ public class BansController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteBan(Guid banId)
     {
-        await Mediator.Send(new DeleteBanCommand(banId));
+        await Sender.Send(new DeleteBanCommand(banId));
 
         return NoContent();
     }

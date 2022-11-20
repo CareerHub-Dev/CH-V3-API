@@ -5,23 +5,29 @@ using MediatR;
 
 namespace Application.Admins.Commands.InviteAdmin;
 
-public record InviteAdminCommand : IRequest<Guid>
+public record InviteAdminCommand
+    : IRequest<Guid>
 {
     public string Email { get; init; } = string.Empty;
 }
 
-public class InviteAdminCommandHandler : IRequestHandler<InviteAdminCommand, Guid>
+public class InviteAdminCommandHandler
+    : IRequestHandler<InviteAdminCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IMediator _mediator;
+    private readonly IPublisher _publisher;
 
-    public InviteAdminCommandHandler(IApplicationDbContext context, IMediator mediator)
+    public InviteAdminCommandHandler(
+        IApplicationDbContext context,
+        IPublisher publisher)
     {
         _context = context;
-        _mediator = mediator;
+        _publisher = publisher;
     }
 
-    public async Task<Guid> Handle(InviteAdminCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        InviteAdminCommand request,
+        CancellationToken cancellationToken)
     {
         var admin = new Admin
         {
@@ -33,7 +39,7 @@ public class InviteAdminCommandHandler : IRequestHandler<InviteAdminCommand, Gui
 
         await _context.SaveChangesAsync();
 
-        await _mediator.Publish(new AdminInvitedEvent(admin));
+        await _publisher.Publish(new AdminInvitedEvent(admin));
 
         return admin.Id;
     }

@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobOffers.Commands.CreateJobOffer;
 
-public record CreateJobOfferCommand : IRequest<Guid>
+public record CreateJobOfferCommand
+    : IRequest<Guid>
 {
     public string Title { init; get; } = string.Empty;
     public string Overview { init; get; } = string.Empty;
@@ -30,25 +31,32 @@ public record CreateJobOfferCommand : IRequest<Guid>
     public List<Guid> TagIds { get; init; } = new List<Guid>();
 }
 
-public class CreateJobOfferCommandHandler : IRequestHandler<CreateJobOfferCommand, Guid>
+public class CreateJobOfferCommandHandler
+    : IRequestHandler<CreateJobOfferCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;
 
-    public CreateJobOfferCommandHandler(IApplicationDbContext context, IImagesService imagesService)
+    public CreateJobOfferCommandHandler(
+        IApplicationDbContext context,
+        IImagesService imagesService)
     {
         _context = context;
         _imagesService = imagesService;
     }
 
-    public async Task<Guid> Handle(CreateJobOfferCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        CreateJobOfferCommand request,
+        CancellationToken cancellationToken)
     {
-        if (!await _context.Companies.AnyAsync(x => x.Id == request.CompanyId))
+        if (!await _context.Companies
+            .AnyAsync(x => x.Id == request.CompanyId))
         {
             throw new NotFoundException(nameof(Company), request.CompanyId);
         }
 
-        if (!await _context.JobPositions.AnyAsync(x => x.Id == request.JobPositionId))
+        if (!await _context.JobPositions
+            .AnyAsync(x => x.Id == request.JobPositionId))
         {
             throw new NotFoundException(nameof(JobPosition), request.JobPositionId);
         }

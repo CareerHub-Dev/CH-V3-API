@@ -6,22 +6,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Posts.Commands.UpdatePost;
 
-public record UpdatePostCommand : IRequest
+public record UpdatePostCommand 
+    : IRequest
 {
     public Guid PostId { get; init; }
     public string Text { get; init; } = string.Empty;
 }
 
-public class UpdatePostCommandHandler : IRequestHandler<UpdatePostCommand>
+public class UpdatePostCommandHandler 
+    : IRequestHandler<UpdatePostCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdatePostCommandHandler(IApplicationDbContext context)
+    public UpdatePostCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdatePostCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        UpdatePostCommand request, 
+        CancellationToken cancellationToken)
     {
         var post = await _context.Posts
             .FirstOrDefaultAsync(x => x.Id == request.PostId);

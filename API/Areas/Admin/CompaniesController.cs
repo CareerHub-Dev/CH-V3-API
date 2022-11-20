@@ -9,12 +9,13 @@ using Application.Companies.Commands.UpdateCompanyBanner;
 using Application.Companies.Commands.UpdateCompanyDetail;
 using Application.Companies.Commands.UpdateCompanyLinks;
 using Application.Companies.Commands.UpdateCompanyLogo;
-using Application.Companies.Queries.GetAmount;
-using Application.Companies.Queries.GetCompanies;
+using Application.Companies.Queries.GetAmountJobOffersOfCompany;
+using Application.Companies.Queries.GetAmountStudentSubscribersOfCompany;
+using Application.Companies.Queries.GetBriefCompaniesWithStatsWithPaginig;
 using Application.Companies.Queries.GetCompany;
-using Application.Emails.Commands;
-using Application.JobOffers.Queries.GetJobOffersOfCompany;
-using Application.Students.Queries.GetStudentSubscribersOfCompany;
+using Application.Emails.Commands.SendInviteCompany;
+using Application.JobOffers.Queries.GetDetiledJobOffersWithStatsOfCompanyWithPaging;
+using Application.Students.Queries.GetStudentSubscribersOfCompanyWithPaging;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -26,7 +27,7 @@ namespace API.Areas.Admin;
 public class CompaniesController : ApiControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CompanyWithStatsDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefCompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
         [FromQuery] bool? isCompanyMustBeVerified,
         [FromQuery] string? orderByExpression,
@@ -34,7 +35,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetCompaniesWithStatsWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetBriefCompaniesWithStatsWithPagingQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -53,7 +54,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new GetCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetCompanyQuery
         {
             CompanyId = companyId
         }));
@@ -64,7 +65,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyQuery
         {
             CompanyId = companyId
         }));
@@ -75,7 +76,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountJobOffersOfCompany(Guid companyId)
     {
-        return Ok(await Mediator.Send(new GetAmountJobOffersOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountJobOffersOfCompanyQuery
         {
             CompanyId = companyId
         }));
@@ -91,7 +92,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> InviteCompany(InviteCompanyCommand command)
     {
-        var result = await Mediator.Send(command);
+        var result = await Sender.Send(command);
 
         return Ok(result);
     }
@@ -108,7 +109,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SendInviteCompanyEmail(SendInviteCompanyEmailCommand command)
     {
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -118,7 +119,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCompany(Guid companyId)
     {
-        await Mediator.Send(new DeleteCompanyCommand(companyId));
+        await Sender.Send(new DeleteCompanyCommand(companyId));
 
         return NoContent();
     }
@@ -134,7 +135,7 @@ public class CompaniesController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -150,7 +151,7 @@ public class CompaniesController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -161,7 +162,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCompanyLogo(Guid companyId, IFormFile? file)
     {
-        var result = await Mediator.Send(new UpdateCompanyLogoCommand { CompanyId = companyId, Logo = file });
+        var result = await Sender.Send(new UpdateCompanyLogoCommand { CompanyId = companyId, Logo = file });
 
         return Ok(result);
     }
@@ -172,7 +173,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCompanyBanner(Guid companyId, IFormFile? file)
     {
-        var result = await Mediator.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file });
+        var result = await Sender.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file });
 
         return Ok(result);
     }
@@ -192,7 +193,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPagingQuery
         {
             CompanyId = companyId,
 
@@ -228,7 +229,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentSubscribersOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetStudentSubscribersOfCompanyWithPagingQuery
         {
             CompanyId = companyId,
 

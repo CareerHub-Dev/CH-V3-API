@@ -7,24 +7,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Commands.UpdateCompanyLogo;
 
-public record UpdateCompanyLogoCommand : IRequest<string?>
+public record UpdateCompanyLogoCommand
+    : IRequest<string?>
 {
     public Guid CompanyId { get; init; }
     public IFormFile? Logo { get; init; }
 }
 
-public class UpdateCompanyLogoCommandHandler : IRequestHandler<UpdateCompanyLogoCommand, string?>
+public class UpdateCompanyLogoCommandHandler
+    : IRequestHandler<UpdateCompanyLogoCommand, string?>
 {
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;
 
-    public UpdateCompanyLogoCommandHandler(IApplicationDbContext context, IImagesService imagesService)
+    public UpdateCompanyLogoCommandHandler(
+        IApplicationDbContext context,
+        IImagesService imagesService)
     {
         _context = context;
         _imagesService = imagesService;
     }
 
-    public async Task<string?> Handle(UpdateCompanyLogoCommand request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(
+        UpdateCompanyLogoCommand request,
+        CancellationToken cancellationToken)
     {
         var company = await _context.Companies
             .FirstOrDefaultAsync(x => x.Id == request.CompanyId);

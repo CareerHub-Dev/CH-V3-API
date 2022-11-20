@@ -28,16 +28,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
         _loggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
     }
 
-    static ApplicationDbContext()
-    {
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<WorkFormat>();
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<Degree>();
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<ExperienceLevel>();
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<JobType>();
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<LanguageLevel>();
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<TemplateLanguage>();
-    }
-
     public DbSet<Account> Accounts => Set<Account>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Student> Students => Set<Student>();
@@ -57,13 +47,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-        builder.HasPostgresEnum<WorkFormat>();
-        builder.HasPostgresEnum<Degree>();
-        builder.HasPostgresEnum<ExperienceLevel>();
-        builder.HasPostgresEnum<JobType>();
-        builder.HasPostgresEnum<LanguageLevel>();
-        builder.HasPostgresEnum<TemplateLanguage>();
 
         base.OnModelCreating(builder);
     }

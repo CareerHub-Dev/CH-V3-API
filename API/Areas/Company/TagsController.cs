@@ -12,9 +12,9 @@ public class TagsController : ApiControllerBase
 {
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
-    public async Task<IActionResult> CreateTag(CreateTagRequest view)
+    public async Task<IActionResult> CreateTag(CreateTagRequest request)
     {
-        var result = await Mediator.Send(new CreateTagCommand { Name = view.Name, IsAccepted = false });
+        var result = await Sender.Send(new CreateTagCommand { Name = request.Name, IsAccepted = false });
 
         return Ok(result);
     }

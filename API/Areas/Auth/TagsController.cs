@@ -1,7 +1,7 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.Tags;
-using Application.Tags.Queries.GetTag;
-using Application.Tags.Queries.GetTags;
+using Application.Tags.Queries.GetBriefTag;
+using Application.Tags.Queries.GetBriefTags;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Auth;
@@ -15,7 +15,7 @@ public class TagsController : ApiControllerBase
     public async Task<IActionResult> GetTags(
         [FromQuery] string? searchTerm)
     {
-        return Ok(await Mediator.Send(new GetBriefTagsWithSearchQuery
+        return Ok(await Sender.Send(new GetBriefTagsQuery
         {
             SearchTerm = searchTerm ?? string.Empty,
         }));
@@ -26,6 +26,6 @@ public class TagsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetTag(Guid tagId)
     {
-        return Ok(await Mediator.Send(new GetBriefTagQuery(tagId)));
+        return Ok(await Sender.Send(new GetBriefTagQuery(tagId)));
     }
 }

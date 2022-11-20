@@ -1,6 +1,7 @@
 ﻿using API.Authorize;
 using Application.Accounts.Queries.GetBriefAccount;
 using Application.Bans.Queries.GetBansOfAccount;
+using Application.Common.DTO.Accounts;
 using Application.Common.DTO.Bans;
 using Application.Common.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ public class AccountsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBriefAccount(Guid accountId)
     {
-        return Ok(await Mediator.Send(new GetBriefAccountQuery(accountId)));
+        return Ok(await Sender.Send(new GetBriefAccountQuery(accountId)));
     }
 
     [HttpGet("{accountId}/Bans")]
@@ -28,7 +29,7 @@ public class AccountsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        return Ok(await Mediator.Send(new GetBansOfAccountWithPaginationWithSortQuery
+        return Ok(await Sender.Send(new GetBansOfAccountWithPagingQuery
         {
             AccountId = accountId,
             PageNumber = pageNumber,

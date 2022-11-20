@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Commands.UpdateTag;
 
-public class UpdateTagCommandValidator : AbstractValidator<UpdateTagCommand>
+public class UpdateTagCommandValidator
+    : AbstractValidator<UpdateTagCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateTagCommandValidator(IApplicationDbContext context)
+    public UpdateTagCommandValidator(
+        IApplicationDbContext context)
     {
         _context = context;
 
@@ -19,7 +21,10 @@ public class UpdateTagCommandValidator : AbstractValidator<UpdateTagCommand>
             .MustAsync(BeUniqueName).WithMessage("The specified name already exists.");
     }
 
-    private async Task<bool> BeUniqueName(UpdateTagCommand model, string name, CancellationToken cancellationToken)
+    private async Task<bool> BeUniqueName(
+        UpdateTagCommand model,
+        string name,
+        CancellationToken cancellationToken)
     {
         return !await _context.Tags
             .Where(x => x.Id != model.TagId)

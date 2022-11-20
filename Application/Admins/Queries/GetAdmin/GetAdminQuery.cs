@@ -8,23 +8,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Admins.Queries.GetAdmin;
 
-public record GetAdminQuery(Guid AdminId) : IRequest<AdminDTO>;
+public record GetAdminQuery(Guid AdminId)
+    : IRequest<AdminDTO>;
 
-public class GetAdminQueryHandler : IRequestHandler<GetAdminQuery, AdminDTO>
+public class GetAdminQueryHandler
+    : IRequestHandler<GetAdminQuery, AdminDTO>
 {
     private readonly IApplicationDbContext _context;
-    public GetAdminQueryHandler(IApplicationDbContext context)
+    public GetAdminQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<AdminDTO> Handle(GetAdminQuery request, CancellationToken cancellationToken)
+    public async Task<AdminDTO> Handle(
+        GetAdminQuery request,
+        CancellationToken cancellationToken)
     {
         var admin = await _context.Admins
-            .AsNoTracking()
-            .Where(x => x.Id == request.AdminId)
             .MapToAdminDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.AdminId);
 
         if (admin == null)
         {

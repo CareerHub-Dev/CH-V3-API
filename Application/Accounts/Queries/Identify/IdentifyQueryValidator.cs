@@ -2,7 +2,8 @@
 
 namespace Application.Accounts.Queries.Identify;
 
-public class IdentifyQueryValidator : AbstractValidator<IdentifyQuery>
+public class IdentifyQueryValidator
+    : AbstractValidator<IdentifyQuery>
 {
     public IdentifyQueryValidator()
     {

@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentGroups.Commands.CreateStudentGroup;
 
-public class CreateStudentGroupCommandValidator : AbstractValidator<CreateStudentGroupCommand>
+public class CreateStudentGroupCommandValidator
+    : AbstractValidator<CreateStudentGroupCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public CreateStudentGroupCommandValidator(IApplicationDbContext context)
+    public CreateStudentGroupCommandValidator(
+        IApplicationDbContext context)
     {
         _context = context;
 
@@ -19,8 +21,11 @@ public class CreateStudentGroupCommandValidator : AbstractValidator<CreateStuden
             .MustAsync(BeUniqueName).WithMessage("The specified name already exists.");
     }
 
-    private async Task<bool> BeUniqueName(string name, CancellationToken cancellationToken)
+    private async Task<bool> BeUniqueName(
+        string name,
+        CancellationToken cancellationToken)
     {
-        return !await _context.StudentGroups.AnyAsync(x => x.Name.Trim().ToLower() == name.NormalizeName(), cancellationToken);
+        return !await _context.StudentGroups
+            .AnyAsync(x => x.Name.Trim().ToLower() == name.NormalizeName(), cancellationToken);
     }
 }

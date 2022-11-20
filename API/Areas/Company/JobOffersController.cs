@@ -6,9 +6,10 @@ using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOfferOfCompany;
 using Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 using Application.JobOffers.Commands.UpdateJobOfferImageOfCompany;
-using Application.JobOffers.Queries.GetAmount;
-using Application.JobOffers.Queries.GetJobOffer;
-using Application.JobOffers.Queries.GetJobOffersOfCompany;
+using Application.JobOffers.Queries.GetAmountAppliedCVsOfCompanyJobOffer;
+using Application.JobOffers.Queries.GetAmountStudentSubscribersOfCompanyJobOffer;
+using Application.JobOffers.Queries.GetDetiledJobOffersWithStatsOfCompanyWithPaging;
+using Application.JobOffers.Queries.GetJobOfferOfCompany;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -34,7 +35,7 @@ public class JobOffersController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetDetiledJobOffersWithStatsOfCompanyWithPagingQuery
         {
             CompanyId = AccountInfo!.Id,
 
@@ -70,7 +71,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfSelfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfCompanyJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfCompanyJobOfferQuery
         {
             JobOfferId = jobOfferId,
             CompanyId = AccountInfo!.Id,
@@ -84,7 +85,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountAppliedCVsOfSelfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetAmountAppliedCVsOfCompanyJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountAppliedCVsOfCompanyJobOfferQuery
         {
             JobOfferId = jobOfferId,
             CompanyId = AccountInfo!.Id,
@@ -98,7 +99,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetJobOfferOfCompanyWithFilterQuery
+        return Ok(await Sender.Send(new GetJobOfferOfCompanyQuery
         {
             JobOfferId = jobOfferId,
             CompanyId = AccountInfo!.Id
@@ -110,7 +111,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateJobOfferForSelfCompany(CreateJobOfferRequest view)
     {
-        var result = await Mediator.Send(new CreateJobOfferCommand
+        var result = await Sender.Send(new CreateJobOfferCommand
         {
             Title = view.Title,
             Overview = view.Overview,
@@ -137,7 +138,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteJobOfferOfSelfCompany(Guid jobOfferId)
     {
-        await Mediator.Send(new DeleteJobOfferOfCompanyCommand(jobOfferId, AccountInfo!.Id));
+        await Sender.Send(new DeleteJobOfferOfCompanyCommand(jobOfferId, AccountInfo!.Id));
 
         return NoContent();
     }
@@ -153,7 +154,7 @@ public class JobOffersController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(new UpdateJobOfferDetailOfCompanyCommand
+        await Sender.Send(new UpdateJobOfferDetailOfCompanyCommand
         {
             JobOfferId = view.JobOfferId,
             Title = view.Title,
@@ -181,7 +182,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateJobOfferImageOfSelfCompany(Guid jobOfferId, IFormFile? file)
     {
-        var result = await Mediator.Send(new UpdateJobOfferImageOfCompanyCommand
+        var result = await Sender.Send(new UpdateJobOfferImageOfCompanyCommand
         {
             CompanyId = AccountInfo!.Id,
 

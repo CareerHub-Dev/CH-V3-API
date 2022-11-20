@@ -5,11 +5,13 @@ using Microsoft.Extensions.Options;
 
 namespace Application.Services;
 
-public class EmailTemplateParserService : IEmailTemplateParserService
+public class EmailTemplateParserService
+    : IEmailTemplateParserService
 {
     private readonly ClientSettings _clientSettings;
 
-    public EmailTemplateParserService(IOptions<ClientSettings> clientSettings)
+    public EmailTemplateParserService(
+        IOptions<ClientSettings> clientSettings)
     {
         _clientSettings = clientSettings.Value;
     }

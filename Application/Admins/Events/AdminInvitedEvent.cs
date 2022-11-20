@@ -1,10 +1,11 @@
-﻿using Application.Emails.Commands;
+﻿using Application.Emails.Commands.SendInviteAdminEmail;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Admins.Events;
 
-public class AdminInvitedEvent : INotification
+public class AdminInvitedEvent
+    : INotification
 {
     public AdminInvitedEvent(Admin admin)
     {
@@ -14,17 +15,21 @@ public class AdminInvitedEvent : INotification
     public Admin Admin { get; }
 }
 
-public class AdminInvitedEventHandler : INotificationHandler<AdminInvitedEvent>
+public class AdminInvitedEventHandler
+    : INotificationHandler<AdminInvitedEvent>
 {
-    private readonly IMediator _mediator;
+    private readonly ISender _sender;
 
-    public AdminInvitedEventHandler(IMediator mediator)
+    public AdminInvitedEventHandler(
+        ISender sender)
     {
-        _mediator = mediator;
+        _sender = sender;
     }
 
-    public async Task Handle(AdminInvitedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(
+        AdminInvitedEvent notification,
+        CancellationToken cancellationToken)
     {
-        await _mediator.Send(new SendInviteAdminEmailCommand(notification.Admin.Id));
+        await _sender.Send(new SendInviteAdminEmailCommand(notification.Admin.Id));
     }
 }

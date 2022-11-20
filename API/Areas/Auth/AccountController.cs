@@ -14,7 +14,7 @@ public class AccountController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ChangePassword(ChangePasswordRequest view)
     {
-        await Mediator.Send(new ChangePasswordCommand
+        await Sender.Send(new ChangePasswordCommand
         {
             OldPassword = view.OldPassword,
             NewPassword = view.NewPassword,

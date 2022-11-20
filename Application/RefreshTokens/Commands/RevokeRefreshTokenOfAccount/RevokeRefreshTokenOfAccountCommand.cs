@@ -6,12 +6,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.RefreshTokens.Commands.RevokeRefreshTokenOfAccount;
 
-public record RevokeRefreshTokenOfAccountCommand : IRequest
+public record RevokeRefreshTokenOfAccountCommand
+    : IRequest
 {
     public string Token { init; get; } = string.Empty;
     public Guid AccountId { get; init; }
 }
-public class RevokeRefreshTokenOfAccountCommandHandler : IRequestHandler<RevokeRefreshTokenOfAccountCommand>
+public class RevokeRefreshTokenOfAccountCommandHandler
+    : IRequestHandler<RevokeRefreshTokenOfAccountCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly IСurrentRemoteIpAddressService _сurrentRemoteIpAddressService;
@@ -23,7 +25,9 @@ public class RevokeRefreshTokenOfAccountCommandHandler : IRequestHandler<RevokeR
         _сurrentRemoteIpAddressService = сurrentRemoteIpAddressService;
     }
 
-    public async Task<Unit> Handle(RevokeRefreshTokenOfAccountCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        RevokeRefreshTokenOfAccountCommand request,
+        CancellationToken cancellationToken)
     {
         if (!await _context.Accounts
             .AnyAsync(x => x.Id == request.AccountId))

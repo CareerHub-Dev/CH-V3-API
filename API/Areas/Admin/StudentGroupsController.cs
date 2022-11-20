@@ -4,7 +4,7 @@ using Application.Common.Enums;
 using Application.StudentGroups.Commands.CreateStudentGroup;
 using Application.StudentGroups.Commands.DeleteStudentGroup;
 using Application.StudentGroups.Commands.UpdateStudentGroup;
-using Application.StudentGroups.Queries.GetStudentGroups;
+using Application.StudentGroups.Queries.GetStudentGroupsWithPaging;
 using Application.Tags.Queries.GetStudentGroup;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -23,7 +23,7 @@ public class StudentGroupsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetStudentGroupsWithPaginationWithSearchWithSortQuery
+        var result = await Sender.Send(new GetStudentGroupsWithPagingQuery
         {
             PageSize = pageSize,
             PageNumber = pageNumber,
@@ -43,14 +43,14 @@ public class StudentGroupsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentGroup(Guid studentGroupId)
     {
-        return Ok(await Mediator.Send(new GetStudentGroupQuery(studentGroupId)));
+        return Ok(await Sender.Send(new GetStudentGroupQuery(studentGroupId)));
     }
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> CreateStudentGroup(CreateStudentGroupCommand command)
     {
-        var result = await Mediator.Send(command);
+        var result = await Sender.Send(command);
 
         return Ok(result);
     }
@@ -66,7 +66,7 @@ public class StudentGroupsController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -76,7 +76,7 @@ public class StudentGroupsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteStudentGroup(Guid studentGroupId)
     {
-        await Mediator.Send(new DeleteStudentGroupCommand(studentGroupId));
+        await Sender.Send(new DeleteStudentGroupCommand(studentGroupId));
 
         return NoContent();
     }

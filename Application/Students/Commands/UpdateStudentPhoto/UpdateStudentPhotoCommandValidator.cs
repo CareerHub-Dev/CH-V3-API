@@ -3,7 +3,8 @@ using FluentValidation;
 
 namespace Application.Students.Commands.UpdateStudentPhoto;
 
-public class UpdateStudentPhotoCommandValidator : AbstractValidator<UpdateStudentPhotoCommand>
+public class UpdateStudentPhotoCommandValidator
+    : AbstractValidator<UpdateStudentPhotoCommand>
 {
     public UpdateStudentPhotoCommandValidator()
     {

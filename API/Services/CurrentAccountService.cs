@@ -3,11 +3,13 @@ using Application.Common.Interfaces;
 
 namespace API.Services;
 
-public class CurrentAccountService : ICurrentAccountService
+public class CurrentAccountService 
+    : ICurrentAccountService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CurrentAccountService(IHttpContextAccessor httpContextAccessor)
+    public CurrentAccountService(
+        IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }

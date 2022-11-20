@@ -2,10 +2,10 @@
 using Application.Admins.Commands.DeleteAdmin;
 using Application.Admins.Commands.InviteAdmin;
 using Application.Admins.Queries.GetAdmin;
-using Application.Admins.Queries.GetAdmins;
+using Application.Admins.Queries.GetAdminsWithPaging;
 using Application.Common.DTO.Admins;
 using Application.Common.Enums;
-using Application.Emails.Commands;
+using Application.Emails.Commands.SendInviteAdminEmail;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -25,7 +25,7 @@ public class AdminsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetAdminsWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetAdminsWithPagingQuery
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
@@ -49,7 +49,7 @@ public class AdminsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAdmin(Guid adminId)
     {
-        return Ok(await Mediator.Send(new GetAdminQuery(adminId)));
+        return Ok(await Sender.Send(new GetAdminQuery(adminId)));
     }
 
     /// <remarks>
@@ -62,7 +62,7 @@ public class AdminsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> InviteAdmin(InviteAdminCommand command)
     {
-        var result = await Mediator.Send(command);
+        var result = await Sender.Send(command);
 
         return Ok(result);
     }
@@ -79,7 +79,7 @@ public class AdminsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SendInviteAdminEmail(SendInviteAdminEmailCommand command)
     {
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -89,7 +89,7 @@ public class AdminsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteAdmin(Guid adminId)
     {
-        await Mediator.Send(new DeleteAdminCommand(adminId));
+        await Sender.Send(new DeleteAdminCommand(adminId));
 
         return NoContent();
     }

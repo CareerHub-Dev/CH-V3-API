@@ -2,7 +2,8 @@
 
 namespace Application.Experiences.Commands.CreateExperience;
 
-public class CreateExperienceCommandValidator : AbstractValidator<CreateExperienceCommand>
+public class CreateExperienceCommandValidator
+    : AbstractValidator<CreateExperienceCommand>
 {
     public CreateExperienceCommandValidator()
     {
@@ -27,6 +28,7 @@ public class CreateExperienceCommandValidator : AbstractValidator<CreateExperien
         RuleFor(x => x.ExperienceLevel)
             .IsInEnum();
 
-        RuleFor(x => x.StartDate).LessThan(x => x.EndDate).When(x => x.EndDate.HasValue);
+        RuleFor(x => x.StartDate)
+            .LessThan(x => x.EndDate).When(x => x.EndDate.HasValue);
     }
 }

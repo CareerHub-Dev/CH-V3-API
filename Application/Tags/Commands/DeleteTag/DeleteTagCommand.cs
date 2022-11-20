@@ -6,21 +6,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Commands.DeleteTag;
 
-public record DeleteTagCommand(Guid TagId) : IRequest;
+public record DeleteTagCommand(Guid TagId)
+    : IRequest;
 
-public class DeleteTagCommandHandler : IRequestHandler<DeleteTagCommand>
+public class DeleteTagCommandHandler
+    : IRequestHandler<DeleteTagCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public DeleteTagCommandHandler(IApplicationDbContext context)
+    public DeleteTagCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(DeleteTagCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        DeleteTagCommand request,
+        CancellationToken cancellationToken)
     {
         var tag = await _context.Tags
-            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == request.TagId);
 
         if (tag == null)

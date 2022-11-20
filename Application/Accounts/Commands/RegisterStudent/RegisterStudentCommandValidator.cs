@@ -3,7 +3,8 @@ using FluentValidation;
 
 namespace Application.Accounts.Commands.RegisterStudent;
 
-public class RegisterStudentCommandValidator : AbstractValidator<RegisterStudentCommand>
+public class RegisterStudentCommandValidator
+    : AbstractValidator<RegisterStudentCommand>
 {
     public RegisterStudentCommandValidator()
     {

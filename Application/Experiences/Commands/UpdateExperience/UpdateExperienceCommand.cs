@@ -7,7 +7,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Experiences.Commands.UpdateExperience;
 
-public record UpdateExperienceCommand : IRequest
+public record UpdateExperienceCommand
+    : IRequest
 {
     public Guid ExperienceId { get; init; }
     public string Title { get; init; } = string.Empty;
@@ -20,16 +21,20 @@ public record UpdateExperienceCommand : IRequest
     public DateTime? EndDate { get; init; }
 }
 
-public class UpdateExperienceCommandHandler : IRequestHandler<UpdateExperienceCommand>
+public class UpdateExperienceCommandHandler
+    : IRequestHandler<UpdateExperienceCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateExperienceCommandHandler(IApplicationDbContext context)
+    public UpdateExperienceCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateExperienceCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        UpdateExperienceCommand request,
+        CancellationToken cancellationToken)
     {
         var experience = await _context.Experiences
             .FirstOrDefaultAsync(x => x.Id == request.ExperienceId);

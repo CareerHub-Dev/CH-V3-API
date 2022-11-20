@@ -6,23 +6,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Commands.UpdateTag;
 
-public record UpdateTagCommand : IRequest
+public record UpdateTagCommand
+    : IRequest
 {
     public Guid TagId { get; init; }
     public string Name { get; init; } = string.Empty;
     public bool IsAccepted { get; init; }
 }
 
-public class UpdateTagCommandHandler : IRequestHandler<UpdateTagCommand>
+public class UpdateTagCommandHandler
+    : IRequestHandler<UpdateTagCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateTagCommandHandler(IApplicationDbContext context)
+    public UpdateTagCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateTagCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        UpdateTagCommand request,
+        CancellationToken cancellationToken)
     {
         var tag = await _context.Tags
             .FirstOrDefaultAsync(x => x.Id == request.TagId);

@@ -7,23 +7,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Students.Commands.UpdateStudentPhoto;
 
-public record UpdateStudentPhotoCommand : IRequest<string?>
+public record UpdateStudentPhotoCommand
+    : IRequest<string?>
 {
     public Guid StudentId { get; init; }
     public IFormFile? Photo { get; init; }
 }
 
-public class UpdateStudentPhotoCommandHandler : IRequestHandler<UpdateStudentPhotoCommand, string?>
+public class UpdateStudentPhotoCommandHandler
+    : IRequestHandler<UpdateStudentPhotoCommand, string?>
 {
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;
-    public UpdateStudentPhotoCommandHandler(IApplicationDbContext context, IImagesService imagesService)
+    public UpdateStudentPhotoCommandHandler(
+        IApplicationDbContext context,
+        IImagesService imagesService)
     {
         _context = context;
         _imagesService = imagesService;
     }
 
-    public async Task<string?> Handle(UpdateStudentPhotoCommand request, CancellationToken cancellationToken)
+    public async Task<string?> Handle(
+        UpdateStudentPhotoCommand request,
+        CancellationToken cancellationToken)
     {
         var student = await _context.Students
             .FirstOrDefaultAsync(x => x.Id == request.StudentId);

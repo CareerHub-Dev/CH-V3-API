@@ -7,25 +7,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Accounts.Commands.ChangePassword;
 
-public record ChangePasswordCommand : IRequest
+public record ChangePasswordCommand
+    : IRequest
 {
     public Guid AccountId { get; init; }
     public string OldPassword { get; init; } = string.Empty;
     public string NewPassword { get; init; } = string.Empty;
 }
 
-public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand>
+public class ChangePasswordCommandHandler
+    : IRequestHandler<ChangePasswordCommand>
 {
     private readonly IApplicationDbContext _context;
     private readonly IPasswordHasher<Account> _passwordHasher;
 
-    public ChangePasswordCommandHandler(IApplicationDbContext context, IPasswordHasher<Account> passwordHasher)
+    public ChangePasswordCommandHandler(
+        IApplicationDbContext context,
+        IPasswordHasher<Account> passwordHasher)
     {
         _context = context;
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        ChangePasswordCommand request,
+        CancellationToken cancellationToken)
     {
         var account = await _context.Accounts
             .FirstOrDefaultAsync(x => x.Id == request.AccountId);
@@ -35,7 +41,8 @@ public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordComman
             throw new NotFoundException(nameof(Account), request.AccountId);
         }
 
-        var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(account, account.PasswordHash, request.OldPassword);
+        var passwordVerificationResult = _passwordHasher
+            .VerifyHashedPassword(account, account.PasswordHash, request.OldPassword);
 
         switch (passwordVerificationResult)
         {

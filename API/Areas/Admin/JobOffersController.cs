@@ -5,7 +5,8 @@ using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOffer;
 using Application.JobOffers.Commands.UpdateJobOfferDetail;
 using Application.JobOffers.Commands.UpdateJobOfferImage;
-using Application.JobOffers.Queries.GetAmount;
+using Application.JobOffers.Queries.GetAmountAppliedCVsOfJobOffer;
+using Application.JobOffers.Queries.GetAmountStudentSubscribersOfJobOffer;
 using Application.JobOffers.Queries.GetJobOffer;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfJobOfferQuery
         {
             JobOfferId = jobOfferId
         }));
@@ -31,7 +32,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountAppliedCVsOfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetAmountAppliedCVsOfJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountAppliedCVsOfJobOfferQuery
         {
             JobOfferId = jobOfferId
         }));
@@ -42,7 +43,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetJobOfferQuery
         {
             JobOfferId = jobOfferId
         }));
@@ -54,7 +55,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateJobOffer([FromForm] CreateJobOfferCommand command)
     {
-        var result = await Mediator.Send(command);
+        var result = await Sender.Send(command);
 
         return Ok(result);
     }
@@ -64,7 +65,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteJobOffer(Guid jobOfferId)
     {
-        await Mediator.Send(new DeleteJobOfferCommand(jobOfferId));
+        await Sender.Send(new DeleteJobOfferCommand(jobOfferId));
 
         return NoContent();
     }
@@ -80,7 +81,7 @@ public class JobOffersController : ApiControllerBase
             return BadRequest();
         }
 
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -91,7 +92,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateJobOfferImage(Guid jobOfferId, IFormFile? file)
     {
-        var result = await Mediator.Send(new UpdateJobOfferImageCommand
+        var result = await Sender.Send(new UpdateJobOfferImageCommand
         {
             JobofferId = jobOfferId,
             Image = file

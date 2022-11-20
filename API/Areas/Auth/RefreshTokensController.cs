@@ -13,14 +13,14 @@ public class RefreshTokensController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RevokeTokenAsync(RevokeRefreshTokenRequest view)
+    public async Task<IActionResult> RevokeTokenAsync(RevokeRefreshTokenRequest request)
     {
-        if (string.IsNullOrWhiteSpace(view.Token))
+        if (string.IsNullOrWhiteSpace(request.Token))
         {
-            view.Token = Request.Cookies["refreshToken"] ?? "";
+            request.Token = Request.Cookies["refreshToken"] ?? "";
         }
 
-        await Mediator.Send(new RevokeRefreshTokenOfAccountCommand { Token = view.Token, AccountId = AccountInfo!.Id });
+        await Sender.Send(new RevokeRefreshTokenOfAccountCommand { Token = request.Token, AccountId = AccountInfo!.Id });
 
         return NoContent();
     }

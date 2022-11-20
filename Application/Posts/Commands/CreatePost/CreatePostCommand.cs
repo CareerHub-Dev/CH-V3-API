@@ -7,27 +7,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Posts.Commands.CreatePost;
 
-public record CreatePostCommand : IRequest<Guid>
+public record CreatePostCommand 
+    : IRequest<Guid>
 {
     public Guid AccountId { get; init; }
     public string Text { get; init; } = string.Empty;
     public List<IFormFile> Images { get; init; } = new List<IFormFile>();
 }
 
-public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, Guid>
+public class CreatePostCommandHandler 
+    : IRequestHandler<CreatePostCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;
 
-    public CreatePostCommandHandler(IApplicationDbContext context, IImagesService imagesService)
+    public CreatePostCommandHandler(
+        IApplicationDbContext context, 
+        IImagesService imagesService)
     {
         _context = context;
         _imagesService = imagesService;
     }
 
-    public async Task<Guid> Handle(CreatePostCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        CreatePostCommand request, 
+        CancellationToken cancellationToken)
     {
-        if (!await _context.Accounts.AnyAsync(x => x.Id == request.AccountId))
+        if (!await _context.Accounts
+            .AnyAsync(x => x.Id == request.AccountId))
         {
             throw new NotFoundException(nameof(Account), request.AccountId);
         }

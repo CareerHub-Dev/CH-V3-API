@@ -6,7 +6,7 @@ using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyStudent;
 using Application.Accounts.Queries.Authenticate;
 using Application.Accounts.Queries.RefreshToken;
-using Application.Emails.Commands;
+using Application.Emails.Commands.SendPasswordResetEmail;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas;
@@ -19,7 +19,7 @@ public class AccountController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Authenticate(AuthenticateQuery query)
     {
-        var response = await Mediator.Send(query);
+        var response = await Sender.Send(query);
 
         SetTokenCookie(response.RefreshToken);
         return Ok(response);
@@ -36,7 +36,7 @@ public class AccountController : ApiControllerBase
             view.Token = Request.Cookies["refreshToken"] ?? "";
         }
 
-        var response = await Mediator.Send(new RefreshTokenQuery
+        var response = await Sender.Send(new RefreshTokenQuery
         {
             Token = view.Token
         });
@@ -50,7 +50,7 @@ public class AccountController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> VerifyCompanyWithContinuedRegistration([FromForm] VerifyCompanyWithContinuedRegistrationCommand command)
     {
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -60,7 +60,7 @@ public class AccountController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> VerifyAdminWithContinuedRegistration(VerifyAdminWithContinuedRegistrationCommand command)
     {
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -70,7 +70,7 @@ public class AccountController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> VerifyStudent(VerifyStudentCommand command)
     {
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -81,7 +81,7 @@ public class AccountController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterStudent(RegisterStudentCommand command)
     {
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -91,7 +91,7 @@ public class AccountController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ForgotPassword(SendPasswordResetEmailCommand command)
     {
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }
@@ -102,7 +102,7 @@ public class AccountController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
-        await Mediator.Send(command);
+        await Sender.Send(command);
 
         return NoContent();
     }

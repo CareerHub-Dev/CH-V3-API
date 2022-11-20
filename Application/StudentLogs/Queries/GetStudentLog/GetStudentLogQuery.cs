@@ -8,24 +8,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Queries.GetStudentLog;
 
-public record GetStudentLogQuery(Guid StudentLogId) : IRequest<StudentLogDTO>;
+public record GetStudentLogQuery(Guid StudentLogId)
+    : IRequest<StudentLogDTO>;
 
-public class GetStudentLogQueryHandler : IRequestHandler<GetStudentLogQuery, StudentLogDTO>
+public class GetStudentLogQueryHandler
+    : IRequestHandler<GetStudentLogQuery, StudentLogDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetStudentLogQueryHandler(IApplicationDbContext context)
+    public GetStudentLogQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<StudentLogDTO> Handle(GetStudentLogQuery request, CancellationToken cancellationToken)
+    public async Task<StudentLogDTO> Handle(
+        GetStudentLogQuery request,
+        CancellationToken cancellationToken)
     {
         var studentGroup = await _context.StudentLogs
-            .AsNoTracking()
-            .Where(x => x.Id == request.StudentLogId)
             .MapToStudentLogDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.StudentLogId);
 
         if (studentGroup == null)
         {

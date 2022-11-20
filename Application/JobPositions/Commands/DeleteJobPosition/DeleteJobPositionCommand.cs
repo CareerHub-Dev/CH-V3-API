@@ -6,21 +6,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.JobPositions.Commands.DeleteJobPosition;
 
-public record DeleteJobpositionCommand(Guid JobPositionId) : IRequest;
+public record DeleteJobpositionCommand(Guid JobPositionId)
+    : IRequest;
 
-public class DeleteJobPositionCommandHandler : IRequestHandler<DeleteJobpositionCommand>
+public class DeleteJobPositionCommandHandler
+    : IRequestHandler<DeleteJobpositionCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public DeleteJobPositionCommandHandler(IApplicationDbContext context)
+    public DeleteJobPositionCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(DeleteJobpositionCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        DeleteJobpositionCommand request,
+        CancellationToken cancellationToken)
     {
         var jobPosition = await _context.JobPositions
-            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == request.JobPositionId);
 
         if (jobPosition == null)

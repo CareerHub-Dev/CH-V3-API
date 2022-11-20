@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Companies.Commands.UpdateCompanyDetail;
 
-public record UpdateCompanyDetailCommand : IRequest
+public record UpdateCompanyDetailCommand
+    : IRequest
 {
     public Guid CompanyId { get; init; }
     public string Name { get; init; } = string.Empty;
@@ -14,18 +15,23 @@ public record UpdateCompanyDetailCommand : IRequest
     public string Description { get; init; } = string.Empty;
 }
 
-public class UpdateCompanyDetailCommandHandler : IRequestHandler<UpdateCompanyDetailCommand>
+public class UpdateCompanyDetailCommandHandler
+    : IRequestHandler<UpdateCompanyDetailCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateCompanyDetailCommandHandler(IApplicationDbContext context)
+    public UpdateCompanyDetailCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateCompanyDetailCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(
+        UpdateCompanyDetailCommand request,
+        CancellationToken cancellationToken)
     {
-        var company = await _context.Companies.FirstOrDefaultAsync(x => x.Id == request.CompanyId);
+        var company = await _context.Companies
+            .FirstOrDefaultAsync(x => x.Id == request.CompanyId);
 
         if (company == null)
         {

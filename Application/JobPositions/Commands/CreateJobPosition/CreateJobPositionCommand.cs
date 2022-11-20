@@ -4,21 +4,26 @@ using MediatR;
 
 namespace Application.JobPositions.Commands.CreateJobPosition;
 
-public record CreateJobPositionCommand : IRequest<Guid>
+public record CreateJobPositionCommand
+    : IRequest<Guid>
 {
     public string Name { get; init; } = string.Empty;
 }
 
-public class CreateJobPositionCommandHandler : IRequestHandler<CreateJobPositionCommand, Guid>
+public class CreateJobPositionCommandHandler
+    : IRequestHandler<CreateJobPositionCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
 
-    public CreateJobPositionCommandHandler(IApplicationDbContext context)
+    public CreateJobPositionCommandHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Guid> Handle(CreateJobPositionCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(
+        CreateJobPositionCommand request,
+        CancellationToken cancellationToken)
     {
         var jobPosition = new JobPosition
         {

@@ -5,11 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.StudentLogs.Commands.CreateStudentLog;
 
-public class CreateStudentLogCommandValidator : AbstractValidator<CreateStudentLogCommand>
+public class CreateStudentLogCommandValidator
+    : AbstractValidator<CreateStudentLogCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public CreateStudentLogCommandValidator(IApplicationDbContext context)
+    public CreateStudentLogCommandValidator(
+        IApplicationDbContext context)
     {
         _context = context;
 
@@ -28,7 +30,9 @@ public class CreateStudentLogCommandValidator : AbstractValidator<CreateStudentL
             .MaximumLength(32);
     }
 
-    private async Task<bool> BeUniqueEmail(string email, CancellationToken cancellationToken)
+    private async Task<bool> BeUniqueEmail(
+        string email,
+        CancellationToken cancellationToken)
     {
         var query = _context.Accounts.Select(x => x.NormalizedEmail)
             .Union(_context.StudentLogs.Select(x => x.NormalizedEmail));

@@ -8,24 +8,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Tags.Queries.GetTag;
 
-public record GetTagQuery(Guid TagId) : IRequest<TagDTO>;
+public record GetTagQuery(Guid TagId)
+    : IRequest<TagDTO>;
 
-public class GetTagQueryHandler : IRequestHandler<GetTagQuery, TagDTO>
+public class GetTagQueryHandler
+    : IRequestHandler<GetTagQuery, TagDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetTagQueryHandler(IApplicationDbContext context)
+    public GetTagQueryHandler(
+        IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<TagDTO> Handle(GetTagQuery request, CancellationToken cancellationToken)
+    public async Task<TagDTO> Handle(
+        GetTagQuery request,
+        CancellationToken cancellationToken)
     {
         var tag = await _context.Tags
-            .AsNoTracking()
-            .Where(x => x.Id == request.TagId)
             .MapToTagDTO()
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(x => x.Id == request.TagId);
 
         if (tag == null)
         {

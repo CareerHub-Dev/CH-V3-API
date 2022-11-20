@@ -3,7 +3,8 @@ using FluentValidation;
 
 namespace Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 
-public class VerifyCompanyWithContinuedRegistrationCommandValidator : AbstractValidator<VerifyCompanyWithContinuedRegistrationCommand>
+public class VerifyCompanyWithContinuedRegistrationCommandValidator
+    : AbstractValidator<VerifyCompanyWithContinuedRegistrationCommand>
 {
     public VerifyCompanyWithContinuedRegistrationCommandValidator()
     {

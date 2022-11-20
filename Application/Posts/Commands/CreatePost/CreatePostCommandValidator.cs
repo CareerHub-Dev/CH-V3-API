@@ -3,7 +3,8 @@ using FluentValidation;
 
 namespace Application.Posts.Commands.CreatePost;
 
-public class CreatePostCommandValidator : AbstractValidator<CreatePostCommand>
+public class CreatePostCommandValidator 
+    : AbstractValidator<CreatePostCommand>
 {
     public CreatePostCommandValidator()
     {

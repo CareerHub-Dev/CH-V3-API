@@ -1,12 +1,13 @@
 ﻿using API.Authorize;
 using Application.Common.DTO.JobOffers;
 using Application.Common.Enums;
-using Application.JobOffers.Commands.VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompany;
-using Application.JobOffers.Commands.VerifiedStudentUnubscribeFromActiveJobOffer;
-using Application.JobOffers.Queries;
-using Application.JobOffers.Queries.GetAmount;
+using Application.JobOffers.Commands.VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompany;
+using Application.JobOffers.Commands.VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompany;
+using Application.JobOffers.Queries.GetAmountAppliedCVsOfJobOffer;
+using Application.JobOffers.Queries.GetAmountStudentSubscribersOfJobOffer;
+using Application.JobOffers.Queries.GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaging;
 using Application.JobOffers.Queries.GetJobOffer;
-using Application.JobOffers.Queries.GetJobOffers;
+using Application.JobOffers.Queries.IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompany;
 using Application.JobOffers.Queries.Models;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ public class JobOffersController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Mediator.Send(new GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaginationWithSearchWithFilterWithSortQuery
+        var result = await Sender.Send(new GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPagingQuery
         {
             FollowerStudentId = AccountInfo!.Id,
 
@@ -68,7 +69,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetJobOfferQuery
         {
             JobOfferId = jobOfferId,
             IsJobOfferMustBeActive = true,
@@ -81,7 +82,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountStudentSubscribersOfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetAmountStudentSubscribersOfJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountStudentSubscribersOfJobOfferQuery
         {
             JobOfferId = jobOfferId,
             IsJobOfferMustBeActive = true,
@@ -96,7 +97,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAmountAppliedCVsOfJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new GetAmountAppliedCVsOfJobOfferWithFilterQuery
+        return Ok(await Sender.Send(new GetAmountAppliedCVsOfJobOfferQuery
         {
             JobOfferId = jobOfferId,
             IsJobOfferMustBeActive = true,
@@ -111,7 +112,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> IsStudentSubscribedToJobOffer(Guid jobOfferId)
     {
-        return Ok(await Mediator.Send(new IsVerifiedActiveStudentSubscribedToActiveJobOfferWithVerifiedActiveCompanyQuery
+        return Ok(await Sender.Send(new IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompanyQuery
         {
             StudentId = AccountInfo!.Id,
             JobOfferId = jobOfferId
@@ -123,7 +124,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SubscribeToJobOffer(Guid jobOfferId)
     {
-        await Mediator.Send(new VerifiedActiveStudentSubscribeToActiveJobOfferWithVerifiedActiveCompanyCommand
+        await Sender.Send(new VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompanyCommand
         {
             StudentId = AccountInfo!.Id,
             JobOfferId = jobOfferId
@@ -137,7 +138,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UnsubscribeFromJobOffer(Guid jobOfferId)
     {
-        await Mediator.Send(new VerifiedActiveStudentUnsubscribeFromActiveJobOfferWithVerifiedActiveCompanyCommand
+        await Sender.Send(new VerifiedStudentUnsubscribeFromActiveJobOfferWithVerifiedCompanyCommand
         {
             StudentId = AccountInfo!.Id,
             JobOfferId = jobOfferId

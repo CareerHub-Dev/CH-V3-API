@@ -12,7 +12,8 @@ using System.Text;
 
 namespace Application.Services.Jwt;
 
-public class JwtService : IJwtService
+public class JwtService
+    : IJwtService
 {
     private readonly IApplicationDbContext _context;
     private readonly JwtSettings _jwtSettings;
@@ -40,7 +41,9 @@ public class JwtService : IJwtService
         {
             Subject = new ClaimsIdentity(new[] { new Claim("Id", accountId.ToString()) }),
             Expires = jwtToken.Expires,
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            SigningCredentials = new SigningCredentials(
+                new SymmetricSecurityKey(key),
+                SecurityAlgorithms.HmacSha256Signature)
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -49,7 +52,9 @@ public class JwtService : IJwtService
         return jwtToken;
     }
 
-    public async Task<RefreshToken> GenerateRefreshTokenAsync(string ipAddress, CancellationToken cancellationToken = default)
+    public async Task<RefreshToken> GenerateRefreshTokenAsync(
+        string ipAddress,
+        CancellationToken cancellationToken = default)
     {
         var refreshToken = new RefreshToken
         {
@@ -62,7 +67,8 @@ public class JwtService : IJwtService
         };
 
         // ensure token is unique by checking against db
-        var tokenIsNotUnique = await _context.RefreshTokens.AnyAsync(x => x.Token == refreshToken.Token, cancellationToken);
+        var tokenIsNotUnique = await _context.RefreshTokens
+            .AnyAsync(x => x.Token == refreshToken.Token, cancellationToken);
 
         if (tokenIsNotUnique)
         {
@@ -78,18 +84,21 @@ public class JwtService : IJwtService
         var key = Encoding.UTF8.GetBytes(_jwtSettings.Secret);
         try
         {
-            var result = await tokenHandler.ValidateTokenAsync(token, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                ClockSkew = TimeSpan.Zero
-            });
+            var result = await tokenHandler.ValidateTokenAsync(
+                token,
+                new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                    ClockSkew = TimeSpan.Zero
+                });
 
             // return account id from JWT token if validation successful
-            return result.Claims.First(x => x.Key == "Id").Value is not string id ? null : Guid.Parse(id);
+            return result.Claims
+                .First(x => x.Key == "Id").Value is not string id ? null : Guid.Parse(id);
         }
         catch
         {

@@ -2,7 +2,8 @@
 
 namespace Application.Posts.Commands.UpdatePostOfAccount;
 
-public class UpdatePostOfAccountCommandValidator : AbstractValidator<UpdatePostOfAccountCommand>
+public class UpdatePostOfAccountCommandValidator 
+    : AbstractValidator<UpdatePostOfAccountCommand>
 {
     public UpdatePostOfAccountCommandValidator()
     {

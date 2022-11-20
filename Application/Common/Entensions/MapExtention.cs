@@ -2,13 +2,14 @@
 using Application.Common.DTO.Bans;
 using Application.Common.DTO.Companies;
 using Application.Common.DTO.CompanyLinks;
+using Application.Common.DTO.Experiences;
+using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.StudentGroups;
 using Application.Common.DTO.StudentLogs;
 using Application.Common.DTO.Students;
 using Application.Common.DTO.Tags;
 using Domain.Entities;
-using MediatR;
 
 namespace Application.Common.Entensions;
 
@@ -122,6 +123,7 @@ public static class MapExtention
             Id = x.Id,
             Reason = x.Reason,
             Expires = x.Expires,
+            AccountId = x.AccountId
         });
     }
 
@@ -222,8 +224,8 @@ public static class MapExtention
 
     public static IQueryable<BriefCompanyWithStatsDTO> MapToBriefCompanyWithStatsDTO(
         this IQueryable<Company> companies,
-        bool? isJobOfferMustBeActive,
-        bool? isSubscriberMustBeVerified)
+        bool? isJobOfferMustBeActive = null,
+        bool? isSubscriberMustBeVerified = null)
     {
         return companies.Select(x => new BriefCompanyWithStatsDTO
         {
@@ -256,8 +258,8 @@ public static class MapExtention
 
     public static IQueryable<ShortCompanyWithStatsDTO> MapToShortCompanyWithStatsDTO(
         this IQueryable<Company> companies,
-        bool? isJobOfferMustBeActive,
-        bool? isSubscriberMustBeVerified)
+        bool? isJobOfferMustBeActive = null,
+        bool? isSubscriberMustBeVerified = null)
     {
         return companies.Select(x => new ShortCompanyWithStatsDTO
         {
@@ -279,8 +281,8 @@ public static class MapExtention
     public static IQueryable<FollowedShortCompanyWithStatsDTO> MapToFollowedShortCompanyWithStatsDTO(
         this IQueryable<Company> companies,
         Guid followerStudentId,
-        bool? isJobOfferMustBeActive,
-        bool? isSubscriberMustBeVerified)
+        bool? isJobOfferMustBeActive = null,
+        bool? isSubscriberMustBeVerified = null)
     {
         return companies.Select(x => new FollowedShortCompanyWithStatsDTO
         {
@@ -342,6 +344,135 @@ public static class MapExtention
         {
             Title = x.Title,
             Uri = x.Uri
+        });
+    }
+
+    #endregion
+
+    #region Experience
+
+    public static IQueryable<ExperienceDTO> MapToExperienceDTO(this IQueryable<Experience> experiences)
+    {
+        return experiences.Select(x => new ExperienceDTO
+        {
+            Id = x.Id,
+            Title = x.Title,
+            CompanyName = x.CompanyName,
+            JobType = x.JobType,
+            WorkFormat = x.WorkFormat,
+            ExperienceLevel = x.ExperienceLevel,
+            JobLocation = x.JobLocation,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
+            StudentId = x.StudentId
+        });
+    }
+
+    #endregion
+
+    #region JobOffer 
+
+    public static IQueryable<DetiledJobOfferDTO> MapToDetiledJobOfferDTO(this IQueryable<JobOffer> jobOffers)
+    {
+        return jobOffers.Select(x => new DetiledJobOfferDTO
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Image = x.Image,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
+            JobType = x.JobType,
+            WorkFormat = x.WorkFormat,
+            ExperienceLevel = x.ExperienceLevel,
+            JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
+            Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
+        });
+    }
+
+    public static IQueryable<DetiledJobOfferWithStatsDTO> MapToDetiledJobOfferWithStatsDTO(
+        this IQueryable<JobOffer> jobOffers,
+        bool? isSubscriberMustBeVerified = null,
+        bool? isStudentOfAppliedCVMustBeVerified = null)
+    {
+        return jobOffers.Select(x => new DetiledJobOfferWithStatsDTO
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Image = x.Image,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
+            JobType = x.JobType,
+            WorkFormat = x.WorkFormat,
+            ExperienceLevel = x.ExperienceLevel,
+            JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
+            Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
+            AmountSubscribers = x.SubscribedStudents.Count(x =>
+                !isSubscriberMustBeVerified.HasValue || (isSubscriberMustBeVerified.Value ?
+                    x.Verified != null || x.PasswordReset != null :
+                    x.Verified == null && x.PasswordReset == null)
+            ),
+            AmountAppliedCVs = x.AppliedCVs.Count(x =>
+                !isStudentOfAppliedCVMustBeVerified.HasValue || (isStudentOfAppliedCVMustBeVerified.Value ?
+                    x.Student!.Verified != null || x.Student.PasswordReset != null :
+                    x.Student!.Verified == null && x.Student.PasswordReset == null)
+            )
+        });
+    }
+
+    public static IQueryable<FollowedDetiledJobOfferWithStatsDTO> MapToFollowedDetiledJobOfferWithStatsDTO(
+        this IQueryable<JobOffer> jobOffers,
+        Guid followerStudentId,
+        bool? isSubscriberMustBeVerified = null,
+        bool? isStudentOfAppliedCVMustBeVerified = null)
+    {
+        return jobOffers.Select(x => new FollowedDetiledJobOfferWithStatsDTO
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Image = x.Image,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
+            JobType = x.JobType,
+            WorkFormat = x.WorkFormat,
+            ExperienceLevel = x.ExperienceLevel,
+            JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
+            Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
+            AmountSubscribers = x.SubscribedStudents.Count(x =>
+                !isSubscriberMustBeVerified.HasValue || (isSubscriberMustBeVerified.Value ?
+                    x.Verified != null || x.PasswordReset != null :
+                    x.Verified == null && x.PasswordReset == null)
+            ),
+            AmountAppliedCVs = x.AppliedCVs.Count(x =>
+                !isStudentOfAppliedCVMustBeVerified.HasValue || (isStudentOfAppliedCVMustBeVerified.Value ?
+                    x.Student!.Verified != null || x.Student.PasswordReset != null :
+                    x.Student!.Verified == null && x.Student.PasswordReset == null)
+            ),
+            IsFollowed = x.SubscribedStudents.Any(x => x.Id == followerStudentId),
+        });
+    }
+
+    public static IQueryable<JobOfferDTO> MapToJobOfferDTO(this IQueryable<JobOffer> jobOffers)
+    {
+        return jobOffers.Select(x => new JobOfferDTO
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Image = x.Image,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
+            JobType = x.JobType,
+            WorkFormat = x.WorkFormat,
+            ExperienceLevel = x.ExperienceLevel,
+            JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
+            Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
+            Overview = x.Overview,
+            Requirements = x.Requirements,
+            Responsibilities = x.Responsibilities,
+            Preferences = x.Preferences
         });
     }
 

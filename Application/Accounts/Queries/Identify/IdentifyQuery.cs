@@ -4,33 +4,43 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Accounts.Queries.Identify;
 
-public record IdentifyQuery : IRequest<IdentifyResult?>
+public record IdentifyQuery
+    : IRequest<IdentifyResult?>
 {
     public string JwtToken { get; init; } = string.Empty;
 }
 
-public class IdentifyQueryHandler : IRequestHandler<IdentifyQuery, IdentifyResult?>
+public class IdentifyQueryHandler
+    : IRequestHandler<IdentifyQuery, IdentifyResult?>
 {
     private readonly IApplicationDbContext _context;
     private readonly IJwtService _jwtService;
     private readonly IAccountHelper _accountHelper;
 
-    public IdentifyQueryHandler(IApplicationDbContext context, IJwtService jwtService, IAccountHelper accountHelper)
+    public IdentifyQueryHandler(
+        IApplicationDbContext context,
+        IJwtService jwtService,
+        IAccountHelper accountHelper)
     {
         _context = context;
         _jwtService = jwtService;
         _accountHelper = accountHelper;
     }
 
-    public async Task<IdentifyResult?> Handle(IdentifyQuery request, CancellationToken cancellationToken)
+    public async Task<IdentifyResult?> Handle(
+        IdentifyQuery request,
+        CancellationToken cancellationToken)
     {
         var accountId = await _jwtService.ValidateJwtTokenAsync(request.JwtToken);
 
-        if (accountId == null) return null;
+        if (accountId == null)
+        {
+            return null;
+        }
 
         var account = await _context.Accounts
             .AsNoTracking()
-            .Include(x => x.Bans.Where(x => x.Expires >= DateTime.UtcNow))
+            .Include(x => x.Bans)
             .FirstOrDefaultAsync(a => a.Id == accountId);
 
         if (account == null) return null;
@@ -38,9 +48,9 @@ public class IdentifyQueryHandler : IRequestHandler<IdentifyQuery, IdentifyResul
         return new IdentifyResult
         {
             Id = account.Id,
-            Role = _accountHelper.GetRole(account),
             IsVerified = account.IsVerified,
-            IsBanned = account.Bans.Any()
+            Role = _accountHelper.GetRole(account),
+            IsBanned = _accountHelper.IsBanned(account),
         };
     }
 }
