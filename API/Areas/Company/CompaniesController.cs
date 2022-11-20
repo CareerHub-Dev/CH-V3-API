@@ -1,5 +1,6 @@
 ﻿using API.Authorize;
 using API.DTO.Requests.Companies;
+using API.DTO.Responses;
 using Application.Common.DTO.Companies;
 using Application.Common.Enums;
 using Application.Companies.Commands.DeleteCompany;
@@ -58,7 +59,6 @@ public class CompaniesController : ApiControllerBase
 
     [HttpPost("self/logo")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> UpdateSelfCompanyLogo(IFormFile? file)
     {
         var result = await Sender.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file });
@@ -67,13 +67,12 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPost("self/banner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImageResponse))]
     public async Task<IActionResult> UpdateSelfCompanyBanner(IFormFile? file)
     {
         var result = await Sender.Send(new UpdateCompanyBannerCommand { CompanyId = AccountInfo!.Id, Banner = file });
 
-        return Ok(result);
+        return Ok(new ImageResponse { Route = result });
     }
 
     [HttpGet("self/amount-subscribers")]

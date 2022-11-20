@@ -1,4 +1,5 @@
 ﻿using API.Authorize;
+using API.DTO.Responses;
 using Application.Common.DTO.Companies;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
@@ -157,25 +158,23 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPost("{companyId}/logo")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImageResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCompanyLogo(Guid companyId, IFormFile? file)
     {
         var result = await Sender.Send(new UpdateCompanyLogoCommand { CompanyId = companyId, Logo = file });
 
-        return Ok(result);
+        return Ok(new ImageResponse { Route = result });
     }
 
     [HttpPost("{companyId}/banner")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImageResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCompanyBanner(Guid companyId, IFormFile? file)
     {
         var result = await Sender.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file });
 
-        return Ok(result);
+        return Ok(new ImageResponse { Route = result });
     }
 
     [HttpGet("{companyId}/JobOffers")]

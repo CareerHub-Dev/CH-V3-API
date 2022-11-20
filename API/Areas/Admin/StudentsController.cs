@@ -1,4 +1,5 @@
 ﻿using API.Authorize;
+using API.DTO.Responses;
 using Application.Common.DTO.Companies;
 using Application.Common.DTO.Experiences;
 using Application.Common.DTO.JobOffers;
@@ -310,12 +311,13 @@ public class StudentsController : ApiControllerBase
     }
 
     [HttpPost("{studentId}/photo")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImageResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateStudentPhoto(Guid studentId, IFormFile? file)
     {
-        return Ok(await Sender.Send(new UpdateStudentPhotoCommand { StudentId = studentId, Photo = file }));
+        var result = await Sender.Send(new UpdateStudentPhotoCommand { StudentId = studentId, Photo = file });
+
+        return Ok(new ImageResponse { Route = result });
     }
 
     [HttpDelete("{studentId}")]

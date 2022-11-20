@@ -1,5 +1,6 @@
 ﻿using API.Authorize;
 using API.DTO.Requests.JobOffers;
+using API.DTO.Responses;
 using Application.Common.DTO.JobOffers;
 using Application.Common.Enums;
 using Application.JobOffers.Commands.CreateJobOffer;
@@ -177,8 +178,7 @@ public class JobOffersController : ApiControllerBase
     }
 
     [HttpPost("{jobOfferId}/image")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImageResponse))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateJobOfferImageOfSelfCompany(Guid jobOfferId, IFormFile? file)
     {
@@ -190,6 +190,6 @@ public class JobOffersController : ApiControllerBase
             Image = file
         });
 
-        return Ok(result);
+        return Ok(new ImageResponse { Route = result });
     }
 }
