@@ -1,23 +1,18 @@
-﻿using Domain.Entities;
-using Domain.Enums;
+﻿using System;
+using System.Collections.Generic;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Infrastructure.Persistence.Migrations
 {
+    /// <inheritdoc />
     public partial class Init : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("Npgsql:Enum:degree", "bachelor,master,doctorate")
-                .Annotation("Npgsql:Enum:experience_level", "intern,trainee,junior,middle,senior")
-                .Annotation("Npgsql:Enum:job_type", "full_time,part_time,contract")
-                .Annotation("Npgsql:Enum:language_level", "a1,a2,b1,b2,c1,c2")
-                .Annotation("Npgsql:Enum:template_language", "ua,en")
-                .Annotation("Npgsql:Enum:work_format", "remote,on_site,hybrid");
-
             migrationBuilder.CreateTable(
                 name: "Accounts",
                 columns: table => new
@@ -153,6 +148,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Text = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
+                    Images = table.Column<List<string>>(type: "text[]", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     AccoundId = table.Column<Guid>(type: "uuid", nullable: false),
                     AccountId = table.Column<Guid>(type: "uuid", nullable: true)
@@ -230,9 +226,9 @@ namespace Infrastructure.Persistence.Migrations
                     Responsibilities = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
                     Preferences = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: false),
                     Image = table.Column<string>(type: "text", nullable: true),
-                    JobType = table.Column<JobType>(type: "job_type", nullable: false),
-                    WorkFormat = table.Column<WorkFormat>(type: "work_format", nullable: false),
-                    ExperienceLevel = table.Column<ExperienceLevel>(type: "experience_level", nullable: false),
+                    JobType = table.Column<int>(type: "integer", nullable: false),
+                    WorkFormat = table.Column<int>(type: "integer", nullable: false),
+                    ExperienceLevel = table.Column<int>(type: "integer", nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -345,7 +341,7 @@ namespace Infrastructure.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     JobPositionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TemplateLanguage = table.Column<TemplateLanguage>(type: "template_language", nullable: false),
+                    TemplateLanguage = table.Column<int>(type: "integer", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     Photo = table.Column<string>(type: "text", nullable: true),
@@ -383,9 +379,9 @@ namespace Infrastructure.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     CompanyName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    JobType = table.Column<JobType>(type: "job_type", nullable: false),
-                    WorkFormat = table.Column<WorkFormat>(type: "work_format", nullable: false),
-                    ExperienceLevel = table.Column<ExperienceLevel>(type: "experience_level", nullable: false),
+                    JobType = table.Column<int>(type: "integer", nullable: false),
+                    WorkFormat = table.Column<int>(type: "integer", nullable: false),
+                    ExperienceLevel = table.Column<int>(type: "integer", nullable: false),
                     JobLocation = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
                     StartDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -565,6 +561,7 @@ namespace Infrastructure.Persistence.Migrations
                 column: "SubscriptionTargetId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
