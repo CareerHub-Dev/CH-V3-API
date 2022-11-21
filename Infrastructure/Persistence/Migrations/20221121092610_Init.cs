@@ -216,6 +216,35 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
+                    Photo = table.Column<string>(type: "text", nullable: true),
+                    Phone = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
+                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    StudentGroupId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_Accounts_Id",
+                        column: x => x.Id,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Students_StudentGroups_StudentGroupId",
+                        column: x => x.StudentGroupId,
+                        principalTable: "StudentGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "JobOffers",
                 columns: table => new
                 {
@@ -247,65 +276,6 @@ namespace Infrastructure.Persistence.Migrations
                         name: "FK_JobOffers_JobPositions_JobPositionId",
                         column: x => x.JobPositionId,
                         principalTable: "JobPositions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    LastName = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: false),
-                    Photo = table.Column<string>(type: "text", nullable: true),
-                    Phone = table.Column<string>(type: "character varying(32)", maxLength: 32, nullable: true),
-                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    StudentGroupId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PostId = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_Accounts_Id",
-                        column: x => x.Id,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Students_Posts_PostId",
-                        column: x => x.PostId,
-                        principalTable: "Posts",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Students_StudentGroups_StudentGroupId",
-                        column: x => x.StudentGroupId,
-                        principalTable: "StudentGroups",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "JobOfferTag",
-                columns: table => new
-                {
-                    JobOffersId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TagsId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_JobOfferTag", x => new { x.JobOffersId, x.TagsId });
-                    table.ForeignKey(
-                        name: "FK_JobOfferTag_JobOffers_JobOffersId",
-                        column: x => x.JobOffersId,
-                        principalTable: "JobOffers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_JobOfferTag_Tags_TagsId",
-                        column: x => x.TagsId,
-                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -399,24 +369,24 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "JobOfferStudent",
+                name: "PostStudent",
                 columns: table => new
                 {
-                    JobOfferSubscriptionsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SubscribedStudentsId = table.Column<Guid>(type: "uuid", nullable: false)
+                    LikedPostsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentsLikedId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JobOfferStudent", x => new { x.JobOfferSubscriptionsId, x.SubscribedStudentsId });
+                    table.PrimaryKey("PK_PostStudent", x => new { x.LikedPostsId, x.StudentsLikedId });
                     table.ForeignKey(
-                        name: "FK_JobOfferStudent_JobOffers_JobOfferSubscriptionsId",
-                        column: x => x.JobOfferSubscriptionsId,
-                        principalTable: "JobOffers",
+                        name: "FK_PostStudent_Posts_LikedPostsId",
+                        column: x => x.LikedPostsId,
+                        principalTable: "Posts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_JobOfferStudent_Students_SubscribedStudentsId",
-                        column: x => x.SubscribedStudentsId,
+                        name: "FK_PostStudent_Students_StudentsLikedId",
+                        column: x => x.StudentsLikedId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -442,6 +412,54 @@ namespace Infrastructure.Persistence.Migrations
                         name: "FK_StudentSubscriptions_Students_SubscriptionTargetId",
                         column: x => x.SubscriptionTargetId,
                         principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "JobOfferStudent",
+                columns: table => new
+                {
+                    JobOfferSubscriptionsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SubscribedStudentsId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobOfferStudent", x => new { x.JobOfferSubscriptionsId, x.SubscribedStudentsId });
+                    table.ForeignKey(
+                        name: "FK_JobOfferStudent_JobOffers_JobOfferSubscriptionsId",
+                        column: x => x.JobOfferSubscriptionsId,
+                        principalTable: "JobOffers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_JobOfferStudent_Students_SubscribedStudentsId",
+                        column: x => x.SubscribedStudentsId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "JobOfferTag",
+                columns: table => new
+                {
+                    JobOffersId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TagsId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobOfferTag", x => new { x.JobOffersId, x.TagsId });
+                    table.ForeignKey(
+                        name: "FK_JobOfferTag_JobOffers_JobOffersId",
+                        column: x => x.JobOffersId,
+                        principalTable: "JobOffers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_JobOfferTag_Tags_TagsId",
+                        column: x => x.TagsId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -531,6 +549,11 @@ namespace Infrastructure.Persistence.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PostStudent_StudentsLikedId",
+                table: "PostStudent",
+                column: "StudentsLikedId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_AccountId",
                 table: "RefreshTokens",
                 column: "AccountId");
@@ -544,11 +567,6 @@ namespace Infrastructure.Persistence.Migrations
                 name: "IX_StudentLogs_StudentGroupId",
                 table: "StudentLogs",
                 column: "StudentGroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_PostId",
-                table: "Students",
-                column: "PostId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_StudentGroupId",
@@ -586,6 +604,9 @@ namespace Infrastructure.Persistence.Migrations
                 name: "JobOfferTag");
 
             migrationBuilder.DropTable(
+                name: "PostStudent");
+
+            migrationBuilder.DropTable(
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
@@ -604,6 +625,9 @@ namespace Infrastructure.Persistence.Migrations
                 name: "Tags");
 
             migrationBuilder.DropTable(
+                name: "Posts");
+
+            migrationBuilder.DropTable(
                 name: "Students");
 
             migrationBuilder.DropTable(
@@ -611,9 +635,6 @@ namespace Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "JobPositions");
-
-            migrationBuilder.DropTable(
-                name: "Posts");
 
             migrationBuilder.DropTable(
                 name: "StudentGroups");

@@ -43,6 +43,7 @@ public class CreatePostCommandHandler
         {
             AccoundId = request.AccountId,
             Text = request.Text,
+            CreatedDate = DateTime.UtcNow,
         };
 
         foreach (var image in request.Images)

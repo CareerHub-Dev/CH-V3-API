@@ -567,6 +567,21 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("JobOfferTag");
                 });
 
+            modelBuilder.Entity("PostStudent", b =>
+                {
+                    b.Property<Guid>("LikedPostsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StudentsLikedId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("LikedPostsId", "StudentsLikedId");
+
+                    b.HasIndex("StudentsLikedId");
+
+                    b.ToTable("PostStudent");
+                });
+
             modelBuilder.Entity("Domain.Entities.Admin", b =>
                 {
                     b.HasBaseType("Domain.Entities.Account");
@@ -633,13 +648,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<string>("Photo")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("PostId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("StudentGroupId")
                         .HasColumnType("uuid");
-
-                    b.HasIndex("PostId");
 
                     b.HasIndex("StudentGroupId");
 
@@ -816,6 +826,21 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PostStudent", b =>
+                {
+                    b.HasOne("Domain.Entities.Post", null)
+                        .WithMany()
+                        .HasForeignKey("LikedPostsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsLikedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.Entities.Admin", b =>
                 {
                     b.HasOne("Domain.Entities.Account", null)
@@ -842,10 +867,6 @@ namespace Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Post", null)
-                        .WithMany("StudentsLiked")
-                        .HasForeignKey("PostId");
-
                     b.HasOne("Domain.Entities.StudentGroup", "StudentGroup")
                         .WithMany()
                         .HasForeignKey("StudentGroupId")
@@ -869,11 +890,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("CVs");
 
                     b.Navigation("JobOffers");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Post", b =>
-                {
-                    b.Navigation("StudentsLiked");
                 });
 
             modelBuilder.Entity("Domain.Entities.Company", b =>

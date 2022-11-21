@@ -20,4 +20,6 @@ public class Student : Account
     public List<Experience> Experiences { get; set; } = new List<Experience>();
 
     public List<CV> CVs { get; set; } = new List<CV>();
+
+    public List<Post> LikedPosts { get; set; } = new List<Post>();
 }

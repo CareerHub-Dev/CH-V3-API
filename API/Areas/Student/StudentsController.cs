@@ -390,7 +390,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImageResponse))]
     public async Task<IActionResult> UpdateSelfStudentPhoto(IFormFile? file)
     {
-        var result = await Sender.Send(new UpdateStudentPhotoCommand { StudentId = AccountInfo!.Id, Photo = file }));
+        var result = await Sender.Send(new UpdateStudentPhotoCommand { StudentId = AccountInfo!.Id, Photo = file });
 
         return Ok(new ImageResponse { Route = result });
     }
