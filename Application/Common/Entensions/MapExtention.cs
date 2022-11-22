@@ -122,8 +122,7 @@ public static class MapExtention
         {
             Id = x.Id,
             Reason = x.Reason,
-            Expires = x.Expires,
-            AccountId = x.AccountId
+            Expires = x.Expires
         });
     }
 

@@ -2,7 +2,7 @@
 
 namespace API.Services;
 
-public class PathService 
+public class PathService
     : IPathService
 {
     private readonly IWebHostEnvironment _webHostEnvironment;

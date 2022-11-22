@@ -29,16 +29,16 @@ public class AccountController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RefreshTokenResult))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RefreshToken(RefreshTokenRequest view)
+    public async Task<IActionResult> RefreshToken(RefreshTokenRequest request)
     {
-        if (string.IsNullOrWhiteSpace(view.Token))
+        if (string.IsNullOrWhiteSpace(request.Token))
         {
-            view.Token = Request.Cookies["refreshToken"] ?? "";
+            request.Token = Request.Cookies["refreshToken"] ?? "";
         }
 
         var response = await Sender.Send(new RefreshTokenQuery
         {
-            Token = view.Token
+            Token = request.Token
         });
 
         SetTokenCookie(response.RefreshToken);

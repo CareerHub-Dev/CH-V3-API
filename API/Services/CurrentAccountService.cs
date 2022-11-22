@@ -3,7 +3,7 @@ using Application.Common.Interfaces;
 
 namespace API.Services;
 
-public class CurrentAccountService 
+public class CurrentAccountService
     : ICurrentAccountService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;

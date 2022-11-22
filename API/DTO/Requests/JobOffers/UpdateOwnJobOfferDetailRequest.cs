@@ -2,14 +2,15 @@
 
 namespace API.DTO.Requests.JobOffers;
 
-public record CreateJobOfferRequest
+public record UpdateOwnJobOfferDetailRequest
 {
+    public Guid JobOfferId { get; init; }
+
     public string Title { init; get; } = string.Empty;
     public string Overview { init; get; } = string.Empty;
     public string Requirements { init; get; } = string.Empty;
     public string Responsibilities { init; get; } = string.Empty;
     public string Preferences { init; get; } = string.Empty;
-    public IFormFile? Image { get; init; }
 
     public JobType JobType { get; init; }
     public WorkFormat WorkFormat { get; init; }

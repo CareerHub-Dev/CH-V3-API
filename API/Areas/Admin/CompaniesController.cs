@@ -83,12 +83,6 @@ public class CompaniesController : ApiControllerBase
         }));
     }
 
-    /// <remarks>
-    /// Admin:
-    /// 
-    ///     Create company (sends an e-mail under the hood)
-    ///
-    /// </remarks>
     [HttpPost("invite")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> InviteCompany(InviteCompanyCommand command)
@@ -98,12 +92,6 @@ public class CompaniesController : ApiControllerBase
         return Ok(result);
     }
 
-    /// <remarks>
-    /// Admin:
-    /// 
-    ///     sends an e-mail
-    ///
-    /// </remarks>
     [HttpPost("send-invite-email")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -162,7 +150,11 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCompanyLogo(Guid companyId, IFormFile? file)
     {
-        var result = await Sender.Send(new UpdateCompanyLogoCommand { CompanyId = companyId, Logo = file });
+        var result = await Sender.Send(new UpdateCompanyLogoCommand
+        {
+            CompanyId = companyId,
+            Logo = file
+        });
 
         return Ok(new ImageResponse { Route = result });
     }
@@ -172,7 +164,11 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateCompanyBanner(Guid companyId, IFormFile? file)
     {
-        var result = await Sender.Send(new UpdateCompanyBannerCommand { CompanyId = companyId, Banner = file });
+        var result = await Sender.Send(new UpdateCompanyBannerCommand
+        {
+            CompanyId = companyId,
+            Banner = file
+        });
 
         return Ok(new ImageResponse { Route = result });
     }

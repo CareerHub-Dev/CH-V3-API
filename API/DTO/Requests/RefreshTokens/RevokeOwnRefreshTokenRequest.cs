@@ -2,7 +2,7 @@
 
 namespace API.DTO.Requests.RefreshTokens;
 
-public class RevokeRefreshTokenRequest
+public class RevokeOwnRefreshTokenRequest
 {
     [DefaultValue("")]
     public string? Token { get; set; } = string.Empty;

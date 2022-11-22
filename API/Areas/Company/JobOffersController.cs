@@ -110,7 +110,7 @@ public class JobOffersController : ApiControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateJobOfferForSelfCompany(CreateJobOfferRequest view)
+    public async Task<IActionResult> CreateJobOfferForSelfCompany(CreateOwnJobOfferRequest view)
     {
         var result = await Sender.Send(new CreateJobOfferCommand
         {
@@ -148,7 +148,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateJobOfferDetailOfSelfCompany(Guid jobOfferId, UpdateJobOfferDetailRequest view)
+    public async Task<IActionResult> UpdateJobOfferDetailOfSelfCompany(Guid jobOfferId, UpdateOwnJobOfferDetailRequest view)
     {
         if (jobOfferId != view.JobOfferId)
         {

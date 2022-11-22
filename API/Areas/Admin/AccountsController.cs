@@ -5,6 +5,7 @@ using Application.Common.DTO.Accounts;
 using Application.Common.DTO.Bans;
 using Application.Common.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace API.Areas.Admin;
 
@@ -29,12 +30,16 @@ public class AccountsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        return Ok(await Sender.Send(new GetBansOfAccountWithPagingQuery
+        var result = await Sender.Send(new GetBansOfAccountWithPagingQuery
         {
             AccountId = accountId,
             PageNumber = pageNumber,
             PageSize = pageSize,
             OrderByExpression = orderByExpression ?? "Expires"
-        }));
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
     }
 }

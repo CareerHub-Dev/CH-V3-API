@@ -13,14 +13,18 @@ public class RefreshTokensController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RevokeTokenAsync(RevokeRefreshTokenRequest request)
+    public async Task<IActionResult> RevokeTokenAsync(RevokeOwnRefreshTokenRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Token))
         {
             request.Token = Request.Cookies["refreshToken"] ?? "";
         }
 
-        await Sender.Send(new RevokeRefreshTokenOfAccountCommand { Token = request.Token, AccountId = AccountInfo!.Id });
+        await Sender.Send(new RevokeRefreshTokenOfAccountCommand
+        {
+            Token = request.Token,
+            AccountId = AccountInfo!.Id
+        });
 
         return NoContent();
     }

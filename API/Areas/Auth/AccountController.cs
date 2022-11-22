@@ -12,12 +12,12 @@ public class AccountController : ApiControllerBase
     [HttpPost("change-password")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ChangePassword(ChangePasswordRequest view)
+    public async Task<IActionResult> ChangePassword(ChangeOwnPasswordRequest request)
     {
         await Sender.Send(new ChangePasswordCommand
         {
-            OldPassword = view.OldPassword,
-            NewPassword = view.NewPassword,
+            OldPassword = request.OldPassword,
+            NewPassword = request.NewPassword,
             AccountId = AccountInfo!.Id,
         });
 

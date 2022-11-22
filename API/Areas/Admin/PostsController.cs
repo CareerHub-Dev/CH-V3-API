@@ -1,15 +1,8 @@
 ﻿using API.Authorize;
-using API.DTO.Requests.Posts;
-using Application.Bans.Commands.CreateBan;
-using Application.Bans.Commands.DeleteBan;
-using Application.Bans.Commands.UpdateBan;
-using Application.Bans.Queries.GetBan;
-using Application.Common.DTO.Bans;
 using Application.Common.Enums;
 using Application.Posts.Commands.CreatePost;
 using Application.Posts.Commands.DeletePost;
 using Application.Posts.Commands.UpdatePost;
-using Application.Posts.Commands.UpdatePostOfAccount;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Admin;

@@ -52,12 +52,6 @@ public class AdminsController : ApiControllerBase
         return Ok(await Sender.Send(new GetAdminQuery(adminId)));
     }
 
-    /// <remarks>
-    /// Admin:
-    /// 
-    ///     Create admin (sends an e-mail under the hood)
-    ///
-    /// </remarks>
     [HttpPost("invite")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> InviteAdmin(InviteAdminCommand command)
@@ -67,12 +61,6 @@ public class AdminsController : ApiControllerBase
         return Ok(result);
     }
 
-    /// <remarks>
-    /// Admin:
-    /// 
-    ///     sends an e-mail
-    ///
-    /// </remarks>
     [HttpPost("send-invite-email")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

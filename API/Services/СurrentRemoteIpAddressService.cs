@@ -2,7 +2,7 @@
 
 namespace API.Services;
 
-public class СurrentRemoteIpAddressService 
+public class СurrentRemoteIpAddressService
     : IСurrentRemoteIpAddressService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -19,7 +19,7 @@ public class СurrentRemoteIpAddressService
         {
             var context = _httpContextAccessor.HttpContext;
 
-            if(context == null)
+            if (context == null)
             {
                 return string.Empty;
             }

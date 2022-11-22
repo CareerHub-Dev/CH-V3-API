@@ -315,7 +315,11 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateStudentPhoto(Guid studentId, IFormFile? file)
     {
-        var result = await Sender.Send(new UpdateStudentPhotoCommand { StudentId = studentId, Photo = file });
+        var result = await Sender.Send(new UpdateStudentPhotoCommand
+        {
+            StudentId = studentId,
+            Photo = file
+        });
 
         return Ok(new ImageResponse { Route = result });
     }

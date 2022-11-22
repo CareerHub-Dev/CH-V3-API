@@ -31,14 +31,14 @@ public class CompaniesController : ApiControllerBase
 
     [HttpPut("self/detail")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> UpdateSelfCompanyDetailAccount(UpdateOwnCompanyDetailRequest view)
+    public async Task<IActionResult> UpdateSelfCompanyDetailAccount(UpdateOwnCompanyDetailRequest request)
     {
         await Sender.Send(new UpdateCompanyDetailCommand
         {
             CompanyId = AccountInfo!.Id,
-            Motto = view.Motto,
-            Description = view.Description,
-            Name = view.Name,
+            Motto = request.Motto,
+            Description = request.Description,
+            Name = request.Name,
         });
 
         return NoContent();
@@ -58,19 +58,27 @@ public class CompaniesController : ApiControllerBase
     }
 
     [HttpPost("self/logo")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImageResponse))]
     public async Task<IActionResult> UpdateSelfCompanyLogo(IFormFile? file)
     {
-        var result = await Sender.Send(new UpdateCompanyLogoCommand { CompanyId = AccountInfo!.Id, Logo = file });
+        var result = await Sender.Send(new UpdateCompanyLogoCommand
+        {
+            CompanyId = AccountInfo!.Id,
+            Logo = file
+        });
 
-        return Ok(result);
+        return Ok(new ImageResponse { Route = result });
     }
 
     [HttpPost("self/banner")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ImageResponse))]
     public async Task<IActionResult> UpdateSelfCompanyBanner(IFormFile? file)
     {
-        var result = await Sender.Send(new UpdateCompanyBannerCommand { CompanyId = AccountInfo!.Id, Banner = file });
+        var result = await Sender.Send(new UpdateCompanyBannerCommand
+        {
+            CompanyId = AccountInfo!.Id,
+            Banner = file
+        });
 
         return Ok(new ImageResponse { Route = result });
     }

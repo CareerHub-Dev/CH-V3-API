@@ -2,7 +2,7 @@
 
 namespace API.DTO.Requests.Experiences;
 
-public record UpdateExperienceRequest
+public record UpdateOwnExperienceRequest
 {
     public Guid ExperienceId { get; init; }
     public string Title { get; init; } = string.Empty;

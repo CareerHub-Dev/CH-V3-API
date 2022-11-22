@@ -52,18 +52,18 @@ public class ExperiencesController : ApiControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
-    public async Task<IActionResult> CreateExperienceForSelfStudent(CreateExperienceRequest view)
+    public async Task<IActionResult> CreateExperienceForSelfStudent(CreateOwnExperienceRequest request)
     {
         var result = await Sender.Send(new CreateExperienceCommand
         {
-            Title = view.Title,
-            CompanyName = view.CompanyName,
-            JobType = view.JobType,
-            WorkFormat = view.WorkFormat,
-            ExperienceLevel = view.ExperienceLevel,
-            JobLocation = view.JobLocation,
-            StartDate = view.StartDate,
-            EndDate = view.EndDate,
+            Title = request.Title,
+            CompanyName = request.CompanyName,
+            JobType = request.JobType,
+            WorkFormat = request.WorkFormat,
+            ExperienceLevel = request.ExperienceLevel,
+            JobLocation = request.JobLocation,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
             StudentId = AccountInfo!.Id
         });
 
@@ -84,7 +84,7 @@ public class ExperiencesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateExperienceOfSelfStudent(Guid experienceId, UpdateExperienceRequest request)
+    public async Task<IActionResult> UpdateExperienceOfSelfStudent(Guid experienceId, UpdateOwnExperienceRequest request)
     {
         if (experienceId != request.ExperienceId)
         {

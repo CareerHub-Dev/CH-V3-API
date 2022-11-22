@@ -2,7 +2,7 @@
 
 namespace API.DTO.Requests.Experiences;
 
-public record CreateExperienceRequest
+public record CreateOwnExperienceRequest
 {
     public string Title { get; init; } = string.Empty;
     public string CompanyName { get; init; } = string.Empty;
