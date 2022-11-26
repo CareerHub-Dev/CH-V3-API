@@ -1,8 +1,8 @@
 ﻿using Domain.Enums;
 
-namespace Domain.Entities;
+namespace Application.Common.DTO.Educations;
 
-public class Education
+public class EducationDTO
 {
     public string University { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
