@@ -5,6 +5,7 @@ using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.IO.Abstractions;
 
 namespace Infrastructure;
 
@@ -26,6 +27,8 @@ public static class ConfigureServices
         services.AddScoped<ApplicationDbContextInitialiser>();
 
         services.AddScoped<IMailKitService, MailKitService>();
+
+        services.AddScoped<IFileSystem, FileSystem>();
 
         return services;
     }

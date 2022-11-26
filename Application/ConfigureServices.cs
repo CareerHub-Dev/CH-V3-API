@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
-using System.IO.Abstractions;
 
 namespace Application;
 
@@ -42,8 +41,6 @@ public static class ConfigureServices
 
         services.AddScoped<IAccountHelper, AccountHelper>();
         services.AddScoped<IRefreshTokenHelper, RefreshTokenHelper>();
-
-        services.AddScoped<IFileSystem, FileSystem>();
 
         services.AddHostedService<RemoveOldImagesBackgroundService>();
 
