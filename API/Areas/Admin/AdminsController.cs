@@ -21,7 +21,7 @@ public class AdminsController : ApiControllerBase
         [FromQuery] bool? isAdminMustBeVerified,
         [FromQuery] bool? isSuperAdmin,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -30,7 +30,7 @@ public class AdminsController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             WithoutAdminId = AccountInfo!.Id,
             IsAdminMustBeVerified = isAdminMustBeVerified,

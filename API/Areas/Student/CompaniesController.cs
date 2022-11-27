@@ -26,7 +26,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedShortCompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -37,7 +37,7 @@ public class CompaniesController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsCompanyMustBeVerified = true,
 
@@ -141,7 +141,7 @@ public class CompaniesController : ApiControllerBase
     public async Task<IActionResult> GetJobOffersOfCompany(
         Guid companyId,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] JobType? mustHaveJobType,
         [FromQuery] WorkFormat? mustHaveWorkFormat,
         [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
@@ -160,7 +160,7 @@ public class CompaniesController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsJobOfferMustBeActive = true,
             MustHaveWorkFormat = mustHaveWorkFormat,

@@ -13,11 +13,11 @@ public class StudentGroupsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefStudentGroupDTO>))]
     public async Task<IActionResult> GetStudentGroups(
-        [FromQuery] string? searchTerm)
+        [FromQuery] string? search)
     {
         return Ok(await Sender.Send(new GetBriefStudentGroupsQuery
         {
-            SearchTerm = searchTerm ?? string.Empty
+            SearchTerm = search ?? string.Empty
         }));
     }
 

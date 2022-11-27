@@ -26,7 +26,7 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DetiledJobOfferWithStatsDTO>))]
     public async Task<IActionResult> GetJobOffersOfSelfCompany(
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] bool? isJobOfferMustBeActive,
         [FromQuery] JobType? mustHaveJobType,
         [FromQuery] WorkFormat? mustHaveWorkFormat,
@@ -43,7 +43,7 @@ public class JobOffersController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsJobOfferMustBeActive = isJobOfferMustBeActive,
             MustHaveWorkFormat = mustHaveWorkFormat,

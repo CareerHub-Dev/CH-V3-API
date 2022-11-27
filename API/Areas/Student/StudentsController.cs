@@ -41,7 +41,7 @@ public class StudentsController : ApiControllerBase
     public async Task<IActionResult> GetStudents(
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -51,7 +51,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsStudentMustBeVerified = true,
             WithoutStudentId = AccountInfo!.Id,
@@ -183,7 +183,7 @@ public class StudentsController : ApiControllerBase
         Guid studentId,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -196,7 +196,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsStudentSubscriptionMustBeVerified = true,
             WithoutStudentSubscriptionId = AccountInfo!.Id,
@@ -217,7 +217,7 @@ public class StudentsController : ApiControllerBase
         Guid studentId,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -230,7 +230,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsStudentSubscriberMustBeVerified = true,
             WithoutStudentSubscriberId = AccountInfo!.Id,
@@ -250,7 +250,7 @@ public class StudentsController : ApiControllerBase
     public async Task<IActionResult> GetCompanySubscriptionsOfStudent(
         Guid studentId,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -264,7 +264,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsCompanyMustBeVerified = true,
 
@@ -288,7 +288,7 @@ public class StudentsController : ApiControllerBase
     public async Task<IActionResult> GetJobOfferSubscriptionsOfStudent(
         Guid studentId,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] JobType? mustHaveJobType,
         [FromQuery] WorkFormat? mustHaveWorkFormat,
         [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
@@ -307,7 +307,7 @@ public class StudentsController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsJobOfferMustBeActive = true,
             MustHaveWorkFormat = mustHaveWorkFormat,
@@ -412,7 +412,7 @@ public class StudentsController : ApiControllerBase
     public async Task<IActionResult> GetStudentSubscriptionsOfSelfStudent(
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -424,7 +424,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsStudentSubscriptionMustBeVerified = true,
             StudentGroupIds = studentGroupIds,
@@ -443,7 +443,7 @@ public class StudentsController : ApiControllerBase
     public async Task<IActionResult> GetStudentSubscribersOfSelfStudent(
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -455,7 +455,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsStudentSubscriberMustBeVerified = true,
             StudentGroupIds = studentGroupIds,
@@ -473,7 +473,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedShortCompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanySubscriptionsOfSelfStudent(
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -485,7 +485,7 @@ public class StudentsController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsCompanyMustBeVerified = true,
 
@@ -507,7 +507,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetiledJobOfferWithStatsDTO>))]
     public async Task<IActionResult> GetJobOfferSubscriptionsOfSelfStudent(
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] JobType? mustHaveJobType,
         [FromQuery] WorkFormat? mustHaveWorkFormat,
         [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
@@ -525,7 +525,7 @@ public class StudentsController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsJobOfferMustBeActive = true,
             MustHaveWorkFormat = mustHaveWorkFormat,

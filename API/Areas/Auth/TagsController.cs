@@ -13,11 +13,11 @@ public class TagsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefTagDTO>))]
     public async Task<IActionResult> GetTags(
-        [FromQuery] string? searchTerm)
+        [FromQuery] string? search)
     {
         return Ok(await Sender.Send(new GetBriefTagsQuery
         {
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
         }));
     }
 

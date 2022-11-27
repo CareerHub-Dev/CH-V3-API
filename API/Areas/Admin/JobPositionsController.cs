@@ -19,7 +19,7 @@ public class JobPositionsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<JobPositionDTO>))]
     public async Task<IActionResult> GetJobPositions(
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -28,7 +28,7 @@ public class JobPositionsController : ApiControllerBase
             PageSize = pageSize,
             PageNumber = pageNumber,
 
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             OrderByExpression = order ?? "Name"
         });

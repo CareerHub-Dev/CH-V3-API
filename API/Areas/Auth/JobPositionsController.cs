@@ -13,11 +13,11 @@ public class JobPositionsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefJobPositionDTO>))]
     public async Task<IActionResult> GetJobPositions(
-        [FromQuery] string? searchTerm)
+        [FromQuery] string? search)
     {
         return Ok(await Sender.Send(new GetBriefJobPositionsQuery
         {
-            SearchTerm = searchTerm ?? string.Empty
+            SearchTerm = search ?? string.Empty
         }));
     }
 

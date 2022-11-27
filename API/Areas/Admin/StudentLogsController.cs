@@ -20,7 +20,7 @@ public class StudentLogsController : ApiControllerBase
     public async Task<IActionResult> GetStudentLogs(
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -28,7 +28,7 @@ public class StudentLogsController : ApiControllerBase
         {
             StudentGroupIds = studentGroupIds,
             OrderByExpression = order ?? "LastName",
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
             PageNumber = pageNumber,
             PageSize = pageSize
         });

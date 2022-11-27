@@ -20,7 +20,7 @@ public class TagsController : ApiControllerBase
     public async Task<IActionResult> GetTags(
         [FromQuery] bool? isAccepted,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -29,7 +29,7 @@ public class TagsController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
             OrderByExpression = order ?? "Name",
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
             IsAccepted = isAccepted
         });
 

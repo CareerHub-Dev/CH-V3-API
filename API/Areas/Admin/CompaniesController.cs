@@ -32,7 +32,7 @@ public class CompaniesController : ApiControllerBase
     public async Task<IActionResult> GetCompanies(
         [FromQuery] bool? isCompanyMustBeVerified,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -40,7 +40,7 @@ public class CompaniesController : ApiControllerBase
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
             OrderByExpression = order ?? "Name"
         });
@@ -179,7 +179,7 @@ public class CompaniesController : ApiControllerBase
         Guid companyId,
         [FromQuery] bool? isJobOfferMustBeActive,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] JobType? mustHaveJobType,
         [FromQuery] WorkFormat? mustHaveWorkFormat,
         [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
@@ -195,7 +195,7 @@ public class CompaniesController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsJobOfferMustBeActive = isJobOfferMustBeActive,
             MustHaveWorkFormat = mustHaveWorkFormat,
@@ -220,7 +220,7 @@ public class CompaniesController : ApiControllerBase
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
-        [FromQuery] string? searchTerm,
+        [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -230,7 +230,7 @@ public class CompaniesController : ApiControllerBase
 
             PageNumber = pageNumber,
             PageSize = pageSize,
-            SearchTerm = searchTerm ?? string.Empty,
+            SearchTerm = search ?? string.Empty,
 
             IsStudentSubscriberMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,

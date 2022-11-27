@@ -98,6 +98,8 @@ public class JobOffersController : ApiControllerBase
             Image = file
         });
 
-        return Ok(new ImageResponse { Route = result });
+        return Ok(new ImageResponse { 
+            Route = result 
+        });
     }
 }
