@@ -25,7 +25,7 @@ public class JobOffersController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DetiledJobOfferWithStatsDTO>))]
     public async Task<IActionResult> GetJobOffersOfSelfCompany(
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] bool? isJobOfferMustBeActive,
         [FromQuery] JobType? mustHaveJobType,
@@ -59,7 +59,7 @@ public class JobOffersController : ApiControllerBase
                 IsSubscriberMustBeVerified = true,
             },
 
-            OrderByExpression = orderByExpression ?? "StartDate",
+            OrderByExpression = order ?? "StartDate",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

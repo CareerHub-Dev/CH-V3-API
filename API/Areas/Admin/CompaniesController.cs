@@ -31,7 +31,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefCompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
         [FromQuery] bool? isCompanyMustBeVerified,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
@@ -42,7 +42,7 @@ public class CompaniesController : ApiControllerBase
             PageSize = pageSize,
             SearchTerm = searchTerm ?? string.Empty,
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
-            OrderByExpression = orderByExpression ?? "Name"
+            OrderByExpression = order ?? "Name"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -178,7 +178,7 @@ public class CompaniesController : ApiControllerBase
     public async Task<IActionResult> GetJobOffersOfCompany(
         Guid companyId,
         [FromQuery] bool? isJobOfferMustBeActive,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] JobType? mustHaveJobType,
         [FromQuery] WorkFormat? mustHaveWorkFormat,
@@ -204,7 +204,7 @@ public class CompaniesController : ApiControllerBase
             MustHaveJobPositionId = mustHavejobPositionId,
             MustHaveTagIds = mustHaveTagIds,
 
-            OrderByExpression = orderByExpression ?? "StartDate",
+            OrderByExpression = order ?? "StartDate",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -219,7 +219,7 @@ public class CompaniesController : ApiControllerBase
         Guid companyId,
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
@@ -235,7 +235,7 @@ public class CompaniesController : ApiControllerBase
             IsStudentSubscriberMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
 
-            OrderByExpression = orderByExpression ?? "LastName",
+            OrderByExpression = order ?? "LastName",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

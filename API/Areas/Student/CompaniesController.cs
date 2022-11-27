@@ -25,7 +25,7 @@ public class CompaniesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedShortCompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
@@ -48,7 +48,7 @@ public class CompaniesController : ApiControllerBase
                 IsSubscriberMustBeVerified = true,
             },
 
-            OrderByExpression = orderByExpression ?? "Name",
+            OrderByExpression = order ?? "Name",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -140,7 +140,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FollowedDetiledJobOfferWithStatsDTO>))]
     public async Task<IActionResult> GetJobOffersOfCompany(
         Guid companyId,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] JobType? mustHaveJobType,
         [FromQuery] WorkFormat? mustHaveWorkFormat,
@@ -176,7 +176,7 @@ public class CompaniesController : ApiControllerBase
                 IsSubscriberMustBeVerified = true,
             },
 
-            OrderByExpression = orderByExpression ?? "StartDate",
+            OrderByExpression = order ?? "StartDate",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

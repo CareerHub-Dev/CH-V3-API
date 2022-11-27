@@ -36,7 +36,7 @@ public class StudentsController : ApiControllerBase
     public async Task<IActionResult> GetStudents(
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
@@ -48,7 +48,7 @@ public class StudentsController : ApiControllerBase
             SearchTerm = searchTerm ?? string.Empty,
             IsStudentMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
-            OrderByExpression = orderByExpression ?? "LastName",
+            OrderByExpression = order ?? "LastName",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -129,7 +129,7 @@ public class StudentsController : ApiControllerBase
         Guid studentId,
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
@@ -145,7 +145,7 @@ public class StudentsController : ApiControllerBase
             IsStudentSubscriptionMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
 
-            OrderByExpression = orderByExpression ?? "LastName",
+            OrderByExpression = order ?? "LastName",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -160,7 +160,7 @@ public class StudentsController : ApiControllerBase
         Guid studentId,
         [FromQuery] bool? isStudentMustBeVerified,
         [FromQuery] List<Guid>? studentGroupIds,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
@@ -176,7 +176,7 @@ public class StudentsController : ApiControllerBase
             IsStudentSubscriberMustBeVerified = isStudentMustBeVerified,
             StudentGroupIds = studentGroupIds,
 
-            OrderByExpression = orderByExpression ?? "LastName",
+            OrderByExpression = order ?? "LastName",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -190,7 +190,7 @@ public class StudentsController : ApiControllerBase
     public async Task<IActionResult> GetCompanySubscriptionsOfStudent(
         Guid studentId,
         [FromQuery] bool? isCompanyMustBeVerified,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
@@ -204,7 +204,7 @@ public class StudentsController : ApiControllerBase
             SearchTerm = searchTerm ?? string.Empty,
 
             IsCompanyMustBeVerified = isCompanyMustBeVerified,
-            OrderByExpression = orderByExpression ?? "Name",
+            OrderByExpression = order ?? "Name",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -216,7 +216,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DetiledJobOfferWithStatsDTO>))]
     public async Task<IActionResult> GetJobOfferSubscriptionsOfStudent(
         Guid studentId,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] bool? isJobOfferMustBeActive,
         [FromQuery] JobType? mustHaveJobType,
@@ -245,7 +245,7 @@ public class StudentsController : ApiControllerBase
             MustHaveTagIds = mustHaveTagIds,
             IsCompanyOfJobOfferMustBeVerified = isCompanyOfJobOfferMustBeVerified,
 
-            OrderByExpression = orderByExpression ?? "StartDate",
+            OrderByExpression = order ?? "StartDate",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -258,7 +258,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetExperiencesOfStudent(
         Guid studentId,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -269,7 +269,7 @@ public class StudentsController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            OrderByExpression = orderByExpression ?? "Title"
+            OrderByExpression = order ?? "Title"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

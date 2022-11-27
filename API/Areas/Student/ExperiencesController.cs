@@ -19,7 +19,7 @@ public class ExperiencesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExperienceDTO>))]
     public async Task<IActionResult> GetExperiencesOfSelfStudent(
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -30,7 +30,7 @@ public class ExperiencesController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            OrderByExpression = orderByExpression ?? "Title"
+            OrderByExpression = order ?? "Title"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

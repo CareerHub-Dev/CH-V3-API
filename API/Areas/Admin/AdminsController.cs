@@ -20,7 +20,7 @@ public class AdminsController : ApiControllerBase
     public async Task<IActionResult> GetAdmins(
         [FromQuery] bool? isAdminMustBeVerified,
         [FromQuery] bool? isSuperAdmin,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
@@ -36,7 +36,7 @@ public class AdminsController : ApiControllerBase
             IsAdminMustBeVerified = isAdminMustBeVerified,
             IsSuperAdmin = isSuperAdmin,
 
-            OrderByExpression = orderByExpression ?? "Email"
+            OrderByExpression = order ?? "Email"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

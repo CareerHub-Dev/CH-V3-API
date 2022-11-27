@@ -18,7 +18,7 @@ public class StudentGroupsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentGroupDTO>))]
     public async Task<IActionResult> GetStudentGroups(
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] string? searchTerm,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
@@ -30,7 +30,7 @@ public class StudentGroupsController : ApiControllerBase
 
             SearchTerm = searchTerm ?? string.Empty,
 
-            OrderByExpression = orderByExpression ?? "Name"
+            OrderByExpression = order ?? "Name"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

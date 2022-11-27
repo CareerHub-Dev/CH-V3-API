@@ -26,7 +26,7 @@ public class AccountsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBansOfAccount(
         Guid accountId,
-        [FromQuery] string? orderByExpression,
+        [FromQuery] string? order,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -35,7 +35,7 @@ public class AccountsController : ApiControllerBase
             AccountId = accountId,
             PageNumber = pageNumber,
             PageSize = pageSize,
-            OrderByExpression = orderByExpression ?? "Expires"
+            OrderByExpression = order ?? "Expires"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
