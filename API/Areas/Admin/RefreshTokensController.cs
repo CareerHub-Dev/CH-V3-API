@@ -9,12 +9,6 @@ namespace API.Areas.Admin;
 [Route("api/Admin/[controller]")]
 public class RefreshTokensController : ApiControllerBase
 {
-    /// <remarks>
-    /// Admin:
-    /// 
-    ///     Revoke any Token
-    ///
-    /// </remarks>
     [HttpPost("revoke-token")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

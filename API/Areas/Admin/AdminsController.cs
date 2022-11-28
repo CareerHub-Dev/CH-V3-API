@@ -18,8 +18,8 @@ public class AdminsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<AdminDTO>))]
     public async Task<IActionResult> GetAdmins(
-        [FromQuery] bool? isAdminMustBeVerified,
-        [FromQuery] bool? isSuperAdmin,
+        [FromQuery] bool? verified,
+        [FromQuery] bool? superAdmin,
         [FromQuery] string? order,
         [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
@@ -33,8 +33,8 @@ public class AdminsController : ApiControllerBase
             SearchTerm = search ?? string.Empty,
 
             WithoutAdminId = AccountInfo!.Id,
-            IsAdminMustBeVerified = isAdminMustBeVerified,
-            IsSuperAdmin = isSuperAdmin,
+            IsAdminMustBeVerified = verified,
+            IsSuperAdmin = superAdmin,
 
             OrderByExpression = order ?? "Email"
         });

@@ -142,11 +142,11 @@ public class CompaniesController : ApiControllerBase
         Guid companyId,
         [FromQuery] string? order,
         [FromQuery] string? search,
-        [FromQuery] JobType? mustHaveJobType,
-        [FromQuery] WorkFormat? mustHaveWorkFormat,
-        [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
-        [FromQuery] Guid? mustHavejobPositionId,
-        [FromQuery] List<Guid>? mustHaveTagIds,
+        [FromQuery] JobType? jobType,
+        [FromQuery] WorkFormat? workFormat,
+        [FromQuery] ExperienceLevel? experienceLevel,
+        [FromQuery] Guid? jobPositionId,
+        [FromQuery] List<Guid>? tagIds,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -163,11 +163,11 @@ public class CompaniesController : ApiControllerBase
             SearchTerm = search ?? string.Empty,
 
             IsJobOfferMustBeActive = true,
-            MustHaveWorkFormat = mustHaveWorkFormat,
-            MustHaveJobType = mustHaveJobType,
-            MustHaveExperienceLevel = mustHaveExperienceLevel,
-            MustHaveJobPositionId = mustHavejobPositionId,
-            MustHaveTagIds = mustHaveTagIds,
+            MustHaveWorkFormat = workFormat,
+            MustHaveJobType = jobType,
+            MustHaveExperienceLevel = experienceLevel,
+            MustHaveJobPositionId = jobPositionId,
+            MustHaveTagIds = tagIds,
 
             StatsFilter = new JobOfferStatsFilter
             {

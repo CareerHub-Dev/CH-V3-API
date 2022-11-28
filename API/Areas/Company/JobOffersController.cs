@@ -27,12 +27,12 @@ public class JobOffersController : ApiControllerBase
     public async Task<IActionResult> GetJobOffersOfSelfCompany(
         [FromQuery] string? order,
         [FromQuery] string? search,
-        [FromQuery] bool? isJobOfferMustBeActive,
-        [FromQuery] JobType? mustHaveJobType,
-        [FromQuery] WorkFormat? mustHaveWorkFormat,
-        [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
-        [FromQuery] Guid? mustHavejobPositionId,
-        [FromQuery] List<Guid>? mustHaveTagIds,
+        [FromQuery] bool? active,
+        [FromQuery] JobType? jobType,
+        [FromQuery] WorkFormat? workFormat,
+        [FromQuery] ExperienceLevel? experienceLevel,
+        [FromQuery] Guid? jobPositionId,
+        [FromQuery] List<Guid>? tagIds,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -45,12 +45,12 @@ public class JobOffersController : ApiControllerBase
 
             SearchTerm = search ?? string.Empty,
 
-            IsJobOfferMustBeActive = isJobOfferMustBeActive,
-            MustHaveWorkFormat = mustHaveWorkFormat,
-            MustHaveJobType = mustHaveJobType,
-            MustHaveExperienceLevel = mustHaveExperienceLevel,
-            MustHaveJobPositionId = mustHavejobPositionId,
-            MustHaveTagIds = mustHaveTagIds,
+            IsJobOfferMustBeActive = active,
+            MustHaveWorkFormat = workFormat,
+            MustHaveJobType = jobType,
+            MustHaveExperienceLevel = experienceLevel,
+            MustHaveJobPositionId = jobPositionId,
+            MustHaveTagIds = tagIds,
 
             StatsFilter = new JobOfferStatsFilter
             {

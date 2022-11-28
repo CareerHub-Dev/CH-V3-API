@@ -30,7 +30,7 @@ public class CompaniesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefCompanyWithStatsDTO>))]
     public async Task<IActionResult> GetCompanies(
-        [FromQuery] bool? isCompanyMustBeVerified,
+        [FromQuery] bool? verified,
         [FromQuery] string? order,
         [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
@@ -41,7 +41,7 @@ public class CompaniesController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
             SearchTerm = search ?? string.Empty,
-            IsCompanyMustBeVerified = isCompanyMustBeVerified,
+            IsCompanyMustBeVerified = verified,
             OrderByExpression = order ?? "Name"
         });
 
@@ -177,14 +177,14 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DetiledJobOfferWithStatsDTO>))]
     public async Task<IActionResult> GetJobOffersOfCompany(
         Guid companyId,
-        [FromQuery] bool? isJobOfferMustBeActive,
+        [FromQuery] bool? active,
         [FromQuery] string? order,
         [FromQuery] string? search,
-        [FromQuery] JobType? mustHaveJobType,
-        [FromQuery] WorkFormat? mustHaveWorkFormat,
-        [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
-        [FromQuery] Guid? mustHavejobPositionId,
-        [FromQuery] List<Guid>? mustHaveTagIds,
+        [FromQuery] JobType? jobType,
+        [FromQuery] WorkFormat? workFormat,
+        [FromQuery] ExperienceLevel? experienceLevel,
+        [FromQuery] Guid? jobPositionId,
+        [FromQuery] List<Guid>? tagIds,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -197,12 +197,12 @@ public class CompaniesController : ApiControllerBase
 
             SearchTerm = search ?? string.Empty,
 
-            IsJobOfferMustBeActive = isJobOfferMustBeActive,
-            MustHaveWorkFormat = mustHaveWorkFormat,
-            MustHaveJobType = mustHaveJobType,
-            MustHaveExperienceLevel = mustHaveExperienceLevel,
-            MustHaveJobPositionId = mustHavejobPositionId,
-            MustHaveTagIds = mustHaveTagIds,
+            IsJobOfferMustBeActive = active,
+            MustHaveWorkFormat = workFormat,
+            MustHaveJobType = jobType,
+            MustHaveExperienceLevel = experienceLevel,
+            MustHaveJobPositionId = jobPositionId,
+            MustHaveTagIds = tagIds,
 
             OrderByExpression = order ?? "StartDate",
         });
@@ -217,7 +217,7 @@ public class CompaniesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentSubscribersOfCompany(
         Guid companyId,
-        [FromQuery] bool? isStudentMustBeVerified,
+        [FromQuery] bool? verified,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
         [FromQuery] string? search,
@@ -232,7 +232,7 @@ public class CompaniesController : ApiControllerBase
             PageSize = pageSize,
             SearchTerm = search ?? string.Empty,
 
-            IsStudentSubscriberMustBeVerified = isStudentMustBeVerified,
+            IsStudentSubscriberMustBeVerified = verified,
             StudentGroupIds = studentGroupIds,
 
             OrderByExpression = order ?? "LastName",

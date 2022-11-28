@@ -34,7 +34,7 @@ public class StudentsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentDTO>))]
     public async Task<IActionResult> GetStudents(
-        [FromQuery] bool? isStudentMustBeVerified,
+        [FromQuery] bool? verified,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
         [FromQuery] string? search,
@@ -46,7 +46,7 @@ public class StudentsController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
             SearchTerm = search ?? string.Empty,
-            IsStudentMustBeVerified = isStudentMustBeVerified,
+            IsStudentMustBeVerified = verified,
             StudentGroupIds = studentGroupIds,
             OrderByExpression = order ?? "LastName",
         });
@@ -127,7 +127,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentSubscriptionsOfStudent(
         Guid studentId,
-        [FromQuery] bool? isStudentMustBeVerified,
+        [FromQuery] bool? verified,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
         [FromQuery] string? search,
@@ -142,7 +142,7 @@ public class StudentsController : ApiControllerBase
             PageSize = pageSize,
             SearchTerm = search ?? string.Empty,
 
-            IsStudentSubscriptionMustBeVerified = isStudentMustBeVerified,
+            IsStudentSubscriptionMustBeVerified = verified,
             StudentGroupIds = studentGroupIds,
 
             OrderByExpression = order ?? "LastName",
@@ -158,7 +158,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetStudentSubscribersOfStudent(
         Guid studentId,
-        [FromQuery] bool? isStudentMustBeVerified,
+        [FromQuery] bool? verified,
         [FromQuery] List<Guid>? studentGroupIds,
         [FromQuery] string? order,
         [FromQuery] string? search,
@@ -173,7 +173,7 @@ public class StudentsController : ApiControllerBase
             PageSize = pageSize,
             SearchTerm = search ?? string.Empty,
 
-            IsStudentSubscriberMustBeVerified = isStudentMustBeVerified,
+            IsStudentSubscriberMustBeVerified = verified,
             StudentGroupIds = studentGroupIds,
 
             OrderByExpression = order ?? "LastName",
@@ -189,7 +189,7 @@ public class StudentsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCompanySubscriptionsOfStudent(
         Guid studentId,
-        [FromQuery] bool? isCompanyMustBeVerified,
+        [FromQuery] bool? verified,
         [FromQuery] string? order,
         [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
@@ -203,7 +203,7 @@ public class StudentsController : ApiControllerBase
             PageSize = pageSize,
             SearchTerm = search ?? string.Empty,
 
-            IsCompanyMustBeVerified = isCompanyMustBeVerified,
+            IsCompanyMustBeVerified = verified,
             OrderByExpression = order ?? "Name",
         });
 
@@ -218,13 +218,13 @@ public class StudentsController : ApiControllerBase
         Guid studentId,
         [FromQuery] string? order,
         [FromQuery] string? search,
-        [FromQuery] bool? isJobOfferMustBeActive,
-        [FromQuery] JobType? mustHaveJobType,
-        [FromQuery] WorkFormat? mustHaveWorkFormat,
-        [FromQuery] ExperienceLevel? mustHaveExperienceLevel,
-        [FromQuery] Guid? mustHavejobPositionId,
-        [FromQuery] List<Guid>? mustHaveTagIds,
-        [FromQuery] bool? isCompanyOfJobOfferMustBeVerified,
+        [FromQuery] bool? active,
+        [FromQuery] JobType? jobType,
+        [FromQuery] WorkFormat? workFormat,
+        [FromQuery] ExperienceLevel? experienceLevel,
+        [FromQuery] Guid? jobPositionId,
+        [FromQuery] List<Guid>? tagIds,
+        [FromQuery] bool? companyVerified,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
@@ -237,13 +237,13 @@ public class StudentsController : ApiControllerBase
 
             SearchTerm = search ?? string.Empty,
 
-            IsJobOfferMustBeActive = isJobOfferMustBeActive,
-            MustHaveWorkFormat = mustHaveWorkFormat,
-            MustHaveJobType = mustHaveJobType,
-            MustHaveExperienceLevel = mustHaveExperienceLevel,
-            MustHaveJobPositionId = mustHavejobPositionId,
-            MustHaveTagIds = mustHaveTagIds,
-            IsCompanyOfJobOfferMustBeVerified = isCompanyOfJobOfferMustBeVerified,
+            IsJobOfferMustBeActive = active,
+            MustHaveWorkFormat = workFormat,
+            MustHaveJobType = jobType,
+            MustHaveExperienceLevel = experienceLevel,
+            MustHaveJobPositionId = jobPositionId,
+            MustHaveTagIds = tagIds,
+            IsCompanyOfJobOfferMustBeVerified = companyVerified,
 
             OrderByExpression = order ?? "StartDate",
         });

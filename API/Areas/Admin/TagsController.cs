@@ -18,7 +18,7 @@ public class TagsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TagDTO>))]
     public async Task<IActionResult> GetTags(
-        [FromQuery] bool? isAccepted,
+        [FromQuery] bool? accepted,
         [FromQuery] string? order,
         [FromQuery] string? search,
         [FromQuery] int pageNumber = 1,
@@ -30,7 +30,7 @@ public class TagsController : ApiControllerBase
             PageSize = pageSize,
             OrderByExpression = order ?? "Name",
             SearchTerm = search ?? string.Empty,
-            IsAccepted = isAccepted
+            IsAccepted = accepted
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
