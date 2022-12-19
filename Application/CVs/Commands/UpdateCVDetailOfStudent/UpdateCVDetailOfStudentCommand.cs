@@ -9,9 +9,9 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.CVs.Commands.UpdateCVDetail;
+namespace Application.CVs.Commands.UpdateCVDetailOfStudent;
 
-public record UpdateCVDetailCommand
+public record UpdateCVDetailOfStudentCommand
     : IRequest
 {
     public Guid CVId { get; init; }
@@ -22,7 +22,6 @@ public record UpdateCVDetailCommand
     public TemplateLanguage TemplateLanguage { get; init; }
     public string LastName { get; init; } = string.Empty;
     public string FirstName { get; init; } = string.Empty;
-    public IFormFile? Photo { get; init; }
     public string Goals { get; init; } = string.Empty;
     public string SkillsAndTechnologies { get; init; } = string.Empty;
     public string ExperienceHighlights { get; init; } = string.Empty;
@@ -30,23 +29,31 @@ public record UpdateCVDetailCommand
     public List<ForeignLanguageDTO> ForeignLanguages { get; init; } = new List<ForeignLanguageDTO>();
     public List<CVProjectLinkDTO> ProjectLinks { get; init; } = new List<CVProjectLinkDTO>();
     public List<EducationDTO> Educations { get; init; } = new List<EducationDTO>();
+
+    public Guid StudentId { get; init; }
 }
 
-public class UpdateCVDetailCommandHandler
-    : IRequestHandler<UpdateCVDetailCommand>
+public class UpdateCVDetailOfStudentCommandHandler
+    : IRequestHandler<UpdateCVDetailOfStudentCommand>
 {
     private readonly IApplicationDbContext _context;
 
-    public UpdateCVDetailCommandHandler(
+    public UpdateCVDetailOfStudentCommandHandler(
         IApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<Unit> Handle(
-        UpdateCVDetailCommand request,
+        UpdateCVDetailOfStudentCommand request,
         CancellationToken cancellationToken)
     {
+        if (!await _context.Students
+            .AnyAsync(x => x.Id == request.StudentId))
+        {
+            throw new NotFoundException(nameof(Student), request.StudentId);
+        }
+
         if (!await _context.JobPositions
             .AnyAsync(x => x.Id == request.JobPositionId))
         {
@@ -54,7 +61,7 @@ public class UpdateCVDetailCommandHandler
         }
 
         var cv = await _context.CVs
-            .FirstOrDefaultAsync(x => x.Id == request.CVId);
+            .FirstOrDefaultAsync(x => x.Id == request.CVId && x.StudentId == request.StudentId);
 
         if (cv == null)
         {

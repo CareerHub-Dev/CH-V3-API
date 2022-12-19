@@ -5,22 +5,24 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.CVs.Commands.UpdateCVPhoto;
+namespace Application.CVs.Commands.UpdateCVPhotoOfStudent;
 
-public record UpdateCVPhotoCommand
+public record UpdateCVPhotoOfStudentCommand
     : IRequest<string?>
 {
     public Guid CVId { get; init; }
     public IFormFile? Photo { get; init; }
+
+    public Guid StudentId { get; init; }
 }
 
-public class UpdateCVPhotoCommandHandler
-    : IRequestHandler<UpdateCVPhotoCommand, string?>
+public class UpdateCVPhotoOfStudentCommandHandler
+    : IRequestHandler<UpdateCVPhotoOfStudentCommand, string?>
 {
     private readonly IApplicationDbContext _context;
     private readonly IImagesService _imagesService;
 
-    public UpdateCVPhotoCommandHandler(
+    public UpdateCVPhotoOfStudentCommandHandler(
         IApplicationDbContext context,
         IImagesService imagesService)
     {
@@ -29,11 +31,17 @@ public class UpdateCVPhotoCommandHandler
     }
 
     public async Task<string?> Handle(
-        UpdateCVPhotoCommand request,
+        UpdateCVPhotoOfStudentCommand request,
         CancellationToken cancellationToken)
     {
+        if (!await _context.Students
+            .AnyAsync(x => x.Id == request.StudentId))
+        {
+            throw new NotFoundException(nameof(Student), request.StudentId);
+        }
+
         var cv = await _context.CVs
-            .FirstOrDefaultAsync(x => x.Id == request.CVId);
+            .FirstOrDefaultAsync(x => x.Id == request.CVId && x.StudentId == request.StudentId);
 
         if (cv == null)
         {
