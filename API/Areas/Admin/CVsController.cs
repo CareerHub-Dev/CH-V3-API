@@ -21,10 +21,7 @@ public class CVsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCV(Guid cvId)
     {
-        return Ok(await Sender.Send(new GetCVQuery
-        {
-            CVId = cvId,
-        }));
+        return Ok(await Sender.Send(new GetCVQuery(cvId)));
     }
 
     [HttpPost]
