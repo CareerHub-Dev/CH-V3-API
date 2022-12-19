@@ -1,11 +1,13 @@
 ﻿using API.Authorize;
 using API.DTO.Responses;
 using Application.Common.DTO.Companies;
+using Application.Common.DTO.CVs;
 using Application.Common.DTO.Experiences;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
 using Application.Common.Enums;
 using Application.Companies.Queries.GetBriefCompanySubscriptionsWithStatsOfStudentWithPaging;
+using Application.CVs.Queries.GetBriefCVsOfStudentWithPaging;
 using Application.Emails.Commands.SendVerifyStudentEmail;
 using Application.Experiences.Queries.GetExperiencesOfStudentWithPaging;
 using Application.JobOffers.Queries.GetDetiledJobOfferSubscriptionsWithStatsOfStudentWithPaging;
@@ -263,6 +265,30 @@ public class StudentsController : ApiControllerBase
         [FromQuery] int pageSize = 10)
     {
         var result = await Sender.Send(new GetExperiencesOfStudentWithPagingQuery
+        {
+            StudentId = studentId,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+
+            OrderByExpression = order ?? "Title"
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{studentId}/CVs")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefCVDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCVsOfStudent(
+        Guid studentId,
+        [FromQuery] string? order,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Sender.Send(new GetBriefCVsOfStudentWithPagingQuery
         {
             StudentId = studentId,
 

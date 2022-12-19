@@ -1,12 +1,18 @@
 ﻿using API.Authorize;
 using API.DTO.Requests.CVs;
 using API.DTO.Responses;
+using Application.Common.DTO.CVs;
+using Application.Common.DTO.Experiences;
 using Application.Common.Enums;
 using Application.CVs.Commands.CreateCV;
 using Application.CVs.Commands.DeleteCVOfStudent;
 using Application.CVs.Commands.UpdateCVDetailOfStudent;
 using Application.CVs.Commands.UpdateCVPhotoOfStudent;
+using Application.CVs.Queries.GetBriefCVsOfStudentWithPaging;
+using Application.CVs.Queries.GetCVOfStudent;
+using Application.Experiences.Queries.GetExperienceOfStudent;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace API.Areas.Student;
 
@@ -14,6 +20,40 @@ namespace API.Areas.Student;
 [Route("api/Student/self/[controller]")]
 public class CVsController : ApiControllerBase
 {
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefCVDTO>))]
+    public async Task<IActionResult> GetCVsOfSelfStudent(
+        [FromQuery] string? order,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Sender.Send(new GetBriefCVsOfStudentWithPagingQuery
+        {
+            StudentId = AccountInfo!.Id,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+
+            OrderByExpression = order ?? "Title"
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{cvId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(CVDTO))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCVOfSelfStudent(Guid cvId)
+    {
+        return Ok(await Sender.Send(new GetCVOfStudentQuery
+        {
+            CVId = cvId,
+            StudentId = AccountInfo!.Id
+        }));
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> CreateCVForSelfStudent(CreateOwnCVRequest request)

@@ -25,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\DTO\CVs\" />
     <Folder Include="Posts\Queries\GetPosts\" />
     <Folder Include="Posts\Queries\GetPostsOfAccount\" />
   </ItemGroup>

@@ -2,7 +2,11 @@
 using Application.Common.DTO.Bans;
 using Application.Common.DTO.Companies;
 using Application.Common.DTO.CompanyLinks;
+using Application.Common.DTO.CVProjectLinks;
+using Application.Common.DTO.CVs;
+using Application.Common.DTO.Educations;
 using Application.Common.DTO.Experiences;
+using Application.Common.DTO.ForeignLanguages;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.StudentGroups;
@@ -472,6 +476,88 @@ public static class MapExtention
             Requirements = x.Requirements,
             Responsibilities = x.Responsibilities,
             Preferences = x.Preferences
+        });
+    }
+
+    #endregion
+
+    #region JobOffer 
+
+    public static IQueryable<BriefCVDTO> MapToBriefCVDTO(this IQueryable<CV> cvs)
+    {
+        return cvs.Select(x => new BriefCVDTO
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Created = x.Created,
+            Modified = x.Modified
+        });
+    }
+
+    public static IQueryable<CVDTO> MapToCVDTO(this IQueryable<CV> cvs)
+    {
+        return cvs.Select(x => new CVDTO
+        {
+            Id = x.Id,
+            Title = x.Title,
+            Created = x.Created,
+            Modified = x.Modified,
+            JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            TemplateLanguage = x.TemplateLanguage,
+            LastName = x.LastName,
+            FirstName = x.FirstName,
+            Photo = x.Photo,
+            Goals = x.Goals,
+            StudentId = x.StudentId,
+            SkillsAndTechnologies = x.SkillsAndTechnologies,
+            ExperienceHighlights = x.ExperienceHighlights,
+            ForeignLanguages = x.ForeignLanguages.MapToForeignLanguageDTO().ToList(),
+            ProjectLinks = x.ProjectLinks.MapToCVProjectLinkDTO().ToList(),
+            Educations = x.Educations.MapToEducationDTO().ToList(),
+        });
+    }
+
+    #endregion
+
+    #region ForeignLanguage
+
+    public static IEnumerable<ForeignLanguageDTO> MapToForeignLanguageDTO(this IEnumerable<ForeignLanguage> languages)
+    {
+        return languages.Select(x => new ForeignLanguageDTO
+        {
+            Name = x.Name,
+            LanguageLevel = x.LanguageLevel,
+        });
+    }
+
+    #endregion
+
+    #region CVProjectLink
+
+    public static IEnumerable<CVProjectLinkDTO> MapToCVProjectLinkDTO(this IEnumerable<CVProjectLink> links)
+    {
+        return links.Select(x => new CVProjectLinkDTO
+        {
+            Title = x.Title,
+            Url = x.Url,
+        });
+    }
+
+    #endregion
+
+    #region CVProjectLink
+
+    public static IEnumerable<EducationDTO> MapToEducationDTO(this IEnumerable<Education> educations)
+    {
+        return educations.Select(x => new EducationDTO
+        {
+            University = x.University,
+            City = x.City,
+            Country = x.Country,
+            Specialty = x.Specialty,
+            Degree = x.Degree,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate,
         });
     }
 
