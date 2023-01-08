@@ -26,7 +26,7 @@ public class CVsController : ApiControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
-    public async Task<IActionResult> CreateCV(CreateCVCommand command)
+    public async Task<IActionResult> CreateCV([FromForm] CreateCVCommand command)
     {
         var result = await Sender.Send(command);
 

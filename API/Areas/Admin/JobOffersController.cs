@@ -8,8 +8,13 @@ using Application.JobOffers.Commands.UpdateJobOfferDetail;
 using Application.JobOffers.Commands.UpdateJobOfferImage;
 using Application.JobOffers.Queries.GetAmountAppliedCVsOfJobOffer;
 using Application.JobOffers.Queries.GetAmountStudentSubscribersOfJobOffer;
+using Application.JobOffers.Queries.GetDetiledJobOffersWithStatsWithPaging;
+using Application.JobOffers.Queries.GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaging;
 using Application.JobOffers.Queries.GetJobOffer;
+using Application.JobOffers.Queries.Models;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace API.Areas.Admin;
 
@@ -17,6 +22,42 @@ namespace API.Areas.Admin;
 [Route("api/Admin/[controller]")]
 public class JobOffersController : ApiControllerBase
 {
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<DetiledJobOfferWithStatsDTO>))]
+    public async Task<IActionResult> GetJobOffers(
+        [FromQuery] string? order,
+        [FromQuery] string? search,
+        [FromQuery] JobType? jobType,
+        [FromQuery] WorkFormat? workFormat,
+        [FromQuery] ExperienceLevel? experienceLevel,
+        [FromQuery] Guid? jobPositionId,
+        [FromQuery] List<Guid>? tagIds,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Sender.Send(new GetDetiledJobOffersWithStatsWithPagingQuery
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+
+            SearchTerm = search ?? string.Empty,
+
+            IsJobOfferMustBeActive = true,
+            MustHaveWorkFormat = workFormat,
+            MustHaveJobType = jobType,
+            MustHaveExperienceLevel = experienceLevel,
+            MustHaveJobPositionId = jobPositionId,
+            MustHaveTagIds = tagIds,
+            IsCompanyOfJobOfferMustBeVerified = true,
+
+            OrderByExpression = order ?? "StartDate",
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
     [HttpGet("{jobOfferId}/amount-student-subscribers")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(int))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
