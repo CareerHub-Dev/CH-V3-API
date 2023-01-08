@@ -324,4 +324,30 @@ public static class FiltrationExtentions
 
         return cvs;
     }
+
+    public static IQueryable<Post> Filter(
+        this IQueryable<Post> posts,
+        bool? isAccountVerified = null,
+        Guid? accountId = null)
+    {
+
+        switch (isAccountVerified)
+        {
+            case true:
+                posts = posts.Where(x => x.Account!.Verified != null || x.Account!.PasswordReset != null);
+                break;
+            case false:
+                posts = posts.Where(x => x.Account!.Verified == null && x.Account!.PasswordReset == null);
+                break;
+            default:
+                break;
+        }
+
+        if(accountId != null)
+        {
+            posts = posts.Where(x => x.AccountId == accountId);
+        }
+
+        return posts;
+    }
 }

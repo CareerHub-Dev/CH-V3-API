@@ -36,7 +36,7 @@ public class UpdatePostOfAccountCommandHandler
         }
 
         var post = await _context.Posts
-            .FirstOrDefaultAsync(x => x.Id == request.PostId && x.AccoundId == request.AccountId);
+            .FirstOrDefaultAsync(x => x.Id == request.PostId && x.AccountId == request.AccountId);
 
         if (post == null)
         {

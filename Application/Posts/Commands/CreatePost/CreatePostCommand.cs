@@ -41,7 +41,7 @@ public class CreatePostCommandHandler
 
         var post = new Post
         {
-            AccoundId = request.AccountId,
+            AccountId = request.AccountId,
             Text = request.Text,
             CreatedDate = DateTime.UtcNow,
         };

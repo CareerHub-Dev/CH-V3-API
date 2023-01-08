@@ -24,9 +24,4 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Posts\Queries\GetPosts\" />
-    <Folder Include="Posts\Queries\GetPostsOfAccount\" />
-  </ItemGroup>
-
 </Project>

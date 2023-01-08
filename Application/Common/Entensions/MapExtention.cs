@@ -9,10 +9,12 @@ using Application.Common.DTO.Experiences;
 using Application.Common.DTO.ForeignLanguages;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.JobPositions;
+using Application.Common.DTO.Posts;
 using Application.Common.DTO.StudentGroups;
 using Application.Common.DTO.StudentLogs;
 using Application.Common.DTO.Students;
 using Application.Common.DTO.Tags;
+using Application.Common.Enums;
 using Domain.Entities;
 
 namespace Application.Common.Entensions;
@@ -559,6 +561,39 @@ public static class MapExtention
             StartDate = x.StartDate,
             EndDate = x.EndDate,
         });
+    }
+
+    #endregion
+
+    #region AccountToAccountOfPost
+
+    public static AccountOfPostDTO MapToAccountOfPostDTO(this Account account)
+    {
+        return account switch
+        {
+            Company company => new AccountOfPostDTO
+            {
+                Id = company.Id,
+                Name = company.Name,
+                Image = company.Logo ?? company.Banner,
+                Role = Role.Company
+            },
+            Student student => new AccountOfPostDTO
+            {
+                Id = student.Id,
+                Name = $"{student.LastName} {student.FirstName}",
+                Image = student.Photo,
+                Role = Role.Student
+            },
+            Admin admin => new AccountOfPostDTO
+            {
+                Id = admin.Id,
+                Name = "Administration",
+                Image = null,
+                Role = Role.Admin
+            },
+            _ => new AccountOfPostDTO(),
+        };
     }
 
     #endregion

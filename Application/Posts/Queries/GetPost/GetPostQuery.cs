@@ -1,5 +1,5 @@
 ﻿using Application.Common.DTO.Posts;
-using Application.Common.Enums;
+using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
@@ -46,36 +46,7 @@ public class GetPostQueryHandler
             Text = post.Text,
             Images = post.Images,
             CreatedDate = post.CreatedDate,
-            Account = MapToAccountOfPostDTO(post.Account!)
-        };
-    }
-
-    private AccountOfPostDTO MapToAccountOfPostDTO(Account account)
-    {
-        return account switch
-        {
-            Company company => new AccountOfPostDTO
-            {
-                Id = company.Id,
-                Name = company.Name,
-                Image = company.Logo ?? company.Banner,
-                Role = Role.Company
-            },
-            Student student => new AccountOfPostDTO
-            {
-                Id = student.Id,
-                Name = $"{student.LastName} {student.FirstName}",
-                Image = student.Photo,
-                Role = Role.Student
-            },
-            Admin admin => new AccountOfPostDTO
-            {
-                Id = admin.Id,
-                Name = "Administration",
-                Image = null,
-                Role = Role.Admin
-            },
-            _ => new AccountOfPostDTO(),
+            Account = post.Account!.MapToAccountOfPostDTO()
         };
     }
 }

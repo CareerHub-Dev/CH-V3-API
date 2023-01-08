@@ -14,4 +14,10 @@ public class PaginatedList<T> : List<T>
         };
         AddRange(items);
     }
+
+    public PaginatedList(List<T> items, MetaData metaData)
+    {
+        MetaData = metaData;
+        AddRange(items);
+    }
 }

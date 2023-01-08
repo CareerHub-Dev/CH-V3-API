@@ -8,7 +8,7 @@ public class Post : BaseEntity
     public List<string> Images { get; set; } = new List<string>();
     public DateTime CreatedDate { get; set; }
 
-    public Guid AccoundId { get; set; }
+    public Guid AccountId { get; set; }
     public Account? Account { get; set; }
 
     public List<Student> StudentsLiked { get; set; } = new List<Student>();
