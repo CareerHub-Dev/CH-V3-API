@@ -5,6 +5,7 @@ using Application.Common.Models.Pagination;
 using Application.Posts.Commands.CreatePost;
 using Application.Posts.Commands.DeletePost;
 using Application.Posts.Commands.UpdatePost;
+using Application.Posts.Queries.GetPost;
 using Application.Posts.Queries.GetPostsWithPaging;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -32,6 +33,18 @@ public class PostsController : ApiControllerBase
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{postId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PostDTO))]
+    public async Task<IActionResult> GetPost(Guid postId)
+    {
+        var result = await Sender.Send(new GetPostQuery
+        {
+            PostId = postId
+        });
 
         return Ok(result);
     }
