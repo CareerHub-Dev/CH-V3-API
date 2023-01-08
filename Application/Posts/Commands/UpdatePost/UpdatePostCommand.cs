@@ -10,7 +10,7 @@ public record UpdatePostCommand
     : IRequest
 {
     public Guid PostId { get; init; }
-    public string Text { get; init; } = string.Empty;
+    public string? Text { get; init; }
 }
 
 public class UpdatePostCommandHandler 

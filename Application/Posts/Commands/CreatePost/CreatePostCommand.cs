@@ -11,7 +11,7 @@ public record CreatePostCommand
     : IRequest<Guid>
 {
     public Guid AccountId { get; init; }
-    public string Text { get; init; } = string.Empty;
+    public string? Text { get; init; }
     public List<IFormFile> Images { get; init; } = new List<IFormFile>();
 }
 

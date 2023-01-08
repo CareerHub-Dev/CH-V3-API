@@ -17,7 +17,6 @@ public class CreatePostCommandValidator
             .MaxFileSize(2 * 1024 * 1024);
 
         RuleFor(x => x.Text)
-            .NotEmpty()
-            .MaximumLength(512);
+            .MaximumLength(512).When(x => x.Text != null);
     }
 }

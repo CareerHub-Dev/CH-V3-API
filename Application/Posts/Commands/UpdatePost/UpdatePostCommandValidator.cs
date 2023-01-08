@@ -8,7 +8,6 @@ public class UpdatePostCommandValidator
     public UpdatePostCommandValidator()
     {
         RuleFor(x => x.Text)
-            .NotEmpty()
-            .MaximumLength(512);
+            .MaximumLength(512).When(x => x.Text != null);
     }
 }
