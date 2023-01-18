@@ -2,10 +2,10 @@
 
 namespace Application.Posts.Queries.GetPostsOfAccountWithPaging;
 
-public class GetPostsOfAccountWithPagingValidator
-    : AbstractValidator<GetPostsOfAccountWithPaging>
+public class GetPostsOfAccountWithPagingQueryValidator
+    : AbstractValidator<GetPostsOfAccountWithPagingQuery>
 {
-    public GetPostsOfAccountWithPagingValidator()
+    public GetPostsOfAccountWithPagingQueryValidator()
     {
         RuleFor(x => x.PageNumber)
             .GreaterThanOrEqualTo(1);

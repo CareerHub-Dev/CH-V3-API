@@ -328,7 +328,7 @@ public static class FiltrationExtentions
     public static IQueryable<Post> Filter(
         this IQueryable<Post> posts,
         bool? isAccountVerified = null,
-        Guid? accountId = null)
+        List<Guid>? accountIds = null)
     {
 
         switch (isAccountVerified)
@@ -343,9 +343,9 @@ public static class FiltrationExtentions
                 break;
         }
 
-        if(accountId != null)
+        if(accountIds != null && accountIds.Count != 0)
         {
-            posts = posts.Where(x => x.AccountId == accountId);
+            posts = posts.Where(x => accountIds.Contains(x.AccountId));
         }
 
         return posts;

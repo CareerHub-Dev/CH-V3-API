@@ -597,4 +597,20 @@ public static class MapExtention
     }
 
     #endregion
+
+    #region Post
+
+    public static IQueryable<PostDTO> MapToPostDTO(this IQueryable<Post> posts)
+    {
+        return posts.Select(x => new PostDTO
+        {
+            Id = x.Id,
+            Text = x.Text,
+            Images = x.Images,
+            CreatedDate = x.CreatedDate,
+            Account = x.Account!.MapToAccountOfPostDTO()
+        });
+    }
+
+    #endregion
 }
