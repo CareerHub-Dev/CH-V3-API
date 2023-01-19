@@ -6,6 +6,7 @@ using Application.Common.DTO.Experiences;
 using Application.Common.Enums;
 using Application.CVs.Commands.CreateCV;
 using Application.CVs.Commands.DeleteCVOfStudent;
+using Application.CVs.Commands.SendCVOfStudentForJobOffer;
 using Application.CVs.Commands.UpdateCVDetailOfStudent;
 using Application.CVs.Commands.UpdateCVPhotoOfStudent;
 using Application.CVs.Queries.GetBriefCVsOfStudentWithPaging;
@@ -120,6 +121,23 @@ public class CVsController : ApiControllerBase
         });
 
         return Ok(new ImageResponse { Route = result });
+    }
+
+    [HttpPost("send-for-joboffer")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> SendCVOfSelfStudentForJobOffer(SendCVForJobOfferRequest request)
+    {
+        await Sender.Send(new SendCVOfStudentForJobOfferCommand
+        {
+            CVId = request.CVId,
+            StudentId = AccountInfo!.Id,
+            JobOfferId = request.JobOfferId,
+            IsJobOfferMustBeActive = true,
+            IsCompanyOfJobOfferMustBeVerified = true,
+        });
+
+        return NoContent();
     }
 
     [HttpDelete("{cvId}")]
