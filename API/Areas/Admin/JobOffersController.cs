@@ -1,6 +1,7 @@
 ﻿using API.Authorize;
 using API.DTO.Responses;
 using Application.Common.DTO.JobOffers;
+using Application.Common.DTO.Students;
 using Application.Common.Enums;
 using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOffer;
@@ -12,6 +13,8 @@ using Application.JobOffers.Queries.GetDetiledJobOffersWithStatsWithPaging;
 using Application.JobOffers.Queries.GetFollowedDetiledJobOffersWithStatsForFollowerStudentWithPaging;
 using Application.JobOffers.Queries.GetJobOffer;
 using Application.JobOffers.Queries.Models;
+using Application.Students.Queries.GetStudentSubscribersOfCompanyWithPaging;
+using Application.Students.Queries.GetStudentSubscribersOfJobOfferWithPaging;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -78,6 +81,37 @@ public class JobOffersController : ApiControllerBase
         {
             JobOfferId = jobOfferId
         }));
+    }
+
+    [HttpGet("{jobOfferId}/student-subscribers")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetStudentSubscribersOfJobOffers(
+        Guid jobOfferId,
+        [FromQuery] bool? verified,
+        [FromQuery] List<Guid>? studentGroupIds,
+        [FromQuery] string? order,
+        [FromQuery] string? search,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Sender.Send(new GetStudentSubscribersOfJobOfferWithPagingQuery
+        {
+            JobOfferId = jobOfferId,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SearchTerm = search ?? string.Empty,
+
+            IsStudentSubscriberMustBeVerified = verified,
+            StudentGroupIds = studentGroupIds,
+
+            OrderByExpression = order ?? "LastName",
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
     }
 
     [HttpGet("{jobOfferId}")]
