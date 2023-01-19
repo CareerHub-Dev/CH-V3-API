@@ -27,4 +27,5 @@ public class JobOffer : BaseEntity
     public List<Student> SubscribedStudents { get; set; } = new List<Student>();
     public List<Tag> Tags { get; set; } = new List<Tag>();
     public List<CV> AppliedCVs { get; set; } = new List<CV>();
+    public List<CVJobOffer> CVJobOffers { get; set; } = new List<CVJobOffer>();
 }

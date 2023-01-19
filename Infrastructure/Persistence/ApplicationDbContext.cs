@@ -43,10 +43,29 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<StudentLog> StudentLogs => Set<StudentLog>();
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<Ban> Bans => Set<Ban>();
+    public DbSet<CVJobOffer> CVJobOffers => Set<CVJobOffer>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        builder
+            .Entity<CV>()
+            .HasMany(x => x.TargetJobOffers)
+            .WithMany(x => x.AppliedCVs)
+            .UsingEntity<CVJobOffer>(
+            j => j
+                .HasOne(pt => pt.JobOffer)
+                .WithMany(t => t.CVJobOffers)
+                .HasForeignKey(pt => pt.JobOfferId),
+            j => j
+                .HasOne(pt => pt.CV)
+                .WithMany(t => t.CVJobOffers)
+                .HasForeignKey(pt => pt.CVId),
+            j =>
+            {
+                j.ToTable("CVJobOffers");
+            });
 
         base.OnModelCreating(builder);
     }

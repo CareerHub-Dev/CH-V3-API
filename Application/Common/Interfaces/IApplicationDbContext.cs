@@ -20,5 +20,6 @@ public interface IApplicationDbContext
     public DbSet<StudentLog> StudentLogs { get; }
     public DbSet<Post> Posts { get; }
     public DbSet<Ban> Bans { get; }
+    public DbSet<CVJobOffer> CVJobOffers { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
