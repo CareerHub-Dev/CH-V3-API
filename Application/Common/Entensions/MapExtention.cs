@@ -483,7 +483,7 @@ public static class MapExtention
 
     #endregion
 
-    #region JobOffer 
+    #region CV 
 
     public static IQueryable<BriefCVDTO> MapToBriefCVDTO(this IQueryable<CV> cvs)
     {
@@ -516,6 +516,22 @@ public static class MapExtention
             ForeignLanguages = x.ForeignLanguages.MapToForeignLanguageDTO().ToList(),
             ProjectLinks = x.ProjectLinks.MapToCVProjectLinkDTO().ToList(),
             Educations = x.Educations.MapToEducationDTO().ToList(),
+        });
+    }
+
+    #endregion
+
+    #region CVJobOffer
+
+    public static IQueryable<BriefCVWithStatusDTO> MapToBriefCVWithStatusDTO(this IQueryable<CVJobOffer> cvJobOffers)
+    {
+        return cvJobOffers.Select(x => new BriefCVWithStatusDTO
+        {
+            Status = x.Status,
+            Id = x.CV!.Id,
+            Title = x.CV.Title,
+            Created = x.CV.Created,
+            Modified = x.CV.Modified
         });
     }
 

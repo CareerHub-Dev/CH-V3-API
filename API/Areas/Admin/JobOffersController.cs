@@ -1,8 +1,11 @@
 ﻿using API.Authorize;
 using API.DTO.Responses;
+using Application.Common.DTO.CVs;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.Students;
 using Application.Common.Enums;
+using Application.CVs.Queries.GetBriefCVsOfStudentWithPaging;
+using Application.CVs.Queries.GetBriefCVWithStatussOfJobOfferWithPaging;
 using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOffer;
 using Application.JobOffers.Commands.UpdateJobOfferDetail;
@@ -107,6 +110,30 @@ public class JobOffersController : ApiControllerBase
             StudentGroupIds = studentGroupIds,
 
             OrderByExpression = order ?? "LastName",
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("{jobOfferId}/CVs")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefCVWithStatusDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCVsOfStudent(
+        Guid jobOfferId,
+        [FromQuery] string? order,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Sender.Send(new GetBriefCVWithStatussOfJobOfferWithPagingQuery
+        {
+            JobOfferId = jobOfferId,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+
+            OrderByExpression = order ?? "Title"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
