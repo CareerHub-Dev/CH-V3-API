@@ -50,4 +50,11 @@ public class EnumsController : ApiControllerBase
     {
         return Ok(await Sender.Send(new GetWorkFormatsQuery()));
     }
+
+    [HttpGet("Reviews")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EnumDTO>))]
+    public async Task<IActionResult> GetReviews()
+    {
+        return Ok(await Sender.Send(new GetReviewsQuery()));
+    }
 }
