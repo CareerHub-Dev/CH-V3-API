@@ -1,14 +1,9 @@
 ﻿using API.Authorize;
 using API.DTO.Requests.Posts;
-using Application.Common.DTO.Posts;
-using Application.Common.Models.Pagination;
 using Application.Posts.Commands.CreatePost;
 using Application.Posts.Commands.DeletePostOfAccount;
 using Application.Posts.Commands.UpdatePostOfAccount;
-using Application.Posts.Queries.GetPost;
-using Application.Posts.Queries.GetPostsOfAccountWithPaging;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace API.Areas.Auth;
 
@@ -16,61 +11,6 @@ namespace API.Areas.Auth;
 [Route("api/Auth/[controller]")]
 public class PostsController : ApiControllerBase
 {
-    [HttpGet("of-account/{accountId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedList<PostDTO>))]
-    public async Task<IActionResult> GetPostsOfAccount(
-        Guid accountId,
-        [FromQuery] string? order,
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10)
-    {
-        var result = await Sender.Send(new GetPostsOfAccountWithPagingQuery
-        {
-            AccountId = accountId,
-            IsAccountMustBeVerified = true,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            OrderByExpression = order ?? "CreatedDate",
-        });
-
-        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
-
-        return Ok(result);
-    }
-
-    [HttpGet("{postId}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PostDTO))]
-    public async Task<IActionResult> GetPost(Guid postId)
-    {
-        var result = await Sender.Send(new GetPostQuery
-        {
-            PostId = postId,
-            IsAccountMustBeVerified = true,
-        });
-
-        return Ok(result);
-    }
-
-    [HttpGet("self")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedList<PostDTO>))]
-    public async Task<IActionResult> GetSelfPosts(
-        [FromQuery] string? order,
-        [FromQuery] int pageNumber = 1,
-        [FromQuery] int pageSize = 10)
-    {
-        var result = await Sender.Send(new GetPostsOfAccountWithPagingQuery
-        {
-            AccountId = AccountInfo!.Id,
-            PageNumber = pageNumber,
-            PageSize = pageSize,
-            OrderByExpression = order ?? "CreatedDate",
-        });
-
-        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
-
-        return Ok(result);
-    }
-
     [HttpPost("self")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     public async Task<IActionResult> CreatePostForSelfAccount([FromForm] CreateOwnPostRequest request)

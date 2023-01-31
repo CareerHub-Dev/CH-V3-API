@@ -6,34 +6,36 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Posts.Queries.GetPost;
+namespace Application.Posts.Queries.GetLikedPost;
 
-public record GetPostQuery
-    : IRequest<PostDTO>
+public record GetLikedPostQuery
+    : IRequest<LikedPostDTO>
 {
     public Guid PostId { get; init; }
     public bool IsAccountMustBeVerified { get; init; }
+
+    public Guid LikerStudentId { get; init; }
 }
 
-public class GetPostQueryHandler
-    : IRequestHandler<GetPostQuery, PostDTO>
+public class GetLikedPostQueryHandler
+    : IRequestHandler<GetLikedPostQuery, LikedPostDTO>
 {
     private readonly IApplicationDbContext _context;
 
-    public GetPostQueryHandler(
+    public GetLikedPostQueryHandler(
         IApplicationDbContext context)
     {
         _context = context;
     }
 
-    public async Task<PostDTO> Handle(
-        GetPostQuery request,
+    public async Task<LikedPostDTO> Handle(
+        GetLikedPostQuery request,
         CancellationToken cancellationToken)
     {
         var post = await _context.Posts
             .AsNoTracking()
             .Include(x => x.Account)
-            .MapToPostDTO()
+            .MapToLikedPostDTO(request.LikerStudentId)
             .FirstOrDefaultAsync(x => x.Id == request.PostId);
 
         if (post == null)

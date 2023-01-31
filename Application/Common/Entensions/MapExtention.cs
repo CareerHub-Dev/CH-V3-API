@@ -563,7 +563,7 @@ public static class MapExtention
 
     #endregion
 
-    #region CVProjectLink
+    #region Education
 
     public static IEnumerable<EducationDTO> MapToEducationDTO(this IEnumerable<Education> educations)
     {
@@ -624,7 +624,22 @@ public static class MapExtention
             Text = x.Text,
             Images = x.Images,
             CreatedDate = x.CreatedDate,
+            Likes = x.StudentsLiked.Count(),
             Account = x.Account!.MapToAccountOfPostDTO()
+        });
+    }
+
+    public static IQueryable<LikedPostDTO> MapToLikedPostDTO(this IQueryable<Post> posts, Guid likerStudentId)
+    {
+        return posts.Select(x => new LikedPostDTO
+        {
+            Id = x.Id,
+            Text = x.Text,
+            Images = x.Images,
+            CreatedDate = x.CreatedDate,
+            Likes = x.StudentsLiked.Count(),
+            Account = x.Account!.MapToAccountOfPostDTO(),
+            IsLiked = x.StudentsLiked.Any(x => x.Id == likerStudentId)
         });
     }
 

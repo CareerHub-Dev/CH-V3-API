@@ -1,0 +1,14 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.nure.career.hub",
+            "sha256_cert_fingerprints": [
+                "D8:C1:D2:DF:1F:33:E3:44:CE:4C:F6:72:32:BB:F4:29:17:56:EC:19:74:BF:F1:AD:4B:93:CE:CF:8F:56:80:9C"
+            ]
+        }
+    }
+]
