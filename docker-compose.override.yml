@@ -26,6 +26,4 @@ services:
 
 volumes:
   images:
-    external: true
   database:
-    external: true

@@ -19,14 +19,13 @@ public class PostsController : ApiControllerBase
     [HttpGet("followed-accounts")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedList<LikedPostDTO>))]
     public async Task<IActionResult> GetLikedPostsOfFollowedAccounts(
-        Guid accountId,
         [FromQuery] string? order,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
         var result = await Sender.Send(new GetPostsOfFollowedAccountsForStudentWithPagingQuery
         {
-            StudentId = accountId,
+            StudentId = AccountInfo!.Id,
             IsStudentMustBeVerified = true,
             IsAccountMustBeVerified = true,
             PageNumber = pageNumber,

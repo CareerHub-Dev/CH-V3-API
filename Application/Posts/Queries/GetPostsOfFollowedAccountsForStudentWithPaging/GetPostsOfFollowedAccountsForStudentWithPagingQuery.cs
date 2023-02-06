@@ -3,7 +3,6 @@ using Application.Common.Entensions;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Models.Pagination;
-using Application.Posts.Queries.GetLikedPostsOfAccountWithPaging;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
