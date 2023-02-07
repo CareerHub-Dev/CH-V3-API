@@ -59,7 +59,7 @@ public class CVsController : ApiControllerBase
             PageNumber = pageNumber,
             PageSize = pageSize,
 
-            OrderByExpression = order ?? "Create DESC"
+            OrderByExpression = order ?? "Created DESC"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
