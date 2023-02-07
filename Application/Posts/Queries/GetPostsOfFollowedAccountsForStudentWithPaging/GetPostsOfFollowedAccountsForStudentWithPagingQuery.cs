@@ -68,6 +68,7 @@ public class GetPostsOfFollowedAccountsForStudentWithPagingQueryHandler
         return await _context.Posts
             .Filter(isAccountVerified: request.IsAccountMustBeVerified, accountIds: all)
             .MapToLikedPostDTO(request.StudentId)
+            .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

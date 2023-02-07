@@ -38,6 +38,7 @@ public class GetAdmininstrationPostsWithPagingQueryHandler
         return await _context.Posts
             .Filter(accountIds: adminIds)
             .MapToPostDTO()
+            .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

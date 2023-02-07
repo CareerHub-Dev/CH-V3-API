@@ -50,6 +50,7 @@ public class GetPostsOfAccountWithPagingQueryHandler
         return await _context.Posts
             .Filter(isAccountVerified: request.IsAccountMustBeVerified, accountIds: new List<Guid> { request.AccountId })
             .MapToLikedPostDTO(request.LikerStudentId)
+            .OrderByExpression(request.OrderByExpression)
             .ToPagedListAsync(request.PageNumber, request.PageSize);
     }
 }

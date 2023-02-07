@@ -31,7 +31,7 @@ public class PostsController : ApiControllerBase
             IsAccountMustBeVerified = true,
             PageNumber = pageNumber,
             PageSize = pageSize,
-            OrderByExpression = order ?? "CreatedDate",
+            OrderByExpression = order ?? "CreatedDate DESC",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
@@ -50,7 +50,7 @@ public class PostsController : ApiControllerBase
         {
             PageNumber = pageNumber,
             PageSize = pageSize,
-            OrderByExpression = order ?? "CreatedDate",
+            OrderByExpression = order ?? "CreatedDate DESC",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

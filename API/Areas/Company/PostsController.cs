@@ -44,7 +44,7 @@ public class PostsController : ApiControllerBase
             AccountId = AccountInfo!.Id,
             PageNumber = pageNumber,
             PageSize = pageSize,
-            OrderByExpression = order ?? "CreatedDate",
+            OrderByExpression = order ?? "CreatedDate DESC",
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
