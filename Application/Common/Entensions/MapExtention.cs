@@ -7,6 +7,7 @@ using Application.Common.DTO.CVs;
 using Application.Common.DTO.Educations;
 using Application.Common.DTO.Experiences;
 using Application.Common.DTO.ForeignLanguages;
+using Application.Common.DTO.JobOfferReviews;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.Posts;
@@ -640,6 +641,33 @@ public static class MapExtention
             Likes = x.StudentsLiked.Count(),
             Account = x.Account!.MapToAccountOfPostDTO(),
             IsLiked = x.StudentsLiked.Any(x => x.Id == likerStudentId)
+        });
+    }
+
+    #endregion
+
+    #region JobOfferReview
+
+    public static IQueryable<JobOfferReviewDTO> MapToJobOfferReviewDTO(this IQueryable<CVJobOffer> cvJobOffers)
+    {
+        return cvJobOffers.Select(x => new JobOfferReviewDTO
+        {
+            Status = x.Status,
+            Message = x.Message,
+            Created = x.Created,
+            CV = new ShortCVofReviewDTO
+            {
+                Id = x.CV!.Id,
+                Title = x.CV.Title,
+                Created = x.CV.Created,
+                Modified = x.CV.Modified,
+            },
+            JobOffer = new ShortJobOfferOfReviewDTO
+            {
+                Id = x.JobOffer!.Id,
+                Title = x.JobOffer.Title,
+                Image = x.JobOffer.Image
+            }
         });
     }
 

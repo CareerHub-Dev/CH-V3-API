@@ -3,6 +3,7 @@ using API.DTO.Requests.CVs;
 using API.DTO.Responses;
 using Application.Common.DTO.CVs;
 using Application.Common.DTO.Experiences;
+using Application.Common.DTO.JobOfferReviews;
 using Application.Common.Enums;
 using Application.CVs.Commands.CreateCV;
 using Application.CVs.Commands.DeleteCVOfStudent;
@@ -12,6 +13,7 @@ using Application.CVs.Commands.UpdateCVPhotoOfStudent;
 using Application.CVs.Queries.GetBriefCVsOfStudentWithPaging;
 using Application.CVs.Queries.GetCVOfStudent;
 using Application.Experiences.Queries.GetExperienceOfStudent;
+using Application.JobOfferReviews.Queries.GetJobOfferReviewsOfStudentWithPaging;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -36,6 +38,28 @@ public class CVsController : ApiControllerBase
             PageSize = pageSize,
 
             OrderByExpression = order ?? "Title"
+        });
+
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("reviews")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<JobOfferReviewDTO>))]
+    public async Task<IActionResult> GetJobOfferReviewsOfSelfStudent(
+        [FromQuery] string? order,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Sender.Send(new GetJobOfferReviewsOfStudentWithPagingQuery
+        {
+            StudentId = AccountInfo!.Id,
+
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+
+            OrderByExpression = order ?? "Create DESC"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));

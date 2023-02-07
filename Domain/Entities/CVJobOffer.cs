@@ -11,4 +11,6 @@ public class CVJobOffer
     public JobOffer? JobOffer { get; set; }
 
     public Review Status { get; set; } = Review.In_progress;
+    public string? Message { get; set; }
+    public DateTime Created { get; set; } = DateTime.UtcNow;
 }
