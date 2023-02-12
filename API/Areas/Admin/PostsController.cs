@@ -93,7 +93,7 @@ public class PostsController : ApiControllerBase
     [HttpPut("{postId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdatePost(Guid postId, [FromForm] UpdatePostCommand commnd)
+    public async Task<IActionResult> UpdatePost(Guid postId, UpdatePostCommand commnd)
     {
         if (postId != commnd.PostId)
         {

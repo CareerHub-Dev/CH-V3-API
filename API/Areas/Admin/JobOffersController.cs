@@ -9,6 +9,7 @@ using Application.CVs.Queries.GetBriefCVWithStatussOfJobOfferWithPaging;
 using Application.JobOffers.Commands.CreateJobOffer;
 using Application.JobOffers.Commands.DeleteJobOffer;
 using Application.JobOffers.Commands.UpdateJobOfferDetail;
+using Application.JobOffers.Commands.UpdateJobOfferEndDate;
 using Application.JobOffers.Commands.UpdateJobOfferImage;
 using Application.JobOffers.Queries.GetAmountAppliedCVsOfJobOffer;
 using Application.JobOffers.Queries.GetAmountStudentSubscribersOfJobOffer;
@@ -178,6 +179,22 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateJobOfferDetail(Guid jobOfferId, UpdateJobOfferDetailCommand command)
+    {
+        if (jobOfferId != command.JobOfferId)
+        {
+            return BadRequest();
+        }
+
+        await Sender.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpPut("{jobOfferId}/endDate")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateJobOfferEndDate(Guid jobOfferId, UpdateJobOfferEndDateCommand command)
     {
         if (jobOfferId != command.JobOfferId)
         {
