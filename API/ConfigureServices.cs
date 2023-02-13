@@ -1,9 +1,11 @@
-﻿using API.Services;
+﻿using API.Providers;
+using API.Services;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Hellang.Middleware.ProblemDetails;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Security.Authentication;
@@ -42,6 +44,13 @@ public static class ConfigureServices
         services.AddProblemDetails();
 
         services.AddSwagger();
+
+        services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+
+        services.AddSignalR(options =>
+        {
+            options.EnableDetailedErrors = true;
+        });
 
         return services;
     }

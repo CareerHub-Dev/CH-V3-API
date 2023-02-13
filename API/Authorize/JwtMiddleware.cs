@@ -14,7 +14,8 @@ public class JwtMiddleware
 
     public async Task Invoke(HttpContext context, ISender mediator)
     {
-        var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+        
+        var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last() ?? context.Request.Query["access_token"];
 
         if (token != null)
         {

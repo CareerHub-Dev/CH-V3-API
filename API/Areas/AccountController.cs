@@ -1,4 +1,6 @@
-﻿using API.DTO.Requests.RefreshTokens;
+﻿using API.Authorize;
+using API.DTO.Requests.RefreshTokens;
+using API.Hubs;
 using Application.Accounts.Commands.RegisterStudent;
 using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
@@ -8,12 +10,20 @@ using Application.Accounts.Queries.Authenticate;
 using Application.Accounts.Queries.RefreshToken;
 using Application.Emails.Commands.SendPasswordResetEmail;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace API.Areas;
 
 [Route("api/[controller]")]
 public class AccountController : ApiControllerBase
 {
+    private readonly IHubContext<NotificationHub> _hub;
+
+    public AccountController(IHubContext<NotificationHub> hub)
+    {
+        _hub = hub;
+    }
+
     [HttpPost("authenticate")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticateResult))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -103,6 +113,15 @@ public class AccountController : ApiControllerBase
     public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
         await Sender.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpGet("test-send")]
+    [Authorize]
+    public async Task<IActionResult> Test([FromQuery] string userId, [FromQuery] string text)
+    {
+        await _hub.Clients.User(userId).SendAsync("Notify", text);
 
         return NoContent();
     }
