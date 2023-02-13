@@ -4,8 +4,10 @@ using Application.Common.Enums;
 using Application.StudentLogs.Commands.CreateStudentLog;
 using Application.StudentLogs.Commands.DeleteStudentLog;
 using Application.StudentLogs.Commands.UpdateStudentLog;
+using Application.StudentLogs.Commands.UploadStudentLogs;
 using Application.StudentLogs.Queries.GetStudentLogsWithPaging;
 using Application.Tags.Queries.GetStudentLog;
+using CsvHelper.Configuration.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -15,6 +17,14 @@ namespace API.Areas.Admin;
 [Route("api/Admin/[controller]")]
 public class StudentLogsController : ApiControllerBase
 {
+    [HttpPost("upload")]
+    public async Task<IActionResult> UpdloadStudentLogs(IFormFile file)
+    {
+        var result = await Sender.Send(new UploadStudentLogsCommand(file));
+
+        return Ok(result);
+    }
+
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<StudentLogDTO>))]
     public async Task<IActionResult> GetStudentLogs(

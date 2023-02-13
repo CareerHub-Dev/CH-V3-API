@@ -7,6 +7,7 @@ using Application.Common.Models.Email;
 using Application.Helpers;
 using Application.Services;
 using Application.Services.Jwt;
+using Application.Services.StudentInfoParser;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
@@ -41,6 +42,7 @@ public static class ConfigureServices
 
         services.AddScoped<IAccountHelper, AccountHelper>();
         services.AddScoped<IRefreshTokenHelper, RefreshTokenHelper>();
+        services.AddScoped<IStudentInfoParserService, StudentInfoParserService>();
 
         services.AddHostedService<RemoveOldImagesBackgroundService>();
 
