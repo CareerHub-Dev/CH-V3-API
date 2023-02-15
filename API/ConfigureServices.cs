@@ -1,5 +1,4 @@
-﻿using API.Providers;
-using API.Services;
+﻿using API.Services;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Hellang.Middleware.ProblemDetails;
@@ -44,8 +43,6 @@ public static class ConfigureServices
         services.AddProblemDetails();
 
         services.AddSwagger();
-
-        services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
         services.AddSignalR(options =>
         {

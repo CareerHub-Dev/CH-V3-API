@@ -1,6 +1,5 @@
 ﻿using API.Authorize;
 using API.DTO.Requests.RefreshTokens;
-using API.Hubs;
 using Application.Accounts.Commands.RegisterStudent;
 using Application.Accounts.Commands.ResetPassword;
 using Application.Accounts.Commands.VerifyAdminWithContinuedRegistration;
@@ -11,19 +10,15 @@ using Application.Accounts.Queries.RefreshToken;
 using Application.Emails.Commands.SendPasswordResetEmail;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using OneSignalApi.Api;
+using OneSignalApi.Client;
+using OneSignalApi.Model;
 
 namespace API.Areas;
 
 [Route("api/[controller]")]
 public class AccountController : ApiControllerBase
 {
-    private readonly IHubContext<NotificationHub> _hub;
-
-    public AccountController(IHubContext<NotificationHub> hub)
-    {
-        _hub = hub;
-    }
-
     [HttpPost("authenticate")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticateResult))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -118,10 +113,20 @@ public class AccountController : ApiControllerBase
     }
 
     [HttpGet("test-send")]
-    [Authorize]
     public async Task<IActionResult> Test([FromQuery] string userId, [FromQuery] string text)
     {
-        await _hub.Clients.User(userId).SendAsync("Notify", text);
+        var appConfig = new Configuration();
+        appConfig.BasePath = "https://onesignal.com/api/v1";
+        appConfig.AccessToken = "YmE1NGY2MzItYWE1Mi00NTY3LWEzMGMtYTE3YzI3ZGEyNTRl";
+        var appInstance = new DefaultApi(appConfig);
+
+        // Create and send notification to all subscribed users
+        var notification = new Notification(appId: "2d563298-b878-4a25-8ac6-f7fd8b5c467d")
+        {
+            Contents = new StringMap(en: text),
+            IncludedSegments = new List<string> { userId }
+        };
+        await appInstance.CreateNotificationAsync(notification);
 
         return NoContent();
     }

@@ -1,6 +1,5 @@
 using API;
 using API.Authorize;
-using API.Hubs;
 using Application;
 using Hellang.Middleware.ProblemDetails;
 using Infrastructure;
@@ -61,7 +60,5 @@ app.UseStaticFiles();
 app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
-
-app.MapHub<NotificationHub>("/hubs/notification");
 
 app.Run();
