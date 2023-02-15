@@ -22,4 +22,5 @@ public class Student : Account
     public List<CV> CVs { get; set; } = new List<CV>();
 
     public List<Post> LikedPosts { get; set; } = new List<Post>();
+    public List<Notification> Notifications { get; set; } = new List<Notification>();
 }

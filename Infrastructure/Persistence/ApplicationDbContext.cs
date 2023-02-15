@@ -44,6 +44,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<Ban> Bans => Set<Ban>();
     public DbSet<CVJobOffer> CVJobOffers => Set<CVJobOffer>();
+    public DbSet<Notification> Notifications => Set<Notification>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
