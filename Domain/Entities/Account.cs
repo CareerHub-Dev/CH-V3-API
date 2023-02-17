@@ -18,6 +18,8 @@ public class Account : BaseEntity
     public List<Ban> Bans { get; set; } = new List<Ban>();
     public List<Post> Posts { get; set; } = new List<Post>();
 
+    public Guid? PlayerId { get; set; }
+
 
     public bool IsVerified => Verified.HasValue || PasswordReset.HasValue;
     public bool IsResetTokenExpired => !ResetTokenExpires.HasValue || ResetTokenExpires < DateTime.UtcNow;

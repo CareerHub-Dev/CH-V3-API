@@ -22,7 +22,6 @@ if (app.Environment.IsDevelopment())
     app.UseMigrationsEndPoint();
 
     // Initialise and seed database
-    
 }
 else
 {

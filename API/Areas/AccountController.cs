@@ -7,6 +7,7 @@ using Application.Accounts.Commands.VerifyCompanyWithContinuedRegistration;
 using Application.Accounts.Commands.VerifyStudent;
 using Application.Accounts.Queries.Authenticate;
 using Application.Accounts.Queries.RefreshToken;
+using Application.Common.Interfaces;
 using Application.Emails.Commands.SendPasswordResetEmail;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -19,6 +20,13 @@ namespace API.Areas;
 [Route("api/[controller]")]
 public class AccountController : ApiControllerBase
 {
+    private readonly INotificationService _notificationService;
+
+    public AccountController(INotificationService notificationService)
+    {
+        _notificationService = notificationService;
+    }
+
     [HttpPost("authenticate")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthenticateResult))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -113,22 +121,11 @@ public class AccountController : ApiControllerBase
     }
 
     [HttpGet("test-send")]
-    public async Task<IActionResult> Test([FromQuery] string userId, [FromQuery] string text)
+    public async Task<IActionResult> Test([FromQuery] Guid playerId, [FromQuery] string webUrl, [FromQuery] string enMessage, [FromQuery] string ukMessage, [FromQuery] string largeIcon)
     {
-        var appConfig = new Configuration();
-        appConfig.BasePath = "https://onesignal.com/api/v1";
-        appConfig.AccessToken = "YmE1NGY2MzItYWE1Mi00NTY3LWEzMGMtYTE3YzI3ZGEyNTRl";
-        var appInstance = new DefaultApi(appConfig);
+        await _notificationService.SendNotificationAsync(new List<Guid> { playerId }, webUrl, enMessage, ukMessage, largeIcon);
 
-        // Create and send notification to all subscribed users
-        var notification = new Notification(appId: "2d563298-b878-4a25-8ac6-f7fd8b5c467d")
-        {
-            Contents = new StringMap(en: text),
-            IncludedSegments = new List<string> { userId }
-        };
-        await appInstance.CreateNotificationAsync(notification);
-
-        return NoContent();
+        return Ok();
     }
 
     // helper methods

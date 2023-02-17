@@ -1,6 +1,7 @@
 ﻿using API.Authorize;
 using API.DTO.Requests.Accounts;
 using Application.Accounts.Commands.ChangePassword;
+using Application.Accounts.Commands.SetPayerId;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Auth;
@@ -18,6 +19,20 @@ public class AccountController : ApiControllerBase
         {
             OldPassword = request.OldPassword,
             NewPassword = request.NewPassword,
+            AccountId = AccountInfo!.Id,
+        });
+
+        return NoContent();
+    }
+
+    [HttpPost("set-palyer-id")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> SetPlayerId(SetOwnPlayerIdRequest request)
+    {
+        await Sender.Send(new SetPayerIdCommand
+        {
+            PlayerId = request.PlayerId,
             AccountId = AccountInfo!.Id,
         });
 
