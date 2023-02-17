@@ -25,7 +25,7 @@ public class AccountController : ApiControllerBase
         return NoContent();
     }
 
-    [HttpPost("set-palyer-id")]
+    [HttpPost("set-player-id")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SetPlayerId(SetOwnPlayerIdRequest request)
