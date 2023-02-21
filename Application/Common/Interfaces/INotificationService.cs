@@ -2,5 +2,5 @@
 
 public interface INotificationService
 {
-    Task SendNotificationAsync(List<Guid> userIds, string webUrl = "", string enMessage = "", string ukMessage = "", string largeIcon = "");
+    Task SendNotificationAsync(List<Guid> userIds, string appUrl = "", string enMessage = "", string ukMessage = "", string largeIcon = "", object? data = null);
 }

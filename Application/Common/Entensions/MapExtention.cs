@@ -10,6 +10,7 @@ using Application.Common.DTO.ForeignLanguages;
 using Application.Common.DTO.JobOfferReviews;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.JobPositions;
+using Application.Common.DTO.Notifications;
 using Application.Common.DTO.Posts;
 using Application.Common.DTO.StudentGroups;
 using Application.Common.DTO.StudentLogs;
@@ -668,6 +669,25 @@ public static class MapExtention
                 Title = x.JobOffer.Title,
                 Image = x.JobOffer.Image
             }
+        });
+    }
+
+    #endregion
+
+    #region Notification
+
+    public static IQueryable<NotificationDTO> MapToNotificationDTO(this IQueryable<Notification> notification)
+    {
+        return notification.Select(x => new NotificationDTO
+        {
+            Id = x.Id,
+            ReferenceId = x.ReferenceId,
+            UkMessage = x.UkMessage,
+            EnMessage = x.EnMessage,
+            Image = x.Image,
+            IsViewed = x.IsViewed,
+            Created = x.Created,
+            Type = x.Type
         });
     }
 

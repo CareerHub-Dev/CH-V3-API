@@ -15,7 +15,7 @@ public class NotificationService : INotificationService
 		_configuration = configuration;
 	}
 
-	public async Task SendNotificationAsync(List<Guid> userIds, string webUrl = "", string enMessage = "", string ukMessage = "", string largeIcon = "")
+	public async Task SendNotificationAsync(List<Guid> userIds, string appUrl = "", string enMessage = "", string ukMessage = "", string largeIcon = "", object? data = null)
 	{
         var appConfig = new Configuration();
         appConfig.BasePath = "https://onesignal.com/api/v1";
@@ -27,8 +27,10 @@ public class NotificationService : INotificationService
             Contents = new StringMap(en: enMessage, uk: ukMessage),
             IncludedSegments = new List<string> { "included_player_ids" },
             IncludePlayerIds = userIds.Select(x => x.ToString()).ToList(),
-            WebUrl = webUrl,
-            LargeIcon = largeIcon
+            AppUrl = appUrl,
+            LargeIcon = largeIcon,
+            Data = data
+            
         };
 
         await appInstance.CreateNotificationAsync(notification);

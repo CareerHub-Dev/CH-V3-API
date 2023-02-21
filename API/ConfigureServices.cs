@@ -21,6 +21,7 @@ public static class ConfigureServices
         services.AddSingleton<ICurrentAccountService, CurrentAccountService>();
         services.AddSingleton<IСurrentRemoteIpAddressService, СurrentRemoteIpAddressService>();
         services.AddScoped<IPathService, PathService>();
+        services.AddScoped<IBaseUrlService, BaseUrlService>();
 
         services.AddHttpContextAccessor();
 

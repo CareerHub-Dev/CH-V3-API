@@ -1,8 +1,8 @@
 ﻿using Domain.Enums;
 
-namespace Domain.Entities;
+namespace Application.Common.DTO.Notifications;
 
-public class Notification
+public class NotificationDTO
 {
     public Guid Id { get; set; }
 
@@ -13,7 +13,4 @@ public class Notification
     public bool IsViewed { get; set; }
     public DateTime Created { get; set; }
     public NotificationType Type { get; set; }
-
-    public Guid StudentId { get; set; }
-    public Student? Student { get; set; }
 }
