@@ -47,7 +47,6 @@ public class SendCVOfStudentForJobOfferCommandHandler
         }
 
         var joboffer = await _context.JobOffers
-            .Include(x => x.AppliedCVs)
             .Filter(
                 isActive: true,
                 isCompanyVerified: true
@@ -59,13 +58,13 @@ public class SendCVOfStudentForJobOfferCommandHandler
             throw new NotFoundException(nameof(JobOffer), request.JobOfferId);
         }
 
-        if (joboffer.AppliedCVs.Any(x => x.Id == request.CVId))
+        var cvJobOffer = new CVJobOffer
         {
-            return Unit.Value;
-        }
+            CVId = request.CVId,
+            JobOfferId = request.JobOfferId,
+        };
 
-        joboffer.AppliedCVs.Add(cv);
-
+        _context.CVJobOffers.Add(cvJobOffer);
         await _context.SaveChangesAsync();
 
         return Unit.Value;

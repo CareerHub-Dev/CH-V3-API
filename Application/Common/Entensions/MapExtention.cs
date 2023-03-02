@@ -420,10 +420,10 @@ public static class MapExtention
                     x.Verified != null || x.PasswordReset != null :
                     x.Verified == null && x.PasswordReset == null)
             ),
-            AmountAppliedCVs = x.AppliedCVs.Count(x =>
+            AmountAppliedCVs = x.CVJobOffers.Count(x =>
                 !isStudentOfAppliedCVMustBeVerified.HasValue || (isStudentOfAppliedCVMustBeVerified.Value ?
-                    x.Student!.Verified != null || x.Student.PasswordReset != null :
-                    x.Student!.Verified == null && x.Student.PasswordReset == null)
+                    x.CV!.Student!.Verified != null || x.CV!.Student.PasswordReset != null :
+                    x.CV!.Student!.Verified == null && x.CV!.Student.PasswordReset == null)
             )
         });
     }
@@ -452,10 +452,10 @@ public static class MapExtention
                     x.Verified != null || x.PasswordReset != null :
                     x.Verified == null && x.PasswordReset == null)
             ),
-            AmountAppliedCVs = x.AppliedCVs.Count(x =>
+            AmountAppliedCVs = x.CVJobOffers.Count(x =>
                 !isStudentOfAppliedCVMustBeVerified.HasValue || (isStudentOfAppliedCVMustBeVerified.Value ?
-                    x.Student!.Verified != null || x.Student.PasswordReset != null :
-                    x.Student!.Verified == null && x.Student.PasswordReset == null)
+                    x.CV!.Student!.Verified != null || x.CV!.Student.PasswordReset != null :
+                    x.CV!.Student!.Verified == null && x.CV!.Student.PasswordReset == null)
             ),
             IsFollowed = x.SubscribedStudents.Any(x => x.Id == followerStudentId),
         });
@@ -653,6 +653,7 @@ public static class MapExtention
     {
         return cvJobOffers.Select(x => new JobOfferReviewDTO
         {
+            Id = x.Id,
             Status = x.Status,
             Message = x.Message,
             Created = x.Created,

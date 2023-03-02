@@ -4,6 +4,7 @@ namespace Application.Common.DTO.JobOfferReviews;
 
 public class JobOfferReviewDTO
 {
+    public Guid Id { get; set; }
     public Review Status { get; set; }
     public string? Message { get; set; }
     public DateTime Created { get; set; }

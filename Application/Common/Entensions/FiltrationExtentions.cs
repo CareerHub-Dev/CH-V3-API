@@ -325,6 +325,39 @@ public static class FiltrationExtentions
         return cvs;
     }
 
+    public static IQueryable<CVJobOffer> Filter(
+        this IQueryable<CVJobOffer> cvJobOffers,
+        bool? isStudentOfCVVerified = null,
+        bool? isStudentOfCVBanned = null)
+    {
+
+        switch (isStudentOfCVVerified)
+        {
+            case true:
+                cvJobOffers = cvJobOffers.Where(x => x.CV!.Student!.Verified != null || x.CV!.Student!.PasswordReset != null);
+                break;
+            case false:
+                cvJobOffers = cvJobOffers.Where(x => x.CV!.Student!.Verified == null && x.CV!.Student!.PasswordReset == null);
+                break;
+            default:
+                break;
+        }
+
+        switch (isStudentOfCVBanned)
+        {
+            case true:
+                cvJobOffers = cvJobOffers.Where(x => x.CV!.Student!.Bans.Any(x => x.Expires >= DateTime.UtcNow));
+                break;
+            case false:
+                cvJobOffers = cvJobOffers.Where(x => x.CV!.Student!.Bans.All(x => x.Expires < DateTime.UtcNow));
+                break;
+            default:
+                break;
+        }
+
+        return cvJobOffers;
+    }
+
     public static IQueryable<Post> Filter(
         this IQueryable<Post> posts,
         bool? isAccountVerified = null,

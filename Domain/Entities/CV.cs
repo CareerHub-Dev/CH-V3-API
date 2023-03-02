@@ -28,7 +28,5 @@ public class CV : BaseEntity
     public List<CVProjectLink> ProjectLinks { get; set; } = new List<CVProjectLink>();
     public List<Education> Educations { get; set; } = new List<Education>();
 
-
-    public List<JobOffer> TargetJobOffers { get; set; } = new List<JobOffer>();
     public List<CVJobOffer> CVJobOffers { get; set; } = new List<CVJobOffer>();
 }

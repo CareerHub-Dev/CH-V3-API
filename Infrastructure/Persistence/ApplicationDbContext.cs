@@ -50,24 +50,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        builder
-            .Entity<CV>()
-            .HasMany(x => x.TargetJobOffers)
-            .WithMany(x => x.AppliedCVs)
-            .UsingEntity<CVJobOffer>(
-            j => j
-                .HasOne(pt => pt.JobOffer)
-                .WithMany(t => t.CVJobOffers)
-                .HasForeignKey(pt => pt.JobOfferId),
-            j => j
-                .HasOne(pt => pt.CV)
-                .WithMany(t => t.CVJobOffers)
-                .HasForeignKey(pt => pt.CVId),
-            j =>
-            {
-                j.ToTable("CVJobOffers");
-            });
-
         base.OnModelCreating(builder);
     }
 

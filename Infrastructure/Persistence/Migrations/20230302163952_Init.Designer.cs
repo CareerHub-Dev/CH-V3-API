@@ -14,8 +14,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230108175839_FixPost2")]
-    partial class FixPost2
+    [Migration("20230302163952_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,21 +26,6 @@ namespace Infrastructure.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("CVJobOffer", b =>
-                {
-                    b.Property<Guid>("AppliedCVsId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TargetJobOffersId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("AppliedCVsId", "TargetJobOffersId");
-
-                    b.HasIndex("TargetJobOffersId");
-
-                    b.ToTable("CVJobOffer");
-                });
 
             modelBuilder.Entity("CompanyStudent", b =>
                 {
@@ -81,6 +66,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.Property<DateTime?>("PasswordReset")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("PlayerId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ResetToken")
                         .HasColumnType("text");
@@ -198,6 +186,36 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("CVs");
+                });
+
+            modelBuilder.Entity("Domain.Entities.CVJobOffer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CVId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("JobOfferId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CVId");
+
+                    b.HasIndex("JobOfferId");
+
+                    b.ToTable("CVJobOffers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Experience", b =>
@@ -336,6 +354,45 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("JobPositions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EnMessage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsViewed")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid>("ReferenceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UkMessage")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -656,21 +713,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("Students", (string)null);
                 });
 
-            modelBuilder.Entity("CVJobOffer", b =>
-                {
-                    b.HasOne("Domain.Entities.CV", null)
-                        .WithMany()
-                        .HasForeignKey("AppliedCVsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.JobOffer", null)
-                        .WithMany()
-                        .HasForeignKey("TargetJobOffersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("CompanyStudent", b =>
                 {
                     b.HasOne("Domain.Entities.Company", null)
@@ -716,6 +758,25 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("Domain.Entities.CVJobOffer", b =>
+                {
+                    b.HasOne("Domain.Entities.CV", "CV")
+                        .WithMany("CVJobOffers")
+                        .HasForeignKey("CVId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.JobOffer", "JobOffer")
+                        .WithMany("CVJobOffers")
+                        .HasForeignKey("JobOfferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CV");
+
+                    b.Navigation("JobOffer");
+                });
+
             modelBuilder.Entity("Domain.Entities.Experience", b =>
                 {
                     b.HasOne("Domain.Entities.Student", "Student")
@@ -744,6 +805,17 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("JobPosition");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Notification", b =>
+                {
+                    b.HasOne("Domain.Entities.Student", "Student")
+                        .WithMany("Notifications")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.Entities.Post", b =>
@@ -887,6 +959,16 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("RefreshTokens");
                 });
 
+            modelBuilder.Entity("Domain.Entities.CV", b =>
+                {
+                    b.Navigation("CVJobOffers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.JobOffer", b =>
+                {
+                    b.Navigation("CVJobOffers");
+                });
+
             modelBuilder.Entity("Domain.Entities.JobPosition", b =>
                 {
                     b.Navigation("CVs");
@@ -904,6 +986,8 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("CVs");
 
                     b.Navigation("Experiences");
+
+                    b.Navigation("Notifications");
 
                     b.Navigation("StudentSubscriptions");
 

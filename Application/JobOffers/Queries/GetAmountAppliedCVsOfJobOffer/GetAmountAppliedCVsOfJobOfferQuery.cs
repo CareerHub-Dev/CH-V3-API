@@ -44,8 +44,8 @@ public class GetAmountAppliedCVsOfJobOfferQueryHandler
 
         return await _context.JobOffers
             .Where(x => x.Id == request.JobOfferId)
-            .SelectMany(x => x.AppliedCVs)
-            .Filter(isStudentVerified: request.IsStudentOfAppliedCVMustBeVerified)
+            .SelectMany(x => x.CVJobOffers)
+            .Filter(isStudentOfCVVerified: request.IsStudentOfAppliedCVMustBeVerified)
             .CountAsync();
     }
 }

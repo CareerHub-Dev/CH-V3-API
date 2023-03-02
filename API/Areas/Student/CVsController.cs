@@ -13,6 +13,7 @@ using Application.CVs.Commands.UpdateCVPhotoOfStudent;
 using Application.CVs.Queries.GetBriefCVsOfStudentWithPaging;
 using Application.CVs.Queries.GetCVOfStudent;
 using Application.Experiences.Queries.GetExperienceOfStudent;
+using Application.JobOfferReviews.Queries.GetJobOfferReviewOfStudent;
 using Application.JobOfferReviews.Queries.GetJobOfferReviewsOfStudentWithPaging;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -63,6 +64,20 @@ public class CVsController : ApiControllerBase
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
+    }
+
+    [HttpGet("reviews/{reviewId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(JobOfferReviewDTO))]
+    public async Task<IActionResult> GetJobOfferReviewOfSelfStudent(
+        Guid reviewId)
+    {
+        var result = await Sender.Send(new GetJobOfferReviewOfStudentQuery
+        {
+            StudentId = AccountInfo!.Id,
+            ReviewId = reviewId
+        });
 
         return Ok(result);
     }

@@ -25,7 +25,8 @@ namespace Infrastructure.Persistence.Migrations
                     Verified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ResetToken = table.Column<string>(type: "text", nullable: true),
                     ResetTokenExpires = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    PasswordReset = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    PasswordReset = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    PlayerId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -150,8 +151,7 @@ namespace Infrastructure.Persistence.Migrations
                     Text = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: false),
                     Images = table.Column<List<string>>(type: "text[]", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    AccoundId = table.Column<Guid>(type: "uuid", nullable: false),
-                    AccountId = table.Column<Guid>(type: "uuid", nullable: true)
+                    AccountId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -160,7 +160,8 @@ namespace Infrastructure.Persistence.Migrations
                         name: "FK_Posts_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -369,6 +370,31 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ReferenceId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UkMessage = table.Column<string>(type: "text", nullable: false),
+                    EnMessage = table.Column<string>(type: "text", nullable: false),
+                    Image = table.Column<string>(type: "text", nullable: true),
+                    IsViewed = table.Column<bool>(type: "boolean", nullable: false),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PostStudent",
                 columns: table => new
                 {
@@ -465,24 +491,28 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CVJobOffer",
+                name: "CVJobOffers",
                 columns: table => new
                 {
-                    AppliedCVsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TargetJobOffersId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CVId = table.Column<Guid>(type: "uuid", nullable: false),
+                    JobOfferId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Message = table.Column<string>(type: "text", nullable: true),
+                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CVJobOffer", x => new { x.AppliedCVsId, x.TargetJobOffersId });
+                    table.PrimaryKey("PK_CVJobOffers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CVJobOffer_CVs_AppliedCVsId",
-                        column: x => x.AppliedCVsId,
+                        name: "FK_CVJobOffers_CVs_CVId",
+                        column: x => x.CVId,
                         principalTable: "CVs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CVJobOffer_JobOffers_TargetJobOffersId",
-                        column: x => x.TargetJobOffersId,
+                        name: "FK_CVJobOffers_JobOffers_JobOfferId",
+                        column: x => x.JobOfferId,
                         principalTable: "JobOffers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -504,9 +534,14 @@ namespace Infrastructure.Persistence.Migrations
                 column: "SubscribedStudentsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CVJobOffer_TargetJobOffersId",
-                table: "CVJobOffer",
-                column: "TargetJobOffersId");
+                name: "IX_CVJobOffers_CVId",
+                table: "CVJobOffers",
+                column: "CVId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CVJobOffers_JobOfferId",
+                table: "CVJobOffers",
+                column: "JobOfferId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CVs_JobPositionId",
@@ -542,6 +577,11 @@ namespace Infrastructure.Persistence.Migrations
                 name: "IX_JobOfferTag_TagsId",
                 table: "JobOfferTag",
                 column: "TagsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_StudentId",
+                table: "Notifications",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_AccountId",
@@ -592,7 +632,7 @@ namespace Infrastructure.Persistence.Migrations
                 name: "CompanyStudent");
 
             migrationBuilder.DropTable(
-                name: "CVJobOffer");
+                name: "CVJobOffers");
 
             migrationBuilder.DropTable(
                 name: "Experiences");
@@ -602,6 +642,9 @@ namespace Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "JobOfferTag");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "PostStudent");

@@ -187,14 +187,18 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.CVJobOffer", b =>
                 {
-                    b.Property<Guid>("CVId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("JobOfferId")
+                    b.Property<Guid>("CVId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("JobOfferId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Message")
                         .HasColumnType("text");
@@ -202,11 +206,13 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.HasKey("CVId", "JobOfferId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("CVId");
 
                     b.HasIndex("JobOfferId");
 
-                    b.ToTable("CVJobOffers", (string)null);
+                    b.ToTable("CVJobOffers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Experience", b =>
