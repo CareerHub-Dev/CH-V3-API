@@ -78,19 +78,18 @@ public class VerifiedStudentLikePostOfVerifiedAccountCommandHandler
 
         _context.Notifications.Add(notification);
 
-        var k = _baseUrlService.GetBaseUrl;
-
         await _context.SaveChangesAsync();
 
         if(post.Account!.PlayerId.HasValue)
         {
             await _notificationService.SendNotificationAsync(
                 new List<Guid> { post.Account.PlayerId.Value },
-                $"{_baseUrlService.GetBaseUrl()}/main/posts/{post.Id}",
+                $"{_baseUrlService.GetBaseUrl()}main/posts/{post.Id}",
                 notification.EnMessage,
                 notification.UkMessage,
                 data: new NotificationDTO
                 {
+                    Id = notification.Id,
                     ReferenceId = notification.ReferenceId,
                     EnMessage = notification.EnMessage,
                     UkMessage = notification.UkMessage,

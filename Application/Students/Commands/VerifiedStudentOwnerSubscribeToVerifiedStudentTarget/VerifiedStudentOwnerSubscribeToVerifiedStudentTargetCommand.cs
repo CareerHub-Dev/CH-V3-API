@@ -96,11 +96,12 @@ public class VerifiedStudentOwnerSubscribeToVerifiedStudentTargetCommandHandler
         {
             await _notificationService.SendNotificationAsync(
                 new List<Guid> { studentTarget.PlayerId.Value },
-                $"{_baseUrlService.GetBaseUrl()}/main/students/{request.StudentOwnerId}",
+                $"{_baseUrlService.GetBaseUrl()}main/students/{request.StudentOwnerId}",
                 notification.EnMessage,
                 notification.UkMessage,
                 data: new NotificationDTO
                 {
+                    Id = notification.Id,
                     ReferenceId = notification.ReferenceId,
                     EnMessage = notification.EnMessage,
                     UkMessage = notification.UkMessage,
