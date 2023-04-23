@@ -22,5 +22,6 @@ public interface IApplicationDbContext
     public DbSet<Ban> Bans { get; }
     public DbSet<CVJobOffer> CVJobOffers { get; }
     public DbSet<Notification> Notifications { get; }
+    public DbSet<JobDirection> JobDirections { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

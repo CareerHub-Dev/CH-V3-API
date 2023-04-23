@@ -26,6 +26,17 @@ public static class SearchExtentions
         return jobPositions.Where(x => x.Name.Trim().ToLower().Contains(lowerCaseTerm));
     }
 
+    public static IQueryable<JobDirection> Search(this IQueryable<JobDirection> jobDirections, string searchTerm)
+    {
+
+        if (string.IsNullOrWhiteSpace(searchTerm))
+            return jobDirections;
+
+        var lowerCaseTerm = searchTerm.NormalizeName();
+
+        return jobDirections.Where(x => x.Name.Trim().ToLower().Contains(lowerCaseTerm));
+    }
+
     public static IQueryable<Tag> Search(this IQueryable<Tag> tags, string searchTerm)
     {
 

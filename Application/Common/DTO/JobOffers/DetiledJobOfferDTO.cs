@@ -17,7 +17,7 @@ public class DetiledJobOfferDTO
     public WorkFormat WorkFormat { get; set; }
     public ExperienceLevel ExperienceLevel { get; set; }
 
-    public BriefJobPositionDTO JobPosition { get; set; } = new BriefJobPositionDTO();
+    public JobPositionDTO JobPosition { get; set; } = new JobPositionDTO();
 
     public BriefCompanyOfJobOfferDTO Company { get; set; } = new BriefCompanyOfJobOfferDTO();
 

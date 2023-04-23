@@ -9,7 +9,7 @@ namespace Application.Common.DTO.CVs;
 
 public class CVDTO : BriefCVDTO
 {
-    public BriefJobPositionDTO JobPosition { get; set; } = new BriefJobPositionDTO();
+    public JobPositionDTO JobPosition { get; set; } = new JobPositionDTO();
 
     public TemplateLanguage TemplateLanguage { get; set; }
     public string LastName { get; set; } = string.Empty;

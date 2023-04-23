@@ -45,7 +45,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Ban> Bans => Set<Ban>();
     public DbSet<CVJobOffer> CVJobOffers => Set<CVJobOffer>();
     public DbSet<Notification> Notifications => Set<Notification>();
-
+    public DbSet<JobDirection> JobDirections => Set<JobDirection>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

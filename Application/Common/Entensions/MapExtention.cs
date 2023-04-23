@@ -7,6 +7,7 @@ using Application.Common.DTO.CVs;
 using Application.Common.DTO.Educations;
 using Application.Common.DTO.Experiences;
 using Application.Common.DTO.ForeignLanguages;
+using Application.Common.DTO.JobDirection;
 using Application.Common.DTO.JobOfferReviews;
 using Application.Common.DTO.JobOffers;
 using Application.Common.DTO.JobPositions;
@@ -78,25 +79,26 @@ public static class MapExtention
 
     #region JobPosition
 
-    public static IQueryable<BriefJobPositionDTO> MapToBriefJobPositionDTO(this IQueryable<JobPosition> jobPositions)
+    public static IQueryable<JobPositionDTO> MapToBriefJobPositionDTO(this IQueryable<JobPosition> jobPositions)
     {
-        return jobPositions.Select(x => new BriefJobPositionDTO
+        return jobPositions.Select(x => new JobPositionDTO
         {
             Id = x.Id,
             Name = x.Name,
         });
     }
 
-    public static IQueryable<JobPositionDTO> MapToJobPositionDTO(this IQueryable<JobPosition> jobPositions)
+    #endregion
+
+    #region JobDirection
+
+    public static IQueryable<JobDirectionDTO> MapToJobDirectionDTO(this IQueryable<JobDirection> jobDirections)
     {
-        return jobPositions.Select(x => new JobPositionDTO
+        return jobDirections.Select(x => new JobDirectionDTO
         {
             Id = x.Id,
             Name = x.Name,
-            Created = x.Created,
-            LastModified = x.LastModified,
-            CreatedBy = x.CreatedBy,
-            LastModifiedBy = x.LastModifiedBy,
+            RecomendedTemplateLanguage = x.RecomendedTemplateLanguage
         });
     }
 
@@ -391,7 +393,7 @@ public static class MapExtention
             JobType = x.JobType,
             WorkFormat = x.WorkFormat,
             ExperienceLevel = x.ExperienceLevel,
-            JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            JobPosition = new JobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
             Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
             Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
         });
@@ -412,7 +414,7 @@ public static class MapExtention
             JobType = x.JobType,
             WorkFormat = x.WorkFormat,
             ExperienceLevel = x.ExperienceLevel,
-            JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            JobPosition = new JobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
             Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
             Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
             AmountSubscribers = x.SubscribedStudents.Count(x =>
@@ -444,7 +446,7 @@ public static class MapExtention
             JobType = x.JobType,
             WorkFormat = x.WorkFormat,
             ExperienceLevel = x.ExperienceLevel,
-            JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            JobPosition = new JobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
             Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
             Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
             AmountSubscribers = x.SubscribedStudents.Count(x =>
@@ -473,7 +475,7 @@ public static class MapExtention
             JobType = x.JobType,
             WorkFormat = x.WorkFormat,
             ExperienceLevel = x.ExperienceLevel,
-            JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            JobPosition = new JobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
             Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
             Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
             Overview = x.Overview,
@@ -506,7 +508,7 @@ public static class MapExtention
             Title = x.Title,
             Created = x.Created,
             Modified = x.Modified,
-            JobPosition = new BriefJobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            JobPosition = new JobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
             TemplateLanguage = x.TemplateLanguage,
             LastName = x.LastName,
             FirstName = x.FirstName,

@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Npgsql;
@@ -105,40 +106,28 @@ public class ApplicationDbContextInitialiser
 
         #region SeedJobPositions
 
-        if (!await _context.JobPositions.AnyAsync())
+        if (!await _context.JobDirections.AnyAsync())
         {
-            await _context.JobPositions.AddRangeAsync(
-                new JobPosition()
+            await _context.JobDirections.AddRangeAsync(
+                new JobDirection()
                 {
-                    Name = "Software development"
+                    Name = "Software Development",
+                    RecomendedTemplateLanguage = TemplateLanguage.EN
                 },
-                new JobPosition()
+                new JobDirection()
                 {
-                    Name = "Quality assurance"
+                    Name = "Data Science",
+                    RecomendedTemplateLanguage = TemplateLanguage.EN
                 },
-                new JobPosition()
+                new JobDirection()
                 {
-                    Name = "Design"
+                    Name = "DevOps",
+                    RecomendedTemplateLanguage = TemplateLanguage.EN
                 },
-                new JobPosition()
+                new JobDirection()
                 {
-                    Name = "DevOps"
-                },
-                new JobPosition()
-                {
-                    Name = "Support"
-                },
-                new JobPosition()
-                {
-                    Name = "HR"
-                },
-                new JobPosition()
-                {
-                    Name = "Finances"
-                },
-                new JobPosition()
-                {
-                    Name = "Other"
+                    Name = "Customer Support",
+                    RecomendedTemplateLanguage = TemplateLanguage.EN
                 }
             );
         }

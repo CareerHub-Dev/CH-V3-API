@@ -6,7 +6,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Tags.Queries.GetJobPosition;
+namespace Application.JobPositions.Queries.GetBriefJobPosition;
 
 public record GetJobPositionQuery(Guid JobPositionId)
     : IRequest<JobPositionDTO>;
@@ -27,7 +27,7 @@ public class GetJobPositionQueryHandler
         CancellationToken cancellationToken)
     {
         var tag = await _context.JobPositions
-            .MapToJobPositionDTO()
+            .MapToBriefJobPositionDTO()
             .FirstOrDefaultAsync(x => x.Id == request.JobPositionId);
 
         if (tag == null)

@@ -1,9 +1,7 @@
 ﻿namespace Application.Common.DTO.JobPositions;
 
-public class JobPositionDTO : BriefJobPositionDTO
+public class JobPositionDTO
 {
-    public DateTime Created { get; set; }
-    public Guid? CreatedBy { get; set; }
-    public DateTime? LastModified { get; set; }
-    public Guid? LastModifiedBy { get; set; }
+    public Guid Id { get; set; }
+    public string Name { get; set; } = string.Empty;
 }
