@@ -79,7 +79,7 @@ public static class MapExtention
 
     #region JobPosition
 
-    public static IQueryable<JobPositionDTO> MapToBriefJobPositionDTO(this IQueryable<JobPosition> jobPositions)
+    public static IQueryable<JobPositionDTO> MapToJobPositionDTO(this IQueryable<JobPosition> jobPositions)
     {
         return jobPositions.Select(x => new JobPositionDTO
         {

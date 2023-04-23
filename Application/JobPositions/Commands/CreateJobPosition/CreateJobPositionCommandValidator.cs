@@ -1,5 +1,6 @@
 ﻿using Application.Common.Entensions;
 using Application.Common.Interfaces;
+using Application.JobPositions.Commands.UpdateJobPosition;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,10 +23,12 @@ public class CreateJobPositionCommandValidator
     }
 
     private async Task<bool> BeUniqueName(
+        CreateJobPositionCommand model,
         string name,
         CancellationToken cancellationToken)
     {
+        
         return !await _context.JobPositions
-            .AnyAsync(x => x.Name.Trim().ToLower() == name.NormalizeName(), cancellationToken);
+            .AnyAsync(x => x.Name.Trim().ToLower() == name.NormalizeName() && x.JobDirectionId == model.JobDirectionId, cancellationToken);
     }
 }
