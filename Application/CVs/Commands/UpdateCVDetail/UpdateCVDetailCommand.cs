@@ -1,5 +1,6 @@
 ﻿using Application.Common.DTO.CVProjectLinks;
 using Application.Common.DTO.Educations;
+using Application.Common.DTO.Experiences;
 using Application.Common.DTO.ForeignLanguages;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
@@ -15,6 +16,7 @@ public record UpdateCVDetailCommand
     : IRequest
 {
     public Guid CVId { get; init; }
+    public ExperienceLevel ExperienceLevel { get; init; }
     public string Title { get; init; } = string.Empty;
 
     public Guid JobPositionId { get; init; }
@@ -24,12 +26,13 @@ public record UpdateCVDetailCommand
     public string FirstName { get; init; } = string.Empty;
     public IFormFile? Photo { get; init; }
     public string Goals { get; init; } = string.Empty;
-    public string SkillsAndTechnologies { get; init; } = string.Empty;
-    public string ExperienceHighlights { get; init; } = string.Empty;
+    public List<string> HardSkills { get; set; } = new List<string>();
+    public List<string> SoftSkills { get; set; } = new List<string>();
 
     public List<ForeignLanguageDTO> ForeignLanguages { get; init; } = new List<ForeignLanguageDTO>();
     public List<CVProjectLinkDTO> ProjectLinks { get; init; } = new List<CVProjectLinkDTO>();
     public List<EducationDTO> Educations { get; init; } = new List<EducationDTO>();
+    public List<CVExperienceDTO> Experiences { get; init; } = new List<CVExperienceDTO>();
 }
 
 public class UpdateCVDetailCommandHandler
@@ -61,6 +64,7 @@ public class UpdateCVDetailCommandHandler
             throw new NotFoundException(nameof(CV), request.CVId);
         }
 
+        cv.ExperienceLevel = request.ExperienceLevel;
         cv.Title = request.Title;
         cv.JobPositionId = request.JobPositionId;
         cv.TemplateLanguage = request.TemplateLanguage;
@@ -68,8 +72,8 @@ public class UpdateCVDetailCommandHandler
         cv.FirstName = request.FirstName;
         cv.JobPositionId = request.JobPositionId;
         cv.Goals = request.Goals;
-        cv.SkillsAndTechnologies = request.SkillsAndTechnologies;
-        cv.ExperienceHighlights = request.ExperienceHighlights;
+        cv.HardSkills = request.HardSkills;
+        cv.SoftSkills = request.SoftSkills;
         cv.ForeignLanguages = request.ForeignLanguages.Select(x => new ForeignLanguage
         {
             Name = x.Name,
@@ -89,6 +93,17 @@ public class UpdateCVDetailCommandHandler
             Degree = x.Degree,
             StartDate = x.StartDate,
             EndDate = x.EndDate,
+        }).ToList();
+        cv.Experiences = request.Experiences.Select(x => new CVExperience
+        {
+            Title = x.Title,
+            CompanyName = x.CompanyName,
+            JobType = x.JobType,
+            WorkFormat = x.WorkFormat,
+            ExperienceLevel = x.ExperienceLevel,
+            JobLocation = x.JobLocation,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate
         }).ToList();
         cv.Modified = DateTime.UtcNow;
 

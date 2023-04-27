@@ -1,5 +1,6 @@
 ﻿using Application.Common.DTO.CVProjectLinks;
 using Application.Common.DTO.Educations;
+using Application.Common.DTO.Experiences;
 using Application.Common.DTO.ForeignLanguages;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
@@ -14,6 +15,7 @@ namespace Application.CVs.Commands.CreateCV;
 public record CreateCVCommand 
     : IRequest<Guid>
 {
+    public ExperienceLevel ExperienceLevel { get; init; }
     public string Title { get; init; } = string.Empty;
 
     public Guid JobPositionId { get; init; }
@@ -23,14 +25,15 @@ public record CreateCVCommand
     public string FirstName { get; init; } = string.Empty;
     public IFormFile? Photo { get; init; }
     public string Goals { get; init; } = string.Empty;
-    public string SkillsAndTechnologies { get; init; } = string.Empty;
-    public string ExperienceHighlights { get; init; } = string.Empty;
+    public List<string> HardSkills { get; set; } = new List<string>();
+    public List<string> SoftSkills { get; set; } = new List<string>();
 
     public Guid StudentId { get; init; }
 
     public List<ForeignLanguageDTO> ForeignLanguages { get; init; } = new List<ForeignLanguageDTO>();
     public List<CVProjectLinkDTO> ProjectLinks { get; init; } = new List<CVProjectLinkDTO>();
     public List<EducationDTO> Educations { get; init; } = new List<EducationDTO>();
+    public List<CVExperienceDTO> Experiences { get; init; } = new List<CVExperienceDTO>();
 }
 
 public class CreateCVCommandHandler
@@ -65,14 +68,15 @@ public class CreateCVCommandHandler
 
         var cv = new CV
         {
+            ExperienceLevel = request.ExperienceLevel,
             Title = request.Title,
             JobPositionId = request.JobPositionId,
             TemplateLanguage = request.TemplateLanguage,
             LastName = request.LastName,
             FirstName = request.FirstName,
             Goals = request.Goals,
-            SkillsAndTechnologies = request.SkillsAndTechnologies,
-            ExperienceHighlights = request.ExperienceHighlights,
+            HardSkills = request.HardSkills,
+            SoftSkills = request.SoftSkills,
             StudentId = request.StudentId,
             ForeignLanguages = request.ForeignLanguages.Select(x => new ForeignLanguage
             {
@@ -93,6 +97,17 @@ public class CreateCVCommandHandler
                 Degree = x.Degree,
                 StartDate = x.StartDate,
                 EndDate = x.EndDate,
+            }).ToList(),
+            Experiences = request.Experiences.Select(x => new CVExperience
+            {
+                Title = x.Title,
+                CompanyName = x.CompanyName,
+                JobType = x.JobType,
+                WorkFormat = x.WorkFormat,
+                ExperienceLevel = x.ExperienceLevel,
+                JobLocation = x.JobLocation,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate
             }).ToList(),
             Created = DateTime.UtcNow
         };

@@ -100,6 +100,7 @@ public class CVsController : ApiControllerBase
     {
         var result = await Sender.Send(new CreateCVCommand
         {
+            ExperienceLevel = request.ExperienceLevel,
             Title = request.Title,
             JobPositionId = request.JobPositionId,
             TemplateLanguage = request.TemplateLanguage,
@@ -107,11 +108,12 @@ public class CVsController : ApiControllerBase
             FirstName = request.FirstName,
             Photo = request.Photo,
             Goals = request.Goals,
-            SkillsAndTechnologies = request.SkillsAndTechnologies,
-            ExperienceHighlights = request.ExperienceHighlights,
+            HardSkills = request.HardSkills,
+            SoftSkills = request.SoftSkills,
             ForeignLanguages = request.ForeignLanguages,
             ProjectLinks = request.ProjectLinks,
             Educations = request.Educations,
+            Experiences = request.Experiences,
             StudentId = AccountInfo!.Id
         });
 
@@ -132,16 +134,18 @@ public class CVsController : ApiControllerBase
         await Sender.Send(new UpdateCVDetailOfStudentCommand
         {
             CVId = request.CVId,
+            ExperienceLevel = request.ExperienceLevel,
             JobPositionId = request.JobPositionId,
             TemplateLanguage = request.TemplateLanguage,
             LastName = request.LastName,
             FirstName = request.FirstName,
             Goals = request.Goals,
-            SkillsAndTechnologies = request.SkillsAndTechnologies,
-            ExperienceHighlights = request.ExperienceHighlights,
+            HardSkills = request.HardSkills,
+            SoftSkills = request.SoftSkills,
             ForeignLanguages = request.ForeignLanguages,
             ProjectLinks = request.ProjectLinks,
             Educations = request.Educations,
+            Experiences = request.Experiences,
             StudentId = AccountInfo!.Id
         });
 

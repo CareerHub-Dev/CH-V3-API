@@ -19,6 +19,7 @@ using Application.Common.DTO.Students;
 using Application.Common.DTO.Tags;
 using Application.Common.Enums;
 using Domain.Entities;
+using Domain.Enums;
 
 namespace Application.Common.Entensions;
 
@@ -377,6 +378,21 @@ public static class MapExtention
         });
     }
 
+    public static IEnumerable<CVExperienceDTO> MapToExperienceDTO(this IEnumerable<CVExperience> experiences)
+    {
+        return experiences.Select(x => new CVExperienceDTO
+        {
+            Title = x.Title,
+            CompanyName = x.CompanyName,
+            JobType = x.JobType,
+            WorkFormat = x.WorkFormat,
+            ExperienceLevel = x.ExperienceLevel,
+            JobLocation = x.JobLocation,
+            StartDate = x.StartDate,
+            EndDate = x.EndDate
+        });
+    }
+
     #endregion
 
     #region JobOffer 
@@ -495,6 +511,7 @@ public static class MapExtention
         {
             Id = x.Id,
             Title = x.Title,
+            ExperienceLevel = x.ExperienceLevel,
             Created = x.Created,
             Modified = x.Modified
         });
@@ -506,17 +523,19 @@ public static class MapExtention
         {
             Id = x.Id,
             Title = x.Title,
+            ExperienceLevel = x.ExperienceLevel,
             Created = x.Created,
             Modified = x.Modified,
             JobPosition = new JobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            JobDirection = new JobDirectionDTO { Id = x.JobPosition.JobDirection!.Id, Name = x.JobPosition.JobDirection.Name },
             TemplateLanguage = x.TemplateLanguage,
             LastName = x.LastName,
             FirstName = x.FirstName,
             Photo = x.Photo,
             Goals = x.Goals,
             StudentId = x.StudentId,
-            SkillsAndTechnologies = x.SkillsAndTechnologies,
-            ExperienceHighlights = x.ExperienceHighlights,
+            HardSkills = x.HardSkills,
+            SoftSkills = x.SoftSkills,
             ForeignLanguages = x.ForeignLanguages.MapToForeignLanguageDTO().ToList(),
             ProjectLinks = x.ProjectLinks.MapToCVProjectLinkDTO().ToList(),
             Educations = x.Educations.MapToEducationDTO().ToList(),
