@@ -107,31 +107,135 @@ public class ApplicationDbContextInitialiser
         #region SeedJobPositions
 
         if (!await _context.JobDirections.AnyAsync())
-        {
-            await _context.JobDirections.AddRangeAsync(
-                new JobDirection()
-                {
-                    Name = "Software Development",
-                    RecomendedTemplateLanguage = TemplateLanguage.EN
-                },
-                new JobDirection()
-                {
-                    Name = "Data Science",
-                    RecomendedTemplateLanguage = TemplateLanguage.EN
-                },
-                new JobDirection()
-                {
-                    Name = "DevOps",
-                    RecomendedTemplateLanguage = TemplateLanguage.EN
-                },
-                new JobDirection()
-                {
-                    Name = "Customer Support",
-                    RecomendedTemplateLanguage = TemplateLanguage.EN
-                }
-            );
-        }
-
+            {
+                await _context.JobDirections.AddRangeAsync(
+                    new JobDirection()
+                    {
+                        Name = "Software Development",
+                        RecomendedTemplateLanguage = TemplateLanguage.EN,
+                        Positions = new List<JobPosition>
+                        {
+                        new JobPosition()
+                        {
+                            Name = "Dotnet Developer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Java Developer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Python Developer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "PHP Developer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Ruby Developer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "C++ Developer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Rust Developer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "C# Developer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "C Developer"
+                        }
+                        }
+                    },
+                    new JobDirection()
+                    {
+                        Name = "Data Science",
+                        RecomendedTemplateLanguage = TemplateLanguage.EN,
+                        Positions = new List<JobPosition>
+                        {
+                        new JobPosition()
+                        {
+                            Name = "Data Scientist"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Data Analyst"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Data Engineer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Machine Learning Engineer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Data Architect"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Data Visualization Engineer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Data Science Manager"
+                        },
+                        }
+                    },
+                    new JobDirection()
+                    {
+                        Name = "DevOps",
+                        RecomendedTemplateLanguage = TemplateLanguage.EN,
+                        Positions = new List<JobPosition>
+                        {
+                        new JobPosition()
+                        {
+                            Name = "DevOps Engineer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "DevOps Architect"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "DevOps Manager"
+                        },
+                        }
+                    },
+                    new JobDirection()
+                    {
+                        Name = "Customer Support",
+                        RecomendedTemplateLanguage = TemplateLanguage.EN,
+                        Positions = new List<JobPosition>
+                        {
+                        new JobPosition()
+                        {
+                            Name = "Customer Support Manager"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Customer Support Engineer"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Customer Support Specialist"
+                        },
+                        new JobPosition()
+                        {
+                            Name = "Customer Support Representative"
+                        },
+                        }
+                    }
+                );
+            }
+        
         #endregion
 
         #region SeedTags
