@@ -287,7 +287,20 @@ public class ApplicationDbContextInitialiser
                 new Tag()
                 {
                     Name = "xUnit"
+                },
+                new Tag()
+                {
+                    Name = "Node.js",
+                },
+                new Tag()
+                {
+                    Name = "JavaScript",
+                },
+                new Tag()
+                {
+                    Name = "React",
                 }
+
             );
         }
 
@@ -320,6 +333,27 @@ public class ApplicationDbContextInitialiser
                     FirstName = "Сергій",
                     LastName = "Бурцев",
                     Email = "serhii.burtsev@nure.ua",
+                    StudentGroup = studentLog.OrderBy(x => Guid.NewGuid()).First()
+                },
+                new StudentLog()
+                {
+                    FirstName = "Андрій",
+                    LastName = "Кузьмін",
+                    Email = "andrii.kuzmin@nure.ua",
+                    StudentGroup = studentLog.OrderBy(x => Guid.NewGuid()).First()
+                },
+                new StudentLog()
+                {
+                    FirstName = "Іван",
+                    LastName = "Дорн",
+                    Email = "ivan.dorn@nure.ua",
+                    StudentGroup = studentLog.OrderBy(x => Guid.NewGuid()).First()
+                },
+                new StudentLog()
+                {
+                    FirstName = "Юлія",
+                    LastName = "Боровська",
+                    Email = "yuliia.borovska@nure.ua",
                     StudentGroup = studentLog.OrderBy(x => Guid.NewGuid()).First()
                 }
             );
@@ -361,6 +395,19 @@ public class ApplicationDbContextInitialiser
                     PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
                     Verified = DateTime.UtcNow,
                     Links = new List<CompanyLink> { new CompanyLink { Title = "Title", Uri = "Uri" } }
+                },
+                new Company()
+                {
+                    Name = "Nix Solutions",
+                    Motto = "Whatever you can imagine we can deliver",
+                    Description = "Software Development Services",
+                    Email = "hr.careerhub@nixsolutions.com",
+                    PasswordHash = "$2a$11$aQ3eaj6dZVNkWqaRFtJLy.7Jt0.Xx0ebv6UHOQSUd1jLEhy4hZZka",
+                    Verified = DateTime.UtcNow,
+                    Links = new List<CompanyLink>
+                    {
+                        new CompanyLink { Title = "Title", Uri = "Uri" }
+                    }
                 }
             );
         }
