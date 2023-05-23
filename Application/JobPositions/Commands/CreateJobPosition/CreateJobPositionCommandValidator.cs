@@ -18,17 +18,6 @@ public class CreateJobPositionCommandValidator
 
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(32)
-            .MustAsync(BeUniqueName).WithMessage("The specified name already exists.");
-    }
-
-    private async Task<bool> BeUniqueName(
-        CreateJobPositionCommand model,
-        string name,
-        CancellationToken cancellationToken)
-    {
-        
-        return !await _context.JobPositions
-            .AnyAsync(x => x.Name.Trim().ToLower() == name.NormalizeName() && x.JobDirectionId == model.JobDirectionId, cancellationToken);
+            .MaximumLength(32);
     }
 }
