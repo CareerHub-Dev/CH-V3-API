@@ -30,6 +30,8 @@ public static class ConfigureServices
 
         services.AddScoped<IFileSystem, FileSystem>();
 
+        services.AddScoped<ICVWordGenerator, CVWordGenerator>();
+
         return services;
     }
 }

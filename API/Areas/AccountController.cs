@@ -9,11 +9,14 @@ using Application.Accounts.Queries.Authenticate;
 using Application.Accounts.Queries.RefreshToken;
 using Application.Common.Interfaces;
 using Application.Emails.Commands.SendPasswordResetEmail;
+using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using OneSignalApi.Api;
 using OneSignalApi.Client;
 using OneSignalApi.Model;
+using System.IO;
 
 namespace API.Areas;
 
@@ -127,6 +130,101 @@ public class AccountController : ApiControllerBase
 
         return Ok();
     }
+
+    private static readonly string WordProcessingMlFormat = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+    [HttpGet("cv-test")]
+    public IActionResult Test([FromServices] ICVWordGenerator wordGenerator)
+    {
+        return File(wordGenerator.GenerateDocument(Default), WordProcessingMlFormat, "my-cv.docx");
+    }
+
+    public static readonly CV Default = new()
+    {
+        FirstName = "FirstName",
+        LastName = "LastName",
+        Photo = null,
+        Goals = "I am seeking a position as a JavaScript trainee, to leverage my skills and passion for learning to make interesting and useful projects in a team of professionals.",
+        HardSkills = new()
+        {
+            "Python", "Mainframe", "TypeScript",
+            "UML", "Spring", "Next.js", "Docker", "Kubernetes", "Git",
+            "Rust", "Flutter", "Dart"
+        },
+        SoftSkills = new()
+        {
+            "Problem Solving",
+            "Leadership",
+            "Cooperation",
+            "Hard-working",
+            "Empathy",
+            "Good manager",
+        },
+        ForeignLanguages = new()
+        {
+            new()
+            {
+                LanguageLevel = LanguageLevel.B2,
+                Name = "English"
+            },
+            new()
+            {
+                LanguageLevel = LanguageLevel.A2,
+                Name = "German"
+            },
+            new()
+            {
+                LanguageLevel = LanguageLevel.B1,
+                Name = "Polish"
+            },
+        },
+        Experiences = new()
+        {
+            new()
+            {
+                Title = "Python Developer",
+                CompanyName = "DataArt",
+                StartDate = new DateTime(2020, 9, 1),
+                EndDate = new DateTime(2021, 1, 1)
+            },
+            new()
+            {
+                Title = "Software Development Engineer in Test",
+                CompanyName = "Rocket Software",
+                StartDate = new DateTime(2021, 6, 1)
+            },
+        },
+        ProjectLinks = new()
+        {
+            new() { Title = "Graphical SSH client", Url = "https://github.com/oxodao/sshelter-ui" },
+            new() { Title = "i3-keyboard-layout-switcher", Url = "https://github.com/porras/i3-keyboard-layout" },
+            new() { Title = "AMD-6850-Rrembrandt Driver", Url = "https://github.com/GPUOpen-Drivers/AMDVLK" },
+            new() { Title = "vim-together", Url = "https://github.com/ThePrimeagen/vim-with-me" },
+        },
+        Educations = new()
+        {
+            new()
+            {
+                Degree = Degree.Master,
+                Specialty = "Computer Science",
+                University = "University of Warsaw",
+                Country = "Poland",
+                City = "Warsaw",
+                StartDate = new DateTime(2017, 04, 22),
+                EndDate = new DateTime(2020, 04, 22)
+            },
+            new()
+            {
+                Degree = Degree.Bachelor,
+                Specialty = "Computer Science",
+                University = "University of Warsaw",
+                Country = "Poland",
+                City = "Warsaw",
+                StartDate = new DateTime(2013, 04, 22),
+                EndDate = new DateTime(2017, 04, 22)
+            },
+        }
+    };
 
     // helper methods
     private void SetTokenCookie(string token)
