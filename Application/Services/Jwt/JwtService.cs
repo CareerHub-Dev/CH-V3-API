@@ -30,7 +30,7 @@ public class JwtService
     {
         var jwtToken = new JwtToken
         {
-            Expires = DateTime.UtcNow.AddMinutes(15)
+            Expires = DateTime.UtcNow.AddMinutes(60)
         };
 
         // generate token that is valid for 15 minutes
