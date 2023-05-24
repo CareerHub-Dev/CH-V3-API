@@ -1,4 +1,5 @@
-﻿using Application.Common.DTO.JobPositions;
+﻿using Application.Common.DTO.JobDirection;
+using Application.Common.DTO.JobPositions;
 using Application.Common.DTO.Tags;
 using Domain.Enums;
 
@@ -18,6 +19,7 @@ public class DetiledJobOfferDTO
     public ExperienceLevel ExperienceLevel { get; set; }
 
     public JobPositionDTO JobPosition { get; set; } = new JobPositionDTO();
+    public JobDirectionDTO JobDirection { get; set; } = new JobDirectionDTO();
 
     public BriefCompanyOfJobOfferDTO Company { get; set; } = new BriefCompanyOfJobOfferDTO();
 

@@ -410,6 +410,7 @@ public static class MapExtention
             WorkFormat = x.WorkFormat,
             ExperienceLevel = x.ExperienceLevel,
             JobPosition = new JobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            JobDirection = new JobDirectionDTO { Id = x.JobPosition!.JobDirection!.Id, Name = x.JobPosition.JobDirection.Name },
             Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
             Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
         });
@@ -431,6 +432,7 @@ public static class MapExtention
             WorkFormat = x.WorkFormat,
             ExperienceLevel = x.ExperienceLevel,
             JobPosition = new JobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            JobDirection = new JobDirectionDTO { Id = x.JobPosition!.JobDirection!.Id, Name = x.JobPosition.JobDirection.Name },
             Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
             Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
             AmountSubscribers = x.SubscribedStudents.Count(x =>
@@ -463,6 +465,7 @@ public static class MapExtention
             WorkFormat = x.WorkFormat,
             ExperienceLevel = x.ExperienceLevel,
             JobPosition = new JobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            JobDirection = new JobDirectionDTO { Id = x.JobPosition!.JobDirection!.Id, Name = x.JobPosition.JobDirection.Name },
             Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
             Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
             AmountSubscribers = x.SubscribedStudents.Count(x =>
@@ -492,6 +495,7 @@ public static class MapExtention
             WorkFormat = x.WorkFormat,
             ExperienceLevel = x.ExperienceLevel,
             JobPosition = new JobPositionDTO { Id = x.JobPosition!.Id, Name = x.JobPosition.Name },
+            JobDirection = new JobDirectionDTO { Id = x.JobPosition!.JobDirection!.Id, Name = x.JobPosition.JobDirection.Name },
             Company = new BriefCompanyOfJobOfferDTO { Id = x.Company!.Id, Name = x.Company.Name },
             Tags = x.Tags.Select(y => new TagDTO { Id = y.Id, Name = y.Name }).ToList(),
             Overview = x.Overview,
