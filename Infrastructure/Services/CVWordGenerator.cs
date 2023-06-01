@@ -7,23 +7,26 @@ using DP = DocumentFormat.OpenXml.Drawing.Pictures;
 using Domain.Entities;
 using Application.Common.Interfaces;
 using DocumentFormat.OpenXml.Validation;
+using System.IO.Abstractions;
 
 namespace Infrastructure.Services
 {
     public class CVWordGenerator : ICVWordGenerator
     {
         private readonly IPathService _pathService;
+        private readonly IFileSystem _fileSystem;
 
-        public CVWordGenerator(IPathService pathService)
+        public CVWordGenerator(IPathService pathService, IFileSystem fileSystem)
         {
             _pathService = pathService;
+            _fileSystem = fileSystem;
         }
 
         public MemoryStream GenerateDocument(CV cv)
         {
             if(cv.Photo != null)
             {
-                cv.Photo = _pathService.GetImageRoute(cv.Photo);
+                cv.Photo = _fileSystem.Path.Combine(_pathService.GetWebRootPath, cv.Photo);
             }
 
             var builder = new CvDocumentBuilder(cv);
