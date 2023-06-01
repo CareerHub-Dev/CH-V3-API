@@ -135,6 +135,31 @@ public class CVsController : ApiControllerBase
         return Ok(result);
     }
 
+    [HttpPost("without-photo")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
+    public async Task<IActionResult> CreateCVWithoutPhotoForSelfStudent([FromBody] CreateOwnCVRequest request)
+    {
+        var result = await Sender.Send(new CreateCVWithoutPhotoCommand
+        {
+            ExperienceLevel = request.ExperienceLevel,
+            Title = request.Title,
+            JobPositionId = request.JobPositionId,
+            TemplateLanguage = request.TemplateLanguage,
+            LastName = request.LastName,
+            FirstName = request.FirstName,
+            Goals = request.Goals,
+            HardSkills = request.HardSkills,
+            SoftSkills = request.SoftSkills,
+            ForeignLanguages = request.ForeignLanguages,
+            ProjectLinks = request.ProjectLinks,
+            Educations = request.Educations,
+            Experiences = request.Experiences,
+            StudentId = AccountInfo!.Id
+        });
+
+        return Ok(result);
+    }
+
     [HttpPut("{cvId}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
