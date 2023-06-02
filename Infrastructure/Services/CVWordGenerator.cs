@@ -24,7 +24,7 @@ namespace Infrastructure.Services
 
         public MemoryStream GenerateDocument(CV cv)
         {
-            if(cv.Photo != null)
+            if (cv.Photo is not null)
             {
                 cv.Photo = _fileSystem.Path.Combine(_pathService.GetWebRootPath, cv.Photo);
             }
@@ -43,8 +43,6 @@ namespace Infrastructure.Services
                 if (cv.Photo is not null)
                 {
                     var imagePart = mainPart.AddImagePart(ImagePartType.Jpeg, CvDocumentBuilder.PhotoImagePartId);
-
-                    // Todo: check if it works
                     using var photoFileStream = new FileStream(cv.Photo, FileMode.Open, FileAccess.Read, FileShare.Read);
                     imagePart.FeedData(photoFileStream);
                 }
@@ -76,14 +74,14 @@ namespace Infrastructure.Services
     public class CvDocumentBuilder
     {
         private readonly CV _data;
-
+        private readonly CvDocumentLocalizedStrings _strings;
         private static readonly string GraphicDataUri = "http://schemas.openxmlformats.org/drawingml/2006/picture";
-
         public static readonly string PhotoImagePartId = "PhotoImagePart";
 
         public CvDocumentBuilder(CV data)
         {
             _data = data;
+            _strings = CvDocumentLocalizedStrings.FromTemplateLanguage(data.TemplateLanguage);
         }
 
         public Document BuildDocument()
@@ -94,28 +92,21 @@ namespace Infrastructure.Services
             };
             var fullNameParagraph = GetTitleParagraph(_data.FirstName + " " + _data.LastName);
             var goalsParagraph = GetPlainTextParagraph(_data.Goals ?? "");
-            var hardSkillsTitle = GetSecondaryTitleParagraph("Hard Skills");
-            var softSkillsTitle = GetSecondaryTitleParagraph("Soft Skills");
 
-            var hardSkills = string.Join("    ", _data.HardSkills);
-            var softSkills = string.Join("    ", _data.SoftSkills);
-
-            var hardSkillsParagraph = GetPlainTextParagraph(hardSkills);
-            var softSkillsParagraph = GetPlainTextParagraph(softSkills);
-
-            var foreignLanguagesTitle = GetSecondaryTitleParagraph("Foreign Languages");
-            var foreignLanguagesElements = _data.ForeignLanguages.Select(element => element.ToString())
+            var foreignLanguagesTitle = GetSecondaryTitleParagraph(_strings.ForeignLanguages);
+            var foreignLanguagesElements = _data.ForeignLanguages
+                .Select(element => element.ToString())
                 .ToList();
-            var workingExperiencesTitle = GetSecondaryTitleParagraph("Working Experience");
-            var projectsTitle = GetSecondaryTitleParagraph("Personal Projects");
-            var educationTitle = GetSecondaryTitleParagraph("Education");
+            var workingExperiencesTitle = GetSecondaryTitleParagraph(_strings.Experience);
+            var projectsTitle = GetSecondaryTitleParagraph(_strings.ProjectLinks);
+            var educationTitle = GetSecondaryTitleParagraph(_strings.Education);
 
             if (_data.Photo is not null)
             {
                 var imageElement = GetDrawingParagraphFromImage(
                     PhotoImagePartId,
                     _data.Photo,
-                    "my photo",
+                    _strings.MyPhoto,
                     128,
                     128
                 );
@@ -124,12 +115,25 @@ namespace Infrastructure.Services
             document.Body.AppendChild(fullNameParagraph);
             document.Body.AppendChild(goalsParagraph);
             document.Body.AppendChild(GetPlainTextParagraph(string.Empty));
-            document.Body.AppendChild(hardSkillsTitle);
-            document.Body.AppendChild(hardSkillsParagraph);
-            document.Body.AppendChild(GetPlainTextParagraph(string.Empty));
-            document.Body.AppendChild(softSkillsTitle);
-            document.Body.AppendChild(softSkillsParagraph);
-            document.Body.AppendChild(GetPlainTextParagraph(string.Empty));
+            if (_data.HardSkills.Count > 0)
+            {
+                var hardSkillsTitle = GetSecondaryTitleParagraph(_strings.HardSkills);
+                var hardSkills = string.Join("    ", _data.HardSkills);
+                var hardSkillsParagraph = GetPlainTextParagraph(hardSkills);
+                document.Body.AppendChild(hardSkillsTitle);
+                document.Body.AppendChild(hardSkillsParagraph);
+                document.Body.AppendChild(GetPlainTextParagraph(string.Empty));
+            }
+
+            if (_data.SoftSkills.Count > 0)
+            {
+                var softSkillsTitle = GetSecondaryTitleParagraph(_strings.SoftSkills);
+                var softSkills = string.Join("    ", _data.SoftSkills);
+                var softSkillsParagraph = GetPlainTextParagraph(softSkills);
+                document.Body.AppendChild(softSkillsTitle);
+                document.Body.AppendChild(softSkillsParagraph);
+                document.Body.AppendChild(GetPlainTextParagraph(string.Empty));
+            }
 
             if (foreignLanguagesElements.Count > 0)
             {
@@ -351,9 +355,9 @@ namespace Infrastructure.Services
             return paragraphs;
         }
 
-        private static List<Paragraph> GetEducationParagraphs(Education education)
+        private List<Paragraph> GetEducationParagraphs(Education education)
         {
-            var endDateString = education.EndDate.HasValue ? education.EndDate.Value.Year.ToString() : "present";
+            var endDateString = education.EndDate.HasValue ? education.EndDate.Value.Year.ToString() : _strings.Present;
             Paragraph degreeAndSpecialityWithPeriod = new(
                 new ParagraphProperties(
                     new SpacingBetweenLines { After = "0" }
@@ -388,9 +392,9 @@ namespace Infrastructure.Services
             return new List<Paragraph> { degreeAndSpecialityWithPeriod, university };
         }
 
-        private static List<Paragraph> GetWorkExperienceParagraphs(CVExperience workExperience)
+        private List<Paragraph> GetWorkExperienceParagraphs(CVExperience workExperience)
         {
-            var endDateString = workExperience.EndDate.HasValue ? workExperience.EndDate.Value.ToString("MM/yyyy") : "present";
+            var endDateString = workExperience.EndDate.HasValue ? workExperience.EndDate.Value.ToString("MM/yyyy") : _strings.Present;
             Paragraph titleAndTimePeriod = new(
                 new ParagraphProperties(
                     new SpacingBetweenLines { After = "0" }
@@ -408,13 +412,13 @@ namespace Infrastructure.Services
                         new RunFonts { Ascii = "Arial" },
                         new FontSize { Val = "22" }
                     ),
-                    new Text(" \u2013 " + workExperience.StartDate.ToString("MM/yyyy") + " to " +
+                    new Text(" \u2013 " + workExperience.StartDate.ToString("MM/yyyy") + " - " +
                         endDateString)
                     { Space = SpaceProcessingModeValues.Preserve }
                 )
             );
 
-            var companyParagraph = GetPlainTextParagraph("at " + workExperience.CompanyName);
+            var companyParagraph = GetPlainTextParagraph(_strings.At + " " + workExperience.CompanyName);
             // var descriptionParagraph = GetPlainTextParagraph(workExperience.Description);
 
             return new List<Paragraph> { titleAndTimePeriod, companyParagraph };
