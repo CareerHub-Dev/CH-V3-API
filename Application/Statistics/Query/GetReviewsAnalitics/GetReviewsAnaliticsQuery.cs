@@ -43,7 +43,7 @@ public class GetReviewsAnaliticsQueryHandler
                     var nowDate = DateTime.UtcNow;
                     var startDate = nowDate.AddDays(-7);
 
-                    var range = GenerateDatesRange(nowDate, startDate);
+                    var range = GenerateDatesRange(startDate, nowDate);
 
                     var reviews = await _context.CVJobOffers.Where(x => x.Created > startDate).ToListAsync();
 
@@ -63,7 +63,7 @@ public class GetReviewsAnaliticsQueryHandler
                     var nowDate = DateTime.UtcNow;
                     var startDate = nowDate.AddDays(-31);
 
-                    var range = GenerateDatesRange(nowDate, startDate);
+                    var range = GenerateDatesRange(startDate, nowDate);
 
                     var reviews = await _context.CVJobOffers.Where(x => x.Created > startDate).ToListAsync();
 
@@ -83,7 +83,7 @@ public class GetReviewsAnaliticsQueryHandler
                     var nowDate = DateTime.UtcNow;
                     var startDate = nowDate.AddDays(-31);
 
-                    var range = GenerateMonthsRange(nowDate, startDate);
+                    var range = GenerateMonthsRange(startDate, nowDate);
 
                     var reviews = await _context.CVJobOffers.Where(x => x.Created > startDate).ToListAsync();
 
