@@ -37,7 +37,7 @@ namespace Application.Statistics.Query.GetTagsAnalitics
                 {
                     Tag = new Common.DTO.Tags.BriefTagDTO { Id = x.Id, Name = x.Name },
                     SavedJobOffers = x.JobOffers.Count(),
-                    SentCV = x.JobOffers.Sum(x => x.CVJobOffers.Count()),
+                    SentCV = x.JobOffers.Count(x => x.CVJobOffers.Any()),
                 }).ToListAsync();
 
             return new TagsAnaliticsResult { TagsAnalitics = tags };
