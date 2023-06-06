@@ -1,4 +1,5 @@
 ﻿using API.Authorize;
+using Application.Common.DTO.JobOfferReviews;
 using Application.Common.DTO.JobOffers;
 using Application.Common.Enums;
 using Application.JobOffers.Commands.VerifiedStudentSubscribeToActiveJobOfferWithVerifiedCompany;
@@ -159,6 +160,30 @@ public class JobOffersController : ApiControllerBase
     public async Task<IActionResult> IsStudentSubscribedToJobOffer(Guid jobOfferId)
     {
         return Ok(await Sender.Send(new IsVerifiedStudentSubscribedToActiveJobOfferWithVerifiedCompanyQuery
+        {
+            StudentId = AccountInfo!.Id,
+            JobOfferId = jobOfferId
+        }));
+    }
+
+    [HttpGet("{jobOfferId}/applied")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> StudentAppliedToJobOffer(Guid jobOfferId)
+    {
+        return Ok(await Sender.Send(new DidStudentApplyToJobOfferQuery
+        {
+            StudentId = AccountInfo!.Id,
+            JobOfferId = jobOfferId
+        }));
+    }
+
+    [HttpGet("{jobOfferId}/applications")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<JobOfferReviewDTO>))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> StudentJobOfferApplications(Guid jobOfferId)
+    {
+        return Ok(await Sender.Send(new GetStudentApplicationsToJobOfferQuery
         {
             StudentId = AccountInfo!.Id,
             JobOfferId = jobOfferId

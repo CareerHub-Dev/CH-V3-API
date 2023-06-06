@@ -15,25 +15,21 @@ namespace Application.CVs.Commands.UpdateCVDetailOfStudent;
 public record UpdateCVDetailOfStudentCommand
     : IRequest
 {
-    public Guid CVId { get; init; }
-    public ExperienceLevel ExperienceLevel { get; init; }
-    public string Title { get; init; } = string.Empty;
-
-    public Guid JobPositionId { get; init; }
-
-    public TemplateLanguage TemplateLanguage { get; init; }
-    public string LastName { get; init; } = string.Empty;
-    public string FirstName { get; init; } = string.Empty;
-    public string Goals { get; init; } = string.Empty;
-    public List<string> HardSkills { get; set; } = new List<string>();
-    public List<string> SoftSkills { get; set; } = new List<string>();
-
-    public List<ForeignLanguageDTO> ForeignLanguages { get; init; } = new List<ForeignLanguageDTO>();
-    public List<CVProjectLinkDTO> ProjectLinks { get; init; } = new List<CVProjectLinkDTO>();
-    public List<EducationDTO> Educations { get; init; } = new List<EducationDTO>();
-    public List<CVExperienceDTO> Experiences { get; init; } = new List<CVExperienceDTO>();
-
-    public Guid StudentId { get; init; }
+    public required Guid CVId { get; init; }
+    public required ExperienceLevel ExperienceLevel { get; init; }
+    public required string Title { get; init; } = string.Empty;
+    public required Guid JobPositionId { get; init; }
+    public required TemplateLanguage TemplateLanguage { get; init; }
+    public required string LastName { get; init; } = string.Empty;
+    public required string FirstName { get; init; } = string.Empty;
+    public required string Goals { get; init; } = string.Empty;
+    public required List<string> HardSkills { get; set; } = new List<string>();
+    public required List<string> SoftSkills { get; set; } = new List<string>();
+    public required List<ForeignLanguageDTO> ForeignLanguages { get; init; } = new List<ForeignLanguageDTO>();
+    public required List<CVProjectLinkDTO> ProjectLinks { get; init; } = new List<CVProjectLinkDTO>();
+    public required List<EducationDTO> Educations { get; init; } = new List<EducationDTO>();
+    public required List<CVExperienceDTO> Experiences { get; init; } = new List<CVExperienceDTO>();
+    public required Guid StudentId { get; init; }
 }
 
 public class UpdateCVDetailOfStudentCommandHandler

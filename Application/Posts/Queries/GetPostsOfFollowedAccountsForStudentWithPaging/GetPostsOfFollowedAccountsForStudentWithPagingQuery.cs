@@ -14,7 +14,7 @@ public class GetPostsOfFollowedAccountsForStudentWithPagingQuery
 {
     public Guid StudentId { get; init; }
     public bool? IsStudentMustBeVerified { get; init; }
-
+    
     public bool? IsAccountMustBeVerified { get; init; }
 
     public int PageNumber { get; init; } = 1;

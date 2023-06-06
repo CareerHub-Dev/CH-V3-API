@@ -166,14 +166,10 @@ public class CVsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateCVDetailOfSelfStudent(Guid cvId, UpdateOwnCVDetailRequest request)
     {
-        if (cvId != request.CVId)
-        {
-            return BadRequest();
-        }
-
         await Sender.Send(new UpdateCVDetailOfStudentCommand
         {
-            CVId = request.CVId,
+            CVId = cvId,
+            Title = request.Title,
             ExperienceLevel = request.ExperienceLevel,
             JobPositionId = request.JobPositionId,
             TemplateLanguage = request.TemplateLanguage,
