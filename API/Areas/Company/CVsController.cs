@@ -4,9 +4,9 @@ using Application.Common.DTO.JobOfferReviews;
 using Application.Common.Enums;
 using Application.CVs.Queries.GetCVOfStudent;
 using Application.CVs.Queries.GetCVWord;
-using Application.JobOfferReviews.Queries.GetJobOfferReviewsOfStudentWithPaging;
+using Application.JobOfferReviews.Queries.GetJobOfferReviewOfStudent;
+using Application.JobOfferReviews.Queries.GetReviewDetailsAsCompany;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace API.Areas.Company;
 
@@ -34,14 +34,14 @@ public class CVsController : ApiControllerBase
         }));
     }
 
-    [HttpGet("{jobOfferId}/{cvId}/reviews")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<JobOfferReviewDTO>))]
-    public async Task<IActionResult> GetAppliedCVReviews(Guid jobOfferId, Guid cvId)
+    [HttpGet("reviews/{reviewId}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(DetailedJobOfferReviewDTO))]
+    public async Task<IActionResult> GetJobOfferReviewAsCompany(Guid reviewId)
     {
-        var result = await Sender.Send(new GetReviewsOfAppliedCVQuery
+        var result = await Sender.Send(new GetReviewDetailsAsCompanyQuery
         {
-            JobOfferId = jobOfferId,
-            CvId = cvId,
+            CompanyId = AccountInfo!.Id,
+            ReviewId = reviewId
         });
 
         return Ok(result);

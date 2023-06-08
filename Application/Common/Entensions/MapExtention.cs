@@ -562,6 +562,20 @@ public static class MapExtention
         });
     }
 
+    public static IQueryable<BriefCVWithStatusAndStudentDTO> MapToBriefCVWithStatusAndStudentDTO(this IQueryable<CVJobOffer> cvJobOffers)
+    {
+        return cvJobOffers.Select(x => new BriefCVWithStatusAndStudentDTO
+        {
+            Status = x.Status,
+            Id = x.CV!.Id,
+            ReviewId = x.Id,
+            Title = x.CV.Title,
+            Created = x.CV.Created,
+            Modified = x.CV.Modified,
+            Student = DetailedStudentDTO.FromEntity(x.CV.Student!),
+        });
+    }
+
     #endregion
 
     #region ForeignLanguage

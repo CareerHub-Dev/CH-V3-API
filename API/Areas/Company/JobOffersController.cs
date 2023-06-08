@@ -98,22 +98,20 @@ public class JobOffersController : ApiControllerBase
     }
 
     [HttpGet("{jobOfferId}/CVs")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefCVWithStatusDTO>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BriefCVWithStatusAndStudentDTO>))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCVsOfStudent(
+    public async Task<IActionResult> GetAppliedCVsByJobOffer(
         Guid jobOfferId,
         [FromQuery] string? order,
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        var result = await Sender.Send(new GetBriefCVWithStatussOfJobOfferWithPagingQuery
+        var result = await Sender.Send(new GetBriefCVWithStatusAndStudentWithPagingQuery
         {
             JobOfferId = jobOfferId,
-
             PageNumber = pageNumber,
             PageSize = pageSize,
-
-            OrderByExpression = order ?? "Title"
+            OrderByExpression = order ?? "Created ASC"
         });
 
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
