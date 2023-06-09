@@ -7,6 +7,7 @@ using Application.Posts.Commands.VerifiedStudentUnlikePostOfVerifiedAccount;
 using Application.Posts.Queries.GetLikedPost;
 using Application.Posts.Queries.GetLikedPostsOfAccountWithPaging;
 using Application.Posts.Queries.GetPostsOfFollowedAccountsForStudentWithPaging;
+using Application.Posts.Queries.IsPostLikedByVerifiedStudent;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -94,6 +95,18 @@ public class PostsController : ApiControllerBase
         Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
 
         return Ok(result);
+    }
+
+    [HttpGet("{postId}/liked")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> IsPostLiked(Guid postId)
+    {
+        return Ok(await Sender.Send(new IsPostLikedByVerifiedStudentQuery
+        {
+            StudentId = AccountInfo!.Id,
+            PostId = postId
+        }));
     }
 
     [HttpPost("{postId}/like")]
