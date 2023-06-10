@@ -64,6 +64,17 @@ public class VerifiedStudentLikePostOfVerifiedAccountCommandHandler
 
         post.StudentsLiked.Add(student);
 
+        var postAuthorIsStudent = await _context.Students
+            .AsNoTracking()
+            .Filter(isVerified: true)
+            .AnyAsync(x => x.Id == post.AccountId);
+
+        if (!postAuthorIsStudent)
+        {
+            await _context.SaveChangesAsync();
+            return Unit.Value;
+        }
+
         var notification = new Notification
         {
             ReferenceId = post.Id,
