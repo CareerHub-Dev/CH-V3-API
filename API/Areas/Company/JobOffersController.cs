@@ -134,24 +134,23 @@ public class JobOffersController : ApiControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Guid))]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CreateJobOfferForSelfCompany(CreateOwnJobOfferRequest view)
+    public async Task<IActionResult> CreateJobOfferForSelfCompany(CreateOwnJobOfferRequest request)
     {
         var result = await Sender.Send(new CreateJobOfferCommand
         {
-            Title = view.Title,
-            Overview = view.Overview,
-            Requirements = view.Requirements,
-            Responsibilities = view.Responsibilities,
-            Preferences = view.Preferences,
-            Image = view.Image,
-            JobType = view.JobType,
-            WorkFormat = view.WorkFormat,
-            ExperienceLevel = view.ExperienceLevel,
-            StartDate = view.StartDate,
-            EndDate = view.EndDate,
-            JobPositionId = view.JobPositionId,
-            TagIds = view.TagIds,
-
+            Title = request.Title,
+            Overview = request.Overview,
+            Requirements = request.Requirements,
+            Responsibilities = request.Responsibilities,
+            Preferences = request.Preferences,
+            Image = request.Image,
+            JobType = request.JobType,
+            WorkFormat = request.WorkFormat,
+            ExperienceLevel = request.ExperienceLevel,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            JobPositionId = request.JobPositionId,
+            TagIds = request.TagIds,
             CompanyId = AccountInfo!.Id
         });
 

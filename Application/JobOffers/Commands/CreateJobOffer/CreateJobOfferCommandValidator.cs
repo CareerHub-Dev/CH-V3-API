@@ -8,7 +8,7 @@ public class CreateJobOfferCommandValidator
 {
     public CreateJobOfferCommandValidator()
     {
-        When(x => x.Image != null, () =>
+        When(x => x.Image is not null, () =>
         {
             RuleFor(x => x.Image!)
                 .AllowedExtensions(".jpg", ".jpeg", ".png")
@@ -41,6 +41,7 @@ public class CreateJobOfferCommandValidator
             .IsInEnum();
 
         RuleFor(x => x.EndDate.Date)
-            .GreaterThan(x => x.StartDate.Date.AddDays(60)).OverridePropertyName("EndDate");
+            .GreaterThan(x => x.StartDate.Date).OverridePropertyName("EndDate")
+            .LessThanOrEqualTo(x => x.StartDate.AddDays(60).Date).OverridePropertyName("EndDate");
     }
 }

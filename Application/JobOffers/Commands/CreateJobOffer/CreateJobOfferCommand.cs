@@ -11,23 +11,19 @@ namespace Application.JobOffers.Commands.CreateJobOffer;
 public record CreateJobOfferCommand
     : IRequest<Guid>
 {
-    public string Title { init; get; } = string.Empty;
-    public string Overview { init; get; } = string.Empty;
-    public string Requirements { init; get; } = string.Empty;
-    public string Responsibilities { init; get; } = string.Empty;
-    public string Preferences { init; get; } = string.Empty;
+    public required string Title { init; get; }
+    public required string Overview { init; get; } 
+    public required string Requirements { init; get; }
+    public required string Responsibilities { init; get; }
+    public required string Preferences { init; get; }
+    public required JobType JobType { get; init; }
+    public required WorkFormat WorkFormat { get; init; }
+    public required ExperienceLevel ExperienceLevel { get; init; }
+    public required DateTime StartDate { get; init; }
+    public required DateTime EndDate { get; init; }
+    public required Guid CompanyId { get; init; }
+    public required Guid JobPositionId { get; init; }
     public IFormFile? Image { get; init; }
-
-    public JobType JobType { get; init; }
-    public WorkFormat WorkFormat { get; init; }
-    public ExperienceLevel ExperienceLevel { get; init; }
-
-    public DateTime StartDate { get; init; }
-    public DateTime EndDate { get; init; }
-
-    public Guid CompanyId { get; init; }
-    public Guid JobPositionId { get; init; }
-
     public List<Guid> TagIds { get; init; } = new List<Guid>();
 }
 
@@ -80,13 +76,11 @@ public class CreateJobOfferCommandHandler
             Tags = tags,
         };
 
-        if (request.Image != null)
+        if (request.Image is not null)
         {
             jobOffer.Image = await _imagesService.SaveImageAsync(request.Image);
         }
-
         await _context.JobOffers.AddAsync(jobOffer);
-
         await _context.SaveChangesAsync();
 
         return jobOffer.Id;
@@ -100,7 +94,7 @@ public class CreateJobOfferCommandHandler
         {
             var tag = await _context.Tags.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (tag == null)
+            if (tag is null)
             {
                 throw new NotFoundException(nameof(Tag), id);
             }
