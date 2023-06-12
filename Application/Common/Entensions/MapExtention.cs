@@ -416,6 +416,32 @@ public static class MapExtention
         });
     }
 
+    public static IQueryable<DetailedJobOfferReviewDTO> MapToDetailedJobOfferReviewDTO(
+        this IQueryable<CVJobOffer> cvJobOffers)
+    {
+        return cvJobOffers.Select(x => new DetailedJobOfferReviewDTO()
+        {
+            Id = x.Id,
+            Created = x.Created,
+            Status = x.Status,
+            Message = x.Message,
+            CV = new ShortCVofReviewDTO() 
+            { 
+                Created = x.CV!.Created, 
+                Id = x.CV.Id, 
+                Modified = x.CV.Modified, 
+                Title = x.CV.Title 
+            },
+            JobOffer = new ShortJobOfferOfReviewDTO() 
+            { 
+                Id = x.JobOffer!.Id, 
+                Title = x.JobOffer.Title, 
+                Image = x.JobOffer.Image 
+            },
+            Student = DetailedStudentDTO.FromEntity(x.CV.Student!),
+        });
+    }
+
     public static IQueryable<DetiledJobOfferWithStatsDTO> MapToDetiledJobOfferWithStatsDTO(
         this IQueryable<JobOffer> jobOffers,
         bool? isSubscriberMustBeVerified = null,

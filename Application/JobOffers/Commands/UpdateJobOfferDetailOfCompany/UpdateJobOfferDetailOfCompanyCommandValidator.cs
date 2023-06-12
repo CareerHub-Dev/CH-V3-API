@@ -33,6 +33,7 @@ public class UpdateJobOfferDetailOfCompanyCommandValidator
             .IsInEnum();
 
         RuleFor(x => x.EndDate.Date)
-            .GreaterThan(DateTime.Today.AddDays(60)).OverridePropertyName("EndDate");
+            .GreaterThan(x => x.StartDate.Date).OverridePropertyName("EndDate")
+            .LessThanOrEqualTo(x => x.StartDate.AddDays(60).Date).OverridePropertyName("EndDate");
     }
 }

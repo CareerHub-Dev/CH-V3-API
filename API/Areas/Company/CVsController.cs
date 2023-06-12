@@ -3,13 +3,17 @@ using API.DTO.Requests.CVs;
 using Application.Common.DTO.CVs;
 using Application.Common.DTO.JobOfferReviews;
 using Application.Common.Enums;
+using Application.Common.Models.Pagination;
 using Application.CVs.Commands.SendCVOfStudentForJobOffer;
 using Application.CVs.Commands.UpdateCVDetailOfStudent;
 using Application.CVs.Queries.GetCVOfStudent;
 using Application.CVs.Queries.GetCVWord;
+using Application.CVs.Queries.GetReviewsWithPagingAsCompany;
 using Application.JobOfferReviews.Queries.GetJobOfferReviewOfStudent;
 using Application.JobOfferReviews.Queries.GetReviewDetailsAsCompany;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace API.Areas.Company;
@@ -36,6 +40,27 @@ public class CVsController : ApiControllerBase
         {
             CVId = cvId,
         }));
+    }
+
+    [HttpGet("reviews")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedList<DetailedJobOfferReviewDTO>))]
+    public async Task<IActionResult> GetReviewsAsCompany(
+        [FromQuery] string? order,
+        [FromQuery] Review? status,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        var result = await Sender.Send(new GetReviewsWithPagingAsCompanyQuery
+        {
+            CompanyId = AccountInfo!.Id,
+            Status = status,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            OrderByExpression = order ?? "Created DESC",
+        });
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(result.MetaData));
+
+        return Ok(result);
     }
 
     [HttpGet("reviews/{reviewId}")]

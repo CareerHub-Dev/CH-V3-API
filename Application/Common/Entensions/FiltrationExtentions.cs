@@ -340,8 +340,13 @@ public static class FiltrationExtentions
     public static IQueryable<CVJobOffer> Filter(
         this IQueryable<CVJobOffer> cvJobOffers,
         bool? isStudentOfCVVerified = null,
-        bool? isStudentOfCVBanned = null)
+        bool? isStudentOfCVBanned = null,
+        Review? status = null)
     {
+        if (status.HasValue)
+        {
+            cvJobOffers = cvJobOffers.Where(x => x.Status == status);
+        }
 
         switch (isStudentOfCVVerified)
         {
