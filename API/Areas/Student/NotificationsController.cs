@@ -7,6 +7,7 @@ using Application.Notifications.Queries.GetAmountUnviewedNotificationsOfStudent;
 using Application.Notifications.Queries.GetNotificationsOfStudentWithPaginig;
 using Application.Notifications.Queries.GetUnviewedNotificationsOfStudentWithPaginig;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace API.Areas.Student;
 
@@ -49,13 +50,15 @@ public class NotificationsController : ApiControllerBase
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 10)
     {
-        return Ok(await Sender.Send(new GetUnviewedNotificationsOfStudentWithPaginigQuery
+        var items = await Sender.Send(new GetUnviewedNotificationsOfStudentWithPaginigQuery
         {
             StudentId = AccountInfo!.Id,
             PageNumber = pageNumber,
             PageSize = pageSize,
             OrderByExpression = "Created DESC"
-        }));
+        });
+        Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(items.MetaData));
+        return Ok(items);
     }
 
     [HttpGet("self/amount-unviewed")]
