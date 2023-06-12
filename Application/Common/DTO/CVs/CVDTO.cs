@@ -10,21 +10,18 @@ namespace Application.Common.DTO.CVs;
 
 public class CVDTO : BriefCVDTO
 {
-    public JobPositionDTO JobPosition { get; set; } = new JobPositionDTO();
-    public JobDirectionDTO JobDirection { get; set; } = new JobDirectionDTO();
-
-    public TemplateLanguage TemplateLanguage { get; set; }
-    public string LastName { get; set; } = string.Empty;
-    public string FirstName { get; set; } = string.Empty;
-    public string? Photo { get; set; }
-    public string Goals { get; set; } = string.Empty;
-    public List<string> HardSkills { get; set; } = new List<string>();
-    public List<string> SoftSkills { get; set; } = new List<string>();
-
-    public Guid StudentId { get; set; }
-
-    public List<ForeignLanguageDTO> ForeignLanguages { get; set; } = new List<ForeignLanguageDTO>();
-    public List<CVProjectLinkDTO> ProjectLinks { get; set; } = new List<CVProjectLinkDTO>();
-    public List<EducationDTO> Educations { get; set; } = new List<EducationDTO>();
-    public List<CVExperienceDTO> Experiences { get; set; } = new List<CVExperienceDTO>();
+    public required JobPositionDTO JobPosition { get; set; }
+    public required JobDirectionDTO JobDirection { get; set; }
+    public required TemplateLanguage TemplateLanguage { get; set; }
+    public required string LastName { get; set; }
+    public required string FirstName { get; set; }
+    public required string? Photo { get; set; }
+    public required string Goals { get; set; }
+    public required List<string> HardSkills { get; set; }
+    public required List<string> SoftSkills { get; set; }
+    public required Guid StudentId { get; set; }
+    public required List<ForeignLanguageDTO> ForeignLanguages { get; set; }
+    public required List<CVProjectLinkDTO> ProjectLinks { get; set; }
+    public required List<EducationDTO> Educations { get; set; }
+    public required List<CVExperienceDTO> Experiences { get; set; }
 }

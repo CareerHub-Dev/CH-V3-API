@@ -543,6 +543,7 @@ public static class MapExtention
             ForeignLanguages = x.ForeignLanguages.MapToForeignLanguageDTO().ToList(),
             ProjectLinks = x.ProjectLinks.MapToCVProjectLinkDTO().ToList(),
             Educations = x.Educations.MapToEducationDTO().ToList(),
+            Experiences = x.Experiences.MapToExperienceDTO().ToList(),
         });
     }
 

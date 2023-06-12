@@ -12,7 +12,6 @@ public record GetCVOfStudentQuery
     : IRequest<CVDTO>
 {
     public Guid CVId { get; init; }
-
     public Guid StudentId { get; init; }
     public bool? IsStudentMustBeVerified { get; init; }
 }
