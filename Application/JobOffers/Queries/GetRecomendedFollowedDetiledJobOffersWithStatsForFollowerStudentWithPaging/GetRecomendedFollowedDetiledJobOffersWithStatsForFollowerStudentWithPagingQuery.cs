@@ -73,8 +73,8 @@ public class GetRecomendedFollowedDetiledJobOffersWithStatsForFollowerStudentWit
                 experienceLevel: request.MustHaveExperienceLevel,
                 jobPositionId: request.MustHaveJobPositionId,
                 tagIds: request.MustHaveTagIds
-        )
-            .Where(x => x.Tags.Select(x => x.Id).Count(y => tags.Contains(y))/x.Tags.Count() > 0.75)
+            )
+            .Where(x => (x.Tags.Count() == 0 ? 0.0 : x.Tags.Select(x => x.Id).Count(y => tags.Contains(y))/(double)x.Tags.Count()) > 0.75)
             .Search(request.SearchTerm)
             .MapToFollowedDetiledJobOfferWithStatsDTO(
                 request.FollowerStudentId,
