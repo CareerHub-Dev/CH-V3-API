@@ -23,22 +23,18 @@ public record CreateJobOfferCommand
     public required DateTime EndDate { get; init; }
     public required Guid CompanyId { get; init; }
     public required Guid JobPositionId { get; init; }
-    public IFormFile? Image { get; init; }
-    public List<Guid> TagIds { get; init; } = new List<Guid>();
+    public required List<Guid> TagIds { get; init; }
 }
 
 public class CreateJobOfferCommandHandler
     : IRequestHandler<CreateJobOfferCommand, Guid>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IImagesService _imagesService;
 
     public CreateJobOfferCommandHandler(
-        IApplicationDbContext context,
-        IImagesService imagesService)
+        IApplicationDbContext context)
     {
         _context = context;
-        _imagesService = imagesService;
     }
 
     public async Task<Guid> Handle(
@@ -76,10 +72,6 @@ public class CreateJobOfferCommandHandler
             Tags = tags,
         };
 
-        if (request.Image is not null)
-        {
-            jobOffer.Image = await _imagesService.SaveImageAsync(request.Image);
-        }
         await _context.JobOffers.AddAsync(jobOffer);
         await _context.SaveChangesAsync();
 

@@ -143,7 +143,6 @@ public class JobOffersController : ApiControllerBase
             Requirements = request.Requirements,
             Responsibilities = request.Responsibilities,
             Preferences = request.Preferences,
-            Image = request.Image,
             JobType = request.JobType,
             WorkFormat = request.WorkFormat,
             ExperienceLevel = request.ExperienceLevel,

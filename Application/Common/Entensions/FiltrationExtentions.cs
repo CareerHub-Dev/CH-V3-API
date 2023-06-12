@@ -93,6 +93,18 @@ public static class FiltrationExtentions
         return studentLogs;
     }
 
+    public static IQueryable<Notification> Filter(
+        this IQueryable<Notification> notifications,
+        bool? isViewed = null)
+    {
+        if (isViewed.HasValue)
+        {
+            notifications = notifications.Where(x => x.IsViewed == isViewed);
+        }
+
+        return notifications;
+    }
+
     public static IQueryable<Tag> Filter(
         this IQueryable<Tag> tags,
         bool? isAccepted = null)

@@ -13,7 +13,6 @@ public record GetJobOfferOfCompanyQuery
 {
     public Guid JobOfferId { get; set; }
     public bool? IsJobOfferMustBeActive { get; init; }
-
     public Guid CompanyId { get; init; }
     public bool? IsCompanyOfJobOfferMustBeVerified { get; init; }
 }

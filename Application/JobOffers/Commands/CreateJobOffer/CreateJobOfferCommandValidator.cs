@@ -8,13 +8,6 @@ public class CreateJobOfferCommandValidator
 {
     public CreateJobOfferCommandValidator()
     {
-        When(x => x.Image is not null, () =>
-        {
-            RuleFor(x => x.Image!)
-                .AllowedExtensions(".jpg", ".jpeg", ".png")
-                .MaxFileSize(2 * 1024 * 1024);
-        });
-
         RuleFor(x => x.Title)
             .NotEmpty()
             .MaximumLength(64);

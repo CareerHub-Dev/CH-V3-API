@@ -9,7 +9,6 @@ public record CreateOwnJobOfferRequest
     public string Requirements { init; get; } = string.Empty;
     public string Responsibilities { init; get; } = string.Empty;
     public string Preferences { init; get; } = string.Empty;
-    public IFormFile? Image { get; init; }
 
     public JobType JobType { get; init; }
     public WorkFormat WorkFormat { get; init; }

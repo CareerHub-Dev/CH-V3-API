@@ -5,6 +5,7 @@ using Application.Common.Enums;
 using Application.Notifications.Commands.SetViewedNotificationOfStudentCommand;
 using Application.Notifications.Queries.GetAmountUnviewedNotificationsOfStudent;
 using Application.Notifications.Queries.GetNotificationsOfStudentWithPaginig;
+using Application.Notifications.Queries.GetUnviewedNotificationsOfStudentWithPaginig;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Areas.Student;
@@ -34,6 +35,21 @@ public class NotificationsController : ApiControllerBase
         [FromQuery] int pageSize = 10)
     {
         return Ok(await Sender.Send(new GetNotificationsOfStudentWithPaginigQuery
+        {
+            StudentId = AccountInfo!.Id,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            OrderByExpression = "Created DESC"
+        }));
+    }
+
+    [HttpGet("self/unviewed")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<NotificationDTO>))]
+    public async Task<IActionResult> GetUnviewedNotificationsOfSelfStudent(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
+    {
+        return Ok(await Sender.Send(new GetUnviewedNotificationsOfStudentWithPaginigQuery
         {
             StudentId = AccountInfo!.Id,
             PageNumber = pageNumber,
