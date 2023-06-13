@@ -170,29 +170,23 @@ public class JobOffersController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> UpdateJobOfferDetailOfSelfCompany(Guid jobOfferId, UpdateOwnJobOfferDetailRequest view)
+    public async Task<IActionResult> UpdateJobOfferDetailOfSelfCompany(Guid jobOfferId, UpdateOwnJobOfferDetailRequest request)
     {
-        if (jobOfferId != view.JobOfferId)
-        {
-            return BadRequest();
-        }
-
         await Sender.Send(new UpdateJobOfferDetailOfCompanyCommand
         {
-            JobOfferId = view.JobOfferId,
-            Title = view.Title,
-            Overview = view.Overview,
-            Requirements = view.Requirements,
-            Responsibilities = view.Responsibilities,
-            Preferences = view.Preferences,
-            JobType = view.JobType,
-            WorkFormat = view.WorkFormat,
-            ExperienceLevel = view.ExperienceLevel,
-            StartDate = view.StartDate,
-            EndDate = view.EndDate,
-            JobPositionId = view.JobPositionId,
-            TagIds = view.TagIds,
-
+            JobOfferId = jobOfferId,
+            Title = request.Title,
+            Overview = request.Overview,
+            Requirements = request.Requirements,
+            Responsibilities = request.Responsibilities,
+            Preferences = request.Preferences,
+            JobType = request.JobType,
+            WorkFormat = request.WorkFormat,
+            ExperienceLevel = request.ExperienceLevel,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate,
+            JobPositionId = request.JobPositionId,
+            TagIds = request.TagIds,
             CompanyId = AccountInfo!.Id
         });
 

@@ -10,26 +10,20 @@ namespace Application.JobOffers.Commands.UpdateJobOfferDetailOfCompany;
 public record UpdateJobOfferDetailOfCompanyCommand
     : IRequest
 {
-    public Guid JobOfferId { get; init; }
-
-    public string Title { init; get; } = string.Empty;
-    public string Overview { init; get; } = string.Empty;
-    public string Requirements { init; get; } = string.Empty;
-    public string Responsibilities { init; get; } = string.Empty;
-    public string Preferences { init; get; } = string.Empty;
-
-    public JobType JobType { get; init; }
-    public WorkFormat WorkFormat { get; init; }
-    public ExperienceLevel ExperienceLevel { get; init; }
-
-    public DateTime StartDate { get; init; }
-    public DateTime EndDate { get; init; }
-
-    public Guid JobPositionId { get; init; }
-
-    public List<Guid> TagIds { get; init; } = new List<Guid>();
-
-    public Guid CompanyId { get; init; }
+    public required Guid JobOfferId { get; init; }
+    public required string Title { init; get; }
+    public required string Overview { init; get; }
+    public required string Requirements { init; get; }
+    public required string Responsibilities { init; get; }
+    public required string Preferences { init; get; }
+    public required JobType JobType { get; init; }
+    public required WorkFormat WorkFormat { get; init; }
+    public required ExperienceLevel ExperienceLevel { get; init; }
+    public required DateTime StartDate { get; init; }
+    public required DateTime EndDate { get; init; }
+    public required Guid JobPositionId { get; init; }
+    public required List<Guid> TagIds { get; init; }
+    public required Guid CompanyId { get; init; }
 }
 
 public class UpdateJobOfferDetailOfCompanyCommandHandler
